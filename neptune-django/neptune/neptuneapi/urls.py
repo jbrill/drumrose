@@ -1,6 +1,6 @@
 from django.urls import path
 
-from neptune.posts import views
+from neptuneapi.posts import views
 
 """neptune URL Configuration
 

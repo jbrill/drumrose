@@ -1,6 +1,8 @@
 from django.urls import path
 
-from neptuneapi.posts import views
+from neptuneapi.posts import views as post_routes
+from neptuneapi.artists import views as artist_routes
+from neptuneapi.albums import views as album_routes
 
 """neptune URL Configuration
 
@@ -17,10 +19,10 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
 from django.contrib import admin
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    path('', views.NeptunePost, name='NeptunePost')
+    path('posts/', post_routes.NeptunePostsRoute, name='NeptunePostsRoute'),
+    path('artists', artist_routes.NeptuneArtistRoute, name='NeptuneArtistsRoute'),
+    path('albums', album_routes.NeptuneAlbumRoute, name='NeptuneAlbumsRoute'),
 ]

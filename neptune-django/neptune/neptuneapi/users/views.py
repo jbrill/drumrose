@@ -2,7 +2,7 @@ from django.http import JsonResponse
 
 from neptuneapi.models.neptune_core import *
 
-def NeptunePostsRoute(request):
+def NeptunePost(request):
     """
     API response for retrieving all posts
     """

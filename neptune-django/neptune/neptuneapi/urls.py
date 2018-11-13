@@ -3,6 +3,7 @@ from django.urls import path
 from neptuneapi.posts import views as post_routes
 from neptuneapi.artists import views as artist_routes
 from neptuneapi.albums import views as album_routes
+from neptuneapi.users import views as user_routes
 
 """neptune URL Configuration
 
@@ -22,7 +23,10 @@ Including another URLconf
 from django.contrib import admin
 
 urlpatterns = [
-    path('posts/', post_routes.NeptunePostsRoute, name='NeptunePostsRoute'),
+    path('posts/', post_routes.NeptunePostList, name='NeptunePostsList'),
+    path('posts/<post_id>/', post_routes.NeptunePostDetail, name='NeptunePostsDetail'),
     path('artists', artist_routes.NeptuneArtistRoute, name='NeptuneArtistsRoute'),
     path('albums', album_routes.NeptuneAlbumRoute, name='NeptuneAlbumsRoute'),
+    path('users/', user_routes.NeptuneUserList.as_view(), name='NeptuneUserList'),
+    path('users/<user_handle>/', user_routes.NeptuneUserDetail.as_view(), name='NeptuneUserDetail'),
 ]

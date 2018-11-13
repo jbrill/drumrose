@@ -1,27 +1,58 @@
 from django.db import models
 
-class NeptuneArtist(models.Model):
-    name = models.CharField(max_length=200)
+class BaseModel(models.Model):
+    """
+    Base model
+    """
+    created_date = models.DateTimeField(auto_now_add=True)
+    modified_date = models.DateTimeField(auto_now=True)
 
-class NeptuneSong(models.Model):
-    name = models.CharField(max_length=200)
+    class Meta:
+        abstract = True
 
-class NeptuneAlbum(models.Model):
+class NeptuneArtist(BaseModel):
+    """
+    Model for an artist
+    """
+    name = models.CharField(max_length=200)
+    songs = models.ManyToManyField('NeptuneSong', blank=True)
+    albums = models.ManyToManyField('NeptuneAlbum', blank=True)
+
+class NeptuneSong(BaseModel):
+    """
+    Model for a song
+    """
+    name = models.CharField(max_length=200)
+    albums = models.ManyToManyField('NeptuneAlbum')
+    artist = models.ForeignKey("NeptuneArtist", on_delete=models.CASCADE)
+
+class NeptuneAlbum(BaseModel):
+    """
+    Model for an album
+    """
     name = models.CharField(max_length=200)
     artwork_url = models.CharField(max_length=200)
+    artist = models.ForeignKey('NeptuneArtist', on_delete=models.CASCADE)
+    songs = models.ManyToManyField('NeptuneSong')
 
-class NeptuneUser(models.Model):
+class NeptuneUser(BaseModel):
     """
     Model for a user
     """
     name = models.CharField(max_length=200)
-    handle = models.CharField(max_length=200)
+    handle = models.CharField(max_length=200, unique=True)
     avatar_url = models.CharField(max_length=200)
+    posts = models.ForeignKey(
+        'NeptunePost', blank=True, null=True, on_delete=models.CASCADE
+    )
 
-class NeptunePost(models.Model):
+class NeptunePost(BaseModel):
+    """
+    Model for a post
+    """
     song = models.ForeignKey(
         NeptuneSong,
         on_delete=models.CASCADE,
     )
     caption = models.CharField(max_length=200)
-
+    user = models.ForeignKey('NeptuneUser', on_delete=models.CASCADE)

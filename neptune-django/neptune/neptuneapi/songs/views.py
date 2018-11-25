@@ -3,22 +3,20 @@ from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 
-from neptuneapi.models.neptune_core import (
-    NeptuneUser, NeptunePost, NeptuneSong
-)
-from neptuneapi.posts.serializers import NeptunePostSerializer
+from neptuneapi.models.neptune_core import NeptuneUser, NeptuneSong
+from neptuneapi.songs.serializers import NeptuneSongSerializer
 
 import json
 
-class NeptunePostList(APIView):
+class NeptuneSongList(APIView):
     """
     Description:
         - API View for User List
     Routes:
-        - GET /posts/
-            - Gets a list of posts per user
-        - POST /posts/
-            - Creates a new post
+        - GET /songs/
+            - Gets a list of songs per user
+        - POST /songs/
+            - Creates a new song
     """
     def get(self, request):
         """
@@ -28,51 +26,28 @@ class NeptunePostList(APIView):
         If 'discover'
           # Grab recommended
         """
-        posts = NeptunePost.objects.all()
+        songs = NeptuneSong.objects.all()
 
-        serializer = NeptunePostSerializer(posts, many=True)
+        serializer = NeptuneSongSerializer(songs, many=True)
         return Response(serializer.data)
 
     def post(self, request):
-        """
-        Requires:
-            - Handle
-            - Apple Music Id
-            - Caption
-        """
+        # create new user
+        print(request)
+        print(request.body.decode('utf-8'))
         request_body = json.loads(request.body.decode('utf-8'))
-
-        apple_music_id = request_body["apple_music_id"]
-        caption = request_body["caption"]
-        user_handle = request_body["handle"]
-        # create new song if one doesnt exist
-        try:
-            song = NeptuneSong.objects.get(
-                apple_music_id=apple_music_id
-            )
-        except NeptuneSong.DoesNotExist:
-            song = NeptuneSong.objects.create(
-                apple_music_id=apple_music_id,
-                name="TEST"
-            )
-
-        print("HERE...")
-
-        user = NeptuneUser.objects.get(
-            handle=user_handle
-        )
-        print(user)
-        print(song)
-        new_post = NeptunePost.objects.create(
-            song=song,
-            caption=caption,
-            user=user
+        print(type(request_body))
+        print(request_body["name"])
+        # print(request_body["handle"])
+        new_song = NeptuneSong.objects.create(
+            name=request_body["name"],
+            apple_music_id=request_body["apple_music_id"]
         )
 
-        serializer = NeptunePostSerializer(new_post)
+        serializer = NeptuneSongSerializer(new_song)
         return Response(serializer.data)
 
-class NeptunePostDetail(APIView):
+class NeptuneSongDetail(APIView):
     """
     Description:
         - API View for Post Detail

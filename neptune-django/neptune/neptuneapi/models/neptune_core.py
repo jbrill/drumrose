@@ -22,9 +22,10 @@ class NeptuneSong(BaseModel):
     """
     Model for a song
     """
+    apple_music_id = models.CharField(max_length=200, unique=True)
     name = models.CharField(max_length=200)
-    albums = models.ManyToManyField('NeptuneAlbum')
-    artist = models.ForeignKey("NeptuneArtist", on_delete=models.CASCADE)
+    #albums = models.ManyToManyField('NeptuneAlbum')
+    #artist = models.ForeignKey("NeptuneArtist", on_delete=models.CASCADE)
 
 class NeptuneAlbum(BaseModel):
     """
@@ -39,8 +40,8 @@ class NeptuneUser(BaseModel):
     """
     Model for a user
     """
-    name = models.CharField(max_length=200)
     handle = models.CharField(max_length=200, unique=True)
+    name = models.CharField(max_length=200)
     avatar_url = models.CharField(max_length=200)
     posts = models.ForeignKey(
         'NeptunePost', blank=True, null=True, on_delete=models.CASCADE

@@ -2,6 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
+from django.http import HttpResponseBadRequest
 
 from neptuneapi.models.neptune_core import (
     NeptuneUser, NeptunePost, NeptuneSong
@@ -53,16 +54,16 @@ class NeptunePostList(APIView):
         except NeptuneSong.DoesNotExist:
             song = NeptuneSong.objects.create(
                 apple_music_id=apple_music_id,
-                name="TEST"
+            )
+        try:
+            user = NeptuneUser.objects.get(
+                handle=user_handle
+            )
+        except NeptuneUser.DoesNotExist:
+            return HttpResponseBadRequest(
+                content='{} does not exist.'.format(user_handle)
             )
 
-        print("HERE...")
-
-        user = NeptuneUser.objects.get(
-            handle=user_handle
-        )
-        print(user)
-        print(song)
         new_post = NeptunePost.objects.create(
             song=song,
             caption=caption,

@@ -26,12 +26,10 @@ class NeptuneUserList(APIView):
 
     def post(self, request):
         # create new user
-        print(request)
-        print(request.body.decode('utf-8'))
-        request_body = json.loads(request.body.decode('utf-8'))
-        print(type(request_body))
-        print(request_body["name"])
-        print(request_body["handle"])
+        request_body = json.loads(
+            request.body.decode('utf-8')
+        )
+
         new_user = NeptuneUser.objects.create(
             name=request_body["name"],
             handle=request_body["handle"],

@@ -23,9 +23,6 @@ class NeptuneSong(BaseModel):
     Model for a song
     """
     apple_music_id = models.CharField(max_length=200, unique=True)
-    name = models.CharField(max_length=200)
-    #albums = models.ManyToManyField('NeptuneAlbum')
-    #artist = models.ForeignKey("NeptuneArtist", on_delete=models.CASCADE)
 
 class NeptuneAlbum(BaseModel):
     """

@@ -1,0 +1,48 @@
+:root {
+  --primary-red: #C0102C;
+  --primary-yellow: #F3F367;
+  --primary-purple: #772CE6;
+}
+
+* {
+  margin: 0;
+  font-family: Menlo, Monaco, "Droid Sans Mono", Consolas, "Lucida Console", "Courier New", monospace;
+}
+
+html {
+  background-color: #F4F4F4;
+}
+
+::selection {
+  background: #A29AE5;
+}
+
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version */
+}
+
+h1 {
+  font-size: 40px;
+  font-weight: 200;
+  line-height: 40px;
+}
+p {
+  font-size: 20px;
+  font-weight: 200;
+  line-height: 30px;
+}
+a {
+  color: #333;
+  text-decoration: none;
+  font-weight: 400;
+  line-height: 30px;
+  transition: border-bottom .2s;
+}
+i:hover {
+  cursor: pointer;
+}

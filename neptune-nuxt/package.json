@@ -1,0 +1,38 @@
+{
+  "name": "Neptune",
+  "version": "1.0.0",
+  "description": "Music streaming for the new world.",
+  "author": "jlbrill",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate",
+    "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
+    "precommit": "npm run lint"
+  },
+  "dependencies": {
+    "@nuxtjs/axios": "^5.3.3",
+    "apple-music-jwt": "^0.2.0",
+    "auth0-lock": "11.8.1",
+    "axios": "^0.18.0",
+    "core-js": "^2.5.7",
+    "fs": "0.0.1-security",
+    "jquery": "^3.3.1",
+    "js-cookie": "2.2.0",
+    "jwt-decode": "2.2.0",
+    "normalize.css": "^8.0.0",
+    "nuxt": "latest",
+    "uuid": "3.3.2"
+  },
+  "devDependencies": {
+    "babel-eslint": "^8.2.6",
+    "eslint": "^5.6.1",
+    "eslint-config-standard": "^11.0.0",
+    "eslint-plugin-html": "^4.0.6",
+    "eslint-plugin-promise": "^3.8.0",
+    "eslint-plugin-standard": "^3.1.0",
+    "prettier": "1.15.3"
+  }
+}

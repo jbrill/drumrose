@@ -12,6 +12,11 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 
+from neptuneapi.utils.access_checks import (
+    get_username_from_payload,
+    get_public_key
+)
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -27,9 +32,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
-
 INSTALLED_APPS = [
     'rest_framework',
     'neptuneapi.apps.NeptuneAppConfig',
@@ -47,8 +50,14 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.auth.middleware.RemoteUserMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'django.contrib.auth.backends.RemoteUserBackend',
 ]
 
 ROOT_URLCONF = 'neptuneapi.urls'
@@ -86,6 +95,18 @@ DATABASES = {
     }
 }
 
+# Rest Framework
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ),
+}
+
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 
@@ -104,6 +125,17 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
+# JWT definition
+JWT_AUTH = {
+    'JWT_PAYLOAD_GET_USERNAME_HANDLER':
+        get_username_from_payload,
+    'JWT_PUBLIC_KEY': get_public_key(),
+    'JWT_ALGORITHM': 'RS256',
+    'JWT_AUDIENCE': 'https://neptunemusic.auth0.com/api/v2/',
+    'JWT_ISSUER': 'https://neptunemusic.auth0.com',
+    'JWT_AUTH_HEADER_PREFIX': 'Bearer ',
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/

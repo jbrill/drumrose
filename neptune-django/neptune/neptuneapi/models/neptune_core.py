@@ -1,4 +1,9 @@
+"""
+Core Models for Neptune API
+"""
+
 from django.db import models
+
 
 class BaseModel(models.Model):
     """
@@ -8,7 +13,11 @@ class BaseModel(models.Model):
     modified_date = models.DateTimeField(auto_now=True)
 
     class Meta:
+        """
+        Meta Class Definition
+        """
         abstract = True
+
 
 class NeptuneArtist(BaseModel):
     """
@@ -18,11 +27,13 @@ class NeptuneArtist(BaseModel):
     songs = models.ManyToManyField('NeptuneSong', blank=True)
     albums = models.ManyToManyField('NeptuneAlbum', blank=True)
 
+
 class NeptuneSong(BaseModel):
     """
     Model for a song
     """
     apple_music_id = models.CharField(max_length=200, unique=True)
+
 
 class NeptuneAlbum(BaseModel):
     """
@@ -32,6 +43,7 @@ class NeptuneAlbum(BaseModel):
     artwork_url = models.CharField(max_length=200)
     artist = models.ForeignKey('NeptuneArtist', on_delete=models.CASCADE)
     songs = models.ManyToManyField('NeptuneSong')
+
 
 class NeptuneUser(BaseModel):
     """
@@ -43,6 +55,7 @@ class NeptuneUser(BaseModel):
     posts = models.ForeignKey(
         'NeptunePost', blank=True, null=True, on_delete=models.CASCADE
     )
+
 
 class NeptunePost(BaseModel):
     """

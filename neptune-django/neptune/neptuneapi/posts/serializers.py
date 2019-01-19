@@ -7,6 +7,7 @@ from neptuneapi.models.neptune_core import NeptunePost
 from neptuneapi.songs.serializers import NeptuneSongSerializer
 from neptuneapi.users.serializers import NeptuneUserSerializer
 
+
 class NeptunePostSerializer(serializers.ModelSerializer):
     """
     Serializer for posts
@@ -15,5 +16,8 @@ class NeptunePostSerializer(serializers.ModelSerializer):
     user = NeptuneUserSerializer(read_only=True)
 
     class Meta:
+        """
+        Serializer Meta Definition
+        """
         model = NeptunePost
         fields = ('song', 'caption', 'user')

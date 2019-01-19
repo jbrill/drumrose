@@ -1,5 +1,12 @@
+"""
+Neptune Post Route Definition
+"""
+
+import json
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.http import HttpResponseBadRequest
@@ -9,7 +16,6 @@ from neptuneapi.models.neptune_core import (
 )
 from neptuneapi.posts.serializers import NeptunePostSerializer
 
-import json
 
 class NeptunePostList(APIView):
     """
@@ -21,6 +27,7 @@ class NeptunePostList(APIView):
         - POST /posts/
             - Creates a new post
     """
+
     def get(self, request):
         """
         If 'feed'
@@ -73,6 +80,7 @@ class NeptunePostList(APIView):
         serializer = NeptunePostSerializer(new_post)
         return Response(serializer.data)
 
+
 class NeptunePostDetail(APIView):
     """
     Description:
@@ -85,6 +93,7 @@ class NeptunePostDetail(APIView):
         - DELETE /posts/:post_id
             - Deletes a post
     """
+
     def get(self, request, post_id):
         print("HERE...")
         user = NeptuneUser.objects.get(

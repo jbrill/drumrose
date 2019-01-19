@@ -1,3 +1,8 @@
+"""
+Urls Module
+"""
+
+from django.contrib import admin
 from django.urls import path
 
 from neptuneapi.posts import views as post_routes
@@ -21,15 +26,45 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.contrib import admin
 
 urlpatterns = [
-    path('posts/', post_routes.NeptunePostList.as_view(), name='NeptunePostsList'),
-    path('posts/<post_id>/', post_routes.NeptunePostDetail.as_view(), name='NeptunePostsDetail'),
-    path('songs/', song_routes.NeptuneSongList.as_view(), name='NeptuneSongList'),
-    path('songs/<song_id>/', song_routes.NeptuneSongDetail.as_view(), name='NeptuneSongDetail'),
-    path('artists', artist_routes.NeptuneArtistRoute, name='NeptuneArtistsRoute'),
-    path('albums', album_routes.NeptuneAlbumRoute, name='NeptuneAlbumsRoute'),
-    path('users/', user_routes.NeptuneUserList.as_view(), name='NeptuneUserList'),
-    path('users/<user_handle>/', user_routes.NeptuneUserDetail.as_view(), name='NeptuneUserDetail'),
+    path(
+        'posts/',
+        post_routes.NeptunePostList.as_view(),
+        name='NeptunePostsList'
+    ),
+    path(
+        'posts/<post_id>/',
+        post_routes.NeptunePostDetail.as_view(),
+        name='NeptunePostsDetail'
+    ),
+    path(
+        'songs/',
+        song_routes.NeptuneSongList.as_view(),
+        name='NeptuneSongList'
+    ),
+    path(
+        'songs/<song_id>/',
+        song_routes.NeptuneSongDetail.as_view(),
+        name='NeptuneSongDetail'),
+    path(
+        'artists',
+        artist_routes.NeptuneArtistRoute,
+        name='NeptuneArtistsRoute'
+    ),
+    path(
+        'albums',
+        album_routes.NeptuneAlbumRoute,
+        name='NeptuneAlbumsRoute'
+    ),
+    path(
+        'users/',
+        user_routes.NeptuneUserList.as_view(),
+        name='NeptuneUserList'
+    ),
+    path(
+        'users/<user_handle>/',
+        user_routes.NeptuneUserDetail.as_view(),
+        name='NeptuneUserDetail'
+    ),
 ]

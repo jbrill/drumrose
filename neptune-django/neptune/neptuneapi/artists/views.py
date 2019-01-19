@@ -1,18 +1,25 @@
+"""
+Artist Route Module
+"""
+
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt, csrf_protect
+from rest_framework.views import APIView
 
 from neptuneapi.artists.serializers import ArtistSerializer
 from neptuneapi.models.neptune_core import NeptuneArtist
 
-@csrf_exempt
-def NeptuneArtistRoute(request):
+
+class NeptuneArtistRoute(APIView):
     """
     API response for an artist
         GET: Retrieves an artist
         POST: Creates an artist
     """
 
-    if request.method == "GET":
+    def get(self, request):
+        """
+        Neptune Artist GET
+        """
         artist_1 = {
             "name": "Dr. Dre",
         }
@@ -23,13 +30,13 @@ def NeptuneArtistRoute(request):
             ]
         }
         return JsonResponse(artists)
-    if request.method == "POST":
+
+    def post(self, request):
+        """
+        Neptune Artist POST
+        """
         test_artist = NeptuneArtist.objects.create(
             name="test"
         )
-        print(test_artist)
-        artist = {
-            "test_name": "test",
-        }
         serializer = ArtistSerializer(test_artist)
         return JsonResponse(serializer.data)

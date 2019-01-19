@@ -1,1 +1,6 @@
 Django==2.1.2
+djangorestframework
+djangorestframework-jwt
+cryptography
+pyjwt
+python-dotenv

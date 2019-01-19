@@ -1,22 +1,35 @@
+"""
+Album route module
+"""
+
+import json
+
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt, csrf_protect
 
 from neptuneapi.albums.serializers import AlbumSerializer
 from neptuneapi.models.neptune_core import NeptuneAlbum
 
-import json
+from rest_framework.views import APIView
 
-@csrf_exempt
-def NeptuneAlbumRoute(request):
+
+class NeptuneAlbumRoute(APIView):
     """
     API response for an artist
         GET: Retrieves an album
         POST: Creates an album
     """
-    if request.method == "GET":
-        albums = NeptuneALbum.objects.all()
+
+    def get(self):
+        """
+        GET for Neptune Artist
+        """
+        albums = NeptuneAlbum.objects.all()
         return JsonResponse(albums)
-    if request.method == "POST":
+
+    def post(self, request):
+        """
+        POST for Neptune Artist
+        """
         artist_data = json.loads(request.body.decode('utf-8'))
         print(artist_data)
         test_album = NeptuneAlbum.objects.create(

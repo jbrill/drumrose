@@ -1,12 +1,15 @@
+"""
+Neptune User Route Module
+"""
+
+import json
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.shortcuts import get_object_or_404
-from django.views.decorators.csrf import csrf_exempt, csrf_protect
 
 from neptuneapi.models.neptune_core import NeptuneUser
 from neptuneapi.users.serializers import NeptuneUserSerializer
 
-import json
 
 class NeptuneUserList(APIView):
     """
@@ -18,13 +21,20 @@ class NeptuneUserList(APIView):
         - POST /users/
             - Creates a new user
     """
-    def get(self, request):
+
+    def get(self):
+        """
+        Get for NeptuneUserList
+        """
         users = NeptuneUser.objects.all()
 
         serializer = NeptuneUserSerializer(users, many=True)
         return Response(serializer.data)
 
     def post(self, request):
+        """
+        Post for NeptuneUserList
+        """
         # create new user
         request_body = json.loads(
             request.body.decode('utf-8')
@@ -39,6 +49,7 @@ class NeptuneUserList(APIView):
         serializer = NeptuneUserSerializer(new_user)
         return Response(serializer.data)
 
+
 class NeptuneUserDetail(APIView):
     """
     Description:
@@ -51,7 +62,11 @@ class NeptuneUserDetail(APIView):
         - DELETE /users/:user_handle
             - Deletes a user
     """
-    def get(self, request, user_handle):
+
+    def get(self, user_handle):
+        """
+        GET for NeptuneUserDetail
+        """
         user = NeptuneUser.objects.get(
             handle=user_handle
         )
@@ -60,6 +75,9 @@ class NeptuneUserDetail(APIView):
         return Response(serializer.data)
 
     def patch(self, request, user_handle):
+        """
+        PATCH for NeptuneUserDetail
+        """
         user = NeptuneUser.objects.get(
             handle=user_handle
         )
@@ -79,6 +97,9 @@ class NeptuneUserDetail(APIView):
         return Response(serializer.data)
 
     def delete(self, request, user_handle):
+        """
+        DELETE for NeptuneUserDetail
+        """
         user = NeptuneUser.objects.get(
             handle=user_handle
         )

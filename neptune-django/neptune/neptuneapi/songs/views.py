@@ -8,6 +8,7 @@ from neptuneapi.songs.serializers import NeptuneSongSerializer
 
 import json
 
+
 class NeptuneSongList(APIView):
     """
     Description:
@@ -18,6 +19,7 @@ class NeptuneSongList(APIView):
         - POST /songs/
             - Creates a new song
     """
+
     def get(self, request):
         """
         If 'feed'
@@ -47,6 +49,7 @@ class NeptuneSongList(APIView):
         serializer = NeptuneSongSerializer(new_song)
         return Response(serializer.data)
 
+
 class NeptuneSongDetail(APIView):
     """
     Description:
@@ -59,6 +62,7 @@ class NeptuneSongDetail(APIView):
         - DELETE /posts/:post_id
             - Deletes a post
     """
+
     def get(self, request, post_id):
         print("HERE...")
         user = NeptuneUser.objects.get(

@@ -10,6 +10,7 @@ from neptuneapi.artists import views as artist_routes
 from neptuneapi.albums import views as album_routes
 from neptuneapi.songs import views as song_routes
 from neptuneapi.users import views as user_routes
+from neptuneapi.auth import views as auth_routes
 
 """neptune URL Configuration
 
@@ -28,6 +29,11 @@ Including another URLconf
 """
 
 urlpatterns = [
+    path(
+        'auth/',
+        auth_routes.AuthRoute.as_view(),
+        name='NeptuneAuth'
+    ),
     path(
         'posts/',
         post_routes.NeptunePostList.as_view(),

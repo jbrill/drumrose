@@ -22,7 +22,7 @@ class NeptuneUserList(APIView):
             - Creates a new user
     """
 
-    def get(self):
+    def get(self, request):
         """
         Get for NeptuneUserList
         """

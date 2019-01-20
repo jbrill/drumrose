@@ -29,6 +29,7 @@ def get_public_key():
     certificate = load_pem_x509_certificate(
         str.encode(certificate_raw), default_backend()
     )
+
     return certificate.public_key()
 
 
@@ -36,6 +37,7 @@ def get_username_from_payload(payload):
     """
     Get username from jwt
     """
+    print("\nHIIII\n")
     username = payload.get('sub').replace('|', '.')
     print("HERE FOR {}".format(username))
     authenticate(remote_user=username)

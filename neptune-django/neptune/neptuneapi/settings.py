@@ -11,11 +11,28 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+import jwt
+import requests
 
-from neptuneapi.utils.access_checks import (
-    get_username_from_payload,
-    get_public_key
-)
+from cryptography.x509 import load_pem_x509_certificate
+from cryptography.hazmat.backends import default_backend
+
+
+def get_public_key():
+    """
+    Returns public key
+    """
+    cert_url = "https://neptunemusic.auth0.com/.well-known/jwks.json"
+    jwks = requests.get(cert_url).json()
+    cert = '-----BEGIN CERTIFICATE-----\n' + \
+        jwks['keys'][0]['x5c'][0] + \
+        '\n-----END CERTIFICATE-----'
+
+    certificate = load_pem_x509_certificate(
+        cert.encode('utf-8'), default_backend())
+
+    return certificate.public_key()
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -34,7 +51,6 @@ ALLOWED_HOSTS = []
 
 # Application definition
 INSTALLED_APPS = [
-    'rest_framework',
     'neptuneapi.apps.NeptuneAppConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -42,6 +58,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'rest_framework_jwt',
 ]
 
 MIDDLEWARE = [
@@ -91,7 +109,7 @@ DATABASES = {
         'USER': 'neptune_user',
         'PASSWORD': 'password',
         'HOST': 'localhost',
-        'PORT': '',
+        'PORT': '5432',
     }
 }
 
@@ -125,16 +143,26 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH0_DOMAIN = 'neptunemusic.auth0.com'
+API_IDENTIFIER = 'https://neptuneapi'
+PUBLIC_KEY = get_public_key()
+JWT_ISSUER = None
 
-# JWT definition
+if AUTH0_DOMAIN:
+    JWT_ISSUER = 'https://' + AUTH0_DOMAIN + '/'
+
+
+def jwt_get_username_from_payload_handler(payload):
+    return 'auth0user'
+
+
 JWT_AUTH = {
-    'JWT_PAYLOAD_GET_USERNAME_HANDLER':
-        get_username_from_payload,
-    'JWT_PUBLIC_KEY': get_public_key(),
+    'JWT_PAYLOAD_GET_USERNAME_HANDLER': jwt_get_username_from_payload_handler,
+    'JWT_PUBLIC_KEY': PUBLIC_KEY,
     'JWT_ALGORITHM': 'RS256',
-    'JWT_AUDIENCE': 'https://neptunemusic.auth0.com/api/v2/',
-    'JWT_ISSUER': 'https://neptunemusic.auth0.com',
-    'JWT_AUTH_HEADER_PREFIX': 'Bearer ',
+    'JWT_AUDIENCE': API_IDENTIFIER,
+    'JWT_ISSUER': JWT_ISSUER,
+    'JWT_AUTH_HEADER_PREFIX': 'Bearer',
 }
 
 # Internationalization
@@ -155,3 +183,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+CORS_ORIGIN_WHITELIST = (
+    'localhost:8080',
+)

@@ -41,8 +41,6 @@ export default {
     documentClick(e) {
       // if we click outside element, hide menu
       let el = this.$refs.moreList;
-      console.log(el);
-      console.log(e.target);
       let target = e.target;
       if (el !== target && !el.contains(target)) {
         if (this.showMoreMenu) {

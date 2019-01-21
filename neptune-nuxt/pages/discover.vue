@@ -70,7 +70,7 @@ export default {
     border-bottom-color: rgba(#000, 1);
   }
 }
-,
-searchContain {
+
+.searchContain {
 }
 </style>

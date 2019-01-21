@@ -24,34 +24,43 @@ export const extractInfoFromHash = () => {
   };
 };
 
-export const setToken = token => {
-  if (process.server) return;
-  window.localStorage.setItem("token", token);
-  console.log("TOKEN...");
-  console.log(token);
-  window.localStorage.setItem("user", JSON.stringify(jwtDecode(token)));
-  Cookie.set("jwt", token);
+export const getDecodedJWT = jwt => {
+  return JSON.stringify(jwtDecode(jwt));
 };
 
-export const getTokenFromCookie = () => {
-  if (process.server) return;
-  console.log("GETTING TOKEN");
-  console.log(Cookie.get("jwt"));
-  return Cookie.get("jwt");
+export const setStorage = (token, identifier) => {
+  if (process.client) {
+    window.localStorage.setItem(identifier, token);
+  } else {
+    Cookie.set(identifier, token);
+  }
 };
 
-export const getTokenFromLocalStorage = () => {
-  const json = window.localStorage.token;
-  return json ? JSON.parse(json) : undefined;
+export const getFromCookie = identifier => {
+  if (process.client) return;
+  return Cookie.get(identifier);
 };
 
-export const unsetToken = () => {
+export const getFromLocalStorage = identifier => {
   if (process.server) return;
-  window.localStorage.removeItem("token");
-  window.localStorage.removeItem("user");
-  window.localStorage.removeItem("secret");
-  Cookie.remove("jwt");
-  window.localStorage.setItem("logout", Date.now());
+  return window.localStorage.identifier;
+};
+
+export const unsetAll = () => {
+  if (process.server) {
+    Object.keys(Cookies.get()).forEach(function(cookieName) {
+      var neededAttributes = {
+        // Here you pass the same attributes that were used when the cookie was created
+        // and are required when removing the cookie
+      };
+      Cookies.remove(cookieName, neededAttributes);
+    });
+  } else {
+    window.localStorage.removeItem("token");
+    window.localStorage.removeItem("user");
+    window.localStorage.removeItem("secret");
+    window.localStorage.setItem("logout", Date.now());
+  }
 };
 
 export const getUserFromCookie = req => {
@@ -76,7 +85,7 @@ export const setSecret = secret =>
 export const checkSecret = secret => window.localStorage.secret === secret;
 
 export const getAppleMusicToken = () => {
-  if (!process.server) return;
+  if (process.client) return;
   var privateKey = fs.readFileSync("./utils/AuthKey_T3K3M873XH.p8").toString();
   const teamId = config.APPLE_MUSIC_TEAM_ID;
   const keyId = config.APPLE_MUSIC_KEY_ID;

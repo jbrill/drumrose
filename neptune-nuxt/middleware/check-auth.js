@@ -1,36 +1,27 @@
 import {
-  getUserFromCookie,
-  getTokenFromCookie,
-  getTokenFromLocalStorage,
-  getUserFromLocalStorage,
-  getAppleMusicToken
+  getFromCookie,
+  getFromLocalStorage,
+  getDecodedJWT
 } from "~/utils/auth";
 
 export default function({ store, req }) {
-  /* If server side
-	If the cookie is expired, set user to null
-  If client side
-	If the user local storage is expired, set user to null
-  If nuxt generate, pass this middleware
-  */
-  let loggedUser;
-  let apiToken;
-  let musicToken;
+  let auth0Token;
+  let appleToken;
+
   if (process.server) {
     if (!req) return;
-    musicToken = getAppleMusicToken();
-    loggedUser = getUserFromCookie(req);
-    apiToken = getTokenFromCookie();
-    store.commit("SET_MUSIC_TOKEN", musicToken);
-    console.log(apiToken);
+    // server side needs to extract from cookies
+    appleToken = getFromCookie("apple_token");
+    auth0Token = getFromCookie("auth0_token");
   } else {
-    apiToken = getTokenFromLocalStorage();
-    loggedUser = getUserFromLocalStorage();
+    // client side extracts from local storage
+    appleToken = getFromLocalStorage("apple_token");
+    auth0Token = getFromLocalStorage("auth0_token");
   }
-  console.log("API TOKEN...");
-  console.log(apiToken);
-  console.log("USER...");
-  console.log(loggedUser);
-  store.commit("SET_API_TOKEN", apiToken);
-  store.commit("SET_USER", loggedUser);
+
+  // const loggedUser = getDecodedJWT(auth0Token);
+
+  store.commit("SET_MUSIC_TOKEN", appleToken);
+  store.commit("SET_API_TOKEN", auth0Token);
+  // store.commit("SET_USER", loggedUser);
 }

@@ -12,7 +12,7 @@ export default {
 
 <style scoped>
 .search-bar__input {
-  width: 20rem;
+  width: 18rem;
   height: 2rem;
   background-image: url("~assets/search.png");
   background-repeat: no-repeat;
@@ -24,7 +24,7 @@ export default {
   font-size: 0.8rem;
   color: white;
   border: none;
-  padding-left: 2rem;
+  padding-left: 2.5rem;
 }
 
 .search-bar__input:focus {

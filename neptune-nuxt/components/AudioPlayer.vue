@@ -91,7 +91,9 @@ export default {
   margin-top: 0.5rem;
   font-size: 2rem;
 }
-
+.audio-play__contain i:hover {
+  color: var(--primary-yellow);
+}
 .audio-player__track-info {
   float: right;
   padding-left: 3rem;

@@ -18,12 +18,12 @@ export default {
 .top--body {
   height: 100%;
   display: inline-block;
-  margin-top: 6rem;
+  margin-top: 8rem;
 }
 
 .search-bar {
   position: absolute;
   right: 4rem;
-  top: 6rem;
+  top: 8rem;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <nuxt-link class="title" to="/" exact>
-      <img src="~/assets/logo.png" />
+      <img class="title__img" src="~/assets/logo.png" />
     </nuxt-link>
     <nuxt-link class="title_middle" to="/" exact>NEPTUNE</nuxt-link>
     <div class="stateLinks">
@@ -37,12 +37,13 @@ export default {
   position: fixed;
   z-index: 100;
   background-color: #9c0235;
-  top: 0;
+  top: 2rem;
   left: 0;
   display: flex;
   align-items: center;
   width: 100%;
   min-height: 4rem;
+  box-shadow: var(--shadow-heavy);
 }
 .header img {
   height: 3rem;
@@ -51,12 +52,15 @@ export default {
   margin-left: 2em;
   font-size: 1.4em;
 }
-.title:hover {
+.title__img {
+  width: 3rem;
+  height: auto;
+  vertical-align: middle;
 }
 .title_middle {
   letter-spacing: 2px;
-  font-size: 2.3em;
-  color: white;
+  font-size: 2em;
+  color: black;
   font-weight: lighter;
   margin: 0 auto;
   margin-left: 3rem;

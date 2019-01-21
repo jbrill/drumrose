@@ -1,10 +1,13 @@
 <template>
-  <div ref="more--list" class="more--menu__contain">
-    <i @click="showMoreMenu = !showMoreMenu" class="material-icons"
+  <div class="more--menu__contain">
+    <i
+      ref="moreList"
+      @click="showMoreMenu = !showMoreMenu"
+      class="material-icons"
       >arrow_drop_down</i
     >
     <transition name="fade">
-      <div v-if="showMoreMenu" class="more--menu__contain">
+      <div v-if="showMoreMenu">
         <ul class="more--list__menu">
           <li>
             <nuxt-link to="/profile"
@@ -38,9 +41,13 @@ export default {
     documentClick(e) {
       // if we click outside element, hide menu
       let el = this.$refs.moreList;
+      console.log(el);
+      console.log(e.target);
       let target = e.target;
       if (el !== target && !el.contains(target)) {
-        this.showMoreMenu = this.showMoreMenu ? false : true;
+        if (this.showMoreMenu) {
+          this.showMoreMenu = false;
+        }
       }
     }
   },
@@ -66,10 +73,11 @@ export default {
 <style scoped>
 .more--menu__contain {
   margin-right: 3rem;
+  z-index: -10;
 }
 .more--menu__contain i {
-  font-size: 2rem;
-  color: white;
+  font-size: 1.5rem;
+  color: black;
   margin-top: 0.5rem;
 }
 .more--menu__contain i:hover {
@@ -85,7 +93,7 @@ export default {
 .more--list__menu {
   position: absolute;
   top: 4rem;
-  background-color: black;
+  background-color: #38312c;
   z-index: 10;
   right: 0;
   padding: 0;
@@ -97,19 +105,20 @@ export default {
 .more--list__menu li {
   width: 100%;
   list-style: none;
+  font-size: 0.8rem;
 }
 .more--list__menu li * {
   width: 100%;
 }
 .more-list__menu__btn {
-  background-color: black;
+  background-color: #1e1b1a;
   color: white;
   border: none;
   height: 3rem;
 }
 .more-list__menu__btn:hover {
   cursor: pointer;
-  color: #f5f5f5;
-  background-color: #030114;
+  color: var(--primary-yellow);
+  background-color: black;
 }
 </style>

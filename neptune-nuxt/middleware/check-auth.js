@@ -1,5 +1,7 @@
 import {
   getUserFromCookie,
+  getTokenFromCookie,
+  getTokenFromLocalStorage,
   getUserFromLocalStorage,
   getAppleMusicToken
 } from "~/utils/auth";
@@ -12,16 +14,23 @@ export default function({ store, req }) {
   If nuxt generate, pass this middleware
   */
   let loggedUser;
+  let apiToken;
   let musicToken;
   if (process.server) {
     if (!req) return;
     musicToken = getAppleMusicToken();
     loggedUser = getUserFromCookie(req);
+    apiToken = getTokenFromCookie();
     store.commit("SET_MUSIC_TOKEN", musicToken);
+    console.log(apiToken);
   } else {
+    apiToken = getTokenFromLocalStorage();
     loggedUser = getUserFromLocalStorage();
   }
+  console.log("API TOKEN...");
+  console.log(apiToken);
   console.log("USER...");
   console.log(loggedUser);
+  store.commit("SET_API_TOKEN", apiToken);
   store.commit("SET_USER", loggedUser);
 }

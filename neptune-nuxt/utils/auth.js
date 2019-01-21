@@ -33,6 +33,18 @@ export const setToken = token => {
   Cookie.set("jwt", token);
 };
 
+export const getTokenFromCookie = () => {
+  if (process.server) return;
+  console.log("GETTING TOKEN");
+  console.log(Cookie.get("jwt"));
+  return Cookie.get("jwt");
+};
+
+export const getTokenFromLocalStorage = () => {
+  const json = window.localStorage.token;
+  return json ? JSON.parse(json) : undefined;
+};
+
 export const unsetToken = () => {
   if (process.server) return;
   window.localStorage.removeItem("token");

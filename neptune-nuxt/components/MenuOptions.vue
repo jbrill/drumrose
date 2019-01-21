@@ -3,7 +3,7 @@
     <ul>
       <li><nuxt-link to="/" class="menubtn">Feed</nuxt-link></li>
       <li><nuxt-link to="/discover" class="menubtn">Discover</nuxt-link></li>
-      <li><nuxt-link to="/jbrlly" class="menubtn">Profile</nuxt-link></li>
+      <li><nuxt-link to="/lists" class="menubtn">Lists</nuxt-link></li>
     </ul>
   </div>
 </template>
@@ -29,7 +29,7 @@ ul {
 }
 ul li {
   display: inline;
-  font-size: 2rem;
+  font-size: 1.5rem;
   margin-left: 1em;
 }
 .menubtn {
@@ -37,7 +37,7 @@ ul li {
 }
 .menubtn:hover {
   cursor: pointer;
-  color: #c0102c;
-  border-bottom: 2px solid #c0102c;
+  color: var(--primary-yellow);
+  border-bottom: 2px solid var(--primary-yellow);
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div><post-feed :posts="posts" /></div>
+  <div><post-feed :posts="posts" />LISTS</div>
 </template>
 
 <script>

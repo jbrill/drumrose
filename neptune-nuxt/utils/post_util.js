@@ -19,9 +19,14 @@ async function getPlayback(musicId, config) {
   return apple_resp;
 }
 
-export const getPosts = async () => {
+export const getPosts = async bearerToken => {
   try {
-    const posts = await axios.get("http://localhost:8000/posts/");
+    console.log(bearerToken);
+    const posts = await axios.get("http://localhost:8000/posts/", {
+      headers: {
+        Authorization: "Bearer " + bearerToken //the token is a variable which holds the token
+      }
+    });
     return posts;
   } catch (err) {
     console.error(err);

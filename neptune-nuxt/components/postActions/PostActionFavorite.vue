@@ -16,6 +16,7 @@ export default {
 }
 .PostActionFavoriteContain {
   float: right;
+  color: white;
   padding-left: 1rem;
 }
 </style>

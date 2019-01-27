@@ -34,9 +34,9 @@ sk-circle {
   content: "";
   display: block;
   margin: 0 auto;
-  width: 15%;
-  height: 15%;
-  background-color: #ac0029;
+  width: 5%;
+  height: 5%;
+  background-color: black;
   border-radius: 100%;
   -webkit-animation: sk-circleBounceDelay 1.2s infinite ease-in-out both;
   animation: sk-circleBounceDelay 1.2s infinite ease-in-out both;

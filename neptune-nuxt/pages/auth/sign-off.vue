@@ -3,6 +3,7 @@
 </template>
 
 <script>
+import { unsetAll } from "~/utils/auth";
 import Loading from "~/components/Loading.vue";
 
 export default {
@@ -10,11 +11,11 @@ export default {
     Loading
   },
   mounted() {
-    const unsetToken = require("~/utils/auth").unsetToken;
-    const logout = require("~/utils/lock").logout;
+    unsetAll();
+    // logout();
 
-    unsetToken();
-    logout();
+    // redirect to home
+    this.$router.replace("/");
   }
 };
 </script>

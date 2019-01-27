@@ -15,8 +15,10 @@
   "dependencies": {
     "@nuxtjs/axios": "^5.3.3",
     "apple-music-jwt": "^0.2.0",
+    "auth0-js": "^9.9.0",
     "auth0-lock": "11.8.1",
     "axios": "^0.18.0",
+    "bootstrap-vue": "^2.0.0-rc.11",
     "core-js": "^2.5.7",
     "fs": "0.0.1-security",
     "jquery": "^3.3.1",
@@ -24,6 +26,7 @@
     "jwt-decode": "2.2.0",
     "normalize.css": "^8.0.0",
     "nuxt": "latest",
+    "nuxt-svg-loader": "^1.0.1",
     "uuid": "3.3.2"
   },
   "devDependencies": {

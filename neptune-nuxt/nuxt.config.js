@@ -47,7 +47,10 @@ module.exports = {
       { rel: "mask-icon", color: "#5bbad5", href: "safari-pinned-tab.svg" },
       { rel: "theme-color", content: "#ffffff" }
     ],
-    script: [{ src: "https://js-cdn.music.apple.com/musickit/v1/musickit.js" }]
+    script: [
+      { src: "https://js-cdn.music.apple.com/musickit/v1/musickit.js" },
+      { src: "https://cdn.auth0.com/js/auth0/9.5.1/auth0.min.js" }
+    ]
   },
   /*
    ** Global CSS
@@ -62,7 +65,7 @@ module.exports = {
     APPLE_MUSIC_KEY_ID: "",
     APPLE_MUSIC_TEAM_ID: ""
   },
-  modules: ["@nuxtjs/axios"],
+  modules: ["@nuxtjs/axios", "bootstrap-vue/nuxt", "nuxt-svg-loader"],
   plugins: [],
   axios: {
     proxyHeaders: false

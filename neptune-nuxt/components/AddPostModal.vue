@@ -3,7 +3,7 @@
     <transition name="modal">
       <div class="modal-mask">
         <div class="modal-wrapper">
-          <div class="modal-container">
+          <div ref="postModal" class="modal-container">
             <h2>ADD POST</h2>
             INPUT SONG <input class="songInput" /><br />
             INPUT CAPTION <input class="captionInput" /><br />
@@ -16,7 +16,29 @@
 </template>
 
 <script>
-export default {};
+export default {
+  methods: {
+    documentClick(e) {
+      // if we click outside element, hide menu
+      let el = this.$refs.postModal;
+      let target = e.target;
+      if (el !== target && !el.contains(target)) {
+        this.$emit("closed");
+      }
+    }
+  },
+  created() {
+    if (!process.server) {
+      document.addEventListener("click", this.documentClick);
+    }
+  },
+  destroyed() {
+    // important to clean up!!
+    if (!process.server) {
+      document.removeEventListener("click", this.documentClick);
+    }
+  }
+};
 </script>
 
 <style scoped>

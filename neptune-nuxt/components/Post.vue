@@ -61,14 +61,13 @@ export default {
 
 <style scoped>
 .post {
-  width: 83%;
+  width: 83%; /* 83 percent of grid width */
   margin: 0 auto;
-  border: 1px solid black;
-  box-shadow: 0px 13px 21px -10px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow-heavy);
 }
 .postContain {
-  background-color: white;
-  border-top: 3px solid #772ce6;
+  background-color: black;
+  border-top: 2px solid var(--red-accent);
   height: 15rem;
   overflow: hidden;
 }
@@ -143,18 +142,23 @@ export default {
 }
 .posterDetail {
   display: inline-block;
+  color: white;
 }
 .posterName {
   margin-top: 0;
+  color: white;
+  font-size: 1rem;
+  padding-bottom: 0.5rem;
+  line-height: 1.5rem;
 }
 .posterName:hover {
   cursor: pointer;
   color: #c0102c;
 }
 .posterHandle {
-  font-size: 50%;
+  font-size: 0.5rem;
   color: grey;
-  margin-top: -10px;
+  margin-top: -1rem;
 }
 .postDate {
   margin-top: 0px;
@@ -164,6 +168,10 @@ export default {
 }
 .postCaption {
   font-size: 1em;
+  color: white;
+  font-family: "Proxima Nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin-left: 1rem;
+  margin-top: 1rem;
 }
 .postActionContain {
   position: absolute;
@@ -176,7 +184,7 @@ export default {
 .postTime {
   font-size: 1rem;
   margin-top: -2.5rem;
-  color: black;
+  color: white;
   position: absolute;
 }
 .timeLoop {
@@ -186,11 +194,11 @@ export default {
   height: 3rem;
   width: 100%;
   position: relative;
-  background-color: white;
-  border-top: 1px solid black;
+  background-color: black;
+  border-top: 1px solid var(--red-accent);
 }
 .audioPlay {
-  color: black;
+  color: white;
   margin-left: 1rem;
   margin-top: 0.5rem;
   font-size: 2rem;

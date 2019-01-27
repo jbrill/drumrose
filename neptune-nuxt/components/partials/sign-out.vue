@@ -1,31 +1,6 @@
 <template>
-  <div class="sign--in__contain">
-    <b-btn class="neptune-button__strong" v-b-modal.modalPopover>Sign In</b-btn>
-    <b-modal id="modalPopover" title="Join the fun" hide-footer>
-      <form method="POST" @submit="onSubmitForm">
-        <div class="form-group">
-          <label for="username"> Username: </label>
-          <input type="text" name="username" class="form-control" />
-        </div>
-
-        <div class="form-group">
-          <label for="password"> Password: </label>
-          <input type="password" name="password" class="form-control" />
-        </div>
-
-        <div class="form-group" v-if="!submitted">
-          <button
-            @click="show = false"
-            type="submit"
-            class="btn btn-default"
-            v-bind:disabled="errors"
-          >
-            Sign In
-          </button>
-        </div>
-        <div class="alert alert-success" v-if="submitted">Thanks!</div>
-      </form>
-    </b-modal>
+  <div class="sign--out__contain">
+    <b-btn class="neptune_btn_strong">Sign Out</b-btn>
   </div>
 </template>
 

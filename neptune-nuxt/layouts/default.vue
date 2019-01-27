@@ -33,12 +33,12 @@ export default {
     return {
       meta: [
         // hid is used as unique identifier. Do not use `vmid` for it as it will not work
-        {
-          name: "apple-music-developer-token",
-          content: this.$store.state.music_token
-        },
-        { name: "apple-music-app-name", content: "Neptune" },
-        { name: "apple-music-app-build", content: "0.0.1" }
+        // {
+        //   name: "apple-music-developer-token",
+        //   content: this.$store.state.music_token
+        // },
+        // { name: "apple-music-app-name", content: "Neptune" },
+        // { name: "apple-music-app-build", content: "0.0.1" }
       ]
     };
   }
@@ -52,6 +52,7 @@ export default {
 }
 .main {
   margin: 0 auto;
+  background-color: var(--primary-red--dark);
 }
 .main-body {
   margin-top: -2rem;

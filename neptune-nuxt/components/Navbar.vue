@@ -1,9 +1,11 @@
 <template>
   <div class="header">
     <nuxt-link class="title" to="/" exact>
-      <img class="title__img" src="~/assets/logo.png" />
+      <NeptuneLogo class="title__img" />
     </nuxt-link>
     <nuxt-link class="title_middle" to="/" exact>NEPTUNE</nuxt-link>
+    <div class="search-bar__contain"><search-bar /></div>
+    <signIn v-if="!isAuthenticated" /> <signOut v-else />
     <div class="stateLinks">
       <div class="nav-bar__right--actions"><moreList /></div>
     </div>
@@ -13,10 +15,17 @@
 <script>
 import { mapGetters } from "vuex";
 import MoreList from "~/components/Navbar/MoreList";
+import SearchBar from "~/components/SearchBar";
+import NeptuneLogo from "~/assets/svg/logo.svg";
+import SignIn from "~/components/partials/sign-in";
+import SignOut from "~/components/partials/sign-out";
 
 export default {
   components: {
-    MoreList
+    MoreList,
+    SearchBar,
+    NeptuneLogo,
+    SignIn
   },
   computed: mapGetters(["isAuthenticated"]),
   methods: {
@@ -37,7 +46,6 @@ export default {
   position: fixed;
   z-index: 100;
   background-color: #9c0235;
-  top: 2rem;
   left: 0;
   display: flex;
   align-items: center;
@@ -60,7 +68,7 @@ export default {
 .title_middle {
   letter-spacing: 2px;
   font-size: 2em;
-  color: black;
+  color: white;
   font-weight: lighter;
   margin: 0 auto;
   margin-left: 3rem;
@@ -85,5 +93,11 @@ a {
 
 .nav-bar__right--actions .moreListContain {
   float: right;
+}
+.search-bar__contain {
+  margin: 0 auto;
+}
+.sign--in__contain {
+  margin-right: 1rem;
 }
 </style>

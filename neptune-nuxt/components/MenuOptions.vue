@@ -25,7 +25,7 @@ ul {
   width: 40%;
   padding-bottom: 10px;
   min-width: 500px;
-  border-bottom: 0.5px solid rgba(0, 0, 0, 0.4);
+  border-bottom: 0.5px solid var(--red-accent);
 }
 ul li {
   display: inline;
@@ -33,7 +33,7 @@ ul li {
   margin-left: 1em;
 }
 .menubtn {
-  color: black;
+  color: white;
 }
 .menubtn:hover {
   cursor: pointer;

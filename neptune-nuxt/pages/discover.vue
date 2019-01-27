@@ -1,28 +1,57 @@
 <template>
-  <div>
-    <div v-if="isAuthenticated" class="loggedInContent"><post-feed /></div>
-    <div v-else><div class="topExtension">LISTEN TO MUSIC</div></div>
-  </div>
+  <div><post-feed :posts="posts" /></div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
-import ProfileNav from "~/components/ProfileNav";
-import MenuOptions from "~/components/MenuOptions";
-import PostFeed from "~/components/PostFeed";
+
 import AddPostButton from "~/components/AddPostButton";
+import PostFeed from "~/components/PostFeed";
 import TopBody from "~/components/TopBody";
+import UnloggedContent from "~/components/UnloggedContent";
+
+import { getPosts, getTrackInfo } from "~/utils/post_util.js";
 
 export default {
   computed: mapGetters(["isAuthenticated", "loggedUser"]),
   components: {
-    ProfileNav,
-    MenuOptions,
     PostFeed,
     AddPostButton,
-    TopBody
+    TopBody,
+    UnloggedContent
   },
-  methods: {}
+  async asyncData({ store }) {
+    console.log("store.state.api_token");
+    console.log(store.state.api_token);
+    const postResponse = await getPosts(store.state.api_token);
+    const posts = postResponse.data;
+    // const posts = [];
+    let parsedPosts = [];
+    for (let post of posts) {
+      const track_info = await getTrackInfo(
+        post.song.apple_music_id,
+        store.state.music_token
+      );
+      const postStructure = {
+        track: track_info,
+        user: post.user,
+        caption: post.caption
+      };
+      if (track_info) parsedPosts.push(postStructure);
+    }
+    console.log(parsedPosts);
+    return {
+      posts: parsedPosts
+    };
+  },
+  data: function() {
+    return {
+      posts: []
+    };
+  },
+  async destroyed() {
+    console.log("DESTROYING...");
+  }
 };
 </script>
 
@@ -33,14 +62,6 @@ export default {
   margin-top: 8rem;
   text-align: center;
 }
-.topBodyContain {
-  width: 100%;
-  height: 40px;
-}
-.menuContain {
-  width: 80%;
-  float: left;
-}
 .profileContain {
   margin-top: -2rem;
   margin-right: 5%;
@@ -48,7 +69,6 @@ export default {
 }
 .feedContain {
   margin-bottom: 10%;
-  margin-top: 5%;
 }
 .topExtension {
   position: absolute;
@@ -69,8 +89,5 @@ export default {
     outline: none;
     border-bottom-color: rgba(#000, 1);
   }
-}
-
-.searchContain {
 }
 </style>

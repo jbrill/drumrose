@@ -1,7 +1,10 @@
 :root {
   --primary-red: #9c0235;
+  --primary-red--dark: #86002d;
   --primary-yellow: #f3f367;
   --primary-purple: #772ce6;
+  --primary-black-light: #33312c;
+  --red-accent: #71250b;
   --shadow-heavy: 0 2px 8px rgba(0, 0, 0, 0.33);
 }
 
@@ -12,8 +15,7 @@
 }
 
 html {
-  background-color: var(--primary-red);
-  /* background-color: var(--primary-red); */
+  background-color: var(--primary-red--dark);
 }
 
 ::selection {
@@ -37,15 +39,24 @@ h1 {
 p {
   font-size: 20px;
   font-weight: 200;
-  line-height: 30px;
 }
 a {
   color: #333;
   text-decoration: none;
   font-weight: 400;
-  line-height: 30px;
   transition: border-bottom 0.2s;
 }
 i:hover {
   cursor: pointer;
+}
+.neptune-button__strong {
+  background-color: transparent;
+  border: none;
+  border-radius: 5px;
+  box-shadow: var(--shadow-heavy);
+}
+.neptune-button__strong:hover {
+  cursor: pointer;
+  background-color: var(--primary-black-light);
+  /* color: var(--primary-purple); */
 }

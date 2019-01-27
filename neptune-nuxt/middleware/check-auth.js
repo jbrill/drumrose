@@ -1,27 +1,29 @@
 import {
   getFromCookie,
   getFromLocalStorage,
-  getDecodedJWT
+  getDecodedJWT,
+  getAppleMusicToken
 } from "~/utils/auth";
+import Cookie from "js-cookie";
 
 export default function({ store, req }) {
-  let auth0Token;
-  let appleToken;
-
   if (process.server) {
     if (!req) return;
     // server side needs to extract from cookies
-    appleToken = getFromCookie("apple_token");
-    auth0Token = getFromCookie("auth0_token");
+    let apple_token = Cookie.get("apple_token");
+    // auth0Token = Cookie.get("auth0_token");
+    if (!apple_token) {
+      // server side
+      apple_token = getAppleMusicToken();
+      store.commit("SET_MUSIC_TOKEN", apple_token);
+      Cookie.set("apple_token", apple_token); // saving token in cookie for server rendering    }
+    }
   } else {
     // client side extracts from local storage
-    appleToken = getFromLocalStorage("apple_token");
-    auth0Token = getFromLocalStorage("auth0_token");
+    // appleToken = getFromLocalStorage("apple_token");
+    const auth0Token = store.state.api_token;
+    if (!auth0Token) {
+      console.log("NO AUTH0 TOKEN... should logout");
+    }
   }
-
-  // const loggedUser = getDecodedJWT(auth0Token);
-
-  store.commit("SET_MUSIC_TOKEN", appleToken);
-  store.commit("SET_API_TOKEN", auth0Token);
-  // store.commit("SET_USER", loggedUser);
 }

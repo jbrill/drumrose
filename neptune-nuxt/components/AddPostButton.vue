@@ -1,10 +1,37 @@
 <template>
   <div>
-    <button class="showModal" @click="showModal = true">
-      <i class="material-icons">album</i>
-    </button>
+    <b-btn class="neptune-button__strong" v-b-modal.addPostModal
+      >New Tune</b-btn
+    >
+    <!-- <i class="material-icons">album</i> -->
     <!-- use the modal component, pass in the prop -->
-    <AddPostModal v-if="showModal" @close="showModal = false" />
+    <!-- <AddPostModal v-on:closed="showModal = false" v-if="showModal" /> -->
+    <b-modal id="addPostModal" title="Add a post" hide-footer>
+      <form method="POST" @submit="onSubmitForm">
+        <div class="form-group">
+          <label for="tune"> Tune </label>
+          <input type="text" name="tune" class="form-control" />
+        </div>
+
+        <div class="form-group">
+          <label for="caption"> Caption </label>
+          <input type="text" name="caption" class="form-control" />
+        </div>
+
+        <div class="form-group" v-if="!submitted">
+          <b-button
+            @click="show = false"
+            type="submit"
+            class="btn btn-default"
+            v-bind:disabled="errors"
+            variant="primary"
+          >
+            Add Post
+          </b-button>
+        </div>
+        <div class="alert alert-success" v-if="submitted">Thanks!</div>
+      </form>
+    </b-modal>
   </div>
 </template>
 
@@ -13,32 +40,30 @@ import { mapGetters } from "vuex";
 import AddPostModal from "~/components/AddPostModal.vue";
 
 export default {
-  data: function() {
-    return {
-      showModal: false
-    };
-  },
   components: {
     AddPostModal
+  },
+  methods: {
+    onSubmitForm: function(e) {
+      event.preventDefault();
+      console.log(e);
+    }
+  },
+  data: function() {
+    return {
+      // showModal: false
+      addPostModal: false
+    };
   }
 };
 </script>
 
 <style scoped>
-.showModal {
-  background-color: black;
-  color: white;
-  height: 2.5rem;
-  width: 6rem;
+.neptune-button__strong {
   position: absolute;
-  right: 3rem;
-  font-size: 1.5rem;
-  text-align: center;
-}
-.showModal i {
-  box-shadow: 0px 13px 21px -10px rgba(0, 0, 0, 0.3);
-}
-.showModal:hover {
-  cursor: pointer;
+  right: 15%;
+  top: 7rem;
+  width: 7rem;
+  line-height: 2rem;
 }
 </style>

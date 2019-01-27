@@ -1,15 +1,15 @@
 <template>
-  <div class="top--body"><menuOptions /> <searchBar /></div>
+  <div class="top--body"><menuOptions /><AddPostButton /></div>
 </template>
 
 <script>
 import MenuOptions from "~/components/MenuOptions";
-import SearchBar from "~/components/SearchBar";
+import AddPostButton from "~/components/AddPostButton";
 
 export default {
   components: {
     MenuOptions,
-    SearchBar
+    AddPostButton
   }
 };
 </script>
@@ -18,12 +18,6 @@ export default {
 .top--body {
   height: 100%;
   display: inline-block;
-  margin-top: 8rem;
-}
-
-.search-bar {
-  position: absolute;
-  right: 4rem;
-  top: 8rem;
+  margin-top: 7rem;
 }
 </style>

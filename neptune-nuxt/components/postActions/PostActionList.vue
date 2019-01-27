@@ -50,7 +50,7 @@ export default {
 
 <style scoped>
 .audioMore {
-  color: black;
+  color: white;
   margin-left: 1rem;
   margin-top: 0.5rem;
   font-size: 2rem;

@@ -20,10 +20,13 @@ export default {
 
 <style scoped>
 .profile--link__contain {
-  text-align: center;
-  padding: 2px;
-  width: 110%;
-  height: 110%;
+  /* text-align: center; */
+  /* padding: 2px; */
+  /* width: 110%; */
+  /* height: 110%; */
+  width: 1em;
+  height: auto;
+  float: left;
 }
 .profile--link__contain:hover {
   background-color: rgba(255, 255, 255, 0.3);

@@ -1,6 +1,11 @@
 <template>
   <div class="search-bar">
-    <input placeholder="Search for music" class="search-bar__input" />
+    <input
+      onfocus="this.placeholder = ''"
+      onblur="this.placeholder = 'Search for music...'"
+      placeholder="Search for music..."
+      class="search-bar__input"
+    />
   </div>
 </template>
 
@@ -20,9 +25,9 @@ export default {
   background-position-x: 0.5rem;
   background-size: 1rem 1rem;
   border-radius: 0.5rem;
-  background-color: #1e1b1a;
+  background-color: white;
   font-size: 0.8rem;
-  color: white;
+  color: black;
   border: none;
   padding-left: 2.5rem;
 }

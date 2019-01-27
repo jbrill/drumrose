@@ -1,6 +1,8 @@
 import { setSecret } from "./auth";
 
 import uuid from "uuid";
+import config from "~/config.json";
+import auth0 from "auth0-js";
 
 const getLock = options => {
   const config = require("~/config.json");
@@ -12,7 +14,20 @@ const getLock = options => {
   );
 };
 
-const getBaseUrl = () => `${window.location.protocol}//${window.location.host}`;
+export const webAuthFactory = () => {
+  console.log("DOMAIN");
+  console.log(config.AUTH0_CLIENT_DOMAIN);
+  return auth0.WebAuth({
+    domain: config.AUTH0_CLIENT_DOMAIN,
+    clientID: config.AUTH0_CLIENT_ID,
+    audience: config.API_AUDIENCE,
+    responseType: "token id_token",
+    redirectUrl: `${getBaseUrl()}/auth/signed-in`
+  });
+};
+
+export const getBaseUrl = () =>
+  `${window.location.protocol}//${window.location.host}`;
 
 const getOptions = container => {
   const secret = uuid.v4();
@@ -21,6 +36,7 @@ const getOptions = container => {
     closable: true,
     auth: {
       responseType: "token id_token",
+      audience: "https://neptuneapi",
       redirectUrl: `${getBaseUrl()}/auth/signed-in`,
       params: {
         scope: "openid profile email",

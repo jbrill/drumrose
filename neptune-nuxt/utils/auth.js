@@ -48,13 +48,14 @@ export const getFromLocalStorage = identifier => {
 
 export const unsetAll = () => {
   if (process.server) {
-    Object.keys(Cookies.get()).forEach(function(cookieName) {
-      var neededAttributes = {
-        // Here you pass the same attributes that were used when the cookie was created
-        // and are required when removing the cookie
-      };
-      Cookies.remove(cookieName, neededAttributes);
-    });
+    // Object.keys(Cookies.get()).forEach(function(cookieName) {
+    //   var neededAttributes = {
+    //     // Here you pass the same attributes that were used when the cookie was created
+    //     // and are required when removing the cookie
+    //   };
+    //   Cookies.remove(cookieName, neededAttributes);
+    // });
+    // Cookies.remove();
   } else {
     window.localStorage.removeItem("token");
     window.localStorage.removeItem("user");
@@ -70,7 +71,6 @@ export const getUserFromCookie = req => {
     .find(c => c.trim().startsWith("jwt="));
   if (!jwtCookie) return;
   const jwt = jwtCookie.split("=")[1];
-  console.log(jwtDecode(jwt));
   return jwtDecode(jwt);
 };
 

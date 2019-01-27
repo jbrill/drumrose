@@ -13,6 +13,7 @@ export default {
 <style scoped>
 .PostActionRepostContain {
   float: left;
+  color: white;
 }
 .postActionRepost:hover {
   color: #772ce6;

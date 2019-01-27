@@ -25,6 +25,12 @@
         </p>
       </div>
     </div>
+    <i
+      ref="moreMusic"
+      @click="moreMusic"
+      class="audio-player__more-btn material-icons"
+      >more_horiz</i
+    >
   </div>
 </template>
 
@@ -74,9 +80,15 @@ export default {
 <style scoped>
 .audioPlayer {
   width: 100%;
-  background-color: black;
-  height: 3rem;
-  overflow: hidden;
+  background: rgb(0, 0, 0);
+  background: linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(25, 25, 25, 1) 100%
+  );
+  border-top: 1px solid var(--primary-black-light);
+  height: 3.5rem;
+  /* overflow: hidden; */
   position: fixed;
   bottom: 0;
 }
@@ -84,23 +96,37 @@ export default {
 .audio-play__contain {
   padding-left: 2rem;
   display: inline-block;
+  height: 100%;
 }
 
 .audio-play__contain i {
   color: white;
-  margin-top: 0.5rem;
+  padding-top: 5px; /* slight nudge down*/
+  vertical-align: middle;
+  margin: 0;
+}
+.audio-play__previous,
+.audio-play__next {
   font-size: 2rem;
 }
-.audio-play__contain i:hover {
+.audio-play {
+  font-size: 2.5rem;
+  padding-top: 5;
+  /* margin-top: 1rem; */
+}
+.audio-play:hover {
+  color: var(--primary-red);
+}
+.audio-play__previous:hover,
+.audio-play__next:hover {
   color: var(--primary-yellow);
 }
 .audio-player__track-info {
   float: right;
   padding-left: 3rem;
   color: white;
-  padding-top: 0.5rem;
+  margin-top: 5px; /* nudge down a bit */
 }
-
 .audio-player__track-info__track-name:hover {
   cursor: pointer;
   color: red;
@@ -112,13 +138,23 @@ export default {
 }
 
 .audio-player__track-info__track-name {
-  font-size: 0.7rem;
-  line-height: 1rem;
+  font-size: 1rem;
   font-weight: bolder;
+  margin-bottom: 0;
 }
 
 .audio-player__track-info__track-artist {
   font-size: 0.5rem;
-  line-height: 1rem;
+  margin-bottom: 0.5rem;
+}
+.audio-player__more-btn {
+  position: absolute;
+  right: 1rem;
+  margin-top: 1rem;
+  color: white;
+  height: 3.5rem;
+}
+.audio-player__more-btn:hover {
+  color: var(--primary-yellow);
 }
 </style>

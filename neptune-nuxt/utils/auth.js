@@ -17,9 +17,10 @@ const getQueryParams = () => {
 
 export const extractInfoFromHash = () => {
   if (process.server) return;
-  const { id_token, state } = getQueryParams();
+  const { access_token, id_token, state } = getQueryParams();
   return {
-    token: id_token,
+    access_token: access_token,
+    id_token: id_token,
     secret: state
   };
 };

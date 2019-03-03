@@ -12,8 +12,6 @@ export default {
   },
   mounted() {
     unsetAll();
-    // logout();
-
     // redirect to home
     this.$router.replace("/");
   }

@@ -3,9 +3,6 @@
     <b-btn class="neptune-button__strong" v-b-modal.addPostModal
       >New Tune</b-btn
     >
-    <!-- <i class="material-icons">album</i> -->
-    <!-- use the modal component, pass in the prop -->
-    <!-- <AddPostModal v-on:closed="showModal = false" v-if="showModal" /> -->
     <b-modal id="addPostModal" title="Add a post" hide-footer>
       <form method="POST" @submit="onSubmitForm">
         <div class="form-group">
@@ -47,12 +44,14 @@ export default {
     onSubmitForm: function(e) {
       event.preventDefault();
       console.log(e);
+      this.submitted = true;
     }
   },
   data: function() {
     return {
-      // showModal: false
-      addPostModal: false
+      addPostModal: false,
+      submitted: false,
+      errors: false
     };
   }
 };

@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 import os
 import jwt
 import requests
-
+from django.contrib.auth import authenticate
 from cryptography.x509 import load_pem_x509_certificate
 from cryptography.hazmat.backends import default_backend
 
@@ -145,18 +145,15 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTH0_DOMAIN = 'neptunemusic.auth0.com'
 API_IDENTIFIER = 'https://neptuneapi'
 PUBLIC_KEY = get_public_key()
-JWT_ISSUER = None
-
-if AUTH0_DOMAIN:
-    JWT_ISSUER = 'https://' + AUTH0_DOMAIN + '/'
+JWT_ISSUER = 'https://neptunemusic.auth0.com/'
 
 
 def jwt_get_username_from_payload_handler(payload):
-    print("HI?")
-    return 'auth0user'
+    username = payload.get('sub').replace('|', '.')
+    authenticate(remote_user=username)
+    return username
 
 
 JWT_AUTH = {

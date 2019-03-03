@@ -6,10 +6,13 @@
     <b-modal id="addPostModal" title="Add a post" hide-footer>
       <form method="POST" @submit="onSubmitForm">
         <div class="form-group">
-          <label for="tune"> Tune </label>
-          <input type="text" name="tune" class="form-control" />
+          <label for="song"> Song </label>
+          <input type="text" name="song" class="form-control" />
         </div>
-
+        <div class="form-group">
+          <label for="artist"> Artist </label>
+          <input type="text" name="artist" class="form-control" />
+        </div>
         <div class="form-group">
           <label for="caption"> Caption </label>
           <input type="text" name="caption" class="form-control" />
@@ -34,15 +37,15 @@
 
 <script>
 import { mapGetters } from "vuex";
-import AddPostModal from "~/components/AddPostModal.vue";
+import { getTrackIDFromQuery } from "~/utils/post_util";
 
 export default {
-  components: {
-    AddPostModal
-  },
+  components: {},
   methods: {
     onSubmitForm: function(e) {
       event.preventDefault();
+      console.log("SUBMITTING FORM");
+      getTrackIDFromQuery("testquery", this.$store.state.music_token);
       this.submitted = true;
     }
   },

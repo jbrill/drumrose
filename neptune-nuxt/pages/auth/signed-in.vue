@@ -9,12 +9,11 @@ import {
 } from "~/utils/auth";
 import Cookie from "js-cookie";
 import Loading from "~/components/Loading.vue";
-import { registerUser } from "~/utils/neptuneapi";
 
 export default {
   mounted() {
     const { access_token, id_token, secret } = extractInfoFromHash();
-    console.log(access_token);
+
     if (!checkSecret(secret)) {
       // Something went wrong with auth!
       window.localStorage.setItem("secret", secret);

@@ -21,10 +21,6 @@ export default {
     UnloggedContent
   },
   async asyncData({ store }) {
-    console.log("store.state.api_token");
-    console.log(store.state.api_token);
-    // const postResponse = await getPosts();
-    // const posts = postResponse.data;
     const posts = [];
     let parsedPosts = [];
     for (let post of posts) {

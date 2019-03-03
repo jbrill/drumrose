@@ -1,3 +1,0 @@
-exports.getPostsByUser = (req, res) => {
-  
-};

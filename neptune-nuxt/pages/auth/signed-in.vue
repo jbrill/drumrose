@@ -1,6 +1,4 @@
-<template>
-  <loading />
-</template>
+<template> </template>
 
 <script>
 import {
@@ -17,14 +15,13 @@ export default {
   mounted() {
     const { access_token, id_token, secret } = extractInfoFromHash();
     console.log(access_token);
-    if (!checkSecret(secret) || !access_token) {
+    if (!checkSecret(secret)) {
       // Something went wrong with auth!
-      console.error("Something happened with the Sign In request");
+      window.localStorage.setItem("secret", secret);
     }
-    console.log("auth0_token");
-    console.log(access_token);
-    // console.log(this.$store);
+
     this.$store.commit("SET_API_TOKEN", access_token);
+    this.$store.commit("SET_USER", id_token);
     // redirect to home
     this.$router.replace("/");
   }

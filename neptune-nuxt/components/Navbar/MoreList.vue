@@ -25,11 +25,15 @@
               ><button class="more-list__menu__btn">Settings</button></nuxt-link
             >
           </li>
-          <!-- <li>
-            <nuxt-link to="/auth/sign-off"
-              ><button class="more-list__menu__btn">Sign Off</button></nuxt-link
+          <li>
+            <button
+              @click="signOff"
+              v-if="isAuthenticated"
+              class="more-list__menu__btn"
             >
-          </li> -->
+              Sign Off
+            </button>
+          </li>
         </ul>
       </div>
     </transition>
@@ -38,11 +42,13 @@
 
 <script>
 import profileNav from "~/components/ProfileNav";
+import { mapGetters } from "vuex";
 
 export default {
   components: {
     profileNav
   },
+  computed: mapGetters(["isAuthenticated"]),
   methods: {
     documentClick(e) {
       // if we click outside element, hide menu
@@ -53,6 +59,9 @@ export default {
           this.showMoreMenu = false;
         }
       }
+    },
+    signOff(e) {
+      console.log("SIGNING OFF HERE");
     }
   },
   created() {

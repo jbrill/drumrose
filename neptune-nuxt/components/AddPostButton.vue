@@ -43,7 +43,6 @@ export default {
   methods: {
     onSubmitForm: function(e) {
       event.preventDefault();
-      console.log(e);
       this.submitted = true;
     }
   },

@@ -20,9 +20,7 @@ async function getPlayback(musicId, config) {
 }
 
 export const getPosts = async bearerToken => {
-  console.log("bearerToken");
   try {
-    console.log(bearerToken);
     const posts = await axios.get("http://localhost:8000/posts/", {
       headers: {
         Authorization: "Bearer " + bearerToken //the token is a variable which holds the token

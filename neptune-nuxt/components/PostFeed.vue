@@ -12,9 +12,7 @@ export default {
     Post
   },
   props: ["posts"],
-  created() {
-    console.log("POST FEED COMPONENT CREATED");
-  }
+  created() {}
 };
 </script>
 <style scoped>

@@ -5,7 +5,7 @@
     </nuxt-link>
     <nuxt-link class="title_middle" to="/" exact>NEPTUNE</nuxt-link>
     <div class="search-bar__contain"><search-bar /></div>
-    <signIn v-if="!isAuthenticated" /> <signOut v-else />
+    <signIn v-if="!isAuthenticated" />
     <div class="stateLinks">
       <div class="nav-bar__right--actions"><moreList /></div>
     </div>
@@ -25,7 +25,8 @@ export default {
     MoreList,
     SearchBar,
     NeptuneLogo,
-    SignIn
+    SignIn,
+    SignOut
   },
   computed: mapGetters(["isAuthenticated"]),
   methods: {

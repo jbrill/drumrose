@@ -64,6 +64,9 @@ export default {
     },
     nextMusic() {
       console.log("NEXT");
+    },
+    moreMusic() {
+      console.log("MORE...");
     }
   },
   data: function() {

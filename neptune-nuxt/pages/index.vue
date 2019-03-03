@@ -28,6 +28,7 @@ export default {
     // const posts = [];
     let parsedPosts = [];
     for (let post of posts) {
+      console.log(store.state.music_token);
       const track_info = await getTrackInfo(
         post.song.apple_music_id,
         store.state.music_token

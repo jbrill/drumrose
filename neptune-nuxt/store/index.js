@@ -3,7 +3,8 @@ export const state = () => {
     music_token: null,
     user: null,
     api_token: null,
-    track_queue: null
+    track_queue: null,
+    user_handle: "jbrlly"
   };
 };
 

@@ -19,8 +19,14 @@ export default {
       window.localStorage.setItem("secret", secret);
     }
 
+    // TODO: Delete... we shouldn't rely on store for tokens
     this.$store.commit("SET_API_TOKEN", access_token);
     this.$store.commit("SET_USER", id_token);
+
+    // Set localstorage
+    window.localStorage.setItem("api_token", access_token);
+    window.localStorage.setItem("user_token", id_token);
+
     // redirect to home
     this.$router.replace("/");
   }

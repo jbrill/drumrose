@@ -9,7 +9,7 @@ import AddPostButton from "~/components/AddPostButton";
 import PostFeed from "~/components/PostFeed";
 import TopBody from "~/components/TopBody";
 import UnloggedContent from "~/components/UnloggedContent";
-
+import { getFromCookie } from "~/utils/auth.js";
 import { getPosts, getTrackInfo } from "~/utils/post_util.js";
 
 export default {
@@ -20,15 +20,22 @@ export default {
     TopBody,
     UnloggedContent
   },
-  async asyncData({ store }) {
-    const postResponse = await getPosts(store.state.api_token);
+  async created() {
+    const postResponse = await getPosts(window.localStorage.api_token);
     const posts = postResponse.data;
     let parsedPosts = [];
+    console.log("API TOKEN");
+    console.log(window.localStorage.api_token);
+
+    console.log("APPLE TOKEN");
+    console.log(this.$store.state.music_token);
+
     for (let post of posts) {
       const track_info = await getTrackInfo(
         post.song.apple_music_id,
-        store.state.music_token
+        this.$store.state.music_token
       );
+      console.log(track_info);
       const postStructure = {
         track: track_info,
         user: post.user,
@@ -36,10 +43,7 @@ export default {
       };
       if (track_info) parsedPosts.push(postStructure);
     }
-    console.log(parsedPosts);
-    return {
-      posts: parsedPosts
-    };
+    this.posts = parsedPosts;
   },
   data: function() {
     return {

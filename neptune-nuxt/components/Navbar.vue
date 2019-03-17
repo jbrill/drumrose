@@ -45,7 +45,7 @@ export default {
 <style scoped>
 .header {
   position: fixed;
-  z-index: 100;
+  z-index: 1000;
   background-color: #9c0235;
   left: 0;
   display: flex;

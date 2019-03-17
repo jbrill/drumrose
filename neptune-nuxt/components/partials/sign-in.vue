@@ -13,7 +13,6 @@ export default {
   middleware: "anonymous",
   methods: {
     onSubmitForm: function(e) {
-      console.log("SUBMITTING...");
       var webAuth = new auth0.WebAuth({
         domain: config.AUTH0_CLIENT_DOMAIN,
         audience: config.API_AUDIENCE,
@@ -22,8 +21,6 @@ export default {
         redirectUri: `${getBaseUrl()}/auth/signed-in`,
         scope: "openid profile"
       });
-      console.log(webAuth);
-      console.log("LOGGIN IN...");
       webAuth.authorize();
     }
   },

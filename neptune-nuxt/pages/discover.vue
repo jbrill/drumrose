@@ -37,7 +37,6 @@ export default {
       };
       if (track_info) parsedPosts.push(postStructure);
     }
-    console.log(parsedPosts);
     return {
       posts: parsedPosts
     };
@@ -46,9 +45,6 @@ export default {
     return {
       posts: []
     };
-  },
-  async destroyed() {
-    console.log("DESTROYING...");
   }
 };
 </script>

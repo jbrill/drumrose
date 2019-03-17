@@ -1,8 +1,8 @@
 import jwtDecode from "jwt-decode";
-import Cookie from "js-cookie";
 import jwt from "jsonwebtoken";
 import config from "~/config.json";
 import fs from "fs";
+import Cookie from "js-cookie";
 
 const getQueryParams = () => {
   const params = {};
@@ -33,6 +33,8 @@ export const setStorage = (token, identifier) => {
   if (process.client) {
     window.localStorage.setItem(identifier, token);
   } else {
+    console.log("SETTING" + identifier);
+    console.log(token);
     Cookie.set(identifier, token);
   }
 };

@@ -94,6 +94,7 @@ export default {
   /* overflow: hidden; */
   position: fixed;
   bottom: 0;
+  z-index: 10000;
 }
 
 .audio-play__contain {

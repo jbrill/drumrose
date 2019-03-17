@@ -7,12 +7,10 @@ import {
 import Cookie from "js-cookie";
 
 export default function({ store, req }) {
-  console.log("HERE.........");
   if (process.server) {
     if (!req) return;
     // server side needs to extract from cookies
     let apple_token = Cookie.get("apple_token");
-    // auth0Token = Cookie.get("auth0_token");
     if (!apple_token) {
       // server side
       apple_token = getAppleMusicToken();
@@ -21,10 +19,13 @@ export default function({ store, req }) {
     }
   } else {
     // client side extracts from local storage
-    // appleToken = getFromLocalStorage("apple_token");
-    const auth0Token = store.state.api_token;
-    if (!auth0Token) {
-      console.log("NO AUTH0 TOKEN... should logout");
+    const auth_token = window.localStorage.api_token;
+    if (!auth_token) {
+      store.commit("SET_USER", null);
+    } else {
+      if (!store.state.user) {
+        console.log("NO USER IN STORE");
+      }
     }
   }
 }

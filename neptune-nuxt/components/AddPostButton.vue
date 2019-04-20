@@ -20,7 +20,8 @@
               @click="togglePick(hint)"
               class="autocomplete-result"
             >
-              {{ hint.attributes.name }} - {{ hint.attributes.artistName }}
+              {{ hint.attributes.name }} <br />
+              {{ hint.attributes.artistName }}
             </li>
           </ul>
         </div>
@@ -63,10 +64,11 @@ export default {
   components: {},
   methods: {
     onSubmitForm: async function(e) {
+      if (!process.client) return;
       event.preventDefault();
       console.log("SUBMITTING FORM");
       await createPost(
-        this.$store.state.api_token,
+        window.localStorage.api_token,
         this.track_id_choice,
         this.caption,
         this.$store.state.user_handle
@@ -112,11 +114,10 @@ export default {
 
 <style scoped>
 .neptune-button__strong {
-  position: absolute;
-  right: 15%;
-  top: 7rem;
+  margin-right: 2rem;
+  top: 5rem;
   width: 7rem;
-  line-height: 2rem;
+  line-height: 1.5rem;
 }
 
 .autocomplete-results {
@@ -127,7 +128,7 @@ export default {
 }
 
 .autocomplete-result {
-  height: 2rem;
+  height: 100%;
 }
 
 .autocomplete-result:hover {

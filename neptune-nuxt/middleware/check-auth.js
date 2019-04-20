@@ -13,7 +13,9 @@ export default function({ store, req }) {
     let apple_token = Cookie.get("apple_token");
     if (!apple_token) {
       // server side
-      apple_token = getAppleMusicToken();
+      const apple_token = getAppleMusicToken();
+      console.log("SETTING APPLE TOKEN?");
+      console.log(apple_token);
       store.commit("SET_MUSIC_TOKEN", apple_token);
       Cookie.set("apple_token", apple_token); // saving token in cookie for server rendering    }
     }
@@ -21,10 +23,13 @@ export default function({ store, req }) {
     // client side extracts from local storage
     const auth_token = window.localStorage.api_token;
     if (!auth_token) {
+      console.log("SETTING USER TO NULL");
       store.commit("SET_USER", null);
     } else {
       if (!store.state.user) {
         console.log("NO USER IN STORE");
+        console.log(auth_token);
+        store.commit("SET_USER", auth_token);
       }
     }
   }

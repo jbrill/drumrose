@@ -1,15 +1,15 @@
 <template>
   <div class="post">
     <div class="postContain">
-      <div class="artistTextContain">
-        <h2 class="artistName">{{ post.track.track_artist }}</h2>
-        <h4 class="songName">{{ post.track.track_name }}</h4>
-      </div>
-
       <div class="artistContain">
         <i @click="playSong" class="audioAction audioPlay material-icons"
           >play_arrow</i
         >
+        <div class="artistTextContain">
+          <h4 class="songName">{{ post.track.track_name }}</h4>
+          <h2 class="artistName">{{ post.track.track_artist }}</h2>
+        </div>
+
         <div class="noselect albumContain">
           <img class="albumCover" :src="post.track.track_cover_url" />
         </div>
@@ -23,19 +23,20 @@
           </div>
         </nuxt-link>
         <p class="postCaption">{{ post.caption }}</p>
+        <div class="post--action--contain">
+          <i
+            @click="favoriteSong"
+            class="audioAction audioFavorite material-icons"
+            >favorite_border</i
+          >
+          <i @click="repostSong" class="audioAction audioRepost material-icons"
+            >loop</i
+          >
+        </div>
         <div class="postActionContain noselect"></div>
       </div>
     </div>
     <div class="postMusicContain noselect">
-      <!-- <i @click="viewMoreSong" class="audioAction audioMore material-icons"
-        >more_horiz</i
-      > -->
-      <i @click="favoriteSong" class="audioAction audioFavorite material-icons"
-        >favorite_border</i
-      >
-      <i @click="repostSong" class="audioAction audioRepost material-icons"
-        >loop</i
-      >
       <!-- <postActionRepost /> <postActionFavorite /> -->
       <!-- <div class="postActionListContain"><postActionList /></div> -->
     </div>
@@ -57,12 +58,29 @@ export default {
   },
   methods: {
     playSong: function(event) {
-      if (!process.server) {
-        // client
-        let musicKit = window.MusicKit.getInstance();
-        musicKit.setQueue(this.post.track.track_playback);
-        this.$store.commit("SET_PLAYING", this.post.track);
+      if (!process.client) return;
+      let musicKit = window.MusicKit.getInstance();
+      if (event.target.innerText === "pause") {
+        window.MusicKit.getInstance()
+          .player.play()
+          .then(function() {
+            console.log("playing...");
+            event.target.innerText = "play_arrow";
+          });
+      } else {
+        window.MusicKit.getInstance()
+          .player.pause()
+          .then(function() {
+            console.log("pausing...");
+            event.target.innerText = "pause";
+          });
       }
+    },
+    repostSong: function(event) {
+      console.log("SHOULD REPOST");
+    },
+    favoriteSong: function(event) {
+      console.log("SHOUDL FAV");
     }
   },
   name: "post",
@@ -98,13 +116,10 @@ export default {
   bottom: 0;
   left: 0;
   background-image: linear-gradient(to bottom, rgb(255, 255, 255, 0) 0, #000);
-  opacity: 0.7;
+  opacity: 0.9;
   border-radius: 2rem;
 }
 .albumCover {
-  /* width: auto; */
-  /* float: left; */
-  /* content: ""; */
   top: 0;
   right: 0;
   bottom: 0;
@@ -114,21 +129,21 @@ export default {
 }
 .songName:hover {
   cursor: pointer;
-  color: #c0102c;
+  color: var(--primary-purple);
   opacity: 1;
 }
 .artistName {
   font-size: 1rem;
-  font-weight: 400;
+  font-weight: 600;
   opacity: 0.8;
 }
 .songName {
-  font-size: 1.2rem;
+  font-size: 0.8rem;
   opacity: 0.8;
 }
 .artistName:hover {
   cursor: pointer;
-  color: #f3f367;
+  color: var(--primary-yellow);
   opacity: 1;
 }
 .albumCover:hover {
@@ -149,9 +164,9 @@ export default {
   text-align: left;
   padding: 5px;
   position: absolute;
-  z-index: 10000;
+  z-index: 1000;
   left: 0.5rem;
-  bottom: 0.5rem;
+  bottom: 0.3rem;
   font-weight: 100;
   width: auto;
   height: auto;
@@ -159,11 +174,9 @@ export default {
 }
 .poster {
   overflow-wrap: break-word;
-  /* left: 10px; */
   position: relative;
-  height: 100%;
-  /* float: right; */
   margin-left: 1rem;
+  height: auto;
 }
 .posterImg {
   width: 2rem;
@@ -200,14 +213,6 @@ export default {
   font-family: "Proxima Nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
   margin-top: 1rem;
 }
-.postActionContain {
-  position: absolute;
-  bottom: 1rem;
-  right: 0;
-}
-.postActionContain i {
-  font-size: 1.5em;
-}
 .postTime {
   font-size: 1rem;
   margin-top: -2.5rem;
@@ -226,13 +231,22 @@ export default {
   height: 2rem;
   width: 100%;
 }
+.post--action--contain {
+  position: absolute;
+  bottom: 2rem;
+  right: 0;
+}
 .audioAction {
   color: white;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   padding-right: 5px;
+  padding-left: 5px;
+  opacity: 0.8;
+  position: absolute;
+  margin-bottom: 0;
 }
 .audioAction:hover {
-  color: var(--primary-yellow);
+  opacity: 1;
 }
 .audioPlay {
   opacity: 0.7;
@@ -242,11 +256,17 @@ export default {
   left: 30%;
   top: 30%;
 }
+.audioFavorite:hover {
+  color: var(--red-accent);
+}
 .audioRepost {
   float: left;
 }
+.audioRepost:hover {
+  color: var(--primary-purple);
+}
 .audioFavorite {
-  float: left;
+  right: 0.5rem;
 }
 .audioMore {
   float: right;

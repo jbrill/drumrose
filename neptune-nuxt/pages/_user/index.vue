@@ -10,11 +10,14 @@
 </template>
 
 <script>
+import { getUserDetail } from "~/api/neptune_api";
+
 export default {
-  async asyncData({ app, params }) {
+  async created() {
     console.log(params.user);
-    const user = await app.$axios.$get(
-      `http://localhost:8000/users/${params.user}/`
+    const user = await getUserDetail(
+      window.localStorage.api_token,
+      params.user
     );
     console.log(user);
     return { user };

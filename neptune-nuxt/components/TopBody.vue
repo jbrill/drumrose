@@ -1,5 +1,5 @@
 <template>
-  <div class="top--body"><menuOptions /><AddPostButton /></div>
+  <div class="top--body"><menuOptions /></div>
 </template>
 
 <script>

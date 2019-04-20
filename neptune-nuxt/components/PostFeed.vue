@@ -17,7 +17,6 @@ export default {
 </script>
 <style scoped>
 .post--feed {
-  margin-top: 5rem;
   display: grid;
   grid-template-columns: 50% 50%;
   row-gap: 4rem;

@@ -1,7 +1,11 @@
 <template>
-  <div>HEYYYY</div>
+  <div class="settings__contain"><h2 class="settings__title">SETTINGS</h2></div>
 </template>
 
 <script></script>
 
-<style scoped></style>
+<style>
+.settings__title {
+  margin-top: 8rem;
+}
+</style>

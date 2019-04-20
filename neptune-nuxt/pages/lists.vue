@@ -10,7 +10,7 @@ import PostFeed from "~/components/PostFeed";
 import TopBody from "~/components/TopBody";
 import UnloggedContent from "~/components/UnloggedContent";
 
-import { getPosts, getTrackInfo } from "~/utils/post_util.js";
+import { getPosts, parsePosts } from "~/utils/post_util.js";
 
 export default {
   computed: mapGetters(["isAuthenticated", "loggedUser"]),
@@ -20,25 +20,11 @@ export default {
     TopBody,
     UnloggedContent
   },
-  async asyncData({ store }) {
-    const posts = [];
-    let parsedPosts = [];
-    for (let post of posts) {
-      const track_info = await getTrackInfo(
-        post.song.apple_music_id,
-        store.state.music_token
-      );
-      const postStructure = {
-        track: track_info,
-        user: post.user,
-        caption: post.caption
-      };
-      if (track_info) parsedPosts.push(postStructure);
-    }
-    console.log(parsedPosts);
-    return {
-      posts: parsedPosts
-    };
+  async created() {
+    const postResponse = await getPosts(window.localStorage.api_token);
+    const posts = postResponse.data;
+
+    this.posts = await parsePosts(posts, this.$store.state.music_token);
   },
   data: function() {
     return {

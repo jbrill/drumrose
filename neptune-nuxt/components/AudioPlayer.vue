@@ -39,21 +39,19 @@ export default {
   methods: {
     playMusic() {
       let musicBtn = this.$refs.musicButton;
-      if (!process.server) {
+      if (process.client) {
         if (musicBtn.innerText === "pause") {
-          // we need to pause
           window.MusicKit.getInstance()
             .player.pause()
             .then(function() {
+              console.log("pausing...");
               musicBtn.innerText = "play_arrow";
             });
         } else {
-          // we need to play
           window.MusicKit.getInstance()
             .player.play()
             .then(function() {
-              console.log("Pausing...");
-              // lets change the state of buttons here...
+              console.log("playing...");
               musicBtn.innerText = "pause";
             });
         }
@@ -83,15 +81,12 @@ export default {
 <style scoped>
 .audioPlayer {
   width: 100%;
-  background: rgb(0, 0, 0);
   background: linear-gradient(
     0deg,
     rgba(0, 0, 0, 1) 0%,
     rgba(25, 25, 25, 1) 100%
   );
-  border-top: 1px solid var(--primary-black-light);
   height: 3.5rem;
-  /* overflow: hidden; */
   position: fixed;
   bottom: 0;
   z-index: 10000;

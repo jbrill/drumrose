@@ -62,6 +62,9 @@ export default {
     },
     signOff(e) {
       console.log("SIGNING OFF HERE");
+      this.$store.commit("SET_USER", null);
+      window.localStorage.clear();
+      window.location.reload();
     }
   },
   created() {

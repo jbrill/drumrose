@@ -24,7 +24,8 @@ export default {
   background-position: left;
   background-position-x: 0.5rem;
   background-size: 1rem 1rem;
-  border-radius: 0.5rem;
+  border-radius: 0.2rem;
+  border: 1px solid var(--primary-black--light);
   background-color: white;
   font-size: 0.8rem;
   color: black;
@@ -33,14 +34,14 @@ export default {
 }
 
 .search-bar__input:focus {
-  /* outline: none !important; */
-  /* border: 1px solid var(--primary-purple); */
+  outline: none !important;
+  border: 1px solid var(--primary-purple);
   box-shadow: 0 0 10px #719ece;
 }
 
 ::placeholder {
-  color: var(--primary-red);
-  /* font-weight: lighter; */
+  color: var(--primary-black--light);
+  font-weight: 300;
   font-family: "Proxima Nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 </style>

@@ -6,6 +6,7 @@
     <nuxt-link class="title_middle" to="/" exact>NEPTUNE</nuxt-link>
     <div class="search-bar__contain"><search-bar /></div>
     <signIn v-if="!isAuthenticated" />
+    <AddPostButton v-else />
     <div class="stateLinks">
       <div class="nav-bar__right--actions"><moreList /></div>
     </div>
@@ -18,7 +19,7 @@ import MoreList from "~/components/Navbar/MoreList";
 import SearchBar from "~/components/SearchBar";
 import NeptuneLogo from "~/assets/svg/logo.svg";
 import SignIn from "~/components/partials/sign-in";
-import SignOut from "~/components/partials/sign-out";
+import AddPostButton from "~/components/AddPostButton";
 
 export default {
   components: {
@@ -26,26 +27,16 @@ export default {
     SearchBar,
     NeptuneLogo,
     SignIn,
-    SignOut
+    AddPostButton
   },
-  computed: mapGetters(["isAuthenticated"]),
-  methods: {
-    logout: function(event) {
-      // `this` inside methods points to the Vue instance
-      alert("Hello " + this.name + "!");
-      // `event` is the native DOM event
-      if (event) {
-        alert(event.target.tagName);
-      }
-    }
-  }
+  computed: mapGetters(["isAuthenticated"])
 };
 </script>
 
-<style scoped>
+<style>
 .header {
   position: fixed;
-  z-index: 1000;
+  z-index: 10000;
   background-color: #9c0235;
   left: 0;
   display: flex;
@@ -97,6 +88,14 @@ a {
 }
 .search-bar__contain {
   margin: 0 auto;
+  opacity: 0.9;
+}
+.search-bar__contain:hover {
+  opacity: 1;
+  transition: opacity 0.2s ease-out;
+  -moz-transition: opacity 0.2s ease-out;
+  -webkit-transition: opacity 0.2s ease-out;
+  -o-transition: opacity 0.2s ease-out;
 }
 .sign--in__contain {
   margin-right: 1rem;

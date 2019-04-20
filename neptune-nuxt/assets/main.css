@@ -46,6 +46,9 @@ a {
   font-weight: 400;
   transition: border-bottom 0.2s;
 }
+a:hover {
+  text-decoration: none;
+}
 i:hover {
   cursor: pointer;
 }
@@ -59,4 +62,7 @@ i:hover {
   cursor: pointer;
   background-color: var(--primary-black-light);
   /* color: var(--primary-purple); */
+}
+.modal {
+  z-index: 100000;
 }

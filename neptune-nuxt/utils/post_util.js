@@ -30,7 +30,6 @@ async function getTrackIDResponseFromQuery(query, config) {
   const getTrackID_URL =
     APPLE_API_URL + "search?term=" + query + "&limit=2&types=songs";
   const trackIDResponse = await axios.get(getTrackID_URL, config);
-  console.log(trackIDResponse);
   return trackIDResponse;
 }
 
@@ -95,7 +94,7 @@ export const createPost = async (
   }
 };
 
-export const getTrackInfo = async (trackId, bearerToken) => {
+async function getTrackInfo(trackId, bearerToken) {
   const apple_api_url = APPLE_API_URL + "songs/" + trackId;
   const resp = await axios.get(apple_api_url, getConfig(bearerToken));
   const track_data = resp.data.data[0].attributes;
@@ -107,4 +106,19 @@ export const getTrackInfo = async (trackId, bearerToken) => {
       .replace("{w}", "250")
       .replace("{h}", "250")
   };
+}
+
+export const parsePosts = async (posts, musicToken) => {
+  let parsedPosts = [];
+  for (let post of posts) {
+    const track_info = await getTrackInfo(post.song.apple_music_id, musicToken);
+    console.log(track_info);
+    const postStructure = {
+      track: track_info,
+      user: post.user,
+      caption: post.caption
+    };
+    if (track_info) parsedPosts.push(postStructure);
+  }
+  return parsedPosts;
 };

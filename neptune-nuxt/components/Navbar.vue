@@ -1,20 +1,22 @@
 <template>
-  <div class="header">
-    <nuxt-link class="title" to="/" exact>
-      <NeptuneLogo class="title__img" />
-    </nuxt-link>
-    <nuxt-link class="title_middle" to="/" exact>NEPTUNE</nuxt-link>
-    <div class="search-bar__contain"><search-bar /></div>
-    <signIn v-if="!isAuthenticated" />
-    <AddPostButton v-else />
-    <div class="stateLinks">
-      <div class="nav-bar__right--actions"><moreList /></div>
+  <no-ssr>
+    <div class="header">
+      <nuxt-link class="title" to="/" exact>
+        <NeptuneLogo class="title__img" />
+      </nuxt-link>
+      <nuxt-link class="title__middle" to="/" exact>NEPTUNE</nuxt-link>
+      <div class="search-bar__contain"><search-bar /></div>
+      <signIn v-if="!isAuthenticated" />
+      <AddPostButton v-else />
+      <div class="stateLinks">
+        <div class="nav-bar__right--actions"><moreList /></div>
+      </div>
     </div>
-  </div>
+  </no-ssr>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { store } from "~/plugins/localStorage";
 import MoreList from "~/components/Navbar/MoreList";
 import SearchBar from "~/components/SearchBar";
 import NeptuneLogo from "~/assets/svg/logo.svg";
@@ -29,7 +31,11 @@ export default {
     SignIn,
     AddPostButton
   },
-  computed: mapGetters(["isAuthenticated"])
+  computed: {
+    isAuthenticated: function() {
+      return store.getters.isAuthenticated;
+    }
+  }
 };
 </script>
 
@@ -57,13 +63,16 @@ export default {
   height: auto;
   vertical-align: middle;
 }
-.title_middle {
+.title__middle {
   letter-spacing: 2px;
   font-size: 2em;
   color: white;
   font-weight: lighter;
   margin: 0 auto;
   margin-left: 3rem;
+}
+.title__middle:hover {
+  color: var(--primary-yellow);
 }
 a {
   text-decoration: none;

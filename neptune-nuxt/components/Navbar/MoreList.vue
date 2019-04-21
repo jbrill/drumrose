@@ -42,13 +42,17 @@
 
 <script>
 import profileNav from "~/components/ProfileNav";
-import { mapGetters } from "vuex";
+import { store } from "~/plugins/localStorage";
 
 export default {
   components: {
     profileNav
   },
-  computed: mapGetters(["isAuthenticated"]),
+  computed: {
+    isAuthenticated: function() {
+      return store.getters.isAuthenticated;
+    }
+  },
   methods: {
     documentClick(e) {
       // if we click outside element, hide menu
@@ -62,9 +66,9 @@ export default {
     },
     signOff(e) {
       console.log("SIGNING OFF HERE");
-      this.$store.commit("SET_USER", null);
-      window.localStorage.clear();
-      window.location.reload();
+      store.commit("set_api_token", null);
+      store.commit("set_secret", null);
+      // redirect to home
     }
   },
   created() {

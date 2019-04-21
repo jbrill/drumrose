@@ -5,15 +5,16 @@
 </template>
 
 <script>
-import { getBaseUrl } from "~/utils/lock";
 import auth0 from "auth0-js";
+import { getBaseUrl } from "~/utils/lock";
 import config from "~/config.json";
 
 export default {
   middleware: "anonymous",
   methods: {
     onSubmitForm: function(e) {
-      var webAuth = new auth0.WebAuth({
+      if (process.server) return;
+      const webAuth = new auth0.WebAuth({
         domain: config.AUTH0_CLIENT_DOMAIN,
         audience: config.API_AUDIENCE,
         clientID: config.AUTH0_CLIENT_ID,

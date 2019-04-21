@@ -65,8 +65,13 @@ module.exports = {
     APPLE_MUSIC_KEY_ID: "",
     APPLE_MUSIC_TEAM_ID: ""
   },
-  modules: ["@nuxtjs/axios", "bootstrap-vue/nuxt", "nuxt-svg-loader"],
-  plugins: [],
+  modules: [
+    "@nuxtjs/axios",
+    "bootstrap-vue/nuxt",
+    "nuxt-svg-loader",
+    "cookie-universal-nuxt"
+  ],
+  plugins: [{ src: "~/plugins/localStorage.js" }],
   axios: {
     proxyHeaders: false
   },

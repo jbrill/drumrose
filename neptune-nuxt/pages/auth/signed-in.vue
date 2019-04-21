@@ -9,6 +9,7 @@ import {
 } from "~/utils/auth";
 import Cookie from "js-cookie";
 import Loading from "~/components/Loading.vue";
+import { store } from "~/plugins/localStorage";
 
 export default {
   mounted() {
@@ -16,14 +17,15 @@ export default {
 
     if (!checkSecret(secret)) {
       // Something went wrong with auth!
-      window.localStorage.setItem("secret", secret);
+      store.commit("set_secret", secret);
     }
 
-    // TODO: Delete... we shouldn't rely on store for tokens
-    this.$store.commit("SET_USER", id_token);
-
-    // Set localstorage
-    window.localStorage.setItem("api_token", access_token);
+    console.log(store);
+    this.$cookies.set("api-token", access_token, {
+      path: "/",
+      maxAge: 60 * 60 * 24 * 7
+    });
+    store.commit("set_api_token", access_token);
 
     // redirect to home
     this.$router.replace("/");

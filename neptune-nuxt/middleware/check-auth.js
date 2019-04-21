@@ -4,33 +4,50 @@ import {
   getDecodedJWT,
   getAppleMusicToken
 } from "~/utils/auth";
-import Cookie from "js-cookie";
+import auth0 from "auth0-js";
+import config from "~/config.json";
+import { getBaseUrl } from "~/utils/lock";
+import { store } from "~/plugins/localStorage";
 
-export default function({ store, req }) {
+export default function({ app, req }) {
   if (process.server) {
-    if (!req) return;
+    const api_token = store.state.api_token;
+    if (!api_token) {
+      const api_token = app.$cookies.get("api-token");
+      store.commit("set_api_token", api_token);
+    }
+
     // server side needs to extract from cookies
-    let apple_token = Cookie.get("apple_token");
+    let apple_token = store.state.apple_token;
     if (!apple_token) {
-      // server side
       const apple_token = getAppleMusicToken();
-      console.log("SETTING APPLE TOKEN?");
-      console.log(apple_token);
-      store.commit("SET_MUSIC_TOKEN", apple_token);
-      Cookie.set("apple_token", apple_token); // saving token in cookie for server rendering    }
+      app.$cookies.set("apple-token", apple_token, {
+        path: "/",
+        maxAge: 60 * 60 * 24 * 7
+      });
+      store.commit("set_apple_token", apple_token);
     }
   } else {
-    // client side extracts from local storage
-    const auth_token = window.localStorage.api_token;
-    if (!auth_token) {
-      console.log("SETTING USER TO NULL");
-      store.commit("SET_USER", null);
-    } else {
-      if (!store.state.user) {
-        console.log("NO USER IN STORE");
-        console.log(auth_token);
-        store.commit("SET_USER", auth_token);
-      }
+    console.log(store.state);
+    // client side needs to extract from cookies
+    let apple_token = store.state.apple_token;
+    if (!apple_token) {
+      const apple_token = app.$cookies.get("apple-token");
+      store.commit("set_apple_token", apple_token);
+    }
+
+    // client side needs to extract from cookies
+    let api_token = store.state.api_token;
+    if (!api_token) {
+      console.log("NO API TOKEN");
+      const api_token = app.$cookies.get("api-token");
+      store.commit("set_api_token", api_token);
+
+      // app.$cookies.set("api-token", api_token, {
+      //   path: "/",
+      //   maxAge: 60 * 60 * 24 * 7
+      // });
+      // store.commit("set_api_token", api_token);
     }
   }
 }

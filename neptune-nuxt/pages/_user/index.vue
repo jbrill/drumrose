@@ -14,6 +14,7 @@ import { getUserDetail } from "~/api/neptune_api";
 
 export default {
   async created() {
+    if (process.server) return;
     console.log(params.user);
     const user = await getUserDetail(
       window.localStorage.api_token,

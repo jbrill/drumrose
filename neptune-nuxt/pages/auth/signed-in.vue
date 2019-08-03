@@ -19,7 +19,7 @@ export default {
       // Something went wrong with auth!
       store.commit("set_secret", secret);
     }
-
+    console.log(id_token);
     console.log(store);
     this.$cookies.set("api-token", access_token, {
       path: "/",

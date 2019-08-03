@@ -34,8 +34,6 @@ export default {
     }
   },
   async created() {
-    console.log(store.state.api_token);
-    console.log(store.state.apple_token);
     const postResponse = await getPosts(store.state.api_token);
     const posts = postResponse.data;
     const postsToRender = await parsePosts(posts, store.state.apple_token);

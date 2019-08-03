@@ -3,7 +3,6 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 import Navbar from "~/components/Navbar";
 import ProfileNav from "~/components/ProfileNav";
 import MenuOptions from "~/components/MenuOptions";
@@ -11,9 +10,12 @@ import PostFeed from "~/components/PostFeed";
 import AddPostButton from "~/components/AddPostButton";
 import TopBody from "~/components/TopBody";
 import AudioPlayer from "~/components/AudioPlayer";
+import { store } from "~/plugins/localStorage";
 
 export default {
-  computed: mapGetters(["isAuthenticated", "loggedUser"]),
+  isAuthenticated: function() {
+    return store.getters.isAuthenticated;
+  },
   components: {
     ProfileNav,
     MenuOptions,
@@ -28,7 +30,7 @@ export default {
       meta: [
         {
           name: "apple-music-developer-token",
-          content: this.$store.state.music_token
+          content: store.state.apple_token
         },
         { name: "apple-music-app-name", content: "Neptune" },
         { name: "apple-music-app-build", content: "0.0.1" }

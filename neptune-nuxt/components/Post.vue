@@ -60,18 +60,19 @@ export default {
     playSong: function(event) {
       if (!process.client) return;
       let musicKit = window.MusicKit.getInstance();
+      // We should reset the queue here
       if (event.target.innerText === "pause") {
-        window.MusicKit.getInstance()
-          .player.play()
-          .then(function() {
-            console.log("playing...");
-            event.target.innerText = "play_arrow";
-          });
-      } else {
         window.MusicKit.getInstance()
           .player.pause()
           .then(function() {
             console.log("pausing...");
+            event.target.innerText = "play_arrow";
+          });
+      } else {
+        window.MusicKit.getInstance()
+          .player.play()
+          .then(function() {
+            console.log("playing...");
             event.target.innerText = "pause";
           });
       }

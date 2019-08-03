@@ -1,18 +1,16 @@
 <template>
-  <no-ssr>
-    <div class="header">
-      <nuxt-link class="title" to="/" exact>
-        <NeptuneLogo class="title__img" />
-      </nuxt-link>
-      <nuxt-link class="title__middle" to="/" exact>NEPTUNE</nuxt-link>
-      <div class="search-bar__contain"><search-bar /></div>
-      <signIn v-if="!isAuthenticated" />
-      <AddPostButton v-else />
-      <div class="stateLinks">
-        <div class="nav-bar__right--actions"><moreList /></div>
-      </div>
+  <div class="header">
+    <nuxt-link class="title" to="/" exact>
+      <NeptuneLogo class="title__img" />
+    </nuxt-link>
+    <nuxt-link class="title__middle" to="/" exact>NEPTUNE</nuxt-link>
+    <div class="search-bar__contain"><search-bar /></div>
+    <signIn v-if="!isAuthenticated" />
+    <AddPostButton v-else />
+    <div class="stateLinks">
+      <div class="nav-bar__right--actions"><moreList /></div>
     </div>
-  </no-ssr>
+  </div>
 </template>
 
 <script>

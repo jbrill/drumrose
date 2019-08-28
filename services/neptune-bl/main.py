@@ -10,7 +10,6 @@ class RequestHandler(tornado.web.RequestHandler):
         self.write("Hello, world?")
 
     def post(self):
-        postData = self.get_argument('data', 'No data')
         self.write(self.request.body)
 
 def make_app():

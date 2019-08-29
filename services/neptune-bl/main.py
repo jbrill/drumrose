@@ -13,11 +13,10 @@ class RequestHandler(tornado.web.RequestHandler):
         self.write("GET")
 
     def post(self):
-        print(self.request.body)
-        print(tornado.escape.json_decode(self.request.body))
-        response = json.dumps(self.request.body)
+        data = tornado.escape.json_decode(self.request.body)
+        response = json.dumps(data)
         print(response)
-        self.write(self.request.body)
+        self.write(response)
 
 def make_app():
     return tornado.web.Application([

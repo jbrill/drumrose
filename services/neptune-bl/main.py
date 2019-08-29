@@ -1,15 +1,19 @@
-import tornado.ioloop
-import tornado.web
-
+import json
 import os
+
+import tornado.web
+import tornado.ioloop
 
 
 class RequestHandler(tornado.web.RequestHandler):
+    def set_default_headers(self):
+        self.set_header("Content-Type", 'application/json')
+
     def get(self):
-        self.write(self.request.body)
-        self.write("Hello, world?")
+        self.write("GET")
 
     def post(self):
+        response = json.dumps(self.request.body)
         self.write(self.request.body)
 
 def make_app():

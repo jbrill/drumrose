@@ -15,6 +15,9 @@ class RequestHandler(tornado.web.RequestHandler):
     def post(self):
         data = tornado.escape.json_decode(self.request.body)
         print(data)
+        slots = data['slots']
+        for slot in slots:
+            slot['resolved'] = 1
         self.write(self.request.body)
 
 def make_app():

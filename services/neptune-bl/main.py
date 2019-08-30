@@ -15,7 +15,7 @@ class RequestHandler(tornado.web.RequestHandler):
     def post(self):
         data = tornado.escape.json_decode(self.request.body)
         print(data)
-        self.write(tornado.escape.json_decode(self.request.body))
+        self.write(self.request.body)
 
 def make_app():
     return tornado.web.Application([

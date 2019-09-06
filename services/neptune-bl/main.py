@@ -21,7 +21,7 @@ class RequestHandler(tornado.web.RequestHandler):
             values = slots[slot]["values"]
             for value in values:
                 value["resolved"] = 1
-                value["value"] = value["tokens"]
+                value["value"] = value["tokens"].capitalize()
         print('data after')
         print(data)
         self.write(data)

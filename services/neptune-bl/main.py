@@ -5,6 +5,23 @@ import tornado.web
 import tornado.ioloop
 
 
+slot_name_map = {
+    'tune': 'tune',
+    'tunes': 'tune',
+    'songs': 'tune',
+    'tracks': 'tune',
+    'music': 'tune',
+    'albums': 'album'
+}
+
+def parse_value(slot_name, slot_value):
+    """Parse slot value"""
+    print("PARSING {} for {}".format(slot_value, slot_name))
+    if slot_name not in slot_name_map:
+        print("SLOT NAME NOT IN MAP")
+
+    pass
+
 class RequestHandler(tornado.web.RequestHandler):
     def set_default_headers(self):
         self.set_header("Content-Type", 'application/json')
@@ -17,11 +34,12 @@ class RequestHandler(tornado.web.RequestHandler):
         print('data before')
         print(data)
         slots = data['slots']
-        for slot in slots:
-            values = slots[slot]["values"]
+        for slot_name in slots:
+            values = slots[slot_name]["values"]
             for value in values:
                 value["resolved"] = 1
-                value["value"] = value["tokens"].capitalize()
+                value["value"] = value["tokens"]
+                parse_value(slot_name, value["value"])
         print('data after')
         print(data)
         self.write(data)

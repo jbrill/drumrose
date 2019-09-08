@@ -4,14 +4,25 @@ import os
 import tornado.web
 import tornado.ioloop
 
-
-slot_name_map = {
+"""
     'tune': 'tune',
     'tunes': 'tune',
     'songs': 'tune',
     'tracks': 'tune',
     'music': 'tune',
     'albums': 'album'
+"""
+
+action_type_mappings = []
+subject_type_mappings = []
+subject_relationship_mappings = []
+subject_mappings = []
+
+slot_name_map = {
+    "_ACTION_TYPE_": action_type_mappings,
+    "_SUBJECT_TYPE_": subject_type_mappings,
+    "_SUBJECT_RELATIONSHIP_": subject_relationship_mappings,
+    "_SUBJECT_": subject_mappings,
 }
 
 def parse_value(slot_name, slot_value):

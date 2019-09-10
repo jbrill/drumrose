@@ -31,6 +31,7 @@ slot_name_map = {
 
 def generate_response(slots):
     """Parse slot value"""
+    slots["_SUGGESTIONS_"] = {}
     for slot_name in slots:
         if slot_name not in slot_name_map:
             print("SLOT NAME NOT IN MAP")
@@ -44,13 +45,37 @@ def generate_response(slots):
         if "_SUBJECT_TYPE_" in slots:
             print("SUBJECT TYPE BUT NO SUBJECT")
     else:
+        print("SUBJECT AND SUBJECT_TYPE")
         subject_type = slots["_SUBJECT_TYPE_"]
         subject = slots["_SUBJECT_"]
         if subject_type["values"][0]["track"] != "NULL":
             print("FIND TRACK FOR SUBJECT")
+            slots["_SUGGESTIONS_"]["type"] = "track"
+            slots["_SUGGESTIONS_"]["resolved"] = 1
+            slots["_SUGGESTIONS_"]["values"] = [
+                {
+                    "value": "The Motto by Drake", 
+                    "resolved": 1,
+                },
+                {
+                    "value": "Sound and Vision by David Bowie",
+                    "resolved": 1,
+                }
+            ]
         elif subject_type["values"][0]["album"] != "NULL":
             print("FIND ALBUM FOR SUBJECT")
-        print("SUBJECT AND SUBJECT_TYPE")
+            slots["_SUGGESTIONS_"]["type"] = "album"
+            slots["_SUGGESTIONS_"]["resolved"] = 1
+            slots["_SUGGESTIONS_"]["values"] = [
+                {
+                    "value": "Take Care by Drake", 
+                    "resolved": 1,
+                },
+                {
+                    "value": "Low by David Bowie",
+                    "resolved": 1,
+                }
+            ]
     # Account for slot mapping hit
     pass
 

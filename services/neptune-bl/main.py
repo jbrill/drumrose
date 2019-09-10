@@ -44,6 +44,12 @@ def generate_response(slots):
         if "_SUBJECT_TYPE_" in slots:
             print("SUBJECT TYPE BUT NO SUBJECT")
     else:
+        subject_type = slots["_SUBJECT_TYPE_"]
+        subject = slots["_SUBJECT_"]
+        if subject_type["values"][0]["track"] != "NULL":
+            print("FIND TRACK FOR SUBJECT")
+        elif subject_type["values"][0]["album"] != "NULL":
+            print("FIND ALBUM FOR SUBJECT")
         print("SUBJECT AND SUBJECT_TYPE")
     # Account for slot mapping hit
     pass

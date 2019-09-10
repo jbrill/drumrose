@@ -14,23 +14,38 @@ import tornado.ioloop
 """
 
 action_type_mappings = []
-subject_type_mappings = []
+subject_type_mappings = {
+    'genre': ['house', 'jazz', 'rock'],
+    'artist': ['artist', 'composer', 'albums'],
+    'album': ['albums', 'albums'],
+    'track': ['song', 'tune', 'tunes', 'songs']
+}
 subject_relationship_mappings = []
 subject_mappings = []
 
 slot_name_map = {
-    "_ACTION_TYPE_": action_type_mappings,
     "_SUBJECT_TYPE_": subject_type_mappings,
     "_SUBJECT_RELATIONSHIP_": subject_relationship_mappings,
     "_SUBJECT_": subject_mappings,
 }
 
-def parse_value(slot_name, slot_value):
+def generate_response(slots):
     """Parse slot value"""
-    print("PARSING {} for {}".format(slot_value, slot_name))
-    if slot_name not in slot_name_map:
-        print("SLOT NAME NOT IN MAP")
-
+    for slot_name in slots:
+        if slot_name not in slot_name_map:
+            print("SLOT NAME NOT IN MAP")
+    if not "_SUBJECT_TYPE_" in slots:
+        print("NO SUBJECT TYPE")
+        if "_SUBJECT_" in slots:
+            print("SUBJECT BUT NO SUBJECT TYPE")
+            print("SHOULD RECOMMEND TRACKS FROM THAT SUBJECT")
+    elif not "_SUBJECT_" in slots:
+        print("NO SUBJECT")
+        if "_SUBJECT_TYPE_" in slots:
+            print("SUBJECT TYPE BUT NO SUBJECT")
+    else:
+        print("SUBJECT AND SUBJECT_TYPE")
+    # Account for slot mapping hit
     pass
 
 class RequestHandler(tornado.web.RequestHandler):
@@ -50,7 +65,7 @@ class RequestHandler(tornado.web.RequestHandler):
             for value in values:
                 value["resolved"] = 1
                 value["value"] = value["tokens"]
-                parse_value(slot_name, value["value"])
+        generate_response(slots)
         print('data after')
         print(data)
         self.write(data)

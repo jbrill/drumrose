@@ -3,6 +3,8 @@ Neptune's Business Logic Communciator
 """
 import json
 import os
+import requests
+
 
 import tornado.web
 import tornado.ioloop
@@ -57,6 +59,22 @@ def generate_suggestions(slots):
             print("FIND ALBUM FOR SUBJECT")
             slots["_SUGGESTIONS_"]["type"] = "album"
             slots["_SUGGESTIONS_"]["resolved"] = 1
+            slots["_SUGGESTIONS_"]["values"] = [
+                {
+                    "value": "Take Care by Drake", 
+                    "resolved": 1,
+                },
+                {
+                    "value": "Low by David Bowie",
+                    "resolved": 1,
+                }
+            ]
+        elif subject_type["values"][0]["artist"] != "NULL":
+            print("FIND ARTIST FOR SUBJECT")
+            slots["_SUGGESTIONS_"]["type"] = "a"
+            slots["_SUGGESTIONS_"]["resolved"] = 1
+            res = requests.get("http://ws.audioscrobbler.com/2.0/?method=artist.getSimilar&api_key=4140ac11193f7e675183afdf810a1bbb&artist=cher")
+            print(res)
             slots["_SUGGESTIONS_"]["values"] = [
                 {
                     "value": "Take Care by Drake", 

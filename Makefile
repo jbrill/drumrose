@@ -1,2 +1,1 @@
-docker:
-	docker build -t <neptune-api> .
+pylint: find . -iname "*.py" | xargs pylint 

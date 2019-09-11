@@ -1,40 +1,31 @@
+"""
+Neptune's Business Logic Communciator
+"""
 import json
 import os
 
 import tornado.web
 import tornado.ioloop
 
-"""
-    'tune': 'tune',
-    'tunes': 'tune',
-    'songs': 'tune',
-    'tracks': 'tune',
-    'music': 'tune',
-    'albums': 'album'
-"""
 
-action_type_mappings = []
-subject_type_mappings = {
-    'genre': ['house', 'jazz', 'rock'],
-    'artist': ['artist', 'composer', 'albums'],
-    'album': ['albums', 'albums'],
-    'track': ['song', 'tune', 'tunes', 'songs']
-}
-subject_relationship_mappings = []
-subject_mappings = []
+slot_name_map = [
+    "_SUBJECT_TYPE_",
+    "_SUBJECT_RELATIONSHIP_",
+    "_SUBJECT_"
+]
 
-slot_name_map = {
-    "_SUBJECT_TYPE_": subject_type_mappings,
-    "_SUBJECT_RELATIONSHIP_": subject_relationship_mappings,
-    "_SUBJECT_": subject_mappings,
-}
+subject_types = ["track", "genre", "artist", "album"]
+subject_relationships = ["from", "like", "similar to"]
 
-def generate_response(slots):
-    """Parse slot value"""
+def generate_suggestions(slots):
+    """
+    Generates a list of suggestions for specified slots
+    """
     slots["_SUGGESTIONS_"] = {}
     for slot_name in slots:
         if slot_name not in slot_name_map:
-            print("SLOT NAME NOT IN MAP")
+            print("{} not recognized.".format(slot_name))
+            return
     if not "_SUBJECT_TYPE_" in slots:
         print("NO SUBJECT TYPE")
         if "_SUBJECT_" in slots:
@@ -76,17 +67,29 @@ def generate_response(slots):
                     "resolved": 1,
                 }
             ]
-    # Account for slot mapping hit
-    pass
+
 
 class RequestHandler(tornado.web.RequestHandler):
+    """
+    Tornado Request Handler
+    """
     def set_default_headers(self):
+        """
+        Override Default Headers For Responses
+        """
         self.set_header("Content-Type", 'application/json')
 
     def get(self):
+        """
+        GET '/'
+        - Placeholder
+        """
         self.write("GET")
 
     def post(self):
+        """
+        POST '/'
+        """
         data = tornado.escape.json_decode(self.request.body)
         print('data before')
         print(data)
@@ -96,17 +99,23 @@ class RequestHandler(tornado.web.RequestHandler):
             for value in values:
                 value["resolved"] = 1
                 value["value"] = value["tokens"]
-        generate_response(slots)
+        generate_suggestions(slots)
         print('data after')
         print(data)
         self.write(data)
 
 def make_app():
+    """
+    Tornado App Entrypoint
+    """
     return tornado.web.Application([
         (r"/", RequestHandler),
     ])
 
 if __name__ == "__main__":
+    """
+    Main Entrypoint
+    """
     app = make_app()
     port = int(os.environ.get("PORT", 5000))
     app.listen(port)

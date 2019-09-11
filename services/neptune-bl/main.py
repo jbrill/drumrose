@@ -10,12 +10,6 @@ import tornado.web
 import tornado.ioloop
 
 
-slot_name_map = [
-    "_SUBJECT_TYPE_",
-    "_SUBJECT_RELATIONSHIP_",
-    "_SUBJECT_"
-]
-
 subject_types = ["track", "genre", "artist", "album"]
 subject_relationships = ["from", "like", "similar to"]
 
@@ -24,10 +18,6 @@ def generate_suggestions(slots):
     Generates a list of suggestions for specified slots
     """
     slots["_SUGGESTIONS_"] = {}
-    for slot_name in slots:
-        if slot_name not in slot_name_map:
-            print("{} not recognized.".format(slot_name))
-            return
     if not "_SUBJECT_TYPE_" in slots:
         print("NO SUBJECT TYPE")
         if "_SUBJECT_" in slots:
@@ -73,8 +63,9 @@ def generate_suggestions(slots):
             print("FIND ARTIST FOR SUBJECT")
             slots["_SUGGESTIONS_"]["type"] = "a"
             slots["_SUGGESTIONS_"]["resolved"] = 1
-            res = requests.get("http://ws.audioscrobbler.com/2.0/?method=artist.getSimilar&api_key=4140ac11193f7e675183afdf810a1bbb&artist=cher")
+            res = requests.get("http://ws.audioscrobbler.com/2.0/?method=artist.getSimilar&api_key=4140ac11193f7e675183afdf810a1bbb&artist=cher&format=json&limit=5")
             print(res)
+            print(res.json())
             slots["_SUGGESTIONS_"]["values"] = [
                 {
                     "value": "Take Care by Drake", 

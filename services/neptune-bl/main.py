@@ -35,16 +35,17 @@ def generate_suggestions(slots):
             print("FIND TRACK FOR SUBJECT")
             slots["_SUGGESTIONS_"]["type"] = "track"
             slots["_SUGGESTIONS_"]["resolved"] = 1
-            slots["_SUGGESTIONS_"]["values"] = [
-                {
-                    "value": "The Motto by Drake", 
-                    "resolved": 1,
-                },
-                {
-                    "value": "Sound and Vision by David Bowie",
-                    "resolved": 1,
-                }
-            ]
+            res = requests.get("http://ws.audioscrobbler.com/2.0/?method=track.getSimilar&api_key=4140ac11193f7e675183afdf810a1bbb&track={}&format=json&limit=5".format(subject["values"][0]["tokens"]))
+            print(res)
+            print(res.json())
+            slots["_SUGGESTIONS_"]["values"] = []
+            for artist in res.json()["similarartists"]["track"]:
+                slots["_SUGGESTIONS_"]["values"].append(
+                    {
+                        "value": "{}".format(artist["name"]), 
+                        "resolved": 1,
+                    }
+                )
         elif subject_type["values"][0]["album"] != "NULL":
             print("FIND ALBUM FOR SUBJECT")
             slots["_SUGGESTIONS_"]["type"] = "album"
@@ -61,21 +62,19 @@ def generate_suggestions(slots):
             ]
         elif subject_type["values"][0]["artist"] != "NULL":
             print("FIND ARTIST FOR SUBJECT")
-            slots["_SUGGESTIONS_"]["type"] = "a"
+            slots["_SUGGESTIONS_"]["type"] = "artist"
             slots["_SUGGESTIONS_"]["resolved"] = 1
-            res = requests.get("http://ws.audioscrobbler.com/2.0/?method=artist.getSimilar&api_key=4140ac11193f7e675183afdf810a1bbb&artist=cher&format=json&limit=5")
+            res = requests.get("http://ws.audioscrobbler.com/2.0/?method=artist.getSimilar&api_key=4140ac11193f7e675183afdf810a1bbb&artist={}&format=json&limit=5".format(subject["values"][0]["tokens"]))
             print(res)
             print(res.json())
-            slots["_SUGGESTIONS_"]["values"] = [
-                {
-                    "value": "Take Care by Drake", 
-                    "resolved": 1,
-                },
-                {
-                    "value": "Low by David Bowie",
-                    "resolved": 1,
-                }
-            ]
+            slots["_SUGGESTIONS_"]["values"] = []
+            for artist in res.json()["similarartists"]["artist"]:
+                slots["_SUGGESTIONS_"]["values"].append(
+                    {
+                        "value": "{}".format(artist["name"]), 
+                        "resolved": 1,
+                    }
+                )
 
 
 class RequestHandler(tornado.web.RequestHandler):

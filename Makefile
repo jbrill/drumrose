@@ -1,1 +1,2 @@
-pylint: find . -iname "*.py" | xargs pylint 
+pylint:
+	find . -iname "*.py" | xargs pylint

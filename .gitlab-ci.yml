@@ -1,5 +1,2 @@
-default:
-  image: python:3.6
-
 py-lint:
   script: 'make pylint'

@@ -1,4 +1,10 @@
 version: "3.7"
 services:
-  webapp:
-    build: ./services/neptune-nuxt/
+    nuxt:
+        build: services/neptune-nuxt
+
+    django:
+        build: services/neptune-django
+
+    apple-music-communicator:
+        build: services/apple-music-communicator

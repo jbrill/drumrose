@@ -1,8 +1,12 @@
 -# Vim Stuff
--*~
--.swp
--.swo
+*~
+*.swp
+*.swo
 
--# Python stuff
--*.pyc
--__pycache__/*
+# Python stuff
+*.pyc
+__pycache__/*
+
+# Node stuff
+*.nuxt
+node_modules/

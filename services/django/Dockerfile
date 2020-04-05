@@ -4,6 +4,7 @@ ENV LC_ALL C.UTF-8
 ENV LANG C.UTF-8
 
 ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONPATH /usr/local/drumrose/services/django
 
 # Install Python and Package Libraries
 RUN apt-get update && apt-get upgrade -y && apt-get autoremove && apt-get autoclean
@@ -27,6 +28,8 @@ RUN apt-get update \
         postgresql-client \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /usr/local/drumrose/django
-COPY . /usr/local/drumrose/django
+WORKDIR /usr/local/drumrose/services/django
+COPY . /usr/local/drumrose/services/django
+
+# install python packages
 RUN pipenv install --system --deploy

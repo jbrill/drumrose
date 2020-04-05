@@ -1,7 +1,7 @@
 version: "3.3"
 services:
-  django:
+  django-server:
     volumes:
-    - './services/django:/usr/local/drumrose/services/django'
+    - '/root/drumrose/services/django:/usr/local/drumrose/services/django'
     environment:
       DEBUG: 'true'

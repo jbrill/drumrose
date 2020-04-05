@@ -3,6 +3,7 @@ Core Models for  API
 """
 
 from django.db import models
+from django.contrib.postgres.fields import ArrayField
 
 
 class BaseModel(models.Model):
@@ -41,7 +42,7 @@ class Album(BaseModel):
     """
     name = models.CharField(max_length=200)
     artwork_url = models.CharField(max_length=200)
-    artist = models.ForeignKey('Artist', on_delete=models.CASCADE)
+    artists = models.ForeignKey('Artist', on_delete=models.CASCADE)
     songs = models.ManyToManyField('Song')
 
 
@@ -52,8 +53,8 @@ class User(BaseModel):
     handle = models.CharField(max_length=200, unique=True)
     name = models.CharField(max_length=200)
     avatar_url = models.CharField(max_length=200)
-    posts = models.ForeignKey(
-        'Post', blank=True, null=True, on_delete=models.CASCADE
+    posts = models.ManyToManyField(
+        'Post', blank=True
     )
 
 
@@ -62,8 +63,7 @@ class Post(BaseModel):
     Model for a post
     """
     song = models.ForeignKey(
-        Song,
+        'Song',
         on_delete=models.CASCADE,
     )
     caption = models.CharField(max_length=200)
-    user = models.ForeignKey('User', on_delete=models.CASCADE)

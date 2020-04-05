@@ -10,9 +10,20 @@ services:
     build: services/django
     ports:
     - "8000:8000"
-    command: "python3 neptuneapi/manage.py runserver"
+    environment:
+      POSTGRES_DB_NAME: drumrose_db
+      POSTGRES_USER: drumrose_user
+      POSTGRES_PASSWORD: drumrose_password
+      POSTGRES_HOST: postgres-server
+      POSTGRES_PORT: 5432
+    command: "python3 manage.py runserver"
 
   postgres:
-    build: services/postgres
-    ports:
-    - "5464:5453"
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB_NAME: drumrose_db
+      POSTGRES_USER: drumrose_user
+      POSTGRES_PASSWORD: drumrose_password
+      POSTGRES_HOST: postgres-server
+      POSTGRES_PORT: 5432

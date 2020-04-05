@@ -1,10 +1,13 @@
 version: "3.7"
 services:
-    nuxt:
-        build: services/neptune-nuxt
+  nuxt:
+    build: services/neptune-nuxt
+    ports:
+    - "3000:3000"
+    command: "npm run dev"
 
-    django:
-        build: services/neptune-django
+  django:
+    build: services/neptune-django
 
-    apple-music-communicator:
-        build: services/apple-music-communicator
+  apple-music-communicator:
+    build: services/apple-music-communicator

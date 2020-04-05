@@ -1,16 +1,18 @@
 version: "3.3"
 services:
   nuxt:
-    build: services/neptune-nuxt
+    build: services/nuxt
     ports:
     - "3000:3000"
     command: "npm run dev"
 
   django:
-    build: services/neptune-django
+    build: services/django
     ports:
     - "8000:8000"
-    command: "tail -f /dev/null"
+    command: "python3 neptuneapi/manage.py runserver"
 
-  apple-music-communicator:
-    build: services/apple-music-communicator
+  postgres:
+    build: services/postgres
+    ports:
+    - "5464:5453"

@@ -1,6 +1,6 @@
 FROM ubuntu:18.04
 LABEL Maintainer="Jason Brill <jlbrill@umich.edu>"
-# Neptune Front-end
+# Drumrose Front-end
 # Version: 1.0
 
 # Install Python and Package Libraries
@@ -20,4 +20,14 @@ WORKDIR $PROJECT_DIR
 RUN ls
 COPY package.json package-lock.json ./
 
+<<<<<<< HEAD:services/neptune-nuxt/Dockerfile
 RUN npm install --verbose
+=======
+RUN sudo apt-get install -y nodejs
+
+RUN mkdir -p /usr/local/drumrose/services/nuxt/
+WORKDIR /usr/local/drumrose/services/nuxt/
+COPY . /usr/local/drumrose/services/nuxt/
+
+RUN npm install
+>>>>>>> dc9f6e5... Nomenclature changes:services/nuxt/Dockerfile

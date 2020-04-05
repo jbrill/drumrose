@@ -32,6 +32,6 @@ RUN apt-get update \
         postgresql-client \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /usr/local/neptune/neptune-django
-COPY . /usr/local/neptune/neptune-django/
+WORKDIR /usr/local/drumrose/django
+COPY . /usr/local/drumrose/django/
 RUN pipenv install --system --deploy

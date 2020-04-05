@@ -1,9 +1,6 @@
 <template>
   <div class="header">
-    <nuxt-link class="title" to="/" exact>
-      <NeptuneLogo class="title__img" />
-    </nuxt-link>
-    <nuxt-link class="title__middle" to="/" exact>NEPTUNE</nuxt-link>
+    <nuxt-link class="title__middle" to="/" exact>DRUMROSE</nuxt-link>
     <div class="search-bar__contain"><search-bar /></div>
     <signIn v-if="!isAuthenticated" />
     <AddPostButton v-else />
@@ -41,7 +38,7 @@ export default {
 .header {
   position: fixed;
   z-index: 10000;
-  background-color: #9c0235;
+  background-color: lavenderblush;
   left: 0;
   display: flex;
   align-items: center;
@@ -64,13 +61,10 @@ export default {
 .title__middle {
   letter-spacing: 2px;
   font-size: 2em;
-  color: white;
+  color: spacegrey;
   font-weight: lighter;
   margin: 0 auto;
   margin-left: 3rem;
-}
-.title__middle:hover {
-  color: var(--primary-yellow);
 }
 a {
   text-decoration: none;

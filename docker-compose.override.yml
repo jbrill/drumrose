@@ -5,3 +5,9 @@ services:
     - '/root/drumrose/services/django:/usr/local/drumrose/services/django'
     environment:
       DEBUG: 'true'
+  
+  nuxt-server:
+    volumes:
+    - '/root/drumrose/services/nuxt/components:/usr/local/drumrose/services/nuxt/components'
+    environment:
+      DEBUG: 'true'

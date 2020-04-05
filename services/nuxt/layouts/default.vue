@@ -45,6 +45,6 @@ export default {
   font-family: Menlo, Monaco, "Droid Sans Mono", Consolas, "Lucida Console",
     "Courier New", monospace;
   margin: 0 auto;
-  background-color: var(--primary-red--dark);
+  background-color: white;
 }
 </style>

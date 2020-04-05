@@ -51,7 +51,7 @@ export const getTrackIDFromQuery = async (query, bearerToken) => {
 
 export const getPosts = async bearerToken => {
   try {
-    const posts = await axios.get("http://localhost:8000/posts/", {
+    const posts = await axios.get("http://django-server:8000/posts/", {
       headers: {
         Authorization: "Bearer " + bearerToken
       }
@@ -73,7 +73,7 @@ export const createPost = async (
 ) => {
   try {
     const posts = await axios.post(
-      "http://localhost:8000/posts/",
+      "http://django-server:8000/posts/",
       {
         apple_music_id: appleSongID,
         handle: userHandle,

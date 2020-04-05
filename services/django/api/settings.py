@@ -47,7 +47,7 @@ SECRET_KEY = 'n467bz@g24axx$=zf17ty@$j(m!t9o+tu!lhfafd4$_!r7ja&$'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["django-server"]
 
 # Application definition
 INSTALLED_APPS = [
@@ -185,5 +185,19 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 CORS_ORIGIN_WHITELIST = (
-    'http://localhost:3000',
+    'http://nuxt-server:3000',
 )
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'WARNING',
+    },
+}

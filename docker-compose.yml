@@ -1,4 +1,4 @@
-version: "3.7"
+version: "3.3"
 services:
   nuxt:
     build: services/neptune-nuxt
@@ -8,6 +8,9 @@ services:
 
   django:
     build: services/neptune-django
+    ports:
+    - "8000:8000"
+    command: "tail -f /dev/null"
 
   apple-music-communicator:
     build: services/apple-music-communicator

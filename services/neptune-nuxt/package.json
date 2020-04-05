@@ -27,7 +27,7 @@
     "jwt-decode": "2.2.0",
     "node-fetch": "^2.3.0",
     "normalize.css": "^8.0.0",
-    "nuxt": "^2.6.2",
+    "nuxt": "^2.12.2",
     "nuxt-svg-loader": "^1.0.1",
     "uuid": "3.3.2",
     "vuex-persistedstate": "^2.5.4"

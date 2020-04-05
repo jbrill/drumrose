@@ -1,6 +1,5 @@
 pylint:
 	find . -iname "*.py" | xargs pylint
 
-
-docker:
-	docker build -t neptune-nuxt services/neptune-nuxt
+up:
+	docker-compose down && docker-compose build && docker-compose up -d

@@ -1,6 +1,0 @@
-Django>3
-djangorestframework
-djangorestframework-jwt
-cryptography
-pyjwt
-python-dotenv

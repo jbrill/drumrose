@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 LABEL Maintainer="Jason Brill <jlbrill@umich.edu>"
 # Neptune Front-end
 # Version: 1.0

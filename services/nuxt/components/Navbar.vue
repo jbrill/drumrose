@@ -38,7 +38,7 @@ export default {
 .header {
   position: fixed;
   z-index: 10000;
-  background-color: lavenderblush;
+  background-color: var(--primary-black-light);
   left: 0;
   display: flex;
   align-items: center;
@@ -58,10 +58,13 @@ export default {
   height: auto;
   vertical-align: middle;
 }
+.title__middle:hover {
+  color: var(--primary-purple);
+}
 .title__middle {
   letter-spacing: 2px;
   font-size: 2em;
-  color: spacegrey;
+  color: var(--primary-red);
   font-weight: lighter;
   margin: 0 auto;
   margin-left: 3rem;
@@ -90,15 +93,14 @@ a {
 .search-bar__contain {
   margin: 0 auto;
   opacity: 0.9;
+  margin-right: 1rem;
 }
 .search-bar__contain:hover {
+  color: black;
   opacity: 1;
   transition: opacity 0.2s ease-out;
   -moz-transition: opacity 0.2s ease-out;
   -webkit-transition: opacity 0.2s ease-out;
   -o-transition: opacity 0.2s ease-out;
-}
-.sign--in__contain {
-  margin-right: 1rem;
 }
 </style>

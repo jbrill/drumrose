@@ -11,11 +11,13 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
-import jwt
 import requests
-from django.contrib.auth import authenticate
+
 from cryptography.x509 import load_pem_x509_certificate
 from cryptography.hazmat.backends import default_backend
+
+import jwt
+from django.contrib.auth import authenticate
 
 
 def get_public_key():
@@ -116,7 +118,6 @@ DATABASES = {
 }
 
 # Rest Framework
-"""
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
@@ -127,9 +128,6 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
     ),
 }
-"""
-
-REST_FRAMEWORK = {}
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators

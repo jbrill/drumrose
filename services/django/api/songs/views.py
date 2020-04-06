@@ -1,18 +1,23 @@
+"""
+Song Views
+"""
+
+import json
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.shortcuts import get_object_or_404
-from django.views.decorators.csrf import csrf_exempt, csrf_protect
+
+#from django.shortcuts import get_object_or_404
+#from django.views.decorators.csrf import csrf_exempt, csrf_protect
 
 from api.models.core import User, Song
 from api.songs.serializers import SongSerializer
-
-import json
 
 
 class SongList(APIView):
     """
     Description:
-        - API View for User List
+        - API View for Song List
     Routes:
         - GET /songs/
             - Gets a list of songs per user
@@ -64,7 +69,6 @@ class SongDetail(APIView):
     """
 
     def get(self, request, post_id):
-        print("HERE...")
         user = User.objects.get(
             handle=user_handle
         )
@@ -77,7 +81,7 @@ class SongDetail(APIView):
             handle=post_id
         )
 
-        # Update user shit
+        #TODO: Update user
 
         serializer = UserSerializer(post)
         return Response(serializer.data)

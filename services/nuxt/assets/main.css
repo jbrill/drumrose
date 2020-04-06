@@ -15,7 +15,7 @@
 }
 
 html {
-  background-color: white;
+  background-color: #F6F6F6;
 }
 
 ::selection {
@@ -53,15 +53,15 @@ i:hover {
   cursor: pointer;
 }
 .neptune-button__strong {
-  background-color: transparent;
+  background-color: var(--primary-black--light);
   border: none;
   border-radius: 5px;
   box-shadow: var(--shadow-heavy);
 }
 .neptune-button__strong:hover {
   cursor: pointer;
-  background-color: var(--primary-black-light);
-  /* color: var(--primary-purple); */
+  background-color: black;
+  color: var(--primary-purple);
 }
 .modal {
   z-index: 100000;

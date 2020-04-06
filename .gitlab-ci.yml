@@ -1,8 +1,15 @@
 image: "ubuntu:18.04"
 
+before_script:
+    - docker info
+
 stages:
     - pre-test
     - test
     - post-test
 
-
+build_image:
+  stage: pre-test
+  script:
+    - docker build -t my-docker-image .
+    - docker run my-docker-image /script/to/run/tests

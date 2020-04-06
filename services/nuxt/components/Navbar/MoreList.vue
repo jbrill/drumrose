@@ -101,8 +101,7 @@ export default {
   margin-top: 0.5rem;
 }
 .more--menu__contain__btn:hover {
-  /* color: var(--primary-purple); */
-  color: black;
+  color: var(--primary-purple);
 }
 .fade-enter-active,
 .fade-leave-active {

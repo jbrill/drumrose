@@ -31,7 +31,6 @@ class AlbumRoute(APIView):
         POST for  Artist
         """
         artist_data = json.loads(request.body.decode('utf-8'))
-        print(artist_data)
         test_album = Album.objects.create(
             name=artist_data["name"],
             artwork_url=artist_data["url"]

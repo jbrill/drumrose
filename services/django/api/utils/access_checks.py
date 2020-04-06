@@ -3,17 +3,17 @@ Auth scope identifier based on
 https://github.com/auth0-samples/auth0-django-api
 """
 
-from functools import wraps
-
 import os
-import jwt
-import requests
-
-from django.http import JsonResponse
-from django.contrib.auth import authenticate
+from functools import wraps
 
 from cryptography.x509 import load_pem_x509_certificate
 from cryptography.hazmat.backends import default_backend
+
+import requests
+import jwt
+
+from django.http import JsonResponse
+from django.contrib.auth import authenticate
 
 
 def get_public_key():
@@ -37,9 +37,7 @@ def get_username_from_payload(payload):
     """
     Get username from jwt
     """
-    print("\nHIIII\n")
     username = payload.get('sub').replace('|', '.')
-    print("HERE FOR {}".format(username))
     authenticate(remote_user=username)
     return username
 

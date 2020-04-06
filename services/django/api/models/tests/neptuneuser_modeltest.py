@@ -7,13 +7,13 @@ from django.test import TestCase
 from api.models.core import User
 
 class PostsTest(TestCase):
-    """ Test module for Puppy model """
+    """ Test module for Post """
 
     def setUp(self):
         User.objects.create(
             name='Casper',
             handle="casperdafriendlyghost",
-            avatar_url="https://s.gravatar.com/avatar/5396e26cc474676468d20d3cb45cbace?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fjl.png"
+            avatar_url="https://i2.wp.com/cdn.auth0.com/avatars/jl.png?ssl=1"
         )
 
     def test_get_user(self):
@@ -21,8 +21,4 @@ class PostsTest(TestCase):
         Tests retrieving a user
         """
         casper = User.objects.get(name='Casper')
-        # self.assertEqual(
-        #     puppy_casper.get_breed(),
-        #     "Casper belongs to Bull Dog breed."
-        # )
-        pass
+        self.assertTrue(casper.handle, "casperdafriendlyghost")

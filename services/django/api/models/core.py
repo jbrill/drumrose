@@ -53,8 +53,11 @@ class User(BaseModel):
     handle = models.CharField(max_length=200, unique=True)
     name = models.CharField(max_length=200)
     avatar_url = models.CharField(max_length=200)
-    posts = models.ManyToManyField(
-        'Post', blank=True
+    posts = models.ForeignKey(
+        'Post',
+        blank=True,
+        on_delete=models.PROTECT,
+        related_name="user_posts"
     )
 
 
@@ -65,5 +68,10 @@ class Post(BaseModel):
     song = models.ForeignKey(
         'Song',
         on_delete=models.CASCADE,
+    )
+    user = models.ForeignKey(
+        'User',
+        on_delete=models.CASCADE,
+        related_name="post_user"
     )
     caption = models.CharField(max_length=200)

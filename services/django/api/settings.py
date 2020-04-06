@@ -47,7 +47,7 @@ SECRET_KEY = 'n467bz@g24axx$=zf17ty@$j(m!t9o+tu!lhfafd4$_!r7ja&$'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["django-server"]
+ALLOWED_HOSTS = ["django-server", "127.0.0.1"]
 
 # Application definition
 INSTALLED_APPS = [
@@ -116,6 +116,7 @@ DATABASES = {
 }
 
 # Rest Framework
+"""
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
@@ -126,6 +127,9 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
     ),
 }
+"""
+
+REST_FRAMEWORK = {}
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators

@@ -1,8 +1,8 @@
 {
-  "name": "Neptune",
+  "name": "Drumrose",
   "version": "1.0.0",
   "description": "Music streaming for the new world.",
-  "author": "jlbrill",
+  "author": "Drumrose",
   "private": true,
   "scripts": {
     "dev": "HOST=0.0.0.0 PORT=3000 nuxt",

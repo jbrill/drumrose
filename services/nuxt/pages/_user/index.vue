@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { getUserDetail } from "~/api/neptune_api";
+import { getUserDetail } from "~/api/api";
 
 export default {
   async created() {

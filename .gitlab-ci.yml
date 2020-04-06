@@ -1,16 +1,17 @@
 image: "ubuntu:18.04"
 
 before_script:
-    - docker system prune --volumes -af 
+    - docker system prune --volumes -af
+    - ./scripts/continuous_integration/gitlab_runner_setup.sh
 
 stages:
     - pre-test
     - test
     - post-test
 
-build_image:
+pylint:
   stage: pre-test
   script:
-    - echo "WOO"
+    - make up
   tags:
     - full-stack

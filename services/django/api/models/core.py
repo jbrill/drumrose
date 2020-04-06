@@ -56,6 +56,7 @@ class User(BaseModel):
     posts = models.ForeignKey(
         'Post',
         blank=True,
+        null=True,
         on_delete=models.PROTECT,
         related_name="user_posts"
     )

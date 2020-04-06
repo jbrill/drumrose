@@ -22,6 +22,9 @@ RUN rm -fr /usr/bin/python3 && ln /usr/bin/python3.7 /usr/bin/python3
 
 RUN pip3 install pipenv
 
+# Link python -> python3
+RUN alias python=python3
+
 # Postgres client
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
@@ -32,4 +35,4 @@ WORKDIR /usr/local/drumrose/services/django
 COPY . /usr/local/drumrose/services/django
 
 # install python packages
-RUN pipenv install --system --deploy
+RUN pipenv install --dev --system --deploy

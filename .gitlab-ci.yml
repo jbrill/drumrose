@@ -1,8 +1,5 @@
 image: "ubuntu:18.04"
 
-before_script:
-    - "./scripts/test_environment.sh"
-
 stages:
     - pre-test
     - test

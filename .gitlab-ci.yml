@@ -1,7 +1,7 @@
 image: "ubuntu:18.04"
 
 before_script:
-    - docker info
+    - docker system prune --volumes -af 
 
 stages:
     - pre-test
@@ -11,7 +11,6 @@ stages:
 build_image:
   stage: pre-test
   script:
-    - docker build -t my-docker-image .
-    - docker run my-docker-image /script/to/run/tests
+    - echo "WOO"
   tags:
     - full-stack

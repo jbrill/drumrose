@@ -3,21 +3,20 @@ module.exports = {
   /*
    ** Router config
    */
-  router: {
-    middleware: "check-auth"
-  },
+  srcDir: 'src/',
+  router: {},
   /*
    ** Headers of the page
    */
   head: {
-    title: "Drumrose - Music for the Soul",
+    title: "DRUMROSE // Music for the Soul",
     meta: [
       { charset: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       {
         hid: "description",
         name: "description",
-        content: "Drumrose"
+        content: "DRUMROSE"
       }
     ],
     link: [
@@ -49,7 +48,6 @@ module.exports = {
     ],
     script: [
       { src: "https://js-cdn.music.apple.com/musickit/v1/musickit.js" },
-      { src: "https://cdn.auth0.com/js/auth0/9.5.1/auth0.min.js" }
     ]
   },
   /*
@@ -59,19 +57,12 @@ module.exports = {
   /*
    ** Environement variables
    */
-  env: {
-    AUTH0_CLIENT_ID: "",
-    AUTH0_CLIENT_DOMAIN: "",
-    APPLE_MUSIC_KEY_ID: "",
-    APPLE_MUSIC_TEAM_ID: ""
-  },
   modules: [
     "@nuxtjs/axios",
     "bootstrap-vue/nuxt",
     "nuxt-svg-loader",
     "cookie-universal-nuxt"
   ],
-  plugins: [{ src: "~/plugins/localStorage.js" }],
   axios: {
     proxyHeaders: false
   },

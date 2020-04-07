@@ -27,7 +27,8 @@ class UserList(APIView):
         """
         print(request)
         users = User.objects.all()
-
+        print("USERS")
+        print(users.count())
         serializer = UserSerializer(users, many=True)
         return Response(serializer.data)
 

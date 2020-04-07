@@ -1,0 +1,13 @@
+version: "3.3"
+services:
+  django-server:
+    volumes:
+    - '${HOME}/drumrose/services/django:/usr/local/drumrose/services/django'
+    environment:
+      DEBUG: 1
+  
+  nuxt-server:
+    volumes:
+    - '${HOME}/drumrose/services/nuxt/src:/usr/local/drumrose/services/nuxt/src'
+    environment:
+      DEBUG: 1

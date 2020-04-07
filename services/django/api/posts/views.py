@@ -1,7 +1,8 @@
 """
  Post Route Definition
 """
-
+# pylint: disable=W0612,W0613
+#
 import json
 
 from api.models.core import Post, Song, User
@@ -31,7 +32,6 @@ class PostList(APIView):
         If 'discover'
           # Grab recommended
         """
-        print(request)
         posts = Post.objects.all()
 
         serializer = PostSerializer(posts, many=True)

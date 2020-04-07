@@ -9,6 +9,7 @@ ENV PYTHONPATH /usr/local/drumrose/services/django
 # Install Python and Package Libraries
 RUN apt-get update && apt-get upgrade -y && apt-get autoremove && apt-get autoclean
 RUN apt-get install -y \
+    make \
     curl \
     sudo \
     vim
@@ -31,8 +32,8 @@ RUN apt-get update \
         postgresql-client \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /usr/local/drumrose/services/django
-COPY . /usr/local/drumrose/services/django
+COPY . /usr/local/drumrose/
+WORKDIR /usr/local/drumrose/services/django/
 
 # install python packages
 RUN pipenv install --dev --system --deploy

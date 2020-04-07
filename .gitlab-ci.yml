@@ -5,15 +5,23 @@ after_script:
     - docker system prune --volumes -af
 
 stages:
-    - pre-test
+    - build
     - test
-    - post-test
+    - deploy
 
 pylint:
-  stage: pre-test
+  stage: test
   script:
-    - docker-compose build tests-server
-    - docker-compose up -d tests-server
+    - docker-compose up -d --build tests-server
     - make dtest-pylint
+  tags:
+    - full-stack
+
+django:
+  stage: test
+  script:
+    - docker-compose up -d --build django-server postgres-server
+    - ./scripts/wait_till_container_healthy.sh drumrose_django-server_1
+    - make dtest-django
   tags:
     - full-stack

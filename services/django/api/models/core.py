@@ -27,8 +27,6 @@ class Artist(BaseModel):
     """
 
     name = models.CharField(max_length=200)
-    songs = models.ManyToManyField("Song", blank=True)
-    albums = models.ManyToManyField("Album", blank=True)
 
 
 class Song(BaseModel):
@@ -36,7 +34,13 @@ class Song(BaseModel):
     Model for a song
     """
 
-    apple_music_id = models.CharField(max_length=200, unique=True)
+    name = models.CharField(max_length=200)
+    albums = models.ManyToManyField(
+        "Album", related_name="songs", related_query_name="song"
+    )
+    artists = models.ManyToManyField(
+        "Artist", related_name="songs", related_query_name="song"
+    )
 
 
 class Album(BaseModel):
@@ -46,8 +50,9 @@ class Album(BaseModel):
 
     name = models.CharField(max_length=200)
     artwork_url = models.CharField(max_length=200)
-    artists = models.ForeignKey("Artist", on_delete=models.CASCADE)
-    songs = models.ManyToManyField("Song")
+    artists = models.ManyToManyField(
+        "Artist", related_name="albums", related_query_name="album"
+    )
 
 
 class User(BaseModel):
@@ -58,8 +63,8 @@ class User(BaseModel):
     handle = models.CharField(max_length=200, unique=True)
     name = models.CharField(max_length=200)
     avatar_url = models.CharField(max_length=200)
-    posts = models.ForeignKey(
-        "Post", blank=True, on_delete=models.PROTECT, related_name="user_posts"
+    posts = models.ManyToManyField(
+        "Post", related_name="users", related_query_name="user"
     )
 
 
@@ -68,8 +73,5 @@ class Post(BaseModel):
     Model for a post
     """
 
-    song = models.ForeignKey("Song", on_delete=models.CASCADE,)
-    user = models.ForeignKey(
-        "User", on_delete=models.CASCADE, related_name="post_user"
-    )
+    song = models.ForeignKey("Song", on_delete=models.CASCADE)
     caption = models.CharField(max_length=200)

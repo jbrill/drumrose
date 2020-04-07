@@ -12,34 +12,9 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 
-import requests
-from cryptography.hazmat.backends import default_backend
-from cryptography.x509 import load_pem_x509_certificate
-from django.contrib.auth import authenticate
-
-
-def get_public_key():
-    """
-    Returns public key
-    """
-    cert_url = "https://music.auth0.com/.well-known/jwks.json"
-    jwks = requests.get(cert_url).json()
-    cert = (
-        "-----BEGIN CERTIFICATE-----\n"
-        + jwks["keys"][0]["x5c"][0]
-        + "\n-----END CERTIFICATE-----"
-    )
-
-    certificate = load_pem_x509_certificate(
-        cert.encode("utf-8"), default_backend()
-    )
-
-    return certificate.public_key()
-
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -48,9 +23,17 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = "n467bz@g24axx$=zf17ty@$j(m!t9o+tu!lhfafd4$_!r7ja&$"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
+if os.getenv("DEBUG") == "1":
+    Debug = True
 
-ALLOWED_HOSTS = ["django-server", "127.0.0.1"]
+# TODO: Revisit
+ALLOWED_HOSTS = [
+    "django-server",
+    "127.0.0.1",
+    "localhost",
+    "teton.drumrose.io",
+]
 
 # Application definition
 INSTALLED_APPS = [
@@ -62,7 +45,6 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
-    "rest_framework_jwt",
     "corsheaders",
 ]
 
@@ -78,10 +60,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-AUTHENTICATION_BACKENDS = [
-    "django.contrib.auth.backends.ModelBackend",
-    "django.contrib.auth.backends.RemoteUserBackend",
-]
+AUTHENTICATION_BACKENDS = []
 
 ROOT_URLCONF = "api.urls"
 
@@ -120,14 +99,8 @@ DATABASES = {
 
 # Rest Framework
 REST_FRAMEWORK = {
-    "DEFAULT_PERMISSION_CLASSES": (
-        "rest_framework.permissions.IsAuthenticated",
-    ),
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_jwt.authentication.JSONWebTokenAuthentication",
-        "rest_framework.authentication.SessionAuthentication",
-        "rest_framework.authentication.BasicAuthentication",
-    ),
+    "DEFAULT_PERMISSION_CLASSES": (),
+    "DEFAULT_AUTHENTICATION_CLASSES": (),
 }
 
 # Password validation
@@ -148,25 +121,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-API_IDENTIFIER = "https://api"
-PUBLIC_KEY = get_public_key()
-JWT_ISSUER = "https://music.auth0.com/"
-
-
-def jwt_get_username_from_payload_handler(payload):
-    username = payload.get("sub").replace("|", ".")
-    authenticate(remote_user=username)
-    return username
-
-
-JWT_AUTH = {
-    "JWT_PAYLOAD_GET_USERNAME_HANDLER": jwt_get_username_from_payload_handler,
-    "JWT_PUBLIC_KEY": PUBLIC_KEY,
-    "JWT_ALGORITHM": "RS256",
-    "JWT_AUDIENCE": API_IDENTIFIER,
-    "JWT_ISSUER": JWT_ISSUER,
-    "JWT_AUTH_HEADER_PREFIX": "Bearer",
-}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
@@ -194,4 +148,11 @@ LOGGING = {
     "disable_existing_loggers": False,
     "handlers": {"console": {"class": "logging.StreamHandler"}},
     "root": {"handlers": ["console"], "level": "WARNING"},
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
+            "propagate": False,
+        },
+    },
 }

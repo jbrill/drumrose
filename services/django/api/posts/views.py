@@ -4,17 +4,12 @@
 
 import json
 
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.decorators import api_view
-from django.shortcuts import get_object_or_404
-from django.views.decorators.csrf import csrf_exempt, csrf_protect
-from django.http import HttpResponseBadRequest
-
-from api.models.core import (
-    User, Post, Song
-)
+from api.models.core import Post, Song, User
 from api.posts.serializers import PostSerializer
+from api.users.serializers import UserSerializer
+from django.http import HttpResponseBadRequest
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 
 class PostList(APIView):
@@ -36,6 +31,7 @@ class PostList(APIView):
         If 'discover'
           # Grab recommended
         """
+        print(request)
         posts = Post.objects.all()
 
         serializer = PostSerializer(posts, many=True)
@@ -48,34 +44,24 @@ class PostList(APIView):
             - Apple Music Id
             - Caption
         """
-        request_body = json.loads(request.body.decode('utf-8'))
+        request_body = json.loads(request.body.decode("utf-8"))
 
         apple_music_id = request_body["apple_music_id"]
         caption = request_body["caption"]
         user_handle = request_body["handle"]
         # create new song if one doesnt exist
         try:
-            song = Song.objects.get(
-                apple_music_id=apple_music_id
-            )
+            song = Song.objects.get(apple_music_id=apple_music_id)
         except Song.DoesNotExist:
-            song = Song.objects.create(
-                apple_music_id=apple_music_id,
-            )
+            song = Song.objects.create(apple_music_id=apple_music_id,)
         try:
-            user = User.objects.get(
-                handle=user_handle
-            )
+            user = User.objects.get(handle=user_handle)
         except User.DoesNotExist:
             return HttpResponseBadRequest(
-                content='{} does not exist.'.format(user_handle)
+                content="{} does not exist.".format(user_handle)
             )
 
-        new_post = Post.objects.create(
-            song=song,
-            caption=caption,
-            user=user
-        )
+        new_post = Post.objects.create(song=song, caption=caption, user=user)
 
         serializer = PostSerializer(new_post)
         return Response(serializer.data)
@@ -95,18 +81,16 @@ class PostDetail(APIView):
     """
 
     def get(self, request, post_id):
-        print("HERE...")
-        user = User.objects.get(
-            handle=user_handle
-        )
+        print(post_id)
+        user_handle = request.body.get("user_handle")
+        user = User.objects.get(handle=user_handle)
 
         serializer = UserSerializer(user)
         return Response(serializer.data)
 
     def patch(self, request, post_id):
-        post = User.objects.get(
-            handle=post_id
-        )
+        print(request)
+        post = User.objects.get(handle=post_id)
 
         # Update user shit
 
@@ -114,9 +98,8 @@ class PostDetail(APIView):
         return Response(serializer.data)
 
     def delete(self, request, post_id):
-        post = User.objects.get(
-            handle=post_id
-        ).delete()
+        print(request)
+        post = User.objects.get(handle=post_id).delete()
 
         serializer = UserSerializer(post)
         return Response(serializer.data)

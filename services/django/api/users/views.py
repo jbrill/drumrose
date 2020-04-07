@@ -4,11 +4,10 @@
 
 import json
 
-from rest_framework.views import APIView
-from rest_framework.response import Response
-
 from api.models.core import User
 from api.users.serializers import UserSerializer
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 
 class UserList(APIView):
@@ -26,6 +25,7 @@ class UserList(APIView):
         """
         Get for UserList
         """
+        print(request)
         users = User.objects.all()
 
         serializer = UserSerializer(users, many=True)
@@ -36,9 +36,7 @@ class UserList(APIView):
         Post for UserList
         """
         # create new user
-        request_body = json.loads(
-            request.body.decode('utf-8')
-        )
+        request_body = json.loads(request.body.decode("utf-8"))
 
         new_user = User.objects.create(
             name=request_body["name"],
@@ -67,9 +65,7 @@ class UserDetail(APIView):
         """
         GET for UserDetail
         """
-        user = User.objects.get(
-            handle=user_handle
-        )
+        user = User.objects.get(handle=user_handle)
 
         serializer = UserSerializer(user)
         return Response(serializer.data)
@@ -78,11 +74,9 @@ class UserDetail(APIView):
         """
         PATCH for UserDetail
         """
-        user = User.objects.get(
-            handle=user_handle
-        )
+        user = User.objects.get(handle=user_handle)
 
-        request_body = json.loads(request.body.decode('utf-8'))
+        request_body = json.loads(request.body.decode("utf-8"))
 
         if request_body["name"]:
             user.name = request_body["name"]
@@ -100,9 +94,8 @@ class UserDetail(APIView):
         """
         DELETE for UserDetail
         """
-        user = User.objects.get(
-            handle=user_handle
-        )
+        print(request)
+        user = User.objects.get(handle=user_handle)
 
         user.delete()
 

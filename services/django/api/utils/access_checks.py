@@ -6,14 +6,12 @@ https://github.com/auth0-samples/auth0-django-api
 import os
 from functools import wraps
 
-from cryptography.x509 import load_pem_x509_certificate
-from cryptography.hazmat.backends import default_backend
-
-import requests
 import jwt
-
-from django.http import JsonResponse
+import requests
+from cryptography.hazmat.backends import default_backend
+from cryptography.x509 import load_pem_x509_certificate
 from django.contrib.auth import authenticate
+from django.http import JsonResponse
 
 
 def get_public_key():
@@ -22,9 +20,11 @@ def get_public_key():
     """
     cert_url = "https://music.auth0.com/.well-known/jwks.json"
     jwks = requests.get(cert_url).json()
-    certificate_raw = '-----BEGIN CERTIFICATE-----\n' + \
-        jwks['keys'][0]['x5c'][0] + \
-        '\n-----END CERTIFICATE-----'
+    certificate_raw = (
+        "-----BEGIN CERTIFICATE-----\n"
+        + jwks["keys"][0]["x5c"][0]
+        + "\n-----END CERTIFICATE-----"
+    )
 
     certificate = load_pem_x509_certificate(
         str.encode(certificate_raw), default_backend()
@@ -37,7 +37,7 @@ def get_username_from_payload(payload):
     """
     Get username from jwt
     """
-    username = payload.get('sub').replace('|', '.')
+    username = payload.get("sub").replace("|", ".")
     authenticate(remote_user=username)
     return username
 
@@ -57,10 +57,12 @@ def requires_scope(required_scope):
     Args:
         required_scope (str): The scope required to access the resource
     """
+
     def require_scope(func):
         """
         Decorator for scope
         """
+
         @wraps(func)
         def decorated(*args, **kwargs):
             """
@@ -68,13 +70,13 @@ def requires_scope(required_scope):
             """
             auth_token = get_token_auth_header(args[0])
             # AUTH0_DOMAIN = os.environ.get('AUTH0_DOMAIN')
-            api_identifier = os.environ.get('API_IDENTIFIER')
+            api_identifier = os.environ.get("API_IDENTIFIER")
             public_key = get_public_key()
             decoded = jwt.decode(
                 auth_token,
                 public_key,
                 audience=api_identifier,
-                algorithms=['RS256']
+                algorithms=["RS256"],
             )
 
             if decoded.get("scope"):
@@ -83,8 +85,11 @@ def requires_scope(required_scope):
                     if token_scope == required_scope:
                         return func(*args, **kwargs)
             response = JsonResponse(
-                {'message': 'You don\'t have access to this resource'})
+                {"message": "You don't have access to this resource"}
+            )
             response.status_code = 403
             return response
+
         return decorated
+
     return require_scope

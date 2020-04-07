@@ -1,4 +1,4 @@
-from django.test import TestCase, Client
+from django.test import Client, TestCase
 
 
 class PostTest(TestCase):
@@ -8,7 +8,7 @@ class PostTest(TestCase):
 
     def setUp(self):
         client = Client()
+        print(client)
 
     def test_post_create(self):
         print("HERE FOR TEST POST")
-        pass

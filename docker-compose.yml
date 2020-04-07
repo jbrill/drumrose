@@ -39,3 +39,9 @@ services:
       POSTGRES_PORT: 5432
     volumes:
       - /var/lib/postgresql/:/var/lib/postgresql/
+  
+  tests-server:
+    build:
+      context: .
+      dockerfile: tests/Dockerfile
+    command: "tail -f /dev/null"

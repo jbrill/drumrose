@@ -11,3 +11,7 @@ services:
     - '/root/drumrose/services/nuxt/components:/usr/local/drumrose/services/nuxt/components'
     environment:
       DEBUG: 'true'
+  
+  tests-server:
+    volumes:
+    - '/root/drumrose:/usr/local/drumrose'

@@ -1,8 +1,8 @@
 image: "ubuntu:18.04"
 
-before_script:
+after_script:
+    - docker-compose down
     - docker system prune --volumes -af
-    - ./scripts/continuous_integration/gitlab_runner_setup.sh
 
 stages:
     - pre-test
@@ -12,6 +12,8 @@ stages:
 pylint:
   stage: pre-test
   script:
-    - make up
+    - docker-compose build tests-server
+    - docker-compose up -d tests-server
+    - make dtest-pylint
   tags:
     - full-stack

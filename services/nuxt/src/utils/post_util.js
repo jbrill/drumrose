@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-const APPLE_API_URL = 'https://api.music.apple.com/v1/catalog/us/';
+const appleApiUrl = 'https://api.music.apple.com/v1/catalog/us/';
 
-function getConfig(bearerToken) {
+function getConfig (bearerToken) {
   const bearer = {
     Authorization: `Bearer ${bearerToken}`,
   };
@@ -13,21 +13,23 @@ function getConfig(bearerToken) {
   return config;
 }
 
-async function getTrackHintResponseFromQuery(query, config) {
-  const getTrackHint_URL = `${APPLE_API_URL}search/hints?term=${query}&limit=10&types=songs`;
-  const trackHintResponse = await axios.get(getTrackHint_URL, config);
+async function getTrackHintResponseFromQuery (query, config) {
+  const getTrackHintUrl = `${appleApiUrl}search/\
+    hints?term=${query}&limit=10&types=songs`;
+  const trackHintResponse = await axios.get(getTrackHintUrl, config);
   return trackHintResponse;
 }
 
-async function getTrackInfoResponseFromAppleID(appleID, config) {
-  const getTrackInfo_URL = `${APPLE_API_URL}songs/${appleID}`;
-  const trackInfoResponse = await axios.get(getTrackInfo_URL, config);
+async function getTrackInfoResponseFromAppleID (appleID, config) {
+  const getTrackInfoUrl = `${appleApiUrl}songs/${appleID}`;
+  const trackInfoResponse = await axios.get(getTrackInfoUrl, config);
   return trackInfoResponse;
 }
 
-async function getTrackIDResponseFromQuery(query, config) {
-  const getTrackID_URL = `${APPLE_API_URL}search?term=${query}&limit=2&types=songs`;
-  const trackIDResponse = await axios.get(getTrackID_URL, config);
+async function getTrackIDResponseFromQuery (query, config) {
+  const getTrackIdUrl = `${appleApiUrl}search?term=\
+    ${query}&limit=2&types=songs`;
+  const trackIDResponse = await axios.get(getTrackIdUrl, config);
   return trackIDResponse;
 }
 
@@ -47,11 +49,11 @@ export const getTrackIDFromQuery = async (query, bearerToken) => {
   return trackIDResponse.data.results.songs.data[0];
 };
 
-export const getPosts = async (bearerToken) => {
+export const getPosts = async bearerToken => {
   try {
     const posts = await axios.get('https://teton.drumrose.io/api/posts/', {
       headers: {
-        Authorization: 'Bearer ' + bearerToken,
+        Authorization: `Bearer ${bearerToken}`,
       },
     });
     return posts;
@@ -63,7 +65,12 @@ export const getPosts = async (bearerToken) => {
   }
 };
 
-export const createPost = async (bearerToken, appleSongID, caption, userHandle) => {
+export const createPost = async (
+  bearerToken,
+  appleSongID,
+  caption,
+  userHandle
+) => {
   try {
     const posts = await axios.post(
       'https://teton.drumrose.io/api/posts/',
@@ -74,7 +81,7 @@ export const createPost = async (bearerToken, appleSongID, caption, userHandle) 
       },
       {
         headers: {
-          Authorization: 'Bearer ' + bearerToken,
+          Authorization: `Bearer ${bearerToken}`,
         },
       }
     );
@@ -87,31 +94,33 @@ export const createPost = async (bearerToken, appleSongID, caption, userHandle) 
   }
 };
 
-async function getTrackInfo(trackId, bearerToken) {
-  const apple_api_url = `${APPLE_API_URL}songs/${trackId}`;
-  const resp = await axios.get(apple_api_url, getConfig(bearerToken));
-  const track_data = resp.data.data[0].attributes;
+async function getTrackInfo (trackId, bearerToken) {
+  const appleApiTrackUrl = `${appleApiUrl}/songs/${trackId}`;
+  const resp = await axios.get(appleApiTrackUrl, getConfig(bearerToken));
+  const trackData = resp.data.data[0].attributes;
   return {
-    track_playback: track_data,
-    track_name: track_data.name,
-    track_artist: track_data.artistName,
-    track_cover_url: track_data.artwork.url.replace('{w}', '250').replace('{h}', '250'),
+    track_playback: trackData,
+    track_name: trackData.name,
+    track_artist: trackData.artistName,
+    track_cover_url: trackData.artwork.url
+      .replace('{w}', '250')
+      .replace('{h}', '250'),
   };
 }
 
-export const parsePosts = async (posts, musicToken) => {
+export const parsePosts = (posts, musicToken) => {
   const parsedPosts = [];
-  for (const post of posts) {
-    const track_info = await getTrackInfo(post.song.apple_music_id, musicToken);
-    console.log(track_info);
+  posts.forEach(post => {
+    const trackInfo = getTrackInfo(post.song.apple_music_id, musicToken);
+    console.log(trackInfo);
     const postStructure = {
-      track: track_info,
+      track: trackInfo,
       user: post.user,
       caption: post.caption,
     };
-    if (track_info) {
+    if (trackInfo) {
       parsedPosts.push(postStructure);
     }
-  }
+  });
   return parsedPosts;
 };

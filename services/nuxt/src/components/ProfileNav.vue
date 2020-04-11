@@ -1,12 +1,12 @@
 <template>
-  <nuxt-link class="profile--link" to="/profile"
->
+  <nuxt-link class="profile--link" to="/profile">
     <div class="profile--link__contain">
       <img
         class="profile--link__contain__img"
-        src="https://avatars1.githubusercontent.com/u/1837026?s=400&u=95442a7c7332e8d25cd4eafeae3753ce593dc441&v=4"
-      />
-      <p>{{ loggedUser ? loggedUser.nickname : "friend" }}</p>
+        src="https://avatars1.githubusercontent.com/u/\
+          1837026?s=400&u=95442a7c7332e8d25cd4eafeae3753ce593dc441&v=4"
+      >
+      <p>{{ loggedUser ? loggedUser.nickname : 'friend' }}</p>
     </div>
   </nuxt-link>
 </template>
@@ -15,8 +15,8 @@
 import { mapGetters } from 'vuex';
 
 export default {
-  computed: mapGetters(['isAuthenticated', 'loggedUser'])
-}
+  computed: mapGetters(['isAuthenticated', 'loggedUser']),
+};
 </script>
 
 <style scoped>

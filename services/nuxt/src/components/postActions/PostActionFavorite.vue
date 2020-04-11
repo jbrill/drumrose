@@ -6,8 +6,8 @@
 
 <script>
 export default {
-  name: "PostActionFavorite"
-}
+  name: 'PostActionFavorite',
+};
 </script>
 
 <style scoped>

@@ -4,33 +4,29 @@
       ref="moreList"
       class="material-icons more--menu__contain__btn"
       @click="showMoreMenu = !showMoreMenu"
-      >arrow_drop_down</i
-    >
+    >arrow_drop_down</i>
     <transition name="fade">
       <div v-if="showMoreMenu">
         <ul class="more--list__menu">
           <li>
-            <nuxt-link to="/profile"
->
+            <nuxt-link to="/profile">
               <button class="more-list__menu__btn">
-Profile
-</button>
+                Profile
+              </button>
             </nuxt-link>
           </li>
           <li>
-            <nuxt-link to="/about"
->
+            <nuxt-link to="/about">
               <button class="more-list__menu__btn">
-About
-</button>
+                About
+              </button>
             </nuxt-link>
           </li>
           <li>
-            <nuxt-link to="/settings"
->
+            <nuxt-link to="/settings">
               <button class="more-list__menu__btn">
-Settings
-</button>
+                Settings
+              </button>
             </nuxt-link>
           </li>
         </ul>
@@ -40,26 +36,22 @@ Settings
 </template>
 
 <script>
-import profileNav from '~/components/ProfileNav';
-
 export default {
-  components: {
-    profileNav
-  },
-  data() {
+  components: {},
+  data () {
     return {
-      showMoreMenu: false
-    }
+      showMoreMenu: false,
+    };
   },
-  created() {
+  created () {
     if (!process.server) {
-      document.addEventListener('click', this.documentClick)
+      document.addEventListener('click', this.documentClick);
     }
   },
-  destroyed() {
+  destroyed () {
     // important to clean up!!
     if (!process.server) {
-      document.removeEventListener('click', this.documentClick)
+      document.removeEventListener('click', this.documentClick);
     }
   },
   methods: {
@@ -74,11 +66,11 @@ export default {
       }
     },
     signOff (e) {
-      console.log("SIGNING OFF HERE");
+      console.log('SIGNING OFF HERE');
       // redirect to home
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>

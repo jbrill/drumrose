@@ -9,11 +9,11 @@ import Post from '~/components/Post.vue';
 
 export default {
   components: {
-    Post
+    Post,
   },
   props: ['posts'],
-  created() {}
-}
+  created () {},
+};
 </script>
 <style scoped>
 .post--feed {

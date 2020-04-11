@@ -1,7 +1,6 @@
 <template>
   <div>
-    <b-btn class="neptune-button__strong" v-b-modal.addPostModal
->
+    <b-btn v-b-modal.addPostModal class="neptune-button__strong">
       New Tune
     </b-btn>
     <b-modal id="addPostModal" title="Add a post" hide-footer>
@@ -13,7 +12,7 @@
             name="tune"
             class="form-control"
             @input="onTuneChange"
-          />
+          >
           <ul id="autocomplete-results" class="autocomplete-results">
             <li
               v-for="(hint, i) in track_query_hints"
@@ -21,7 +20,7 @@
               class="autocomplete-result"
               @click="togglePick(hint)"
             >
-              {{ hint.attributes.name }} <br >
+              {{ hint.attributes.name }} <br>
               {{ hint.attributes.artistName }}
             </li>
           </ul>
@@ -33,7 +32,7 @@
             name="caption"
             class="form-control"
             @input="onCaptionChange"
-          />
+          >
         </div>
 
         <div v-if="!submitted" class="form-group">
@@ -47,7 +46,9 @@
             Add Post
           </b-button>
         </div>
-        <div v-if="submitted" class="alert alert-success">Thanks!</div>
+        <div v-if="submitted" class="alert alert-success">
+          Thanks!
+        </div>
       </form>
     </b-modal>
   </div>
@@ -58,7 +59,7 @@ import { mapGetters } from 'vuex';
 import {
   getTrackIDFromQuery,
   getTrackHintsFromQuery,
-  createPost
+  createPost,
 } from '~/utils/post_util';
 
 export default {
@@ -67,52 +68,51 @@ export default {
     items: {
       type: Array,
       required: false,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
-  data: function() {
+  data: function () {
     return {
       addPostModal: false,
       submitted: false,
       track_query_hints: [],
       errors: false,
       track_id_choice: null,
-      caption: null
+      caption: null,
     };
   },
   methods: {
     onSubmitForm: async function (e) {
       if (!process.client) {
-        return
+        return;
       }
-      event.preventDefault()
-      console.log('SUBMITTING FORM');
+      e.preventDefault();
       await createPost(
         window.localStorage.api_token,
         this.track_id_choice,
         this.caption,
         this.$store.state.user_handle
-      )
-      this.submitted = true
+      );
+      this.submitted = true;
     },
     onTuneChange: async function (e) {
-      const search_query = e.target.value
+      const searchQuery = e.target.value;
       const resp = await getTrackHintsFromQuery(
-        search_query,
+        searchQuery,
         this.$store.state.music_token
-      )
-      console.log(resp)
-      this.track_query_hints = resp
+      );
+      console.log(resp);
+      this.track_query_hints = resp;
     },
-    onCaptionChange: async function (e) {
-      const caption = e.target.value
-      this.caption = caption
+    onCaptionChange: function (e) {
+      const caption = e.target.value;
+      this.caption = caption;
     },
-    togglePick: function (apple_track_result) {
-      this.track_id_choice = apple_track_result.id
-    }
-  }
-}
+    togglePick: function (appleTrackResult) {
+      this.track_id_choice = appleTrackResult.id;
+    },
+  },
+};
 </script>
 
 <style scoped>

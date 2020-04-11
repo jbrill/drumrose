@@ -6,7 +6,7 @@
 import { getPosts } from '~/utils/post_util';
 
 export default {
-  name: 'user-profile',
-  components: {}
-}
+  name: 'UserProfile',
+  components: {},
+};
 </script>

@@ -4,15 +4,21 @@
     "parser": "babel-eslint",
     "sourceType": "module"
   },
-  "extends": ["airbnb", "prettier", "plugin:node/recommended", "@nuxtjs"],
+  "extends": ["airbnb", "prettier", "@nuxtjs"],
   "plugins": ["prettier"],
   "rules": {
+    "comma-dangle": "always",
     "prettier/prettier": "error",
     "no-unused-vars": "warn",
     "no-console": "off",
     "func-names": "off",
     "no-process-exit": "off",
     "object-shorthand": "off",
-    "class-methods-use-this": "off"
+    "class-methods-use-this": "off",
+    "comma-dangle": [2, "always-multiline"],
+    "semi": [2, "always"],
+    "no-param-reassign": [2, { "props": false }],
+    "space-before-function-paren": "warn",
+    "import/extensions": "off"
   }
 }

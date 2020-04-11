@@ -1,9 +1,11 @@
 <template>
-  <div class="aboutContain">HELLO</div>
+  <div class="aboutContain">
+    HELLO
+  </div>
 </template>
 
 <script>
-export default {}
+export default {};
 </script>
 
 <style scoped></style>

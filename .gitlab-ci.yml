@@ -25,3 +25,11 @@ django:
     - make dtest-django
   tags:
     - full-stack
+
+eslint:
+  stage: test
+  script:
+    - docker-compose up -d --build nuxt-server
+    - make dtest-eslint
+  tags:
+    - full-stack

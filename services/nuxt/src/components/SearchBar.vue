@@ -5,21 +5,21 @@
       onblur="this.placeholder = 'Search for music...'"
       placeholder="Search for music..."
       class="search-bar__input"
-    />
+    >
   </div>
 </template>
 
 <script>
 export default {
-  components: {}
-}
+  components: {},
+};
 </script>
 
 <style scoped>
 .search-bar__input {
   width: 18rem;
   height: 2rem;
-  background-image: url("~assets/search.png");
+  background-image: url('~assets/search.png');
   background-repeat: no-repeat;
   background-position: left;
   background-position-x: 0.5rem;
@@ -42,6 +42,6 @@ export default {
 ::placeholder {
   color: var(--primary-black--light);
   font-weight: 300;
-  font-family: "Proxima Nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: 'Proxima Nova', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 </style>

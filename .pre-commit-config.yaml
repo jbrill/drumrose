@@ -16,12 +16,3 @@ repos:
     rev: v4.3.21
     hooks:
     - id: isort
--   repo: local
-    hooks:
-    - id: prettier
-      name: prettier
-      entry: prettier --write
-      language: node
-      language_version: system
-      files: \.(scss|ts|js|json)$
-      additional_dependencies: ['prettier']

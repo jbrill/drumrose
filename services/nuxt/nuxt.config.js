@@ -1,5 +1,3 @@
-const webpack = require('webpack');
-
 module.exports = {
   /*
    ** Router config
@@ -10,7 +8,7 @@ module.exports = {
    ** Headers of the page
    */
   head: {
-    title: 'DRUMROSE // Music for the Soul',
+    title: 'DRUMROSE // Music for everyone',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -56,7 +54,12 @@ module.exports = {
   /*
    ** Environement variables
    */
-  modules: ['@nuxtjs/axios', 'bootstrap-vue/nuxt', 'nuxt-svg-loader', 'cookie-universal-nuxt'],
+  modules: [
+    '@nuxtjs/axios',
+    'bootstrap-vue/nuxt',
+    'nuxt-svg-loader',
+    'cookie-universal-nuxt',
+  ],
   axios: {
     proxyHeaders: false,
   },

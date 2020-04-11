@@ -2,7 +2,9 @@
   <div class="unloggedContain">
     <div class="unlogged--contain__upper-area">
       <nuxt-link to="/auth/sign-in">
-        <button class="unlogged-contain__upper--area__sign--up">Sign up</button>
+        <button class="unlogged-contain__upper--area__sign--up">
+          Sign up
+        </button>
       </nuxt-link>
       <p class="unlogged-contain__upper--area__log-in__text">
         Already a member?
@@ -15,7 +17,7 @@
 </template>
 
 <script>
-export default {}
+export default {};
 </script>
 
 <style>

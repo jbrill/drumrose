@@ -8,22 +8,18 @@
 </template>
 
 <script>
-import AddPostButton from '~/components/AddPostButton';
 import PostFeed from '~/components/PostFeed';
 import TopBody from '~/components/TopBody';
-import UnloggedContent from '~/components/UnloggedContent';
-import { getPosts, parsePosts } from '~/utils/post_util.js';
+import { getPosts, parsePosts } from '~/utils/post_util';
 
 export default {
   components: {
     PostFeed,
-    AddPostButton,
     TopBody,
-    UnloggedContent
   },
-  data: function() {
+  data: function () {
     return {
-      posts: []
+      posts: [],
     };
   },
   computed: {},
@@ -33,11 +29,11 @@ export default {
     const postsToRender = await parsePosts(posts);
     this.posts = postsToRender;
   },
-  async destroyed() {
+  destroyed () {
     /* We should set index here on page */
     console.log('DESTROYING...');
-  }
-}
+  },
+};
 </script>
 
 <style scoped></style>

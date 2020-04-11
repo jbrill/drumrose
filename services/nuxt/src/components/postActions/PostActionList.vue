@@ -17,20 +17,20 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
-      showDropdown: false
-    }
+      showDropdown: false,
+    };
   },
-  created() {
+  created () {
     if (!process.server) {
-      document.addEventListener('click', this.documentClick)
+      document.addEventListener('click', this.documentClick);
     }
   },
-  destroyed() {
+  destroyed () {
     // important to clean up!!
     if (!process.server) {
-      document.removeEventListener('click', this.documentClick)
+      document.removeEventListener('click', this.documentClick);
     }
   },
   methods: {
@@ -38,14 +38,13 @@ export default {
       const el = this.$refs.dropdownMenu;
       const { target } = e;
       if (el !== target && !el.contains(target)) {
-        if (this.showDropdown == true) {
+        if (this.showDropdown === true) {
           this.showDropdown = false;
-          return
         }
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>

@@ -2,36 +2,47 @@
   <div class="post">
     <div class="postContain">
       <div class="artistContain">
-        <i @click="playSong" class="audioAction audioPlay material-icons"
-          >play_arrow</i
-        >
+        <i
+          class="audioAction audioPlay material-icons"
+          @click="playSong"
+        >play_arrow</i>
         <div class="artistTextContain">
-          <h4 class="songName">{{ post.track.track_name }}</h4>
-          <h2 class="artistName">{{ post.track.track_artist }}</h2>
+          <h4 class="songName">
+            {{ post.track.track_name }}
+          </h4>
+          <h2 class="artistName">
+            {{ post.track.track_artist }}
+          </h2>
         </div>
 
         <div class="noselect albumContain">
-          <img class="albumCover" :src="post.track.track_cover_url" >
+          <img class="albumCover" :src="post.track.track_cover_url">
         </div>
       </div>
       <div class="poster">
         <nuxt-link class="noselect" :to="'/' + post.user.handle">
-          <img class="posterImg" :src="post.user.avatar_url" >
+          <img class="posterImg" :src="post.user.avatar_url">
           <div class="posterDetail">
-            <h3 class="posterName">{{ post.user.name }}</h3>
-            <h5 class="posterHandle">@{{ post.user.handle }}</h5>
+            <h3 class="posterName">
+              {{ post.user.name }}
+            </h3>
+            <h5 class="posterHandle">
+              @{{ post.user.handle }}
+            </h5>
           </div>
         </nuxt-link>
-        <p class="postCaption">{{ post.caption }}</p>
+        <p class="postCaption">
+          {{ post.caption }}
+        </p>
         <div class="post--action--contain">
           <i
             class="audioAction audioFavorite material-icons"
             @click="favoriteSong"
-            >favorite_border</i
-          >
-          <i @click="repostSong" class="audioAction audioRepost material-icons"
-            >loop</i
-          >
+          >favorite_border</i>
+          <i
+            class="audioAction audioRepost material-icons"
+            @click="repostSong"
+          >loop</i>
         </div>
         <div class="postActionContain noselect" />
       </div>
@@ -45,50 +56,43 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import PostActionFavorite from '~/components/postActions/PostActionFavorite';
-import PostActionRepost from '~/components/postActions/PostActionRepost';
-import PostActionList from '~/components/postActions/PostActionList';
 
 export default {
   computed: mapGetters(['musicToken', 'isMusicAuthenticated']),
-  name: "post",
-  components: {
-    PostActionList,
-    PostActionFavorite,
-    PostActionRepost
-  },
+  name: 'Post',
+  components: {},
   methods: {
-    playSong: function(event) {
+    playSong: function (event) {
       if (!process.client) {
         return;
       }
       const musicKit = window.MusicKit.getInstance();
       // We should reset the queue here
-      if (event.target.textContent === "pause") {
+      if (event.target.textContent === 'pause') {
         window.MusicKit.getInstance()
           .player.pause()
-          .then(function() {
-            console.log("pausing...");
-            event.target.textContent = "play_arrow";
+          .then(function () {
+            console.log('pausing...');
+            event.target.textContent = 'play_arrow';
           });
       } else {
         window.MusicKit.getInstance()
           .player.play()
-          .then(function() {
-            console.log("playing...");
-            event.target.textContent = "pause";
+          .then(function () {
+            console.log('playing...');
+            event.target.textContent = 'pause';
           });
       }
     },
-    repostSong: function(event) {
-      console.log("SHOULD REPOST");
+    repostSong: function (event) {
+      console.log('SHOULD REPOST');
     },
-    favoriteSong: function(event) {
-      console.log("SHOUDL FAV");
-    }
+    favoriteSong: function (event) {
+      console.log('SHOUDL FAV');
+    },
   },
-  props: ['post']
-}
+  props: ['post'],
+};
 </script>
 
 <style scoped>
@@ -112,7 +116,7 @@ export default {
   float: left;
 }
 .albumContain::before {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   right: 0;
@@ -173,7 +177,7 @@ export default {
   font-weight: 100;
   width: auto;
   height: auto;
-  font-family: "Proxima Nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: 'Proxima Nova', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 .poster {
   overflow-wrap: break-word;
@@ -213,7 +217,7 @@ export default {
 .postCaption {
   font-size: 1em;
   color: white;
-  font-family: "Proxima Nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: 'Proxima Nova', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   margin-top: 1rem;
 }
 .postTime {

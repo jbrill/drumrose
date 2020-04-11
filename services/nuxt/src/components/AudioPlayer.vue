@@ -5,17 +5,18 @@
         ref="musicPrev"
         class="audio-play__previous material-icons"
         @click="prevMusic"
-        >skip_previous</i
-      >
-      <i ref="musicButton" @click="playMusic" class="audio-play material-icons"
-        >play_arrow</i
-      >
+      >skip_previous</i>
+      <i
+        ref="musicButton"
+        class="audio-play
+material-icons"
+        @click="playMusic"
+      >play_arrow</i>
       <i
         ref="musicNext"
         class="audio-play__next material-icons"
         @click="nextMusic"
-        >skip_next</i
-      >
+      >skip_next</i>
       <div class="audio-player__track-info">
         <p class="audio-player__track-info__track-name">
           {{ track_queue.track_name }}
@@ -30,46 +31,46 @@
 
 <script>
 export default {
-  data: function() {
+  data: function () {
     return {
       track_queue: {
-        track_name: "somethin",
-        track_artist: "dr. dre"
-      }
+        track_name: 'somethin',
+        track_artist: 'dr. dre',
+      },
     };
   },
   methods: {
     playMusic () {
       const musicBtn = this.$refs.musicButton;
       if (process.client) {
-        if (musicBtn.textContent === "pause") {
+        if (musicBtn.textContent === 'pause') {
           window.MusicKit.getInstance()
             .player.pause()
-            .then(function() {
-              console.log("pausing...");
-              musicBtn.textContent = "play_arrow";
+            .then(function () {
+              console.log('pausing...');
+              musicBtn.textContent = 'play_arrow';
             });
         } else {
           window.MusicKit.getInstance()
             .player.play()
-            .then(function() {
-              console.log("playing...");
-              musicBtn.textContent = "pause";
+            .then(function () {
+              console.log('playing...');
+              musicBtn.textContent = 'pause';
             });
         }
       }
     },
     prevMusic () {
-      console.log("PREV");
+      console.log('PREV');
     },
     nextMusic () {
-      console.log("NEXT");
+      console.log('NEXT');
     },
     moreMusic () {
-      console.log("MORE...");
-    }
-  }
-}
+      console.log('MORE...');
+    },
+  },
+};
 </script>
 
 <style scoped>

@@ -16,8 +16,8 @@
 </template>
 <script>
 export default {
-  name: 'Loading'
-}
+  name: 'Loading',
+};
 </script>
 <style scoped>
 sk-circle {
@@ -31,7 +31,7 @@ sk-circle {
   position: absolute;
 }
 .sk-circle .sk-child:before {
-  content: "";
+  content: '';
   display: block;
   margin: 0 auto;
   width: 5%;

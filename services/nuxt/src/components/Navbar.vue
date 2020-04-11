@@ -1,10 +1,16 @@
 <template>
   <div class="header">
-    <nuxt-link class="title__middle" to="/" exact> DRUMROSE </nuxt-link>
-    <div class="search-bar__contain"><search-bar /></div>
+    <nuxt-link class="title__middle" to="/" exact>
+      DRUMROSE
+    </nuxt-link>
+    <div class="search-bar__contain">
+      <search-bar />
+    </div>
     <AddPostButton />
     <div class="stateLinks">
-      <div class="nav-bar__right--actions"><moreList /></div>
+      <div class="nav-bar__right--actions">
+        <moreList />
+      </div>
     </div>
   </div>
 </template>
@@ -12,17 +18,15 @@
 <script>
 import MoreList from '~/components/Navbar/MoreList';
 import SearchBar from '~/components/SearchBar';
-import NeptuneLogo from '~/assets/svg/logo.svg';
 import AddPostButton from '~/components/AddPostButton';
 
 export default {
   components: {
     MoreList,
     SearchBar,
-    NeptuneLogo,
-    AddPostButton
-  }
-}
+    AddPostButton,
+  },
+};
 </script>
 
 <style>

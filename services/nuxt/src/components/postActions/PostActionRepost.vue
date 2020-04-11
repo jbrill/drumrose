@@ -6,8 +6,8 @@
 
 <script>
 export default {
-  name: "postActionRepost"
-};
+  name: "PostActionRepost"
+}
 </script>
 
 <style scoped>

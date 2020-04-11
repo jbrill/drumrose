@@ -3,14 +3,15 @@ module.exports = {
   parser: 'babel-eslint',
   env: {
     browser: true,
-    node: true
+    node: true,
   },
-  extends: 'standard',
+  extends: ['airbnb-base', 'prettier'],
   // required to lint *.vue files
-  plugins: [
-    'html'
-  ],
+  plugins: ['html'],
+  ignorePatterns: ['node_modules/'],
   // add your custom rules here
-  rules: {},
-  globals: {}
-}
+  rules: {
+    'prettier/prettier': ['error'],
+  },
+  globals: {},
+};

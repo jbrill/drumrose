@@ -10,20 +10,22 @@
 </template>
 
 <script>
-import { getUserDetail } from "~/api/api";
+import { getUserDetail } from '~/api/api';
 
 export default {
   async created() {
-    if (process.server) return;
-    console.log(params.user);
+    if (process.server) {
+      return
+    }
+    console.log(params.user)
     const user = await getUserDetail(
       window.localStorage.api_token,
       params.user
-    );
-    console.log(user);
-    return { user };
+    )
+    console.log(user)
+    return { user }
   }
-};
+}
 </script>
 
 <style scoped></style>

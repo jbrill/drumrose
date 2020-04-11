@@ -3,8 +3,8 @@
     <div class="noselect audio-play__contain">
       <i
         ref="musicPrev"
-        @click="prevMusic"
         class="audio-play__previous material-icons"
+        @click="prevMusic"
         >skip_previous</i
       >
       <i ref="musicButton" @click="playMusic" class="audio-play material-icons"
@@ -12,8 +12,8 @@
       >
       <i
         ref="musicNext"
-        @click="nextMusic"
         class="audio-play__next material-icons"
+        @click="nextMusic"
         >skip_next</i
       >
       <div class="audio-player__track-info">
@@ -30,37 +30,6 @@
 
 <script>
 export default {
-  methods: {
-    playMusic() {
-      let musicBtn = this.$refs.musicButton;
-      if (process.client) {
-        if (musicBtn.innerText === "pause") {
-          window.MusicKit.getInstance()
-            .player.pause()
-            .then(function() {
-              console.log("pausing...");
-              musicBtn.innerText = "play_arrow";
-            });
-        } else {
-          window.MusicKit.getInstance()
-            .player.play()
-            .then(function() {
-              console.log("playing...");
-              musicBtn.innerText = "pause";
-            });
-        }
-      }
-    },
-    prevMusic() {
-      console.log("PREV");
-    },
-    nextMusic() {
-      console.log("NEXT");
-    },
-    moreMusic() {
-      console.log("MORE...");
-    }
-  },
   data: function() {
     return {
       track_queue: {
@@ -68,8 +37,39 @@ export default {
         track_artist: "dr. dre"
       }
     };
+  },
+  methods: {
+    playMusic () {
+      const musicBtn = this.$refs.musicButton;
+      if (process.client) {
+        if (musicBtn.textContent === "pause") {
+          window.MusicKit.getInstance()
+            .player.pause()
+            .then(function() {
+              console.log("pausing...");
+              musicBtn.textContent = "play_arrow";
+            });
+        } else {
+          window.MusicKit.getInstance()
+            .player.play()
+            .then(function() {
+              console.log("playing...");
+              musicBtn.textContent = "pause";
+            });
+        }
+      }
+    },
+    prevMusic () {
+      console.log("PREV");
+    },
+    nextMusic () {
+      console.log("NEXT");
+    },
+    moreMusic () {
+      console.log("MORE...");
+    }
   }
-};
+}
 </script>
 
 <style scoped>

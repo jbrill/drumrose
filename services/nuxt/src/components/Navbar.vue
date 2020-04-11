@@ -1,6 +1,6 @@
 <template>
   <div class="header">
-    <nuxt-link class="title__middle" to="/" exact>DRUMROSE</nuxt-link>
+    <nuxt-link class="title__middle" to="/" exact> DRUMROSE </nuxt-link>
     <div class="search-bar__contain"><search-bar /></div>
     <AddPostButton />
     <div class="stateLinks">
@@ -10,10 +10,10 @@
 </template>
 
 <script>
-import MoreList from "~/components/Navbar/MoreList";
-import SearchBar from "~/components/SearchBar";
-import NeptuneLogo from "~/assets/svg/logo.svg";
-import AddPostButton from "~/components/AddPostButton";
+import MoreList from '~/components/Navbar/MoreList';
+import SearchBar from '~/components/SearchBar';
+import NeptuneLogo from '~/assets/svg/logo.svg';
+import AddPostButton from '~/components/AddPostButton';
 
 export default {
   components: {
@@ -21,8 +21,8 @@ export default {
     SearchBar,
     NeptuneLogo,
     AddPostButton
-  },
-};
+  }
+}
 </script>
 
 <style>

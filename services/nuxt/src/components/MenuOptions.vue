@@ -1,18 +1,24 @@
 <template>
   <div class="menu-options">
     <ul>
-      <li><nuxt-link to="/" class="menubtn">Feed</nuxt-link></li>
-      <li><nuxt-link to="/discover" class="menubtn">Discover</nuxt-link></li>
-      <li><nuxt-link to="/lists" class="menubtn">Lists</nuxt-link></li>
+      <li><nuxt-link to="/" class="menubtn">
+Feed
+</nuxt-link></li>
+      <li><nuxt-link to="/discover" class="menubtn">
+Discover
+</nuxt-link></li>
+      <li><nuxt-link to="/lists" class="menubtn">
+Lists
+</nuxt-link></li>
     </ul>
   </div>
 </template>
 
 <script>
 export default {
-  components: {},
-  name: "menuoptions"
-};
+  name: "menuoptions",
+  components: {}
+}
 </script>
 
 <style scoped>

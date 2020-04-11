@@ -1,6 +1,6 @@
 <template>
-  <div class="postActionMoreContain" ref="dropdownMenu">
-    <i @click="showDropdown = !showDropdown" class="audioMore material-icons">
+  <div ref="dropdownMenu" class="postActionMoreContain">
+    <i class="audioMore material-icons" @click="showDropdown = !showDropdown">
       more_horiz
     </i>
     <transition name="slide-y">
@@ -17,35 +17,35 @@
 
 <script>
 export default {
-  methods: {
-    documentClick(e) {
-      let el = this.$refs.dropdownMenu;
-      let target = e.target;
-      if (el !== target && !el.contains(target)) {
-        if (this.showDropdown == true) {
-          this.showDropdown = false;
-          return;
-        }
-      }
+  data() {
+    return {
+      showDropdown: false
     }
   },
   created() {
     if (!process.server) {
-      document.addEventListener("click", this.documentClick);
+      document.addEventListener('click', this.documentClick)
     }
   },
   destroyed() {
     // important to clean up!!
     if (!process.server) {
-      document.removeEventListener("click", this.documentClick);
+      document.removeEventListener('click', this.documentClick)
     }
   },
-  data() {
-    return {
-      showDropdown: false
-    };
+  methods: {
+    documentClick (e) {
+      const el = this.$refs.dropdownMenu;
+      const { target } = e;
+      if (el !== target && !el.contains(target)) {
+        if (this.showDropdown == true) {
+          this.showDropdown = false;
+          return
+        }
+      }
+    }
   }
-};
+}
 </script>
 
 <style scoped>

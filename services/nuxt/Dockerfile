@@ -34,5 +34,11 @@ RUN npm install
 >>>>>>> dc9f6e5... Nomenclature changes:services/nuxt/Dockerfile
 =======
 COPY . /usr/local/drumrose/services/nuxt/
+<<<<<<< HEAD
 RUN npm ci
 >>>>>>> b6bea85... (feature) scrap auth
+=======
+
+# CI=1 to not ignore tty output
+RUN CI=1 npm ci
+>>>>>>> 771fa62... (feature) cypress

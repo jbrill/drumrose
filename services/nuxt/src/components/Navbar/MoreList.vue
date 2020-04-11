@@ -2,8 +2,8 @@
   <div class="more--menu__contain">
     <i
       ref="moreList"
-      @click="showMoreMenu = !showMoreMenu"
       class="material-icons more--menu__contain__btn"
+      @click="showMoreMenu = !showMoreMenu"
       >arrow_drop_down</i
     >
     <transition name="fade">
@@ -11,18 +11,27 @@
         <ul class="more--list__menu">
           <li>
             <nuxt-link to="/profile"
-              ><button class="more-list__menu__btn">Profile</button></nuxt-link
-            >
+>
+              <button class="more-list__menu__btn">
+Profile
+</button>
+            </nuxt-link>
           </li>
           <li>
             <nuxt-link to="/about"
-              ><button class="more-list__menu__btn">About</button></nuxt-link
-            >
+>
+              <button class="more-list__menu__btn">
+About
+</button>
+            </nuxt-link>
           </li>
           <li>
             <nuxt-link to="/settings"
-              ><button class="more-list__menu__btn">Settings</button></nuxt-link
-            >
+>
+              <button class="more-list__menu__btn">
+Settings
+</button>
+            </nuxt-link>
           </li>
         </ul>
       </div>
@@ -31,45 +40,45 @@
 </template>
 
 <script>
-import profileNav from "~/components/ProfileNav";
+import profileNav from '~/components/ProfileNav';
 
 export default {
   components: {
     profileNav
   },
+  data() {
+    return {
+      showMoreMenu: false
+    }
+  },
+  created() {
+    if (!process.server) {
+      document.addEventListener('click', this.documentClick)
+    }
+  },
+  destroyed() {
+    // important to clean up!!
+    if (!process.server) {
+      document.removeEventListener('click', this.documentClick)
+    }
+  },
   methods: {
-    documentClick(e) {
+    documentClick (e) {
       // if we click outside element, hide menu
-      let el = this.$refs.moreList;
-      let target = e.target;
+      const el = this.$refs.moreList;
+      const { target } = e;
       if (el !== target && !el.contains(target)) {
         if (this.showMoreMenu) {
           this.showMoreMenu = false;
         }
       }
     },
-    signOff(e) {
+    signOff (e) {
       console.log("SIGNING OFF HERE");
       // redirect to home
     }
-  },
-  created() {
-    if (!process.server) {
-      document.addEventListener("click", this.documentClick);
-    }
-  },
-  destroyed() {
-    // important to clean up!!
-    if (!process.server) {
-      document.removeEventListener("click", this.documentClick);
-    }
-  },
-  data() {
-    return {
-      showMoreMenu: false
-    };
   }
-};
+}
 </script>
 
 <style scoped>

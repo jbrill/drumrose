@@ -3,15 +3,15 @@
 </template>
 
 <script>
-import MenuOptions from "~/components/MenuOptions";
-import AddPostButton from "~/components/AddPostButton";
+import MenuOptions from '~/components/MenuOptions';
+import AddPostButton from '~/components/AddPostButton';
 
 export default {
   components: {
     MenuOptions,
     AddPostButton
   }
-};
+}
 </script>
 
 <style scoped>

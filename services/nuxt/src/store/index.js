@@ -3,7 +3,7 @@ export const state = () => {
     music_token: null,
     user: null,
     track_queue: null,
-    user_handle: "jbrlly"
+    user_handle: 'jbrlly',
   };
 };
 
@@ -16,7 +16,7 @@ export const mutations = {
   },
   SET_PLAYING(state, track_info) {
     state.track_queue = track_info || null;
-  }
+  },
 };
 
 export const getters = {
@@ -31,5 +31,5 @@ export const getters = {
   },
   trackQueue(state) {
     return state.track_queue;
-  }
+  },
 };

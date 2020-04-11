@@ -1,4 +1,5 @@
-const webpack = require("webpack");
+const webpack = require('webpack');
+
 module.exports = {
   /*
    ** Router config
@@ -9,64 +10,57 @@ module.exports = {
    ** Headers of the page
    */
   head: {
-    title: "DRUMROSE // Music for the Soul",
+    title: 'DRUMROSE // Music for the Soul',
     meta: [
-      { charset: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { charset: 'utf-8' },
+      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       {
-        hid: "description",
-        name: "description",
-        content: "DRUMROSE"
-      }
+        hid: 'description',
+        name: 'description',
+        content: 'DRUMROSE',
+      },
     ],
     link: [
       {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/icon?family=Material+Icons"
+        rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/icon?family=Material+Icons',
       },
-      { rel: "icon", type: "image/x-icon", href: "favicon.ico" },
+      { rel: 'icon', type: 'image/x-icon', href: 'favicon.ico' },
       {
-        rel: "apple-touch-icon",
-        sizes: "180x180",
-        href: "apple-touch-icon.png"
-      },
-      {
-        rel: "icon",
-        type: "image/png",
-        sizes: "32x32",
-        href: "favicon-32x32.png"
+        rel: 'apple-touch-icon',
+        sizes: '180x180',
+        href: 'apple-touch-icon.png',
       },
       {
-        rel: "icon",
-        type: "image/png",
-        sizes: "16x16",
-        href: "favicon-16x16.png"
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '32x32',
+        href: 'favicon-32x32.png',
       },
-      { rel: "manifest", href: "site.webmanifest" },
-      { rel: "mask-icon", color: "#5bbad5", href: "safari-pinned-tab.svg" },
-      { rel: "theme-color", content: "#ffffff" }
+      {
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '16x16',
+        href: 'favicon-16x16.png',
+      },
+      { rel: 'manifest', href: 'site.webmanifest' },
+      { rel: 'mask-icon', color: '#5bbad5', href: 'safari-pinned-tab.svg' },
+      { rel: 'theme-color', content: '#ffffff' },
     ],
-    script: [
-      { src: "https://js-cdn.music.apple.com/musickit/v1/musickit.js" },
-    ]
+    script: [{ src: 'https://js-cdn.music.apple.com/musickit/v1/musickit.js' }],
   },
   /*
    ** Global CSS
    */
-  css: ["normalize.css", "~assets/main.css"],
+  css: ['normalize.css', '~assets/main.css'],
   /*
    ** Environement variables
    */
-  modules: [
-    "@nuxtjs/axios",
-    "bootstrap-vue/nuxt",
-    "nuxt-svg-loader",
-    "cookie-universal-nuxt"
-  ],
+  modules: ['@nuxtjs/axios', 'bootstrap-vue/nuxt', 'nuxt-svg-loader', 'cookie-universal-nuxt'],
   axios: {
-    proxyHeaders: false
+    proxyHeaders: false,
   },
-  /*loading: '~/components/Loading.vue',*/
+  /* loading: '~/components/Loading.vue', */
   /*
    ** Build configuration
    */
@@ -75,16 +69,16 @@ module.exports = {
      ** You can extend webpack config here
      */
     extend(config, { isDev }) {
-      config.node = { fs: "empty" };
+      config.node = { fs: 'empty' };
       // Run ESLint on save
       if (isDev && process.client) {
         config.module.rules.push({
-          enforce: "pre",
+          enforce: 'pre',
           test: /\.(js|vue)$/,
-          loader: "eslint-loader",
-          exclude: /(node_modules)/
+          loader: 'eslint-loader',
+          exclude: /(node_modules)/,
         });
       }
-    }
-  }
+    },
+  },
 };

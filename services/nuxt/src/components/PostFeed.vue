@@ -1,19 +1,19 @@
 <template>
   <div class="post--feed">
-    <post v-for="post in posts" v-bind:key="post.id" v-bind:post="post" />
+    <post v-for="post in posts" :key="post.id" :post="post" />
   </div>
 </template>
 
 <script>
-import Post from "~/components/Post.vue";
+import Post from '~/components/Post.vue';
 
 export default {
   components: {
     Post
   },
-  props: ["posts"],
+  props: ['posts'],
   created() {}
-};
+}
 </script>
 <style scoped>
 .post--feed {

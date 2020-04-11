@@ -1,3 +1,3 @@
 <template>
-  <div class="postModalContain"></div>
+  <div class="postModalContain" />
 </template>

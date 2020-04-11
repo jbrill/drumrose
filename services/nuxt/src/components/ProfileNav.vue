@@ -1,6 +1,7 @@
 <template>
   <nuxt-link class="profile--link" to="/profile"
-    ><div class="profile--link__contain">
+>
+    <div class="profile--link__contain">
       <img
         class="profile--link__contain__img"
         src="https://avatars1.githubusercontent.com/u/1837026?s=400&u=95442a7c7332e8d25cd4eafeae3753ce593dc441&v=4"
@@ -11,11 +12,11 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex';
 
 export default {
-  computed: mapGetters(["isAuthenticated", "loggedUser"])
-};
+  computed: mapGetters(['isAuthenticated', 'loggedUser'])
+}
 </script>
 
 <style scoped>

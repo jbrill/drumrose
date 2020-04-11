@@ -11,12 +11,12 @@
         </div>
 
         <div class="noselect albumContain">
-          <img class="albumCover" :src="post.track.track_cover_url" />
+          <img class="albumCover" :src="post.track.track_cover_url" >
         </div>
       </div>
       <div class="poster">
-        <nuxt-link class="noselect" v-bind:to="'/' + post.user.handle">
-          <img class="posterImg" :src="post.user.avatar_url" />
+        <nuxt-link class="noselect" :to="'/' + post.user.handle">
+          <img class="posterImg" :src="post.user.avatar_url" >
           <div class="posterDetail">
             <h3 class="posterName">{{ post.user.name }}</h3>
             <h5 class="posterHandle">@{{ post.user.handle }}</h5>
@@ -25,15 +25,15 @@
         <p class="postCaption">{{ post.caption }}</p>
         <div class="post--action--contain">
           <i
-            @click="favoriteSong"
             class="audioAction audioFavorite material-icons"
+            @click="favoriteSong"
             >favorite_border</i
           >
           <i @click="repostSong" class="audioAction audioRepost material-icons"
             >loop</i
           >
         </div>
-        <div class="postActionContain noselect"></div>
+        <div class="postActionContain noselect" />
       </div>
     </div>
     <div class="postMusicContain noselect">
@@ -44,13 +44,14 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import PostActionFavorite from "~/components/postActions/PostActionFavorite";
-import PostActionRepost from "~/components/postActions/PostActionRepost";
-import PostActionList from "~/components/postActions/PostActionList";
+import { mapGetters } from 'vuex';
+import PostActionFavorite from '~/components/postActions/PostActionFavorite';
+import PostActionRepost from '~/components/postActions/PostActionRepost';
+import PostActionList from '~/components/postActions/PostActionList';
 
 export default {
-  computed: mapGetters(["musicToken", "isMusicAuthenticated"]),
+  computed: mapGetters(['musicToken', 'isMusicAuthenticated']),
+  name: "post",
   components: {
     PostActionList,
     PostActionFavorite,
@@ -58,22 +59,24 @@ export default {
   },
   methods: {
     playSong: function(event) {
-      if (!process.client) return;
-      let musicKit = window.MusicKit.getInstance();
+      if (!process.client) {
+        return;
+      }
+      const musicKit = window.MusicKit.getInstance();
       // We should reset the queue here
-      if (event.target.innerText === "pause") {
+      if (event.target.textContent === "pause") {
         window.MusicKit.getInstance()
           .player.pause()
           .then(function() {
             console.log("pausing...");
-            event.target.innerText = "play_arrow";
+            event.target.textContent = "play_arrow";
           });
       } else {
         window.MusicKit.getInstance()
           .player.play()
           .then(function() {
             console.log("playing...");
-            event.target.innerText = "pause";
+            event.target.textContent = "pause";
           });
       }
     },
@@ -84,9 +87,8 @@ export default {
       console.log("SHOUDL FAV");
     }
   },
-  name: "post",
-  props: ["post"]
-};
+  props: ['post']
+}
 </script>
 
 <style scoped>

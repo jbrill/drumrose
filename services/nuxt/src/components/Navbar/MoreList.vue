@@ -78,6 +78,23 @@ export default {
   color: white;
   margin-top: 0.5rem;
 }
+@media screen and (prefers-color-scheme: dark) {
+  .more--menu__contain__btn {
+    color: white;
+  }
+  .more--menu__contain__btn:hover, .more--menu__contain__btn:focus {
+    color: var(--primary-purple);
+  }
+  .more--list__menu {
+    color: var(--primary-purple);
+  }
+  .more-list__menu__btn {
+    color: var(--primary-purple);
+  }
+  .more-list__menu__btn:hover, .more-list__menu__btn:focus {
+    color: var(--primary-red);
+  }
+}
 .more--menu__contain__btn:hover, .more--menu__contain__btn:focus {
   color: var(--primary-purple);
 }
@@ -101,10 +118,7 @@ export default {
   z-index: 10;
   right: 0;
   padding: 0;
-}
-.more--list__menu {
   width: 8rem;
-  padding: 0;
 }
 .more--list__menu li {
   width: 100%;

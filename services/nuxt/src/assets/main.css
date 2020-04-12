@@ -40,16 +40,24 @@ p {
   font-size: 20px;
   font-weight: 200;
 }
+@media screen and (prefers-reduced-motion: reduce) {
+a {
+  color: #333;
+  text-decoration: none;
+  font-weight: 400;
+  transition: none;
+}
+}
 a {
   color: #333;
   text-decoration: none;
   font-weight: 400;
   transition: border-bottom 0.2s;
 }
-a:hover {
+a:hover, a:focus {
   text-decoration: none;
 }
-i:hover {
+i:hover, i:focus {
   cursor: pointer;
 }
 .neptune-button__strong {
@@ -58,7 +66,7 @@ i:hover {
   border-radius: 5px;
   box-shadow: var(--shadow-heavy);
 }
-.neptune-button__strong:hover {
+.neptune-button__strong:hover, .neptune-button__strong:focus {
   cursor: pointer;
   background-color: black;
   color: var(--primary-purple);

@@ -96,6 +96,45 @@ export default {
 </script>
 
 <style scoped>
+@media screen and (prefers-color-scheme: dark) {
+  .songName:hover, .songName:focus {
+    color: white;
+  }
+  .artistName:hover, .artistName:focus {
+    color: white;
+  }
+  .artistTextContain {
+    color: grey;
+  }
+  .posterDetail {
+    color: white;
+  }
+  .posterName {
+    color: white;
+  }
+  .posterHandle {
+    color: white;
+  }
+  .postDate {
+    color: white;
+  }
+  .postCaption {
+    color: white;
+  }
+  .postTime {
+    color: white;
+  }
+  .audioAction {
+    color: white;
+  }
+  .audioFavorite:hover, .audioFavorite:focus {
+    color: grey;
+  }
+  .audioRepost:hover, .audioRepost:focus {
+    color: grey;
+  }
+}
+
 .post {
   width: 80%; /* 83 percent of grid width */
   margin: 0 auto;
@@ -135,11 +174,6 @@ export default {
   border-radius: 2rem;
   box-shadow: var(--shadow-heavy);
 }
-.songName:hover, .songName:focus {
-  cursor: pointer;
-  color: var(--primary-purple);
-  opacity: 1;
-}
 .artistName {
   font-size: 1rem;
   font-weight: 600;
@@ -148,6 +182,11 @@ export default {
 .songName {
   font-size: 0.8rem;
   opacity: 0.8;
+}
+.songName:hover, .songName:focus {
+  cursor: pointer;
+  color: var(--primary-purple);
+  opacity: 1;
 }
 .artistName:hover, .artistName:focus {
   cursor: pointer;
@@ -212,7 +251,7 @@ export default {
 .postDate {
   margin-top: 0;
   margin-right: 0;
-  font-size: 10px;
+  font-size: 1rem;
   color: grey;
 }
 .postCaption {
@@ -264,9 +303,6 @@ export default {
   left: 30%;
   top: 30%;
 }
-.audioFavorite:hover, .audioFavorite:focus {
-  color: var(--red-accent);
-}
 .audioRepost {
   float: left;
 }
@@ -275,6 +311,9 @@ export default {
 }
 .audioFavorite {
   right: 0.5rem;
+}
+.audioFavorite:hover, .audioFavorite:focus {
+  color: var(--red-accent);
 }
 .audioMore {
   float: right;

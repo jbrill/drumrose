@@ -26,10 +26,10 @@ django:
   tags:
     - full-stack
 
-eslint:
+lintjs:
   stage: test
   script:
     - docker-compose up -d --build nuxt-server
-    - make dtest-eslint
+    - make dtest-lint
   tags:
     - full-stack

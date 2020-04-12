@@ -16,6 +16,12 @@ export default {
 </script>
 
 <style scoped>
+@media screen and (prefers-color-scheme: dark) {
+  .search-bar__input {
+    color: white;
+    background-color: grey;
+  }
+}
 .search-bar__input {
   width: 18rem;
   height: 2rem;
@@ -29,7 +35,6 @@ export default {
   background-color: white;
   font-size: 0.8rem;
   color: black;
-  border: none;
   padding-left: 2.5rem;
 }
 

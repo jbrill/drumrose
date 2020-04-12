@@ -19,5 +19,5 @@ dtest-django:
 _test-views:
 	echo "TEST VIEWS"
 
-dtest-eslint:
-	docker exec -t drumrose_nuxt-server_1 bash -c "npm run lint"
+dtest-lint:
+	docker exec -t drumrose_nuxt-server_1 bash -c "npm run lint;"

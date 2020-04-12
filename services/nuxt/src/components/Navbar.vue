@@ -45,11 +45,11 @@ export default {
   .header {
     background-color: black;
   }
-  .title__middle:hover, .title__middle:focus {
-    color: white;
-  }
   .title__middle {
     color: var(--primary-red);
+  }
+  .title__middle:hover, .title__middle:focus {
+    color: white;
   }
   .search-bar__contain:hover, .search-bar__contain:focus {
     color: ghostwhite;

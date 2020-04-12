@@ -73,7 +73,7 @@ export default {
     // With options
     ['@nuxtjs/stylelint-module', {
       fix: true,
-    }]
+    }],
   ],
   build: {
     /*

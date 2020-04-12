@@ -106,14 +106,17 @@ export default {
   .audio-play:hover, .audio-play:focus {
     color: var(--primary-yellow);
   }
-  .audio-play__previous:hover, .audio-play__next:hover, .audio-play__previous:focus, .audio-play__next:focus {
+  .audio-play__previous:hover,
+  .audio-play__next:hover,
+  .audio-play__previous:focus,
+  .audio-play__next:focus {
     color: var(--primary-red);
   }
   .audio-player__track-info {
     color: white;
   }
   .audio-player__track-info__track-name:hover,
-.audio-player__track-info__track-name:focus {
+  .audio-player__track-info__track-name:focus {
     color: white;
   }
   .audio-player__track-info__track-artist:hover,
@@ -159,7 +162,8 @@ export default {
   margin-bottom: 0;
 }
 
-.audio-player__track-info__track-name:hover, .audio-player__track-info__track-name:focus {
+.audio-player__track-info__track-name:hover,
+.audio-player__track-info__track-name:focus {
   cursor: pointer;
   color: red;
 }
@@ -168,7 +172,8 @@ export default {
   font-size: 0.5rem;
 }
 
-.audio-player__track-info__track-artist:hover, .audio-player__track-info__track-artist:focus {
+.audio-player__track-info__track-artist:hover,
+.audio-player__track-info__track-artist:focus {
   cursor: pointer;
   color: purple;
 }
@@ -177,7 +182,8 @@ export default {
   right: 1rem;
   color: white;
 }
-.audio-player__more-btn:hover, .audio-player__more-btn:focus {
+.audio-player__more-btn:hover,
+.audio-player__more-btn:focus {
   color: var(--primary-yellow);
 }
 </style>

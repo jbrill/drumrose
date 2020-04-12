@@ -10,8 +10,11 @@
     "start": "nuxt start",
     "generate": "nuxt generate",
     "cypress:open": "cypress open",
-    "lint": "eslint --ext .js,.vue .",
-    "lint:fix": "eslint --fix --ext .js,.vue ."
+    "lint": "npm run lint:eslint && npm run lint:stylelint",
+    "lint:eslint": "eslint --ext .js,.vue .",
+    "lint:eslint:fix": "eslint --fix --ext .js,.vue .",
+    "lint:stylelint": "stylelint 'src/**/*.vue'",
+    "lint:stylelint:fix": "stylelint 'src/**/*.vue' --fix"
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.4.1",
@@ -55,7 +58,6 @@
     "stylelint-a11y": "^1.2.3",
     "stylelint-config-prettier": "^8.0.1",
     "stylelint-config-standard": "^20.0.0",
-    "stylelint-config-styled-components": "^0.1.1",
-    "stylelint-processor-styled-components": "^1.10.0"
+    "stylelint-config-styled-components": "^0.1.1"
   }
 }

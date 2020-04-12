@@ -1,7 +1,7 @@
 <template>
   <div class="post--feed__logged-in__contain">
-    <topBody />
-    <post-feed :posts="posts" />
+    <TopBody />
+    <PostFeed :posts="posts" />
   </div>
 </template>
 

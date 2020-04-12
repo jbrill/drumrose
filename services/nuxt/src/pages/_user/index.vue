@@ -18,10 +18,7 @@
 import getUserDetail from '~/api/api';
 
 export default {
-  async created () {
-    if (process.server) {
-      return;
-    }
+  async beforeMount () {
     console.log(this.$route.params.user);
     const user = await getUserDetail(
       window.localStorage.api_token,

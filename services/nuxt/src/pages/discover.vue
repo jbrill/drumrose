@@ -1,8 +1,8 @@
 <template>
   <client-only>
     <div class="post--feed__logged-in__contain">
-      <topBody />
-      <post-feed :posts="posts" />
+      <TopBody />
+      <PostFeed :posts="posts" />
     </div>
   </client-only>
 </template>

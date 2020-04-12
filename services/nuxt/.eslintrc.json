@@ -4,11 +4,24 @@
     "parser": "babel-eslint",
     "sourceType": "module"
   },
-  "extends": ["airbnb", "prettier", "@nuxtjs"],
+  "env": {
+    "node": true,
+    "browser": true
+  },
+  "extends": [
+    "prettier",
+    "prettier/vue",
+    "@nuxtjs",
+    "plugin:nuxt/recommended",
+    "plugin:vue/essential",
+    "eslint:recommended"
+  ],
   "plugins": ["prettier"],
+  "globals": {
+    "$nuxt": true
+  },
   "rules": {
-    "comma-dangle": "always",
-    "prettier/prettier": "error",
+    "vue/component-name-in-template-casing": ["error", "PascalCase"],
     "no-unused-vars": "warn",
     "no-console": "off",
     "func-names": "off",
@@ -16,9 +29,12 @@
     "object-shorthand": "off",
     "class-methods-use-this": "off",
     "comma-dangle": [2, "always-multiline"],
-    "semi": [2, "always"],
+    "semi": ["error", "always"],
     "no-param-reassign": [2, { "props": false }],
     "space-before-function-paren": "warn",
+    "object-curly-spacing": ["error", "always"],
+    "arrow-parens": ["error", "as-needed"],
+    "max-len": ["error", { "code": 80 }],
     "import/extensions": "off"
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="top--body">
-    <menuOptions />
+    <MenuOptions />
   </div>
 </template>
 

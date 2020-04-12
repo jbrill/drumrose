@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   /*
    ** Router config
    */
@@ -71,7 +71,7 @@ module.exports = {
     /*
      ** You can extend webpack config here
      */
-    extend(config, { isDev }) {
+    extend (config, { isDev }) {
       config.node = { fs: 'empty' };
       // Run ESLint on save
       if (isDev && process.client) {

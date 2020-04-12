@@ -22,16 +22,11 @@ export default {
       showDropdown: false,
     };
   },
-  created () {
-    if (!process.server) {
-      document.addEventListener('click', this.documentClick);
-    }
+  beforeMount () {
+    document.addEventListener('click', this.documentClick);
   },
-  destroyed () {
-    // important to clean up!!
-    if (!process.server) {
-      document.removeEventListener('click', this.documentClick);
-    }
+  beforeDestroy () {
+    document.removeEventListener('click', this.documentClick);
   },
   methods: {
     documentClick (e) {

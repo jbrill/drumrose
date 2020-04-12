@@ -4,12 +4,12 @@
       DRUMROSE
     </nuxt-link>
     <div class="search-bar__contain">
-      <search-bar />
+      <SearchBar />
     </div>
     <AddPostButton />
     <div class="stateLinks">
       <div class="nav-bar__right--actions">
-        <moreList />
+        <MoreList />
       </div>
     </div>
   </div>

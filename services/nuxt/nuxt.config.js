@@ -63,10 +63,18 @@ export default {
   axios: {
     proxyHeaders: false,
   },
-  /* loading: '~/components/Loading.vue', */
   /*
    ** Build configuration
    */
+  buildModules: [
+    // Simple usage
+    '@nuxtjs/stylelint-module',
+
+    // With options
+    ['@nuxtjs/stylelint-module', {
+      fix: true,
+    }]
+  ],
   build: {
     /*
      ** You can extend webpack config here

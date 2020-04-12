@@ -22,16 +22,19 @@ export default {
 <style scoped>
 .profile--link__contain {
   /* text-align: center; */
+
   /* padding: 2px; */
+
   /* width: 110%; */
+
   /* height: 110%; */
   width: 1em;
   height: auto;
   float: left;
 }
-.profile--link__contain:hover {
+.profile--link__contain:hover, .profile--link__contain:focus {
   background-color: rgba(255, 255, 255, 0.3);
-  box-shadow: 0rem 2rem 3rem -2rem rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2rem 3rem -2rem rgba(0, 0, 0, 0.3);
   border: 1px solid grey;
   cursor: pointer;
   border-radius: 4px;

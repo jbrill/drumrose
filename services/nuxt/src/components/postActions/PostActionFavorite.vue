@@ -11,7 +11,7 @@ export default {
 </script>
 
 <style scoped>
-.postActionFavorite:hover {
+.postActionFavorite:hover, .postActionFavorite:focus {
   color: #be002e;
 }
 .PostActionFavoriteContain {

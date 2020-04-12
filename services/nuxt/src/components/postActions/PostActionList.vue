@@ -52,7 +52,7 @@ export default {
   right: 1rem;
   top: 0;
 }
-.audioMore:hover {
+.audioMore:hover, .audioMore:focus {
   color: #772ce6;
 }
 .postActionList {
@@ -61,7 +61,7 @@ export default {
   padding: 0;
   width: 100%;
 }
-.postActionList:hover {
+.postActionList:hover, .postActionList:focus {
   cursor: pointer;
 }
 .postActionListContain {
@@ -76,7 +76,7 @@ export default {
   margin-left: 0;
   font-size: 0.7rem;
 }
-.postActionList li:hover {
+.postActionList li:hover, .postActionList li:focus {
   background-color: #f5f5f5;
   color: #772ce6;
 }

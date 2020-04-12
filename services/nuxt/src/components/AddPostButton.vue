@@ -129,12 +129,17 @@ export default {
   padding-left: 1rem;
   margin-top: 1em;
 }
+@media screen and (prefers-color-scheme: dark) {
+  .autocomplete-results {
+    color: white;
+  }
+}
 
 .autocomplete-result {
   height: 100%;
 }
 
-.autocomplete-result:hover {
+.autocomplete-result:hover, .autocomplete-result:focus {
   background-color: #f2f2f2;
   cursor: pointer;
 }

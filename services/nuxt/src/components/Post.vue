@@ -108,6 +108,7 @@ export default {
 .artistContain {
   position: relative;
   width: auto;
+
   /* height: 2rem; */
   float: left;
 }
@@ -134,7 +135,7 @@ export default {
   border-radius: 2rem;
   box-shadow: var(--shadow-heavy);
 }
-.songName:hover {
+.songName:hover, .songName:focus {
   cursor: pointer;
   color: var(--primary-purple);
   opacity: 1;
@@ -148,12 +149,12 @@ export default {
   font-size: 0.8rem;
   opacity: 0.8;
 }
-.artistName:hover {
+.artistName:hover, .artistName:focus {
   cursor: pointer;
   color: var(--primary-yellow);
   opacity: 1;
 }
-.albumCover:hover {
+.albumCover:hover, .albumCover:focus {
   cursor: pointer;
 }
 .playButton {
@@ -163,7 +164,7 @@ export default {
   position: absolute;
   height: 5em;
 }
-.playButton:hover {
+.playButton:hover, .playButton:focus {
   cursor: pointer;
 }
 .artistTextContain {
@@ -200,7 +201,7 @@ export default {
   padding-bottom: 0.5rem;
   line-height: 1.5rem;
 }
-.posterName:hover {
+.posterName:hover, .posterName:focus {
   cursor: pointer;
 }
 .posterHandle {
@@ -209,8 +210,8 @@ export default {
   margin-top: -1rem;
 }
 .postDate {
-  margin-top: 0px;
-  margin-right: 0px;
+  margin-top: 0;
+  margin-right: 0;
   font-size: 10px;
   color: grey;
 }
@@ -252,7 +253,7 @@ export default {
   position: absolute;
   margin-bottom: 0;
 }
-.audioAction:hover {
+.audioAction:hover, .audioAction:focus {
   opacity: 1;
 }
 .audioPlay {
@@ -263,13 +264,13 @@ export default {
   left: 30%;
   top: 30%;
 }
-.audioFavorite:hover {
+.audioFavorite:hover, .audioFavorite:focus {
   color: var(--red-accent);
 }
 .audioRepost {
   float: left;
 }
-.audioRepost:hover {
+.audioRepost:hover, .audioRepost:focus {
   color: var(--primary-purple);
 }
 .audioFavorite {
@@ -278,7 +279,7 @@ export default {
 .audioMore {
   float: right;
 }
-.audioPlay:hover {
+.audioPlay:hover, .audioPlay:focus {
   opacity: 1;
 }
 </style>

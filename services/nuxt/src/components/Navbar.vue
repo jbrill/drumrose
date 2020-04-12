@@ -41,6 +41,20 @@ export default {
   min-height: 4rem;
   box-shadow: var(--shadow-heavy);
 }
+@media screen and (prefers-color-scheme: dark) {
+  .header {
+    background-color: black;
+  }
+  .title__middle:hover, .title__middle:focus {
+    color: white;
+  }
+  .title__middle {
+    color: var(--primary-red);
+  }
+  .search-bar__contain:hover, .search-bar__contain:focus {
+    color: ghostwhite;
+  }
+}
 .header img {
   height: 3rem;
 }
@@ -53,9 +67,6 @@ export default {
   height: auto;
   vertical-align: middle;
 }
-.title__middle:hover {
-  color: var(--primary-red);
-}
 .title__middle {
   letter-spacing: 2px;
   font-size: 1.7rem;
@@ -63,6 +74,9 @@ export default {
   font-weight: bolder;
   margin: 0 auto;
   margin-left: 3rem;
+}
+.title__middle:hover, .title__middle:focus {
+  color: var(--primary-red);
 }
 a {
   text-decoration: none;
@@ -90,12 +104,16 @@ a {
   opacity: 0.9;
   margin-right: 1rem;
 }
-.search-bar__contain:hover {
+@media screen and (prefers-reduced-motion: reduce) {
+  .search-bar__contain:hover, .search-bar__contain:focus {
+    color: black;
+    opacity: 1;
+    transition: none;
+  }
+}
+.search-bar__contain:hover, .search-bar__contain:focus {
   color: black;
   opacity: 1;
   transition: opacity 0.2s ease-out;
-  -moz-transition: opacity 0.2s ease-out;
-  -webkit-transition: opacity 0.2s ease-out;
-  -o-transition: opacity 0.2s ease-out;
 }
 </style>

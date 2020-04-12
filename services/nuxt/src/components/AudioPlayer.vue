@@ -95,10 +95,39 @@ export default {
 
 .audio-play__contain i {
   color: white;
-  padding-top: 5px; /* slight nudge down*/
+  padding-top: 5px; /* slight nudge down */
   vertical-align: middle;
   margin: 0;
 }
+@media screen and (prefers-color-scheme: dark) {
+  .audio-play__contain i {
+    color: white;
+  }
+  .audio-play:hover, .audio-play:focus {
+    color: var(--primary-yellow);
+  }
+  .audio-play__previous:hover, .audio-play__next:hover, .audio-play__previous:focus, .audio-play__next:focus {
+    color: var(--primary-red);
+  }
+  .audio-player__track-info {
+    color: white;
+  }
+  .audio-player__track-info__track-name:hover,
+.audio-player__track-info__track-name:focus {
+    color: white;
+  }
+  .audio-player__track-info__track-artist:hover,
+.audio-player__track-info__track-artist:focus {
+    color: white;
+  }
+  .audio-player__more-btn {
+    color: white;
+  }
+  .audio-player__more-btn:hover, .audio-player__more-btn:focus {
+    color: white;
+  }
+}
+
 .audio-play__previous,
 .audio-play__next {
   font-size: 1.5rem;
@@ -106,28 +135,22 @@ export default {
 .audio-play {
   font-size: 2rem;
   padding-top: 5;
+
   /* margin-top: 1rem; */
 }
-.audio-play:hover {
+.audio-play:hover, .audio-play:focus {
   color: var(--primary-red);
 }
 .audio-play__previous:hover,
-.audio-play__next:hover {
+.audio-play__next:hover, .audio-play__previous:focus,
+.audio-play__next:focus {
   color: var(--primary-yellow);
 }
+
 .audio-player__track-info {
   float: right;
   padding-left: 3rem;
   color: white;
-}
-.audio-player__track-info__track-name:hover {
-  cursor: pointer;
-  color: red;
-}
-
-.audio-player__track-info__track-artist:hover {
-  cursor: pointer;
-  color: purple;
 }
 
 .audio-player__track-info__track-name {
@@ -136,14 +159,25 @@ export default {
   margin-bottom: 0;
 }
 
+.audio-player__track-info__track-name:hover, .audio-player__track-info__track-name:focus {
+  cursor: pointer;
+  color: red;
+}
+
 .audio-player__track-info__track-artist {
   font-size: 0.5rem;
 }
+
+.audio-player__track-info__track-artist:hover, .audio-player__track-info__track-artist:focus {
+  cursor: pointer;
+  color: purple;
+}
+
 .audio-player__more-btn {
   right: 1rem;
   color: white;
 }
-.audio-player__more-btn:hover {
+.audio-player__more-btn:hover, .audio-player__more-btn:focus {
   color: var(--primary-yellow);
 }
 </style>

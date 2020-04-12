@@ -46,7 +46,7 @@ ul li {
 .menubtn {
   color: black;
 }
-.menubtn:hover {
+.menubtn:hover, .menubtn:focus {
   cursor: pointer;
   color: var(--primary-red);
   border-bottom: 2px solid var(--primary-red);

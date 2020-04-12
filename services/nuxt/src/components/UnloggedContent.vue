@@ -46,7 +46,7 @@ export default {};
   text-align: center;
   font-weight: 100;
   font-size: 1rem;
-  box-shadow: 0px 13px 21px -10px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 13px 21px -10px rgba(0, 0, 0, 0.3);
 }
 .unlogged-contain__upper--area__log-in__text {
   position: absolute;

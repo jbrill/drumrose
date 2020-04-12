@@ -15,7 +15,7 @@ export default {
   float: left;
   color: white;
 }
-.postActionRepost:hover {
+.postActionRepost:hover, .postActionRepost:focus {
   color: #772ce6;
 }
 </style>

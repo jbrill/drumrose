@@ -78,8 +78,14 @@ export default {
   color: white;
   margin-top: 0.5rem;
 }
-.more--menu__contain__btn:hover {
+.more--menu__contain__btn:hover, .more--menu__contain__btn:focus {
   color: var(--primary-purple);
+}
+@media screen and (prefers-reduced-motion: reduce) {
+.fade-enter-active,
+.fade-leave-active {
+  transition: none;
+}
 }
 .fade-enter-active,
 .fade-leave-active {
@@ -114,7 +120,7 @@ export default {
   border: none;
   height: 3rem;
 }
-.more-list__menu__btn:hover {
+.more-list__menu__btn:hover, .more-list__menu__btn:focus {
   cursor: pointer;
   color: var(--primary-yellow);
   background-color: black;

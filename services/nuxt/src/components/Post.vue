@@ -8,10 +8,10 @@
         >play_arrow</i>
         <div class="artistTextContain">
           <h4 class="songName">
-            {{ post.track.track_name }}
+            {{ post.name }}
           </h4>
           <h2 class="artistName">
-            {{ post.track.track_artist }}
+            TEST ARTIST
           </h2>
         </div>
 

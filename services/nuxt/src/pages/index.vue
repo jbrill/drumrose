@@ -22,7 +22,7 @@ export default {
   },
   async fetch () {
     const postResponse = await getPosts();
-    const posts = postResponse.data;
+    this.posts = postResponse.data;
     console.log(posts);
     //    const postsToRender = await parsePosts(posts);
     //    this.posts = postsToRender;

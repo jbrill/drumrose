@@ -42,6 +42,7 @@ export default {
   outline: none !important;
   border: 1px solid var(--primary-purple);
   box-shadow: 0 0 10px #719ece;
+  opacity: 1;
 }
 
 ::placeholder {

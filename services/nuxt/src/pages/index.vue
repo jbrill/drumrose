@@ -20,7 +20,7 @@ export default {
       posts: [],
     };
   },
-  async created () {
+  async fetch () {
     const postResponse = await getPosts();
     const posts = postResponse.data;
     console.log(posts);

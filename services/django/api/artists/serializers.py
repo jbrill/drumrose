@@ -2,6 +2,7 @@
 Artist Serializer Module
 """
 
+from api.models.core import Artist
 from rest_framework import serializers
 
 
@@ -10,4 +11,5 @@ class ArtistSerializer(serializers.Serializer):
     Artist Serializer Class
     """
 
-    name = serializers.CharField(max_length=200)
+    model = Artist
+    field = "__all__"

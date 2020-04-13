@@ -4,7 +4,6 @@ Module contains  posts
 
 from api.models.core import Post
 from api.songs.serializers import SongSerializer
-from api.users.serializers import UserSerializer
 from rest_framework import serializers
 
 
@@ -14,7 +13,6 @@ class PostSerializer(serializers.ModelSerializer):
     """
 
     song = SongSerializer(read_only=True)
-    user = UserSerializer(read_only=True)
 
     class Meta:
         """
@@ -22,4 +20,4 @@ class PostSerializer(serializers.ModelSerializer):
         """
 
         model = Post
-        fields = ("song", "caption", "user")
+        fields = "__all__"

@@ -51,7 +51,7 @@ export const getTrackIDFromQuery = async (query, bearerToken) => {
 
 export const getPosts = async bearerToken => {
   try {
-    const posts = await axios.get('https://teton.drumrose.io/api/posts/', {
+    const posts = await axios.get('http://django-server:8000/posts/', {
       headers: {
         Authorization: `Bearer ${bearerToken}`,
       },

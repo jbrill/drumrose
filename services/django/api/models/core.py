@@ -2,6 +2,8 @@
 Core Models for  API
 """
 
+import uuid
+
 from django.db import models
 
 
@@ -10,6 +12,7 @@ class BaseModel(models.Model):
     Base model
     """
 
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     created_date = models.DateTimeField(auto_now_add=True)
     modified_date = models.DateTimeField(auto_now=True)
 
@@ -35,8 +38,9 @@ class Song(BaseModel):
     """
 
     name = models.CharField(max_length=200)
-    albums = models.ManyToManyField(
-        "Album", related_name="songs", related_query_name="song"
+    artist_photo_url = models.CharField(max_length=200, null=True)
+    album = models.ForeignKey(
+        "Album", null=True, blank=True, on_delete=models.CASCADE,
     )
     artists = models.ManyToManyField(
         "Artist", related_name="songs", related_query_name="song"
@@ -50,9 +54,6 @@ class Album(BaseModel):
 
     name = models.CharField(max_length=200)
     artwork_url = models.CharField(max_length=200)
-    artists = models.ManyToManyField(
-        "Artist", related_name="albums", related_query_name="album"
-    )
 
 
 class User(BaseModel):
@@ -63,9 +64,6 @@ class User(BaseModel):
     handle = models.CharField(max_length=200, unique=True)
     name = models.CharField(max_length=200)
     avatar_url = models.CharField(max_length=200)
-    posts = models.ManyToManyField(
-        "Post", related_name="users", related_query_name="user"
-    )
 
 
 class Post(BaseModel):
@@ -75,3 +73,6 @@ class Post(BaseModel):
 
     song = models.ForeignKey("Song", on_delete=models.CASCADE)
     caption = models.CharField(max_length=200)
+    user = models.ForeignKey(
+        "User", null=True, blank=True, on_delete=models.CASCADE
+    )

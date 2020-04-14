@@ -2,7 +2,7 @@
   <div class="menu-options">
     <ul>
       <li>
-        <nuxt-link to="/" class="menubtn">
+        <nuxt-link to="/" :class="{ isActive: $route.path == '/',  menubtn : true }">
           Feed
         </nuxt-link>
       </li>
@@ -44,10 +44,13 @@ ul li {
   margin-left: 1em;
 }
 .menubtn {
-  color: black;
+  color: var(--primary-black-light);
 }
 .menubtn:hover, .menubtn:focus {
   cursor: pointer;
+  color: var(--primary-purple);
+}
+.isActive {
   color: var(--primary-red);
 }
 </style>

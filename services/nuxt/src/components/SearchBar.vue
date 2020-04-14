@@ -2,8 +2,8 @@
   <div class="search-bar">
     <input
       onfocus="this.placeholder = ''"
-      onblur="this.placeholder = 'Search for music...'"
-      placeholder="Search for music..."
+      onblur="this.placeholder = ''"
+      placeholder="Search for music"
       class="search-bar__input"
     >
   </div>
@@ -23,7 +23,7 @@ export default {
   }
 }
 .search-bar__input {
-  width: 18rem;
+  width: 105%;
   height: 2rem;
   background-image: url('~assets/search.png');
   background-repeat: no-repeat;
@@ -40,7 +40,7 @@ export default {
 
 .search-bar__input:focus {
   outline: none !important;
-  border: 1px solid var(--primary-purple);
+  border: .5px solid var(--primary-purple);
   box-shadow: 0 0 10px #719ece;
   opacity: 1;
 }

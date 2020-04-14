@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-btn v-b-modal.addPostModal class="neptune-button__strong">
+    <b-btn v-b-modal.addPostModal class="add-post-button">
       New Tune
     </b-btn>
     <b-modal id="addPostModal" title="Add a post" hide-footer>
@@ -116,11 +116,20 @@ export default {
 </script>
 
 <style scoped>
-.neptune-button__strong {
+.add-post-button {
   margin-right: 2rem;
+  border: none;
+  border-radius: 5px;
+  background-color: black; 
+  box-shadow: var(--shadow-heavy);  
   top: 5rem;
   width: 7rem;
   line-height: 1.5rem;
+  color: white;
+}
+
+.add-post-button:hover, .add-post-button:focus {
+  opacity: 0.9 !important;
 }
 
 .autocomplete-results {

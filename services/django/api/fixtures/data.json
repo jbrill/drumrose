@@ -5,7 +5,8 @@
     "fields": {
         "created_date": "2020-04-13T18:34:35.652Z",
         "modified_date": "2020-04-13T18:34:35.652Z",
-        "name": "Teresa Bowen"
+        "name": "James Brown",
+        "artist_photo_url": null
     }
 },
 {
@@ -14,7 +15,8 @@
     "fields": {
         "created_date": "2020-04-13T18:34:35.649Z",
         "modified_date": "2020-04-13T18:34:35.649Z",
-        "name": "James Salazar"
+        "name": "Flying Lotus",
+        "artist_photo_url": null
     }
 },
 {
@@ -23,7 +25,8 @@
     "fields": {
         "created_date": "2020-04-13T18:34:35.650Z",
         "modified_date": "2020-04-13T18:34:35.650Z",
-        "name": "Vincent Smith"
+        "name": "Fiona Apple",
+        "artist_photo_url": null
     }
 },
 {
@@ -32,7 +35,8 @@
     "fields": {
         "created_date": "2020-04-13T18:34:35.653Z",
         "modified_date": "2020-04-13T18:34:35.654Z",
-        "name": "Melissa Jones"
+        "name": "Grimes",
+        "artist_photo_url": null
     }
 },
 {
@@ -41,7 +45,8 @@
     "fields": {
         "created_date": "2020-04-13T18:34:35.645Z",
         "modified_date": "2020-04-13T18:34:35.645Z",
-        "name": "Shawn Webb"
+        "name": "Death Grips",
+        "artist_photo_url": null
     }
 },
 {
@@ -49,13 +54,10 @@
     "pk": "10ccc694-2b2a-4eb2-ae6d-1d51bcd195e2",
     "fields": {
         "created_date": "2020-04-13T18:35:52.035Z",
-        "modified_date": "2020-04-13T18:35:52.037Z",
-        "name": "William Reyes",
-        "artist_photo_url": null,
+        "modified_date": "2020-04-15T02:41:01.640Z",
+        "name": "Soul Power",
         "album": "8fae704f-6e68-422a-836a-76071c2e1a59",
-        "artists": [
-            "7134bfed-ee9c-4930-a176-89f8b43279f5"
-        ]
+        "artist": "7134bfed-ee9c-4930-a176-89f8b43279f5"
     }
 },
 {
@@ -63,13 +65,10 @@
     "pk": "260afbe0-0b3a-4d81-9810-174d2c83250a",
     "fields": {
         "created_date": "2020-04-13T18:35:52.030Z",
-        "modified_date": "2020-04-13T18:35:52.031Z",
-        "name": "Monica King",
-        "artist_photo_url": null,
+        "modified_date": "2020-04-15T03:00:50.094Z",
+        "name": "Please Please Please",
         "album": "f499acbe-1730-4f59-ad36-1c9c1f9b9907",
-        "artists": [
-            "7134bfed-ee9c-4930-a176-89f8b43279f5"
-        ]
+        "artist": "7134bfed-ee9c-4930-a176-89f8b43279f5"
     }
 },
 {
@@ -77,13 +76,10 @@
     "pk": "56b8abfc-2e1d-4123-ad1d-671d6dd07f79",
     "fields": {
         "created_date": "2020-04-13T18:35:52.024Z",
-        "modified_date": "2020-04-13T18:35:52.026Z",
-        "name": "Russell Murphy",
-        "artist_photo_url": null,
-        "album": "bc78e72f-bee7-4795-ba9c-314460697de1",
-        "artists": [
-            "7134bfed-ee9c-4930-a176-89f8b43279f5"
-        ]
+        "modified_date": "2020-04-15T17:47:20.881Z",
+        "name": "Oblivion",
+        "album": "4297b472-79e5-4c39-9175-51e3db64e64e",
+        "artist": "d14b8013-2c6a-47cd-9144-6058c016bedc"
     }
 },
 {
@@ -91,13 +87,10 @@
     "pk": "b523a72b-27a0-44fc-845b-e18c45391907",
     "fields": {
         "created_date": "2020-04-13T18:35:52.045Z",
-        "modified_date": "2020-04-13T18:35:52.046Z",
-        "name": "Gabriel Haney",
-        "artist_photo_url": null,
+        "modified_date": "2020-04-15T17:50:05.736Z",
+        "name": "Criminal",
         "album": "853e84ec-facd-4195-b2cf-8f362a8ab303",
-        "artists": [
-            "7134bfed-ee9c-4930-a176-89f8b43279f5"
-        ]
+        "artist": "a493b14f-0a5e-447b-a198-03a4be6203df"
     }
 },
 {
@@ -105,13 +98,10 @@
     "pk": "d03d9aab-0bb3-48bc-8794-9beff84a6699",
     "fields": {
         "created_date": "2020-04-13T18:35:52.040Z",
-        "modified_date": "2020-04-13T18:35:52.042Z",
-        "name": "Angel Ashley",
-        "artist_photo_url": null,
-        "album": "4297b472-79e5-4c39-9175-51e3db64e64e",
-        "artists": [
-            "7134bfed-ee9c-4930-a176-89f8b43279f5"
-        ]
+        "modified_date": "2020-04-15T17:41:10.609Z",
+        "name": "Do the Astral Plane",
+        "album": "bc78e72f-bee7-4795-ba9c-314460697de1",
+        "artist": "85290714-c8d5-4930-8904-083885f56cf0"
     }
 },
 {
@@ -119,9 +109,9 @@
     "pk": "4297b472-79e5-4c39-9175-51e3db64e64e",
     "fields": {
         "created_date": "2020-04-13T18:35:52.039Z",
-        "modified_date": "2020-04-13T18:35:52.039Z",
+        "modified_date": "2020-04-15T17:47:43.290Z",
         "name": "Mrs. Tonya Gomez",
-        "artwork_url": "test_url"
+        "artwork_url": "https://i.ytimg.com/vi/m5H-YlcMSbc/hqdefault.jpg"
     }
 },
 {
@@ -129,9 +119,9 @@
     "pk": "853e84ec-facd-4195-b2cf-8f362a8ab303",
     "fields": {
         "created_date": "2020-04-13T18:35:52.044Z",
-        "modified_date": "2020-04-13T18:35:52.044Z",
-        "name": "Kyle Alvarado",
-        "artwork_url": "test_url"
+        "modified_date": "2020-04-15T17:51:12.640Z",
+        "name": "Tidal",
+        "artwork_url": "https://upload.wikimedia.org/wikipedia/en/b/b5/FionaAppleTidal.png"
     }
 },
 {
@@ -140,8 +130,8 @@
     "fields": {
         "created_date": "2020-04-13T18:35:52.034Z",
         "modified_date": "2020-04-13T18:35:52.034Z",
-        "name": "Amanda Thomas",
-        "artwork_url": "test_url"
+        "name": "Soul Power Pt. 1",
+        "artwork_url": "https://images.genius.com/035506d17f802e21cf91cd7006101d48.1000x1000x1.jpg"
     }
 },
 {
@@ -149,9 +139,9 @@
     "pk": "bc78e72f-bee7-4795-ba9c-314460697de1",
     "fields": {
         "created_date": "2020-04-13T18:35:52.021Z",
-        "modified_date": "2020-04-13T18:35:52.021Z",
-        "name": "Thomas Walker",
-        "artwork_url": "test_url"
+        "modified_date": "2020-04-15T17:39:52.303Z",
+        "name": "Cosmogramma",
+        "artwork_url": "https://upload.wikimedia.org/wikipedia/en/b/bc/WARPCD195Packshot_480.jpg"
     }
 },
 {
@@ -160,8 +150,8 @@
     "fields": {
         "created_date": "2020-04-13T18:35:52.028Z",
         "modified_date": "2020-04-13T18:35:52.028Z",
-        "name": "Dwayne Allen",
-        "artwork_url": "test_url"
+        "name": "Please Please Please",
+        "artwork_url": "https://upload.wikimedia.org/wikipedia/en/thumb/b/b2/PleasePleasePlease.jpg/220px-PleasePleasePlease.jpg"
     }
 },
 {
@@ -193,7 +183,7 @@
         "created_date": "2020-04-13T18:31:07.485Z",
         "modified_date": "2020-04-13T18:31:07.486Z",
         "handle": "john0",
-        "name": "Caitlin Bishop",
+        "name": "Jason Brill",
         "avatar_url": "test_url"
     }
 },
@@ -305,490 +295,6 @@
         "song": "b523a72b-27a0-44fc-845b-e18c45391907",
         "caption": "Exactly control coach certainly feel including western. Person mouth opportunity here option bill.",
         "user": "ccd6b4c9-dc99-4fd7-8237-332db6c729d3"
-    }
-},
-{
-    "model": "contenttypes.contenttype",
-    "pk": 1,
-    "fields": {
-        "app_label": "api",
-        "model": "artist"
-    }
-},
-{
-    "model": "contenttypes.contenttype",
-    "pk": 2,
-    "fields": {
-        "app_label": "api",
-        "model": "song"
-    }
-},
-{
-    "model": "contenttypes.contenttype",
-    "pk": 3,
-    "fields": {
-        "app_label": "api",
-        "model": "album"
-    }
-},
-{
-    "model": "contenttypes.contenttype",
-    "pk": 4,
-    "fields": {
-        "app_label": "api",
-        "model": "user"
-    }
-},
-{
-    "model": "contenttypes.contenttype",
-    "pk": 5,
-    "fields": {
-        "app_label": "api",
-        "model": "post"
-    }
-},
-{
-    "model": "contenttypes.contenttype",
-    "pk": 6,
-    "fields": {
-        "app_label": "admin",
-        "model": "logentry"
-    }
-},
-{
-    "model": "contenttypes.contenttype",
-    "pk": 7,
-    "fields": {
-        "app_label": "auth",
-        "model": "permission"
-    }
-},
-{
-    "model": "contenttypes.contenttype",
-    "pk": 8,
-    "fields": {
-        "app_label": "auth",
-        "model": "group"
-    }
-},
-{
-    "model": "contenttypes.contenttype",
-    "pk": 9,
-    "fields": {
-        "app_label": "auth",
-        "model": "user"
-    }
-},
-{
-    "model": "contenttypes.contenttype",
-    "pk": 10,
-    "fields": {
-        "app_label": "contenttypes",
-        "model": "contenttype"
-    }
-},
-{
-    "model": "contenttypes.contenttype",
-    "pk": 11,
-    "fields": {
-        "app_label": "sessions",
-        "model": "session"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 1,
-    "fields": {
-        "name": "Can add artist",
-        "content_type": 1,
-        "codename": "add_artist"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 2,
-    "fields": {
-        "name": "Can change artist",
-        "content_type": 1,
-        "codename": "change_artist"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 3,
-    "fields": {
-        "name": "Can delete artist",
-        "content_type": 1,
-        "codename": "delete_artist"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 4,
-    "fields": {
-        "name": "Can view artist",
-        "content_type": 1,
-        "codename": "view_artist"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 5,
-    "fields": {
-        "name": "Can add song",
-        "content_type": 2,
-        "codename": "add_song"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 6,
-    "fields": {
-        "name": "Can change song",
-        "content_type": 2,
-        "codename": "change_song"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 7,
-    "fields": {
-        "name": "Can delete song",
-        "content_type": 2,
-        "codename": "delete_song"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 8,
-    "fields": {
-        "name": "Can view song",
-        "content_type": 2,
-        "codename": "view_song"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 9,
-    "fields": {
-        "name": "Can add album",
-        "content_type": 3,
-        "codename": "add_album"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 10,
-    "fields": {
-        "name": "Can change album",
-        "content_type": 3,
-        "codename": "change_album"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 11,
-    "fields": {
-        "name": "Can delete album",
-        "content_type": 3,
-        "codename": "delete_album"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 12,
-    "fields": {
-        "name": "Can view album",
-        "content_type": 3,
-        "codename": "view_album"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 13,
-    "fields": {
-        "name": "Can add user",
-        "content_type": 4,
-        "codename": "add_user"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 14,
-    "fields": {
-        "name": "Can change user",
-        "content_type": 4,
-        "codename": "change_user"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 15,
-    "fields": {
-        "name": "Can delete user",
-        "content_type": 4,
-        "codename": "delete_user"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 16,
-    "fields": {
-        "name": "Can view user",
-        "content_type": 4,
-        "codename": "view_user"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 17,
-    "fields": {
-        "name": "Can add post",
-        "content_type": 5,
-        "codename": "add_post"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 18,
-    "fields": {
-        "name": "Can change post",
-        "content_type": 5,
-        "codename": "change_post"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 19,
-    "fields": {
-        "name": "Can delete post",
-        "content_type": 5,
-        "codename": "delete_post"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 20,
-    "fields": {
-        "name": "Can view post",
-        "content_type": 5,
-        "codename": "view_post"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 21,
-    "fields": {
-        "name": "Can add log entry",
-        "content_type": 6,
-        "codename": "add_logentry"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 22,
-    "fields": {
-        "name": "Can change log entry",
-        "content_type": 6,
-        "codename": "change_logentry"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 23,
-    "fields": {
-        "name": "Can delete log entry",
-        "content_type": 6,
-        "codename": "delete_logentry"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 24,
-    "fields": {
-        "name": "Can view log entry",
-        "content_type": 6,
-        "codename": "view_logentry"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 25,
-    "fields": {
-        "name": "Can add permission",
-        "content_type": 7,
-        "codename": "add_permission"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 26,
-    "fields": {
-        "name": "Can change permission",
-        "content_type": 7,
-        "codename": "change_permission"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 27,
-    "fields": {
-        "name": "Can delete permission",
-        "content_type": 7,
-        "codename": "delete_permission"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 28,
-    "fields": {
-        "name": "Can view permission",
-        "content_type": 7,
-        "codename": "view_permission"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 29,
-    "fields": {
-        "name": "Can add group",
-        "content_type": 8,
-        "codename": "add_group"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 30,
-    "fields": {
-        "name": "Can change group",
-        "content_type": 8,
-        "codename": "change_group"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 31,
-    "fields": {
-        "name": "Can delete group",
-        "content_type": 8,
-        "codename": "delete_group"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 32,
-    "fields": {
-        "name": "Can view group",
-        "content_type": 8,
-        "codename": "view_group"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 33,
-    "fields": {
-        "name": "Can add user",
-        "content_type": 9,
-        "codename": "add_user"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 34,
-    "fields": {
-        "name": "Can change user",
-        "content_type": 9,
-        "codename": "change_user"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 35,
-    "fields": {
-        "name": "Can delete user",
-        "content_type": 9,
-        "codename": "delete_user"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 36,
-    "fields": {
-        "name": "Can view user",
-        "content_type": 9,
-        "codename": "view_user"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 37,
-    "fields": {
-        "name": "Can add content type",
-        "content_type": 10,
-        "codename": "add_contenttype"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 38,
-    "fields": {
-        "name": "Can change content type",
-        "content_type": 10,
-        "codename": "change_contenttype"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 39,
-    "fields": {
-        "name": "Can delete content type",
-        "content_type": 10,
-        "codename": "delete_contenttype"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 40,
-    "fields": {
-        "name": "Can view content type",
-        "content_type": 10,
-        "codename": "view_contenttype"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 41,
-    "fields": {
-        "name": "Can add session",
-        "content_type": 11,
-        "codename": "add_session"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 42,
-    "fields": {
-        "name": "Can change session",
-        "content_type": 11,
-        "codename": "change_session"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 43,
-    "fields": {
-        "name": "Can delete session",
-        "content_type": 11,
-        "codename": "delete_session"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 44,
-    "fields": {
-        "name": "Can view session",
-        "content_type": 11,
-        "codename": "view_session"
     }
 }
 ]

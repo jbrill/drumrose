@@ -32,7 +32,7 @@ export default {
 <style>
 .header {
   position: fixed;
-  z-index: 0;
+  z-index: 10;
   background-color: var(--primary-black-light);
   left: 0;
   display: flex;
@@ -102,7 +102,7 @@ a {
 .search-bar__contain {
   margin: 0 auto;
   opacity: 0.9;
-  margin-right: 1rem;
+  margin-right: 1.2rem;
 }
 @media screen and (prefers-reduced-motion: reduce) {
   .search-bar__contain:hover, .search-bar__contain:focus {

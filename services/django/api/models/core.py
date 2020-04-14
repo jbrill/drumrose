@@ -30,6 +30,7 @@ class Artist(BaseModel):
     """
 
     name = models.CharField(max_length=200)
+    artist_photo_url = models.CharField(max_length=200, null=True)
 
 
 class Song(BaseModel):
@@ -38,12 +39,11 @@ class Song(BaseModel):
     """
 
     name = models.CharField(max_length=200)
-    artist_photo_url = models.CharField(max_length=200, null=True)
     album = models.ForeignKey(
         "Album", null=True, blank=True, on_delete=models.CASCADE,
     )
-    artists = models.ManyToManyField(
-        "Artist", related_name="songs", related_query_name="song"
+    artist = models.ForeignKey(
+        "Artist", null=True, blank=True, on_delete=models.CASCADE,
     )
 
 

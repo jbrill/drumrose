@@ -5,8 +5,8 @@ from rest_framework import serializers
 
 
 class SongSerializer(serializers.ModelSerializer):
-    artists = ArtistSerializer(many=True, read_only=True)
-    albums = AlbumSerializer(many=True, read_only=True)
+    artist = ArtistSerializer(many=False, read_only=True)
+    album = AlbumSerializer(many=False, read_only=True)
 
     class Meta:
         model = Song

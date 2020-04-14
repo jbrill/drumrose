@@ -6,6 +6,9 @@
   --primary-black-light: #33312c;
   --red-accent: #71250b;
   --shadow-heavy: 0 2px 8px rgba(0, 0, 0, 0.33);
+  --shadow-heavy-red: 0 2px 8px #9c0235;
+  --shadow-heavy-purple: 0 2px 8px #772ce6;
+  --shadow-medium: 0 2px 4px rgba(0, 0, 0, 0.22);
 }
 
 * {
@@ -60,16 +63,9 @@ a:hover, a:focus {
 i:hover, i:focus {
   cursor: pointer;
 }
-.neptune-button__strong {
-  background-color: var(--primary-black--light);
-  border: none;
-  border-radius: 5px;
-  box-shadow: var(--shadow-heavy);
-}
-.neptune-button__strong:hover, .neptune-button__strong:focus {
-  cursor: pointer;
-  background-color: black;
-  color: var(--primary-purple);
+.material-icons {
+  user-select: none;
+  font-size: 1.2em;
 }
 .modal {
   z-index: 100000;

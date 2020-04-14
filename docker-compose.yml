@@ -8,6 +8,7 @@ services:
     ports:
       - 443:443
       - 80:80
+    command: "tail -f /var/log/nginx/access.log"
 
   nuxt-server:
     build: services/nuxt
@@ -57,20 +58,3 @@ services:
       context: .
       dockerfile: tests/Dockerfile
     command: "tail -f /dev/null"
-
-  musicbrainz:
-    image: linuxserver/musicbrainz
-    container_name: musicbrainz
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Europe/London
-      - BRAINZCODE=code from musicbrainz
-      - WEBADDRESS=ip of host
-      - NPROC=parameter #optional
-    volumes:
-      - /path/to/appdata/config:/config
-      - /path/to/appdata/config:/data
-    ports:
-      - 5000:5000
-    restart: unless-stopped

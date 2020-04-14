@@ -63,6 +63,9 @@ export default {
   axios: {
     proxyHeaders: false,
   },
+  plugins: [
+    { src: '~utils/post_util.js' }
+  ],
   /*
    ** Build configuration
    */

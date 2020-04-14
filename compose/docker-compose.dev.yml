@@ -9,5 +9,6 @@ services:
   nuxt-server:
     volumes:
     - '${HOME}/drumrose/services/nuxt/src:/usr/local/drumrose/services/nuxt/src'
+    - '${HOME}/drumrose/services/nuxt/nuxt.config.js:/usr/local/drumrose/services/nuxt/nuxt.config.js'
     environment:
       DEBUG: 1

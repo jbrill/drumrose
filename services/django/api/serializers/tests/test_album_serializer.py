@@ -3,7 +3,6 @@ Album Serializer Test Module
 """
 
 from api.albums.serializers import AlbumSerializer
-from api.models.core import Album
 from api.models.factories import AlbumFactory
 from django.test import TestCase
 

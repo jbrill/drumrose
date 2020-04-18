@@ -12,8 +12,8 @@
       </div>
       <div class="poster">
         <div class="posterDetail">
-          <div class="posterImg" v-bind:style="{ backgroundImage: 'url('
-+ post.song.album.artwork_url + ')' }">
+          <div class="posterImg" v-bind:style="{ backgroundImage: 'url(' +
+              post.user.avatar_url + ')' }">
           </div>
           <nuxt-link class="noselect" :to="'/' + post.user.handle">
             <div class="posterInfo">
@@ -289,10 +289,6 @@ export default {
 .audioAction:hover, .audioAction:focus {
   opacity: 1;
 }
-.audioPlay:hover {
-  opacity: 1;
-  box-shadow: var(--shadow-heavy-red);
-}
 .audioRepost {
   float: right;
 }
@@ -310,5 +306,6 @@ export default {
 }
 .audioPlay:hover, .audioPlay:focus {
   opacity: 1;
+  color: var(--primary-purple);
 }
 </style>

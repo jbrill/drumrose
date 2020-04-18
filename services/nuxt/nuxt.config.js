@@ -64,7 +64,7 @@ export default {
     proxyHeaders: false,
   },
   plugins: [
-    { src: '~utils/post_util.js' }
+    { src: '~utils/post_util.js' },
   ],
   /*
    ** Build configuration

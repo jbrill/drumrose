@@ -25,8 +25,8 @@ urlpatterns = [
     path(
         "songs/<song_id>/", song_routes.SongDetail.as_view(), name="SongDetail"
     ),
-    path("artists/", artist_routes.ArtistRoute, name="ArtistsRoute"),
-    path("albums/", album_routes.AlbumRoute, name="AlbumsRoute"),
+    path("artists/", artist_routes.ArtistRoute.as_view(), name="ArtistsRoute"),
+    path("albums/", album_routes.AlbumRoute.as_view(), name="AlbumsRoute"),
     path("users/", user_routes.UserList.as_view(), name="UserList"),
     path(
         "users/<user_handle>/",

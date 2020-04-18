@@ -17,12 +17,13 @@ class AlbumRoute(APIView):
         POST: Creates an album
     """
 
-    def get(self):
+    def get(self, request):
         """
         GET for  Artist
         """
         albums = Album.objects.all()
-        return JsonResponse(albums)
+        serializer = AlbumSerializer(albums, many=True)
+        return JsonResponse({"albums": serializer.data})
 
     def post(self, request):
         """

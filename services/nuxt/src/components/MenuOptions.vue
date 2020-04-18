@@ -2,7 +2,10 @@
   <div class="menu-options">
     <ul>
       <li>
-        <nuxt-link to="/" :class="{ isActive: $route.path == '/',  menubtn : true }">
+        <nuxt-link
+          to="/"
+          :class="{ isActive: $route.path == '/',  menubtn : true }"
+        >
           Feed
         </nuxt-link>
       </li>

@@ -8,15 +8,13 @@ export default {
    ** Headers of the page
    */
   head: {
-    title: 'DRUMROSE // Music for everyone',
+    title: 'DRUMROSE // affect culture',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      {
-        hid: 'description',
-        name: 'description',
-        content: 'DRUMROSE',
-      },
+      { hid: 'apple-music-developer-token', name: 'apple-music-developer-token', content: process.env.APPLE_MUSIC_KEY_ID },
+      { hid: 'apple-music-app-name', name: 'apple-music-app-name', content: 'Drumrose' },
+      { hid: 'apple-music-app-build', name: 'apple-music-app-build', content: 'My custom description' }
     ],
     link: [
       {

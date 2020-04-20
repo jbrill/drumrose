@@ -69,7 +69,7 @@ export default {
 }
 .title__middle {
   letter-spacing: 2px;
-  font-size: 1.7rem;
+  font-size: 1.5rem;
   color: ghostwhite;
   font-weight: bolder;
   margin: 0 auto;

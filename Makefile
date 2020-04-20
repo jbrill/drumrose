@@ -8,7 +8,7 @@ _test-models:
 	coverage run --source . services/django/manage.py test services/django/api/models/tests -v2 --pattern="*_model_tests.py"
 
 dtest-pylint:
-	docker exec -t drumrose_tests-server_1 bash -c "make _test-pylint"
+	docker exec -t drumrose_django-server_1 bash -c "cd /usr/local/drumrose; make _test-pylint"
 
 _test-pylint:
 	find . -iname '*.py' | xargs pylint

@@ -7,6 +7,8 @@ verify_ssl = true
 coverage = "*"
 factory-boy = "*"
 faker = "*"
+pylint = "*"
+pylint-django = "*"
 
 [packages]
 djangorestframework = "*"

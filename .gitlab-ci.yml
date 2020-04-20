@@ -12,7 +12,7 @@ stages:
 pylint:
   stage: test
   script:
-    - docker-compose up -d --build tests-server
+    - docker-compose up -d --build django-server
     - make dtest-pylint
   tags:
     - full-stack

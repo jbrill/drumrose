@@ -84,6 +84,7 @@ export default {
   height: 3rem;
   position: fixed;
   bottom: 0;
+  padding: 5px;
   z-index: 10000;
 }
 

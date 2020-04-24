@@ -15,8 +15,8 @@ class SongTest(TestCase):
         Tests retrieving a song
         """
         SongFactory(name="Song Test")
-        song = Song.objects.get(name="Song Test")
-        self.assertEqual(song.albums.count(), 0)
+        self.assertEqual(Song.objects.count(), 1)
+        self.assertEqual(Song.objects.first().name, "Song Test")
 
     def test_get_multiple_songs_simple(self):
         """

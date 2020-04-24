@@ -4,6 +4,7 @@ Urls Module
 
 from api import views as api_routes
 from api.albums import views as album_routes
+from api.apple_music_token import views as apple_music_token_routes
 from api.artists import views as artist_routes
 from api.auth import views as auth_routes
 from api.posts import views as post_routes
@@ -32,5 +33,10 @@ urlpatterns = [
         "users/<user_handle>/",
         user_routes.UserDetail.as_view(),
         name="UserDetail",
+    ),
+    path(
+        "apple_music_token/",
+        apple_music_token_routes.AppleMusicTokenRoute.as_view(),
+        name="AppleMusicTokenRoute",
     ),
 ]

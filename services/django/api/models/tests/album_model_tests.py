@@ -16,7 +16,7 @@ class AlbumTest(TestCase):
         """
         AlbumFactory(name="Test Album",)
         test_album = Album.objects.get(name="Test Album")
-        self.assertEqual(test_album.artwork_url, "")
+        self.assertEqual(test_album.artwork_url, "test_url")
 
     def test_get_multiple_albums_simple(self):
         """

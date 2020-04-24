@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 
+# Apple Music JWT Token Generator Object
+from api.utils.generate_apple_music_token import AppleMusicTokenGenerator
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -121,6 +124,14 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
+APPLE_MUSIC_KEY_ID = os.getenv("APPLE_MUSIC_KEY_ID", None)
+APPLE_MUSIC_TEAM_ID = os.getenv("APPLE_MUSIC_TEAM_ID", None)
+APPLE_MUSIC_SECRET = os.getenv("APPLE_MUSIC_SECRET", None)
+
+APPLE_MUSIC_TOKEN_GENERATOR = AppleMusicTokenGenerator(
+    APPLE_MUSIC_SECRET, APPLE_MUSIC_KEY_ID, APPLE_MUSIC_TEAM_ID,
+)
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/

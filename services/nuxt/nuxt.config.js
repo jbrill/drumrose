@@ -12,9 +12,6 @@ export default {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'apple-music-developer-token', name: 'apple-music-developer-token', content: process.env.APPLE_MUSIC_KEY_ID },
-      { hid: 'apple-music-app-name', name: 'apple-music-app-name', content: 'Drumrose' },
-      { hid: 'apple-music-app-build', name: 'apple-music-app-build', content: 'My custom description' }
     ],
     link: [
       {
@@ -54,15 +51,14 @@ export default {
    */
   modules: [
     '@nuxtjs/axios',
-    'bootstrap-vue/nuxt',
     'nuxt-svg-loader',
+    'bootstrap-vue/nuxt',
     'cookie-universal-nuxt',
   ],
   axios: {
     proxyHeaders: false,
   },
   plugins: [
-    { src: '~utils/post_util.js' },
   ],
   /*
    ** Build configuration

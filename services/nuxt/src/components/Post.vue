@@ -43,7 +43,7 @@
             <i
               class="audioAction audioFavorite material-icons"
               @click="favoriteSong"
-            >favorite_border</i>
+            >favorite</i>
             <i
               class="audioAction audioRepost material-icons"
               @click="repostSong"

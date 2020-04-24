@@ -49,6 +49,20 @@ export const getTrackIDFromQuery = async (query, bearerToken) => {
   return trackIDResponse.data.results.songs.data[0];
 };
 
+export const getAppleMusicDeveloperToken = async bearerToken => {
+  try {
+    const tokenResponse = await axios.post(
+      'https://teton.drumrose.io/api/apple_music_token/', {
+      headers: {
+        Authorization: `Bearer ${bearerToken}`,
+      },
+    });
+    return tokenResponse;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 export const getPosts = async bearerToken => {
   try {
     const posts = await axios.get('https://teton.drumrose.io/api/posts/', {

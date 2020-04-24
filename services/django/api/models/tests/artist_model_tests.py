@@ -15,8 +15,8 @@ class ArtistTest(TestCase):
         Tests retrieving a artist
         """
         ArtistFactory(name="Casper")
-        casper = Artist.objects.get(name="Casper")
-        self.assertEqual(casper.songs.count(), 0)
+        self.assertEqual(Artist.objects.count(), 1)
+        self.assertEqual(Artist.objects.first().name, "Casper")
 
     def test_get_multiple_artists_simple(self):
         """

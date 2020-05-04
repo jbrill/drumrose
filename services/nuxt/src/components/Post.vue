@@ -3,11 +3,22 @@
     <div class="postContain">
       <div class="artistContain">
         <div class="noselect albumContain">
+            <i
+              class="audioAction audioPause material-icons"
+              @click="pauseTrack"
+              v-if="nowPlayingItem && nowPlayingItem.playbackState === 2"
+            >pause</i>
+            <i
+              class="audioAction audioPlay material-icons"
+              @click="playTrack"
+              v-else
+            >play_arrow</i>
           <img class="albumCover" :src="post.song.album.artwork_url">
         </div>
         <div class="artistTextContain">
-          <h2 class="songName">{{ post.song.name }}</h2>
-          <h2 class="artistName">{{post.song.artist.name }}</h2>
+          <span ref="songName" class="songName">{{ post.song.name }}</span>
+          <span ref="artistName" class="artistName">{{post.song.artist.name
+}}</span>
         </div>
       </div>
       <div class="poster">
@@ -33,21 +44,12 @@
           {{ post.caption }}
         </p>
         <div class="postBottomContain">
-          <div class="audioActionsContain">
-            <i
-              class="audioAction audioPlay material-icons"
-              @click="playSong"
-            >play_arrow</i>
-          </div>
+          <PostTimeline />
           <div class="post-action-contain">
             <i
               class="audioAction audioFavorite material-icons"
-              @click="favoriteSong"
+              @click="favoriteTrack"
             >favorite</i>
-            <i
-              class="audioAction audioRepost material-icons"
-              @click="repostSong"
-            >loop</i>
           </div>
         </div>
       </div>
@@ -56,39 +58,24 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapState } from 'vuex';
+import PostTimeline from '~/components/PostTimeline';
 
 export default {
   name: 'Post',
-  components: {},
+  components: {
+    PostTimeline
+  },
+  computed: mapState(['nowPlayingItem']),
   props: ['post'],
   methods: {
-    playSong: function (event) {
-      if (!process.client) {
-        return;
-      }
-      const musicKit = window.MusicKit.getInstance();
-      // We should reset the queue here
-      if (event.target.textContent === 'pause') {
-        window.MusicKit.getInstance()
-          .player.pause()
-          .then(function () {
-            console.log('pausing...');
-            event.target.textContent = 'play_arrow';
-          });
-      } else {
-        window.MusicKit.getInstance()
-          .player.play()
-          .then(function () {
-            console.log('playing...');
-            event.target.textContent = 'pause';
-          });
-      }
+    pauseTrack: async function (event) {
+      await this.$store.dispatch("pause");
     },
-    repostSong: function (event) {
-      console.log('SHOULD REPOST');
+    playTrack: async function (event) {
+      await Promise.all([this.$store.dispatch("play"), this.$store.dispatch("play")]);
     },
-    favoriteSong: function (event) {
+    favoriteTrack: function (event) {
       console.log('SHOUDL FAV');
     },
   },
@@ -130,9 +117,6 @@ export default {
   .audioFavorite:hover, .audioFavorite:focus {
     color: grey;
   }
-  .audioRepost:hover, .audioRepost:focus {
-    color: grey;
-  }
 }
 
 .post {
@@ -151,15 +135,18 @@ export default {
 .albumContain {
   z-index: 0;
   width: 100%;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .albumContain > i {
-  position:relative;
-  top: calc(50% - 10px); /* 50% - 3/4 of icon height */
+  position: absolute;
+  color: var(--primary-purple);
+  font-size: 4rem;
 }
 .albumCover {
   width: 100%;
-  max-width: 9em;
+  max-width: 7em;
   height: auto;
   border-radius: 2px;
   box-shadow: var(--shadow-medium);
@@ -179,7 +166,7 @@ export default {
   opacity: 0.8;
 }
 .songName {
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   margin-bottom: 0;
   opacity: 0.8;
 }
@@ -199,15 +186,18 @@ export default {
 }
 .postBottomContain {
   display: flex;
+  align-items: center;
 }
 .post-action-contain {
   display: inline-block;
   margin-left: auto;
 }
 .artistTextContain {
+  display: flex;
+  flex-direction: column;
   color: black;
   padding-top: 1rem;
-  text-align: center; 
+  text-align: left; 
   font-family: 'Proxima Nova', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 .poster {
@@ -216,7 +206,7 @@ export default {
   margin-left: 2rem;
   height: auto;
   display: grid;
-  grid-template-rows: 25% 65% 10%;
+  grid-template-rows: 25% 50% 25%;
 }
 .posterImg {
   border-radius: 4px;
@@ -288,15 +278,10 @@ export default {
 .audioAction {
   color: black;
   opacity: 0.8;
+  font-size: 100%;
 }
 .audioAction:hover, .audioAction:focus {
   opacity: 1;
-}
-.audioRepost {
-  float: right;
-}
-.audioRepost:hover, .audioRepost:focus {
-  color: var(--primary-purple);
 }
 .audioFavorite {
   padding-right: 1rem;
@@ -306,6 +291,12 @@ export default {
 }
 .audioMore {
   float: left;
+}
+.audioPause {
+  font-size: 2rem;
+}
+.audioPlay {
+  font-size: 2rem;
 }
 .audioPlay:hover, .audioPlay:focus {
   opacity: 1;

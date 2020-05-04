@@ -1,9 +1,11 @@
-import axios from 'axios';
-import Cookie from 'cookie';
-import clonedeep from 'lodash';
+import Raven from 'raven-js';
+//import { errorMessage } from '~/utils';
 
-export const state = () => ({
-	// State information
+import { clonedeep } from 'lodash';
+
+// Initial state
+const state = {
+  // State information
   isInitialized: false,
   supportsEME: false,
   storefront: '',
@@ -21,10 +23,11 @@ export const state = () => ({
   playbackTime: null,
   volume: null,
 
-	// Queue
+  // Queue information
   queue: [],
-  queuePosition: -1,
-});
+  queuePosition: 0,
+  history: []
+};
 
 /**
  * Return the appropriate API object.
@@ -89,26 +92,8 @@ const getters = {
   }
 };
 
-export const mutations = {
-	SET_APPLE_MUSIC_TOKEN(state, apple_music_token) {
-		state.appleMusicToken = apple_music_token;
-	},
-  SET_POSTS(state, posts) {
-    state.posts = posts;
-  },
-  SET_CURR_POST(state, post) {
-    state.currPost = post;
-  },
-  SET_CURR_POST_PLAYING(state, isPlaying) {
-    state.currPostPlaying = isPlaying;
-  },
-  SET_QUEUE(state, posts) {
-		console.log("SETTIN QUEUE");
-    state.queue = posts;
-		const tracks = posts.map(a => a.song.apple_music_id);
-		MusicKit.getInstance().setQueue({ songs: tracks }).then( () => { console.log("AY") } )
-  },
-	init (state) {
+const mutations = {
+  init (state) {
     if (state.isInitialized) {
       console.warn('Already initialized; aborting');
       return;
@@ -143,7 +128,7 @@ export const mutations = {
     state.repeatMode = repeatMode;
   },
   nowPlayingItem (state, nowPlayingItem) {
-    state.nowPlayingItem = nowPlayingItem.value();
+    state.nowPlayingItem = nowPlayingItem;
   },
   playbackTime (state, playbackTime) {
     state.playbackTime = playbackTime;
@@ -171,44 +156,25 @@ export const mutations = {
   },
   removeEventListener (state, listener) {
     MusicKit.getInstance().removeEventListener(listener.event, listener.func);
-  },
-}
+  }
+};
 
-export const actions = {
- 	setAppleMusicToken({commit}) {
-    axios.post('https://teton.drumrose.io/api/apple_music_token/').then(result => {
-			commit('SET_APPLE_MUSIC_TOKEN', result.data.token);
-    }).catch(error => {
-      throw new Error(`API ${error}`);
+const actions = {
+  init ({ commit, state, dispatch }) {
+    if (!process.client) {
+      return;
+    }
+    Raven.setTagsContext({ musicKitVersion: MusicKit.version });
+
+    let app = {};
+    let instance = MusicKit.configure({
+      developerToken: "developerToken",
+      app: {
+        name: app.name || 'Music',
+        build: app.version || '2.0.0',
+        icon: app.icon
+      }
     });
-  },
- 	getPosts({commit}) {
-    axios.post('https://teton.drumrose.io/api/posts/').then(result => {
-			commit('SET_POSTS', result.data);
-    }).catch(error => {
-      throw new Error(`API ${error}`);
-    });
-  },
-  setCurrPost({ commit }, post) {
-    commit('SET_CURR_POST', post);
-  },
-  setCurrPostPlaying({ commit }) {
-    commit('SET_CURR_POST_PLAYING', true);
-  },
-  setCurrPostPausing({ commit }) {
-    commit('SET_CURR_POST_PLAYING', false);
-  },
-	async nuxtClientInit({ commit }, { req }) {
-  	console.log("INITIN")
-		const tokenResponse = await axios.post('https://teton.drumrose.io/api/apple_music_token/');
-		let instance = MusicKit.configure({
-			developerToken: tokenResponse.data.token,
-			app: {
-				name: 'DRUMROSE',
-				build: '2.0.0',
-				icon: "ICON"
-			}
-		});
 
     let localStorage = window.localStorage;
 
@@ -447,9 +413,9 @@ export const actions = {
     }
   },
 
-  async play (_) {
+  play (_) {
     let instance = MusicKit.getInstance();
-    await instance.player.play();
+    return instance.player.play();
   },
   pause (_) {
     let instance = MusicKit.getInstance();
@@ -612,7 +578,13 @@ export const actions = {
         reject(err);
       }
     });
-	},
-}
+  }
+};
 
-export const strict = false
+export default {
+  namespaced: true,
+  state,
+  getters,
+  mutations,
+  actions
+};

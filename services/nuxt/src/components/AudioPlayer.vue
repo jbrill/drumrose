@@ -1,6 +1,30 @@
 <template>
   <div class="audioPlayer">
-    <div class="noselect audio-play__contain">
+    <div v-if="nowPlayingItem" class="nowPlayingContain">
+      <i
+        ref="volumeButton"
+        class="volume-button material-icons"
+        @click="changeVolume"
+      >volume_up</i>
+      <div class="audio-player-artwork">
+        <span :style="{ backgroundImage: 'url('
++ nowPlayingItem.attributes.artwork.url +')', backgroundSize: 'cover' }">
+</span></div>
+      <div class="audio-player__track-info">
+        <span ref="trackArtist" class="audio-player__track-info__track-artist">
+          {{ nowPlayingItem.attributes.artistName }}
+        </span>
+        <span ref="songName" class="audio-player__track-info__track-name"">
+          {{ nowPlayingItem.attributes.name }}
+        </span>
+      </div>
+      <i
+        ref="queueButton"
+        class="queue-button material-icons"
+        @click="showQueue"
+      >queue_music</i>
+    </div>
+    <div class="musicControls">
       <i
         ref="musicPrev"
         class="audio-play__previous material-icons"
@@ -10,64 +34,84 @@
         ref="musicButton"
         class="audio-play
 material-icons"
-        @click="playMusic"
+        @click="playTrack"
+        v-if="playbackState ===  3"
       >play_arrow</i>
+      <i
+        ref="musicButton"
+        class="audio-pause
+material-icons"
+        @click="pauseTrack"
+        v-else
+      >pause</i>
       <i
         ref="musicNext"
         class="audio-play__next material-icons"
         @click="nextMusic"
       >skip_next</i>
-      <div class="audio-player__track-info">
-        <p class="audio-player__track-info__track-name">
-          {{ track_queue.track_name }}
-        </p>
-        <p class="audio-player__track-info__track-artist">
-          {{ track_queue.track_artist }}
-        </p>
+      <div class="musicNavigationControls">
+        <i
+          ref="shuffleButton"
+          class="shuffle-button material-icons"
+          @click="shuffleTrack"
+        >shuffles</i>
+        <i
+          ref="repeatButton"
+          class="repeat-button material-icons"
+          @click="repeatTrack"
+        >repeat</i>
       </div>
     </div>
+    <PostTimeline />
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
+import PostTimeline from "~/components/PostTimeline";
+
 export default {
-  data: function () {
-    return {
-      track_queue: {
-        track_name: 'somethin',
-        track_artist: 'dr. dre',
-      },
-    };
+  components: {
+    PostTimeline
+  },
+  computed: {
+    ...mapState(['nowPlayingItem', 'playbackState']),
+    isOverflowing() {
+      const element = this.$refs.songName;
+      if (element.offsetWidth < element.scrollWidth) {
+        console.log("AYO");
+        return true;
+      }
+      return false;
+    }
   },
   methods: {
-    playMusic () {
-      const musicBtn = this.$refs.musicButton;
-      if (process.client) {
-        if (musicBtn.textContent === 'pause') {
-          window.MusicKit.getInstance()
-            .player.pause()
-            .then(function () {
-              console.log('pausing...');
-              musicBtn.textContent = 'play_arrow';
-            });
-        } else {
-          window.MusicKit.getInstance()
-            .player.play()
-            .then(function () {
-              console.log('playing...');
-              musicBtn.textContent = 'pause';
-            });
-        }
-      }
+    playTrack () {
+      this.$store.dispatch("play");
+    },
+    pauseTrack () {
+      this.$store.dispatch("pause");
     },
     prevMusic () {
-      console.log('PREV');
+      this.$store.dispatch("next");
     },
     nextMusic () {
-      console.log('NEXT');
+      this.$store.dispatch("previous");
     },
     moreMusic () {
       console.log('MORE...');
+    },
+    repeatTrack () {
+      console.log("REPEAT")
+    },
+    shuffleTrack () {
+      console.log("SHUFFLE")
+    },
+    changeVolume () {
+      console.log("VOLUME")
+    },
+    showQueue () {
+      console.log("queueueue")
     },
   },
 };
@@ -76,27 +120,28 @@ export default {
 <style scoped>
 .audioPlayer {
   width: 100%;
+  height: 3rem;
   background: linear-gradient(
     0deg,
     rgba(0, 0, 0, 1) 0%,
     rgba(25, 25, 25, 1) 100%
   );
-  height: 3rem;
   position: fixed;
   bottom: 0;
-  padding: 5px;
   z-index: 10000;
+  display: grid;
+  grid-template-columns: 30% 20% 50%;
 }
 
-.audio-play__contain {
-  padding-left: 2rem;
-  display: inline-block;
+.nowPlayingContain {
   height: 100%;
+  display: grid;
+  grid-template-columns: 10% 15% 75%;
 }
 
 .audio-play__contain i {
   color: white;
-  padding-top: 5px; /* slight nudge down */
+  padding-top: 2.5px; /* slight nudge down */
   vertical-align: middle;
   margin: 0;
 }
@@ -121,7 +166,7 @@ export default {
     color: white;
   }
   .audio-player__track-info__track-artist:hover,
-.audio-player__track-info__track-artist:focus {
+  .audio-player__track-info__track-artist:focus {
     color: white;
   }
   .audio-player__more-btn {
@@ -131,52 +176,62 @@ export default {
     color: white;
   }
 }
-
+.audio-player-artwork {
+  width: 30px;
+  height: 30px;
+  align-self: center;
+  margin: 0 auto;
+}
+.audio-player-artwork span {
+  width: 30px;
+  height: 30px;
+  display: block;
+}
+.audio-player-artwork:hover, .audio-player-artwork:focus {
+  cursor: pointer;
+}
 .audio-play__previous,
 .audio-play__next {
-  font-size: 1.5rem;
+  font-size: 1rem;
+  align-self: center;
+  color: white;
 }
-.audio-play {
-  font-size: 2rem;
-  padding-top: 5;
-
-  /* margin-top: 1rem; */
-}
-.audio-play:hover, .audio-play:focus {
-  color: var(--primary-red);
-}
-.audio-play__previous:hover,
-.audio-play__next:hover, .audio-play__previous:focus,
-.audio-play__next:focus {
-  color: var(--primary-yellow);
-}
-
-.audio-player__track-info {
-  float: right;
-  padding-left: 3rem;
+.audio-play, .audio-pause {
+  font-size: 1.8rem;
+  padding: 5px;
+  align-self: center;
   color: white;
 }
 
+.audio-player__track-info {
+  color: white;
+  display: grid;
+  grid-template-rows: 50% 50%;
+}
+
 .audio-player__track-info__track-name {
-  font-size: 1rem;
-  font-weight: bolder;
+  font-size: 0.5rem;
   margin-bottom: 0;
 }
 
 .audio-player__track-info__track-name:hover,
 .audio-player__track-info__track-name:focus {
   cursor: pointer;
-  color: red;
+  color: white;
 }
 
 .audio-player__track-info__track-artist {
-  font-size: 0.5rem;
+  font-size: 0.6rem;
+  align-self: flex-end;
 }
 
+.audio-player__track-info span {
+  color: #ccc;
+}
 .audio-player__track-info__track-artist:hover,
 .audio-player__track-info__track-artist:focus {
   cursor: pointer;
-  color: purple;
+  color: white;
 }
 
 .audio-player__more-btn {
@@ -185,6 +240,26 @@ export default {
 }
 .audio-player__more-btn:hover,
 .audio-player__more-btn:focus {
+  color: var(--primary-yellow);
+}
+.musicControls {
+  display: flex;
+}
+.musicNavigationControls {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+}
+.musicNavigationControls i {
+  color: white;
+  font-size: 1rem;
+}
+.volume-button {
+  color: white;
+  align-self: center;
+  margin: 0 auto;
+}
+.volume-button:hover, .volume-button:focus {
   color: var(--primary-yellow);
 }
 </style>

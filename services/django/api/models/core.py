@@ -45,6 +45,7 @@ class Song(BaseModel):
     artist = models.ForeignKey(
         "Artist", null=True, blank=True, on_delete=models.CASCADE,
     )
+    apple_music_id = models.CharField(max_length=200, null=True, blank=True)
 
 
 class Album(BaseModel):

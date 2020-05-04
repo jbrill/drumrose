@@ -1,7 +1,7 @@
 <template>
   <div>
     <TopBody />
-    <div class="post-feed">
+    <div v-if="" class="post-feed">
       <Post v-for="post in posts" :key="post.id" :post="post" />
     </div>
   </div>
@@ -10,7 +10,8 @@
 <script>
 import Post from '~/components/Post';
 import TopBody from '~/components/TopBody';
-import { getPosts } from '~/utils/post_util.js';
+import { getPosts } from '~/utils/post_util';
+import { mapState } from 'vuex';
 
 export default {
   components: {
@@ -18,14 +19,17 @@ export default {
     TopBody,
   },
   async asyncData () {
-    const postResponse = await getPosts();
-    console.dir(postResponse);
-    return { "posts":  postResponse.data };
-    //    const postsToRender = await parsePosts(posts);
-    //    this.posts = postsToRender;
+    const posts = await getPosts();
+    return { "posts":  posts.data };
+  },
+  mounted () {
+    /* lets set the music queue here */
+    console.log("SHOULD SET QUEUE...")
+    const queue = this.posts.map(a => a.song.apple_music_id);
+    this.$store.dispatch("setQueue", { "songs": queue } );
   },
   destroyed () {
-    /* We should set index here on page */
+    /* We should set post index here on page */
     console.log('DESTROYING...');
   },
 };

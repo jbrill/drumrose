@@ -1,34 +1,24 @@
 <template>
   <div class="app">
-    <Navbar /> <nuxt /> <AudioPlayer />
+    <Navbar />
+    <nuxt />
+    <transition name="fade">
+      <AudioPlayer v-if="queuePosition >= 0" />
+    </transition>
   </div>
 </template>
 
 <script>
 import Navbar from '~/components/Navbar';
 import AudioPlayer from '~/components/AudioPlayer';
-import { getAppleMusicDeveloperToken } from '~/utils/post_util';
+import { mapState } from 'vuex';
 
 
 export default {
+  computed: mapState(['queuePosition']),
   components: {
     Navbar,
     AudioPlayer,
-  },
-  async mounted () {
-      const res = await getAppleMusicDeveloperToken();
-      // MusicKit global is now defined
-      // eslint-disable-next-line no-undef
-      const music = MusicKit.configure({
-        developerToken: res.data.token,
-        app: {
-          name: 'AppleMusicKitExample',
-          build: '1978.4.1',
-        },
-      });
-
-      // expose our instance globally for testing
-      window.music = music;
   },
 };
 </script>
@@ -39,5 +29,20 @@ export default {
     'Courier New', monospace;
   margin: 0 auto;
   background-color: #f6f6f6;
+}
+@media screen and (prefers-reduced-motion: reduce) {
+  .fade-enter-active, .fade-leave-active {
+    transition: none;
+    margin-bottom: 0;
+  }
+  .app {
+    background-color: var(--primary-black-light);
+  }
+}
+.fade-enter-active, .fade-leave-active {
+  transition: margin-bottom .3s ease-out;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  margin-bottom: -2rem;
 }
 </style>

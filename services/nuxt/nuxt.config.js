@@ -3,12 +3,13 @@ export default {
    ** Router config
    */
   srcDir: 'src/',
-  router: {},
+  router: {
+  },
   /*
    ** Headers of the page
    */
   head: {
-    title: 'DRUMROSE // affect culture',
+    title: 'DRUMROSE // HOME',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -59,6 +60,7 @@ export default {
     proxyHeaders: false,
   },
   plugins: [
+    '~/plugins/nuxt-client-init.client.js'
   ],
   /*
    ** Build configuration

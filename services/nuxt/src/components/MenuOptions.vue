@@ -16,7 +16,7 @@
       </li>
       <li>
         <nuxt-link to="/lists" class="menubtn">
-          Lists
+          Library
         </nuxt-link>
       </li>
     </ul>

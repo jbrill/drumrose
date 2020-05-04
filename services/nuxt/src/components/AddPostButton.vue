@@ -86,7 +86,6 @@ export default {
       if (!process.client) {
         return;
       }
-      e.preventDefault();
       await createPost(
         window.localStorage.api_token,
         this.track_id_choice,
@@ -99,7 +98,7 @@ export default {
       const searchQuery = e.target.value;
       const resp = await getTrackHintsFromQuery(
         searchQuery,
-        this.$store.state.music_token
+        this.$store.state.appleMusicToken
       );
       console.log(resp);
       this.track_query_hints = resp;

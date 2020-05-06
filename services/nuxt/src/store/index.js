@@ -1,6 +1,7 @@
 import axios from 'axios';
 import Cookie from 'cookie';
 import clonedeep from 'lodash';
+import Raven from 'raven-js';
 
 export const state = () => ({
 	// State information
@@ -24,6 +25,11 @@ export const state = () => ({
 	// Queue
   queue: [],
   queuePosition: -1,
+  history: [],
+
+  // Posts
+  posts: [],
+  nowPlayingPost: null,
 });
 
 /**
@@ -46,10 +52,32 @@ export function apiHeaders () {
   });
 }
 
-const getters = {
+export const getters = {
   storefront (state) {
     return state.storefront;
   },
+
+	getCurrentPlaybackDuration (state) {
+		if (state.playbackTime && state.playbackTime.currentPlaybackDuration) {
+      const minutes = Math.floor(state.playbackTime.currentPlaybackDuration / 60);
+      const seconds = state.playbackTime.currentPlaybackDuration - minutes * 60;
+      const parsedMinutes = minutes;
+      const parsedSeconds = seconds < 10 ? `0${seconds}` : `${seconds}`;
+      return `${parsedMinutes}:${parsedSeconds}`
+    }
+    return "0:00";
+	},
+	
+	getCurrentPlaybackTime (state) {
+		if (state.playbackTime && state.playbackTime.currentPlaybackTime) {
+      const minutes = Math.floor(state.playbackTime.currentPlaybackTime / 60);
+      const seconds = state.playbackTime.currentPlaybackTime - minutes * 60;
+      const parsedMinutes = minutes;
+      const parsedSeconds = seconds < 10 ? `0${seconds}` : `${seconds}`;
+      return `${parsedMinutes}:${parsedSeconds}`
+    }
+    return "0:00";
+	},
 
   recommendations (state) {
     return getApi(false).recommendations();
@@ -87,27 +115,12 @@ const getters = {
       return getApi(library).search(query, options);
     };
   }
-};
+}
 
 export const mutations = {
 	SET_APPLE_MUSIC_TOKEN(state, apple_music_token) {
 		state.appleMusicToken = apple_music_token;
 	},
-  SET_POSTS(state, posts) {
-    state.posts = posts;
-  },
-  SET_CURR_POST(state, post) {
-    state.currPost = post;
-  },
-  SET_CURR_POST_PLAYING(state, isPlaying) {
-    state.currPostPlaying = isPlaying;
-  },
-  SET_QUEUE(state, posts) {
-		console.log("SETTIN QUEUE");
-    state.queue = posts;
-		const tracks = posts.map(a => a.song.apple_music_id);
-		MusicKit.getInstance().setQueue({ songs: tracks }).then( () => { console.log("AY") } )
-  },
 	init (state) {
     if (state.isInitialized) {
       console.warn('Already initialized; aborting');
@@ -146,7 +159,7 @@ export const mutations = {
     state.nowPlayingItem = nowPlayingItem.value();
   },
   playbackTime (state, playbackTime) {
-    state.playbackTime = playbackTime;
+    state.playbackTime = playbackTime.value();
   },
   volume (state, volume) {
     state.volume = volume;
@@ -163,6 +176,14 @@ export const mutations = {
     // Only keep 100 items in the history.
     state.history.splice(0, 0, clonedeep(item));
     state.history = state.history.slice(0, Math.min(state.history.length, 100));
+  },
+
+  // Posts
+  nowPlayingPost (state, nowPlayingPost) {
+    state.nowPlayingPost = nowPlayingPost;
+  },
+  posts(state, posts) {
+    state.posts = posts;
   },
 
   // Event listeners
@@ -182,24 +203,13 @@ export const actions = {
       throw new Error(`API ${error}`);
     });
   },
- 	getPosts({commit}) {
-    axios.post('https://teton.drumrose.io/api/posts/').then(result => {
-			commit('SET_POSTS', result.data);
-    }).catch(error => {
-      throw new Error(`API ${error}`);
-    });
+ 	setPosts({commit}, posts) {
+    commit('posts', posts);
   },
-  setCurrPost({ commit }, post) {
-    commit('SET_CURR_POST', post);
+ 	setNowPlayingPost({commit}, post) {
+    commit('nowPlayingPost', post);
   },
-  setCurrPostPlaying({ commit }) {
-    commit('SET_CURR_POST_PLAYING', true);
-  },
-  setCurrPostPausing({ commit }) {
-    commit('SET_CURR_POST_PLAYING', false);
-  },
-	async nuxtClientInit({ commit }, { req }) {
-  	console.log("INITIN")
+	async nuxtClientInit({ commit, state, dispatch }, { req }) {
 		const tokenResponse = await axios.post('https://teton.drumrose.io/api/apple_music_token/');
 		let instance = MusicKit.configure({
 			developerToken: tokenResponse.data.token,
@@ -448,12 +458,10 @@ export const actions = {
   },
 
   async play (_) {
-    let instance = MusicKit.getInstance();
-    await instance.player.play();
+    await MusicKit.getInstance().player.play();
   },
-  pause (_) {
-    let instance = MusicKit.getInstance();
-    return instance.player.pause();
+  async pause (_) {
+    await MusicKit.getInstance().player.pause();
   },
   previous (_) {
     let instance = MusicKit.getInstance();

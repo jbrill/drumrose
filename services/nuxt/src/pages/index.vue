@@ -1,8 +1,8 @@
 <template>
   <div>
     <TopBody />
-    <div v-if="" class="post-feed">
-      <Post v-for="post in posts" :key="post.id" :post="post" />
+    <div class="post-feed">
+      <Post v-for="(post, index) in posts" :index="index" :key="post.id" :post="post" />
     </div>
   </div>
 </template>
@@ -26,6 +26,7 @@ export default {
     /* lets set the music queue here */
     console.log("SHOULD SET QUEUE...")
     const queue = this.posts.map(a => a.song.apple_music_id);
+    this.$store.dispatch("setPosts", this.posts);
     this.$store.dispatch("setQueue", { "songs": queue } );
   },
   destroyed () {

@@ -1,18 +1,8 @@
 <template>
-  <div class="post">
+  <div :class="{ post: true, activePost: (nowPlayingPost && nowPlayingPost.id === post.id) }">
     <div class="postContain">
       <div class="artistContain">
         <div class="noselect albumContain">
-            <i
-              class="audioAction audioPause material-icons"
-              @click="pauseTrack"
-              v-if="nowPlayingItem && nowPlayingItem.playbackState === 2"
-            >pause</i>
-            <i
-              class="audioAction audioPlay material-icons"
-              @click="playTrack"
-              v-else
-            >play_arrow</i>
           <img class="albumCover" :src="post.song.album.artwork_url">
         </div>
         <div class="artistTextContain">
@@ -44,9 +34,19 @@
           {{ post.caption }}
         </p>
         <div class="postBottomContain">
+          <i v-ripple="'rgba(255, 255, 255, 0.35)'"
+            class="audioAction audioPause material-icons"
+            @click="pauseTrack"
+            v-if="nowPlayingPost && nowPlayingPost.id === post.id && playbackState === 2"
+          >pause</i>
+          <i
+            class="audioAction audioPlay material-icons"
+            @click="playTrack"
+            v-else
+          >play_arrow</i>
           <PostTimeline />
           <div class="post-action-contain">
-            <i
+            <i v-ripple="'rgba(255, 255, 255, 0.35)'"
               class="audioAction audioFavorite material-icons"
               @click="favoriteTrack"
             >favorite</i>
@@ -66,14 +66,20 @@ export default {
   components: {
     PostTimeline
   },
-  computed: mapState(['nowPlayingItem']),
-  props: ['post'],
+  computed: mapState(['nowPlayingItem', 'nowPlayingPost', 'playbackState']),
+  props: ['post', 'index'],
   methods: {
     pauseTrack: async function (event) {
       await this.$store.dispatch("pause");
     },
-    playTrack: async function (event) {
-      await Promise.all([this.$store.dispatch("play"), this.$store.dispatch("play")]);
+    playTrack: function (event) {
+      console.log("YO");
+      const posts = this.$store.state.posts.slice(this.index)
+      const tracks = posts.map(a => a.song.apple_music_id);
+      this.$store.dispatch("setQueue", { "songs": tracks }).then( () => {
+        this.$store.dispatch("play");
+        this.$store.dispatch("setNowPlayingPost", this.post);
+      });
     },
     favoriteTrack: function (event) {
       console.log('SHOUDL FAV');
@@ -105,9 +111,6 @@ export default {
   .postDate {
     color: black;
   }
-  .postCaption {
-    color: black;
-  }
   .postTime {
     color: black;
   }
@@ -117,6 +120,12 @@ export default {
   .audioFavorite:hover, .audioFavorite:focus {
     color: grey;
   }
+}
+.postCaption {
+  font-size: 1em;
+  color: black;
+  font-family: 'Proxima Nova', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  margin-top: 1rem;
 }
 
 .post {
@@ -132,17 +141,26 @@ export default {
   background-color: white;
   box-shadow: var(--shadow-heavy);
 }
+@media (prefers-color-scheme: dark) {
+  .post {
+    background-color: black;
+  }
+  .post:hover, .post:focus {
+    background-color: var(--primary-black-light);
+  }
+  .postCaption {
+    color: white;
+  }
+}
+.activePost {
+  box-shadow: var(--shadow-heavy-purple);
+}
 .albumContain {
   z-index: 0;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-.albumContain > i {
-  position: absolute;
-  color: var(--primary-purple);
-  font-size: 4rem;
 }
 .albumCover {
   width: 100%;
@@ -251,12 +269,6 @@ export default {
   font-size: 1rem;
   color: grey;
 }
-.postCaption {
-  font-size: 1em;
-  color: black;
-  font-family: 'Proxima Nova', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  margin-top: 1rem;
-}
 .postTime {
   font-size: 1rem;
   margin-top: -2.5rem;
@@ -294,6 +306,9 @@ export default {
 }
 .audioPause {
   font-size: 2rem;
+}
+.audioPause:hover, .audioPause:focus {
+  color: var(--primary-purple);
 }
 .audioPlay {
   font-size: 2rem;

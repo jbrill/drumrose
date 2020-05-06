@@ -60,7 +60,9 @@ export default {
     proxyHeaders: false,
   },
   plugins: [
-    '~/plugins/nuxt-client-init.client.js'
+    '~/plugins/nuxt-client-init.client.js',
+    '~/plugins/ripple.client.js',
+    '~/plugins/tooltip.client.js',
   ],
   /*
    ** Build configuration

@@ -6,6 +6,11 @@
         class="volume-button material-icons"
         @click="changeVolume"
       >volume_up</i>
+      <i
+        ref="queueButton"
+        class="queue-button material-icons"
+        @click="showQueue"
+      >queue_music</i>
       <div class="audio-player-artwork">
         <span :style="{ backgroundImage: 'url('
 + nowPlayingItem.attributes.artwork.url +')', backgroundSize: 'cover' }">
@@ -19,10 +24,10 @@
         </span>
       </div>
       <i
-        ref="queueButton"
-        class="queue-button material-icons"
-        @click="showQueue"
-      >queue_music</i>
+        ref="favoriteButton"
+        class="favorite-button material-icons"
+        @click="favoriteTrack"
+      >favorite</i>
     </div>
     <div class="musicControls">
       <i
@@ -54,6 +59,7 @@ material-icons"
           ref="shuffleButton"
           class="shuffle-button material-icons"
           @click="shuffleTrack"
+          v-tooltip="'Shuffle'"
         >shuffles</i>
         <i
           ref="repeatButton"
@@ -93,25 +99,41 @@ export default {
       this.$store.dispatch("pause");
     },
     prevMusic () {
-      this.$store.dispatch("next");
+      if (this.$store.state.playbackTime.currentPlaybackTime >= 3 || this.$store.state.history.length === 0) {
+        this.$store.dispatch("seek", 0);
+      } else {
+        this.$store.dispatch("previous");
+      }
     },
     nextMusic () {
-      this.$store.dispatch("previous");
+      let vm = this;
+      this.$store.dispatch("next").then( function() {
+        const idx = vm.$store.state.posts.filter(a => {
+          return a.song.apple_music_id === vm.$store.state.nowPlayingItem.id
+        });
+        console.log(idx);
+        vm.$store.dispatch("setNowPlayingPost", idx[0]);
+      });
     },
     moreMusic () {
       console.log('MORE...');
     },
     repeatTrack () {
       console.log("REPEAT")
+      this.$store.dispatch("toggleRepeatMode");
     },
     shuffleTrack () {
       console.log("SHUFFLE")
+      this.$store.dispatch("toggleShuffleMode");
     },
     changeVolume () {
       console.log("VOLUME")
     },
     showQueue () {
       console.log("queueueue")
+    },
+    favoriteTrack () {
+      console.log("favorite")
     },
   },
 };
@@ -130,13 +152,14 @@ export default {
   bottom: 0;
   z-index: 10000;
   display: grid;
-  grid-template-columns: 30% 20% 50%;
+  grid-template-columns: 35% 15% 50%;
 }
 
 .nowPlayingContain {
   height: 100%;
   display: grid;
-  grid-template-columns: 10% 15% 75%;
+  grid-template-columns: 10% 10% 15% 55% 10%;
+  grid-template-rows: 100%;
 }
 
 .audio-play__contain i {
@@ -244,6 +267,7 @@ export default {
 }
 .musicControls {
   display: flex;
+  margin: 0 auto;
 }
 .musicNavigationControls {
   display: flex;
@@ -261,5 +285,22 @@ export default {
 }
 .volume-button:hover, .volume-button:focus {
   color: var(--primary-yellow);
+}
+.queue-button {
+  color: white;
+  align-self: center;
+  margin: 0 auto;
+}
+.queue-button:hover, .queue-button:focus {
+  color: var(--primary-yellow);
+}
+.favorite-button {
+  color: white;
+  align-self: center;
+  margin: 0 auto;
+  font-size: 0.9rem;
+}
+.favorite-button:hover, .favorite-button:focus {
+  color: var(--primary-red);
 }
 </style>

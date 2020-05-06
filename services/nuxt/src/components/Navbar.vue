@@ -32,7 +32,7 @@ export default {
 <style>
 .header {
   position: fixed;
-  z-index: 10;
+  z-index: 1000;
   background-color: var(--primary-black-light);
   left: 0;
   display: flex;

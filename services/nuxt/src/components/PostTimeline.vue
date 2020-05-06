@@ -1,23 +1,32 @@
 <template>
   <div
 		class="timeline-wrap"
-		@click="moveWheel"
-		@mouseleave="stopDrag"
-		@mousedown="startDrag"
-		@mousemove="doDrag"
 	>
+	<span class="timeline-time timeline-time-begin">{{ currentPlaybackTime }}</span>
 		<div 
 			ref="timeline"
 			class="post-timeline"
+      @mouseleave="stopDrag"
+      @mousedown="startDrag"
+      @mousemove="doDrag"
+      @click="moveWheel"
 		>
-			<div v-if="startedPlaying" :style="{ width: wheelPosition }" class="timeline-before-wheel"></div>
+			<div :style="{ width: playbackTime ? 100 * (playbackTime.currentPlaybackTime / playbackTime.currentPlaybackDuration) + '%' : '0%' }" class="timeline-before-wheel"></div>
+      <div 
+        ref="buffered-timeline"
+        class="post-timeline-buffer"
+        :style="{ width: bufferedProgress + '%' }"
+      ></div>
 			<!---<div v-if="startedPlaying" :style="{ width: mousePosition }" class="timeline-mouse-hover"></div>-->
 			<!---<div v-if="startedPlaying" :style="{ left: wheelPosition }" ref="wheel" class="post-timeline-wheel"></div>-->
 		</div>
+  <span class="timeline-time timeline-time-end">{{ currentPlaybackDuration }}</span>
 	</div>
 </template>
 
 <script>
+import { mapState, mapGetters } from 'vuex';
+
 export default {
   data() {
     return {
@@ -26,6 +35,16 @@ export default {
       dragging: false,
       startedPlaying: false,
     }
+  },
+  computed: {
+    ...mapGetters({
+      currentPlaybackDuration: 'getCurrentPlaybackDuration',
+      currentPlaybackTime: 'getCurrentPlaybackTime',
+    }),
+    ...mapState([
+      'bufferedProgress',
+      'playbackTime',
+    ]),
   },
 	mounted () {
     window.addEventListener('mouseup', this.stopDrag);
@@ -52,6 +71,8 @@ export default {
     moveWheel (event) {
 			const wheelOffset = 100 * (event.offsetX / this.$refs.timeline.clientWidth);
 			this.wheelPosition = wheelOffset + "%";
+      const currPos = (event.offsetX / this.$refs.timeline.clientWidth) * this.$store.state.playbackTime.currentPlaybackDuration;
+      this.$store.dispatch("seek", currPos); 
     },
 		hoverTimeline(event) {
 			console.log(event);
@@ -77,16 +98,34 @@ export default {
   width: 90%;
   height: 60%;
   margin: 0 auto;
-  background-color: #F2F2F2;
+  background-color: #ccc;
 	position: relative;
+}
+.post-timeline-buffer {
+  height: 100%;
+  margin: 0 auto;
+  background-color: #F5F5F5;
+	position: absolute;
 }
 .post-timeline:hover, .post-timeline:focus {
 	opacity: 1;
+  cursor: pointer;
+}
+.timeline-time {
+  font-size: 0.7rem;
+  padding: 10px;
+}
+.timeline-time-begin {
+  color: var(--primary-red);
+}
+.timeline-time-end {
+  color: white;
 }
 .timeline-before-wheel {
 	position: absolute;
 	height: 100%;
 	background-color: var(--primary-red);
+  z-index: 100;
 }
 .timeline-mouse-hover {
 	position: absolute;

@@ -1,10 +1,14 @@
 <template>
   <div class="more--menu__contain">
-    <i
+    <div
+      class="user-dropdown"
       ref="moreList"
-      class="material-icons more--menu__contain__btn"
       @click="showMoreMenu = !showMoreMenu"
-    >arrow_drop_down</i>
+    >
+    <img class="user-avatar" src="https://upload.wikimedia.org/wikipedia/en/thumb/b/b2/PleasePleasePlease.jpg/220px-PleasePleasePlease.jpg" />
+    <i
+      class="material-icons more--menu__contain__btn"
+    >arrow_drop_down</i></div>
     <transition name="fade">
       <div v-if="showMoreMenu">
         <ul class="more--list__menu">
@@ -26,6 +30,13 @@
             <nuxt-link to="/settings">
               <button class="more-list__menu__btn">
                 Settings
+              </button>
+            </nuxt-link>
+          </li>
+          <li>
+            <nuxt-link to="/settings">
+              <button class="more-list__menu__btn">
+                Sign out
               </button>
             </nuxt-link>
           </li>
@@ -71,12 +82,11 @@ export default {
 <style scoped>
 .more--menu__contain {
   margin-right: 3rem;
-  z-index: -10;
 }
 .more--menu__contain__btn {
   font-size: 1.5rem;
   color: white;
-  margin-top: 0.5rem;
+  align-self: center;
 }
 @media screen and (prefers-color-scheme: dark) {
   .more--menu__contain__btn {
@@ -138,5 +148,17 @@ export default {
   cursor: pointer;
   color: var(--primary-yellow);
   background-color: black;
+}
+.user-avatar {
+  width: 2rem;
+  height: auto;
+  align-self: center;
+  border-radius: 50%;
+}
+.user-dropdown {
+  display: flex;
+}
+.user-dropdown:hover, .user-dropdown:focus {
+  cursor: pointer;
 }
 </style>

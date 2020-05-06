@@ -30,6 +30,11 @@ export default {
   margin: 0 auto;
   background-color: #f6f6f6;
 }
+@media (prefers-color-scheme: dark) {
+  .app {
+    background-color: black;
+  }
+}
 @media screen and (prefers-reduced-motion: reduce) {
   .fade-enter-active, .fade-leave-active {
     transition: none;

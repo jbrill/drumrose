@@ -1,6 +1,11 @@
 <template>
   <div class="audioPlayer">
-    <div v-if="nowPlayingItem" class="nowPlayingContain">
+    <div
+      v-hotkey="{
+        'space': playTrack,
+      }" 
+      v-if="nowPlayingItem" class="nowPlayingContain"
+    >
       <i
         ref="volumeButton"
         class="volume-button material-icons"

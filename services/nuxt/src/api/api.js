@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const getUserDetail = async function (bearerToken, userHandle) {
+export const getUserDetail = async function (bearerToken, userHandle) {
   const userInfo = await axios.get(
     `https://teton.drumrose.io/api/users/${userHandle}`,
     {
@@ -12,4 +12,11 @@ const getUserDetail = async function (bearerToken, userHandle) {
   return userInfo;
 };
 
-export default getUserDetail;
+export const getPlaylists = async function() {
+  const response = await axios.get(
+    `https://teton.drumrose.io/api/playlists/`,
+  );
+  console.log("RESPONSE")
+  console.log(response.data)
+  return response;
+}

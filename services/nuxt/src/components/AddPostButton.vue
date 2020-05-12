@@ -1,8 +1,8 @@
 <template>
   <div>
-    <b-btn v-b-modal.addPostModal class="add-post-button">
-      New Tune
-    </b-btn>
+    <v-btn class="add-post-button" rounded color="primary" dark nuxt to="discover" width="10rem">
+      Create playlist
+    </v-btn>
     <b-modal id="addPostModal" title="Add a post" hide-footer>
       <form method="POST" @submit="onSubmitForm">
         <div class="form-group">

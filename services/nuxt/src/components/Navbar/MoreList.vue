@@ -13,16 +13,44 @@
       <div v-if="showMoreMenu">
         <ul class="more--list__menu">
           <li>
-            <nuxt-link to="/profile">
+            <nuxt-link to="/about">
               <button class="more-list__menu__btn">
-                Profile
+                About Us
               </button>
             </nuxt-link>
           </li>
           <li>
             <nuxt-link to="/about">
               <button class="more-list__menu__btn">
-                About
+                Legal
+              </button>
+            </nuxt-link>
+          </li>
+          <li>
+            <nuxt-link to="/about">
+              <button class="more-list__menu__btn">
+                Copyright
+              </button>
+            </nuxt-link>
+          </li>
+          <li>
+            <nuxt-link to="/about">
+              <button class="more-list__menu__btn">
+                Support
+              </button>
+            </nuxt-link>
+          </li>
+          <li>
+            <nuxt-link to="/about">
+              <button class="more-list__menu__btn">
+                Keyboard Shortcuts
+              </button>
+            </nuxt-link>
+          </li>
+          <li>
+            <nuxt-link to="/jbrlly">
+              <button class="more-list__menu__btn">
+                Profile
               </button>
             </nuxt-link>
           </li>
@@ -82,6 +110,9 @@ export default {
 <style scoped>
 .more--menu__contain {
   margin-right: 3rem;
+  height: 100%;
+  display: flex;
+  align-items: center;
 }
 .more--menu__contain__btn {
   font-size: 1.5rem;

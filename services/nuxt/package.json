@@ -28,6 +28,7 @@
     "js-cookie": "2.2.0",
     "jwt-decode": "2.2.0",
     "lodash": "^4.17.15",
+    "material-design-icons-iconfont": "^5.0.1",
     "node-fetch": "^2.3.0",
     "normalize.css": "^8.0.0",
     "nuxt": "^2.12.2",
@@ -46,6 +47,7 @@
   "devDependencies": {
     "@nuxtjs/eslint-config": "^2.0.2",
     "@nuxtjs/stylelint-module": "^3.2.2",
+    "@nuxtjs/vuetify": "^1.11.2",
     "babel-eslint": "^8.2.6",
     "cypress": "^4.3.0",
     "eslint": "^5.16.0",

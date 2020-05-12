@@ -15,18 +15,7 @@
 </template>
 
 <script>
-import getUserDetail from '~/api/api';
-
 export default {
-  async beforeMount () {
-    console.log(this.$route.params.user);
-    const user = await getUserDetail(
-      window.localStorage.api_token,
-      this.$route.params.user
-    );
-    console.log(user);
-    // return { user };
-  },
 };
 </script>
 

@@ -77,3 +77,16 @@ class Post(BaseModel):
     user = models.ForeignKey(
         "User", null=True, blank=True, on_delete=models.CASCADE
     )
+
+
+class Playlist(BaseModel):
+    """
+    Model for a playlist
+    """
+
+    tracks = models.ManyToManyField("Song")
+    title = models.CharField(max_length=64)
+    caption = models.CharField(max_length=200)
+    user = models.ForeignKey(
+        "User", null=True, blank=True, on_delete=models.CASCADE
+    )

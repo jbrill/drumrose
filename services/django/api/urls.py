@@ -22,6 +22,7 @@ urlpatterns = [
         post_routes.PostDetail.as_view(),
         name="PostsDetail",
     ),
+    path("playlists/", post_routes.PostList.as_view(), name="PlaylistList"),
     path("songs/", song_routes.SongList.as_view(), name="SongList"),
     path(
         "songs/<song_id>/", song_routes.SongDetail.as_view(), name="SongDetail"

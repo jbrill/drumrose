@@ -1,17 +1,18 @@
 <template>
   <div class="header">
-    <nuxt-link class="title__middle" to="/" exact>
+    <v-btn to="/" primary text nuxt color="var(--primary-yellow)" ripple x-large class="title-button">
       DRUMROSE
-    </nuxt-link>
+    </v-btn>
+    <div class="navigation-contain">
+      <v-btn color="#ccc" text nuxt to="/">FEED</v-btn>
+      <v-btn color="#ccc" text nuxt to="/playlists">PLAYLISTS</v-btn>
+      <v-btn color="#ccc" text nuxt to="/library">LIBRARY</v-btn>
+    </div>
     <div class="search-bar__contain">
       <SearchBar />
     </div>
-    <AddPostButton />
-    <div class="stateLinks">
-      <div class="nav-bar__right--actions">
-        <MoreList />
-      </div>
-    </div>
+    <!---<AddPostButton />-->
+    <MoreList />
   </div>
 </template>
 
@@ -40,6 +41,17 @@ export default {
   width: 100%;
   min-height: 4rem;
   box-shadow: var(--shadow-heavy);
+}
+.navigation-contain {
+  display: flex;
+  justify-content: flex-end;
+  margin: 0 auto;
+  width: 100%;
+  padding-right: 1rem;
+}
+.title-button span {
+  font-weight: bolder;
+  font-size: larger;
 }
 @media screen and (prefers-color-scheme: dark) {
   .header {
@@ -83,17 +95,6 @@ a {
 }
 .registerLink {
   padding-right: 2%;
-}
-.stateLinks {
-  display: inline;
-}
-.nav-bar__right--actions {
-  display: inline-block;
-}
-.nav-bar__right--actions .search-bar {
-  float: left;
-  margin-right: 6rem;
-  margin-top: 0.3rem;
 }
 
 .nav-bar__right--actions .moreListContain {

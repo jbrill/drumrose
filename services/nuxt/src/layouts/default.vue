@@ -1,11 +1,13 @@
 <template>
-  <div class="app">
-    <Navbar />
-    <nuxt />
-    <transition name="fade">
-      <AudioPlayer v-if="queuePosition >= 0" />
-    </transition>
-  </div>
+  <v-app class="app">
+    <v-content>
+      <v-app-bar><Navbar /></v-app-bar>
+      <v-container><v-container-fluid><nuxt /></v-container-fluid></v-container>
+      <transition name="fade">
+        <AudioPlayer v-if="queuePosition >= 0" />
+      </transition>
+    </v-content>
+  </v-app>
 </template>
 
 <script>

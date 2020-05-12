@@ -621,6 +621,30 @@ export const actions = {
       }
     });
 	},
+  
+  getTrackHints (_, { searchInput }) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let res = await fetch(`https://api.music.apple.com/v1/catalog/us/}search?term=\${searchInput}&limit=2&types=songs`, {
+          method: 'GET',
+          headers: apiHeaders(),
+        });
+
+        if (res.status === 204) {
+          // Invalid local cache
+          let api = getApi(true);
+          api.clearCacheItems();
+
+          // Return successful
+          resolve(true);
+        } else {
+          reject(MusicKit.MKError(MusicKit.MKError.SERVER_ERROR));
+        }
+      } catch (err) {
+        reject(err);
+      }
+    });
+  },
 }
 
 export const strict = false

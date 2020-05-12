@@ -63,6 +63,8 @@ export default {
     '~/plugins/nuxt-client-init.client.js',
     '~/plugins/ripple.client.js',
     '~/plugins/tooltip.client.js',
+    '~/plugins/hotkey.client.js',
+    '~/plugins/vuetify.client.js',
   ],
   /*
    ** Build configuration
@@ -75,6 +77,12 @@ export default {
     ['@nuxtjs/stylelint-module', {
       fix: true,
     }],
+
+		// Simple usage
+    '@nuxtjs/vuetify',
+
+    // With options
+    ['@nuxtjs/vuetify', { /* module options */ }],
   ],
   build: {
     /*

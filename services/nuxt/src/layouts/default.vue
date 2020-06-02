@@ -1,8 +1,36 @@
 <template>
-  <v-app class="app">
+  <v-app dark class="app">
     <v-content>
       <v-app-bar><Navbar /></v-app-bar>
-      <v-container><v-container-fluid><nuxt /></v-container-fluid></v-container>
+      <v-container fluid d-flex>
+        <div class="music-search-contain">
+          <v-toolbar
+            dense
+            flat
+            floating
+            elevation=0
+            color="transparent"
+            class="music-searchbar"
+          >
+            <v-text-field
+              hide-details
+              prepend-icon="search"
+              placeholder="Search"
+              single-line
+            ></v-text-field>
+          </v-toolbar>
+          <div>
+            <v-btn small text color="#ccc">LIBRARY</v-btn>
+            <ul class="library-menu-contain">
+              <li><v-btn x-small color="transparent" tile><v-icon x-small left>mdi-waveform</v-icon> Tracks</v-btn></li>
+              <li><v-btn x-small color="transparent" tile><v-icon x-small left>mdi-album</v-icon> Albums</v-btn></li>
+              <li><v-btn x-small color="transparent" tile><v-icon x-small left>mdi-face</v-icon> Artists</v-btn></li>
+            </ul>
+          </div>
+          <div><v-btn x-small text color="#ccc">PLAYLISTS</v-btn></div>
+        </div>
+        <nuxt class="center-contain" />
+      </v-container>
       <transition name="fade">
         <AudioPlayer v-if="queuePosition >= 0" />
       </transition>
@@ -25,12 +53,25 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .app {
   font-family: Menlo, Monaco, 'Droid Sans Mono', Consolas, 'Lucida Console',
     'Courier New', monospace;
   margin: 0 auto;
-  background-color: #f6f6f6;
+  background-color: #252525;
+}
+.music-search-contain {
+  width: 20%;
+  align-self: flex-start;
+}
+.center-contain {
+  width: 80%;
+}
+.library-menu-contain {
+  list-style: none;
+}
+>>>.music-searchbar div {
+  padding: 0;
 }
 @media (prefers-color-scheme: dark) {
   .app {

@@ -9,10 +9,10 @@ Vue.use(Vuetify);
 export default ctx => {
   const vuetify = new Vuetify({
     theme: {
-      dark: false,
+      dark: true,
       themes: {
          dark: {
-           primary: colors.deepPurple.lighten3,
+           primary: "#474747",
            accent: colors.deepPurple.accent3,
            secondary: colors.amber.darken3,
            info: colors.teal.lighten1,

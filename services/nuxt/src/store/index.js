@@ -203,9 +203,6 @@ export const actions = {
       throw new Error(`API ${error}`);
     });
   },
- 	setPosts({commit}, posts) {
-    commit('posts', posts);
-  },
  	setNowPlayingPost({commit}, post) {
     commit('nowPlayingPost', post);
   },

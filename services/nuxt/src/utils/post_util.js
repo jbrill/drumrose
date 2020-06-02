@@ -33,6 +33,13 @@ async function getTrackIDResponseFromQuery (query, config) {
   return trackIDResponse;
 }
 
+async function getAlbumIDResponseFromQuery (query, config) {
+  const getTrackIdUrl = `${appleApiUrl}search?term=\
+    ${query}&limit=2&types=albums`;
+  const trackIDResponse = await axios.get(getTrackIdUrl, config);
+  return trackIDResponse;
+}
+
 export const getTrackHintsFromQuery = async (query, bearerToken) => {
   const trackIDResponse = await getTrackIDResponseFromQuery(
     query.replace(' ', '+'),
@@ -47,6 +54,14 @@ export const getTrackIDFromQuery = async (query, bearerToken) => {
     getConfig(bearerToken)
   );
   return trackIDResponse.data.results.songs.data[0];
+};
+
+export const getAlbumIDFromQuery = async (query, bearerToken) => {
+  const trackIDResponse = await getAlbumIDResponseFromQuery(
+    query.replace(' ', '+'),
+    getConfig(bearerToken)
+  );
+  return trackIDResponse.data.results.albums.data[0];
 };
 
 export const getAppleMusicDeveloperToken = async bearerToken => {

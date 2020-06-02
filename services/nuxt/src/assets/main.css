@@ -18,11 +18,15 @@
 }
 
 html {
-  background-color: #f6f6f6;
+  background-color: #474747;
 }
 
 ::selection {
   background: #a29ae5;
+}
+
+.v-application {
+  background: #474747;
 }
 
 .noselect {
@@ -68,6 +72,17 @@ i:hover, i:focus {
   user-select: none;
   font-size: 1.2em;
 }
-.modal {
-  z-index: 100000;
+span, p {
+  color: #ccc;
+}
+.VueCarousel-navigation-button {
+  box-shadow: var(--shadow-medium);
+  background-color: black !important;
+  border-radius: 2px;
+  color: #ccc !important;
+}
+
+.VueCarousel-slide {
+  width: 20%;
+  padding: 1%;
 }

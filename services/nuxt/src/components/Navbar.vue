@@ -1,32 +1,89 @@
 <template>
   <div class="header">
-    <v-btn to="/" primary text nuxt color="var(--primary-yellow)" ripple x-large class="title-button">
+    <nuxt-link to="/" color="var(--primary-red)" class="title-button">
       DRUMROSE
-    </v-btn>
+    </nuxt-link>
     <div class="navigation-contain">
-      <v-btn color="#ccc" text nuxt to="/">FEED</v-btn>
+      <v-btn color="#ccc" text nuxt to="/">SOCIAL</v-btn>
+      <v-btn color="#ccc" text nuxt to="/discover">DISCOVER</v-btn>
       <v-btn color="#ccc" text nuxt to="/playlists">PLAYLISTS</v-btn>
       <v-btn color="#ccc" text nuxt to="/library">LIBRARY</v-btn>
     </div>
-    <div class="search-bar__contain">
-      <SearchBar />
+    <div style="text-align: center">
+			<v-menu dark open-on-hover offset-y>
+        <template v-slot:activator="{ on }">
+          <v-btn
+            tile
+            dark
+            class="profile-menu-button-contain"
+            v-on="on"
+          >
+            jbrilly
+						<v-icon
+              style="height: 100%"
+              right dark
+							v-on="on"
+						>
+						 mdi-chevron-down
+						</v-icon>
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item
+            v-for="(item, index) in profileOptions"
+            :key="index"
+            @click=""
+            :to="item.link"
+          >
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </div>
-    <!---<AddPostButton />-->
-    <MoreList />
+    <div class="application-preferences">
+      <v-menu dark offset-y>
+        <template v-slot:activator="{ on }">
+          <v-icon
+            dark center
+            v-on="on"
+          >
+           mdi-dots-horizontal 
+          </v-icon>
+        </template>
+        <v-list>
+          <v-list-item
+            v-for="(item, index) in applicationOptions"
+            :key="index"
+            :to="item.link"
+            @click=""
+          >
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+    </div>
   </div>
 </template>
 
 <script>
-import MoreList from '~/components/Navbar/MoreList';
-import SearchBar from '~/components/SearchBar';
-import AddPostButton from '~/components/AddPostButton';
-
 export default {
   components: {
-    MoreList,
-    SearchBar,
-    AddPostButton,
   },
+  data: () => ({
+    profileOptions: [
+      { title: 'Profile', link: "/profile" },
+      { title: 'Likes', link: "/likes" },
+      { title: 'Playlists', link: "/playlists" },
+      { title: 'Following', link: "/following" },
+		],
+    applicationOptions: [
+      { title: 'About Us', links: "about" },
+      { title: 'Terms', link: "terms" },
+      { title: 'Contact', link: "/contact" },
+      { title: 'Settings', link: "/settings" },
+      { title: 'Sign Out' },
+		],
+	})
 };
 </script>
 
@@ -36,7 +93,9 @@ export default {
   z-index: 1000;
   background-color: var(--primary-black-light);
   left: 0;
-  display: flex;
+  display: grid;
+  grid-template-columns: 25% 50% 20% 5%;
+  grid-template-rows: 100%;
   align-items: center;
   width: 100%;
   min-height: 4rem;
@@ -44,14 +103,18 @@ export default {
 }
 .navigation-contain {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   margin: 0 auto;
   width: 100%;
-  padding-right: 1rem;
 }
-.title-button span {
+.title-button {
   font-weight: bolder;
-  font-size: larger;
+  color: var(--primary-red) !important;
+  font-size: 1.5rem;
+  padding-left: 1rem;
+}
+.profile-menu-icon {
+  height: 100%;
 }
 @media screen and (prefers-color-scheme: dark) {
   .header {

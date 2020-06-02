@@ -45,7 +45,9 @@ class Song(BaseModel):
     artist = models.ForeignKey(
         "Artist", null=True, blank=True, on_delete=models.CASCADE,
     )
-    apple_music_id = models.CharField(max_length=200, null=True, blank=True)
+    apple_music_id = models.CharField(
+        max_length=200, null=True, blank=True, unique=True
+    )
 
 
 class Album(BaseModel):
@@ -55,6 +57,9 @@ class Album(BaseModel):
 
     name = models.CharField(max_length=200)
     artwork_url = models.CharField(max_length=200)
+    apple_music_id = models.CharField(
+        max_length=200, null=True, blank=True, unique=True
+    )
 
 
 class User(BaseModel):
@@ -65,18 +70,6 @@ class User(BaseModel):
     handle = models.CharField(max_length=200, unique=True)
     name = models.CharField(max_length=200)
     avatar_url = models.CharField(max_length=200)
-
-
-class Post(BaseModel):
-    """
-    Model for a post
-    """
-
-    song = models.ForeignKey("Song", on_delete=models.CASCADE)
-    caption = models.CharField(max_length=200)
-    user = models.ForeignKey(
-        "User", null=True, blank=True, on_delete=models.CASCADE
-    )
 
 
 class Playlist(BaseModel):
@@ -90,3 +83,65 @@ class Playlist(BaseModel):
     user = models.ForeignKey(
         "User", null=True, blank=True, on_delete=models.CASCADE
     )
+    apple_music_id = models.CharField(
+        max_length=200, null=True, blank=True, unique=True
+    )
+
+
+class FavoritedItem(BaseModel):
+    """
+    Model for a favorited track
+    """
+
+    user = models.ForeignKey(
+        "User", null=True, blank=True, on_delete=models.CASCADE
+    )
+
+    class Meta:
+        """
+        Meta Class Definition
+        """
+
+        abstract = True
+
+
+class FavoritedTrack(FavoritedItem):
+    """
+    Model for a favorited track
+    """
+
+    song = models.ForeignKey("Song", on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = (
+            "user",
+            "song",
+        )
+
+
+class FavoritedAlbum(FavoritedItem):
+    """
+    Model for a favorited album
+    """
+
+    album = models.ForeignKey("Album", on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = (
+            "user",
+            "album",
+        )
+
+
+class FavoritedPlaylist(FavoritedItem):
+    """
+    Model for a favorited playlist
+    """
+
+    playlist = models.ForeignKey("Playlist", on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = (
+            "user",
+            "playlist",
+        )

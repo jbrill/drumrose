@@ -114,9 +114,10 @@
     "pk": "4297b472-79e5-4c39-9175-51e3db64e64e",
     "fields": {
         "created_date": "2020-04-13T18:35:52.039Z",
-        "modified_date": "2020-04-15T17:47:43.290Z",
+        "modified_date": "2020-05-27T18:29:16.277Z",
         "name": "Mrs. Tonya Gomez",
-        "artwork_url": "https://i.ytimg.com/vi/m5H-YlcMSbc/hqdefault.jpg"
+        "artwork_url": "https://i.ytimg.com/vi/m5H-YlcMSbc/hqdefault.jpg",
+        "apple_music_id": "499874506"
     }
 },
 {
@@ -124,9 +125,10 @@
     "pk": "853e84ec-facd-4195-b2cf-8f362a8ab303",
     "fields": {
         "created_date": "2020-04-13T18:35:52.044Z",
-        "modified_date": "2020-04-15T17:51:12.640Z",
+        "modified_date": "2020-05-27T18:26:11.608Z",
         "name": "Tidal",
-        "artwork_url": "https://upload.wikimedia.org/wikipedia/en/b/b5/FionaAppleTidal.png"
+        "artwork_url": "https://upload.wikimedia.org/wikipedia/en/b/b5/FionaAppleTidal.png",
+        "apple_music_id": "309677190"
     }
 },
 {
@@ -134,9 +136,10 @@
     "pk": "8fae704f-6e68-422a-836a-76071c2e1a59",
     "fields": {
         "created_date": "2020-04-13T18:35:52.034Z",
-        "modified_date": "2020-04-13T18:35:52.034Z",
+        "modified_date": "2020-05-27T18:20:24.686Z",
         "name": "Soul Power Pt. 1",
-        "artwork_url": "https://images.genius.com/035506d17f802e21cf91cd7006101d48.1000x1000x1.jpg"
+        "artwork_url": "https://images.genius.com/035506d17f802e21cf91cd7006101d48.1000x1000x1.jpg",
+        "apple_music_id": "1469577132"
     }
 },
 {
@@ -144,9 +147,10 @@
     "pk": "bc78e72f-bee7-4795-ba9c-314460697de1",
     "fields": {
         "created_date": "2020-04-13T18:35:52.021Z",
-        "modified_date": "2020-04-15T17:39:52.303Z",
+        "modified_date": "2020-05-27T18:15:08.245Z",
         "name": "Cosmogramma",
-        "artwork_url": "https://upload.wikimedia.org/wikipedia/en/b/bc/WARPCD195Packshot_480.jpg"
+        "artwork_url": "https://upload.wikimedia.org/wikipedia/en/b/bc/WARPCD195Packshot_480.jpg",
+        "apple_music_id": "367788829"
     }
 },
 {
@@ -154,9 +158,10 @@
     "pk": "f499acbe-1730-4f59-ad36-1c9c1f9b9907",
     "fields": {
         "created_date": "2020-04-13T18:35:52.028Z",
-        "modified_date": "2020-04-13T18:35:52.028Z",
+        "modified_date": "2020-05-27T18:27:18.840Z",
         "name": "Please Please Please",
-        "artwork_url": "https://upload.wikimedia.org/wikipedia/en/thumb/b/b2/PleasePleasePlease.jpg/220px-PleasePleasePlease.jpg"
+        "artwork_url": "https://upload.wikimedia.org/wikipedia/en/thumb/b/b2/PleasePleasePlease.jpg/220px-PleasePleasePlease.jpg",
+        "apple_music_id": "1443828151"
     }
 },
 {
@@ -248,95 +253,15 @@
     }
 },
 {
-    "model": "api.post",
-    "pk": "483ce307-f1fe-4bef-b6cf-522da003b291",
-    "fields": {
-        "created_date": "2020-04-13T18:39:56.887Z",
-        "modified_date": "2020-04-13T18:39:56.887Z",
-        "song": "260afbe0-0b3a-4d81-9810-174d2c83250a",
-        "caption": "Start station structure hospital. Decade seven person very.\nWould policy north order fear likely area. You ago sit space few. Science central nearly set these oil.",
-        "user": "7c536691-9e5b-471f-92af-df62cebc51bb"
-    }
-},
-{
-    "model": "api.post",
-    "pk": "7482ee71-0b1a-4319-bbb2-7ee17ed4443a",
-    "fields": {
-        "created_date": "2020-04-13T18:39:56.894Z",
-        "modified_date": "2020-04-13T18:39:56.894Z",
-        "song": "d03d9aab-0bb3-48bc-8794-9beff84a6699",
-        "caption": "No short idea church bag.\nAway memory else teacher such. Minute eye involve agreement realize when result.\nCost miss detail move. Matter rule region also. Inside cost recently study.",
-        "user": "6d359d14-bb98-41d9-a64e-8ada30437793"
-    }
-},
-{
-    "model": "api.post",
-    "pk": "c4046ed8-bd7f-40f8-a34b-e9b2063fcc46",
-    "fields": {
-        "created_date": "2020-04-13T18:39:56.891Z",
-        "modified_date": "2020-04-13T18:39:56.891Z",
-        "song": "10ccc694-2b2a-4eb2-ae6d-1d51bcd195e2",
-        "caption": "Large property air world notice soldier according wish. Nothing throughout cause guy assume life personal along.\nImpact happy all that war. Wonder yard note soldier mean officer.",
-        "user": "4cf3e136-adec-4ad8-abe0-27d5dfd428f1"
-    }
-},
-{
-    "model": "api.post",
-    "pk": "d99297c5-f2c3-4a3b-bc46-364ee291c9db",
-    "fields": {
-        "created_date": "2020-04-13T18:39:56.883Z",
-        "modified_date": "2020-04-13T18:39:56.883Z",
-        "song": "56b8abfc-2e1d-4123-ad1d-671d6dd07f79",
-        "caption": "Build be student may. Front generation new away. Whatever tend new data across leg.\nThat task ever travel strong. Grow order say task cup turn.",
-        "user": "9fd1559c-87d2-4291-ad99-640ee98dabc4"
-    }
-},
-{
-    "model": "api.post",
-    "pk": "ec479fd3-f45e-4c3e-a12c-87b077d16725",
-    "fields": {
-        "created_date": "2020-04-13T18:39:56.897Z",
-        "modified_date": "2020-04-13T18:39:56.897Z",
-        "song": "b523a72b-27a0-44fc-845b-e18c45391907",
-        "caption": "Exactly control coach certainly feel including western. Person mouth opportunity here option bill.",
-        "user": "ccd6b4c9-dc99-4fd7-8237-332db6c729d3"
-    }
-},
-{
     "model": "api.playlist",
-    "pk": "276964f7-f277-44f6-a9cb-2a3d5963ee70",
+    "pk": "7ce8e9ba-4c15-4dce-afe0-8ba89c8e088a",
     "fields": {
-        "created_date": "2020-05-12T23:17:12.262Z",
-        "modified_date": "2020-05-12T23:17:12.262Z",
-        "title": "This is a test playlist numba 2",
-        "caption": "I wonder how this will work",
-        "user": "ccd6b4c9-dc99-4fd7-8237-332db6c729d3",
-        "tracks": [
-            "d03d9aab-0bb3-48bc-8794-9beff84a6699"
-        ]
-    }
-},
-{
-    "model": "api.playlist",
-    "pk": "62f4035e-d2be-4702-87e8-de79f9d111cc",
-    "fields": {
-        "created_date": "2020-05-12T23:17:24.494Z",
-        "modified_date": "2020-05-12T23:17:24.494Z",
-        "title": "This is a test playlist numba e",
-        "caption": "I wonder how this will work",
-        "user": "ccd6b4c9-dc99-4fd7-8237-332db6c729d3",
-        "tracks": []
-    }
-},
-{
-    "model": "api.playlist",
-    "pk": "ca0dd05e-bab0-4897-9fa4-f51592f83824",
-    "fields": {
-        "created_date": "2020-05-12T23:16:52.170Z",
-        "modified_date": "2020-05-12T23:16:52.170Z",
-        "title": "This is a test playlist",
-        "caption": "I wonder how this will work",
+        "created_date": "2020-06-02T15:47:06.399Z",
+        "modified_date": "2020-06-02T17:19:08.990Z",
+        "title": "The first playlist",
+        "caption": "the first playlist caption",
         "user": "15c51ab9-0ac7-4225-897c-5c743021f3a9",
+        "apple_music_id": "pl.abe8ba42278f4ef490e3a9fc5ec8e8c5",
         "tracks": [
             "10ccc694-2b2a-4eb2-ae6d-1d51bcd195e2",
             "260afbe0-0b3a-4d81-9810-174d2c83250a",
@@ -347,99 +272,112 @@
     }
 },
 {
-    "model": "contenttypes.contenttype",
-    "pk": 1,
+    "model": "api.playlist",
+    "pk": "90020c3a-f816-4268-8fe0-f9bf36fcd2bf",
     "fields": {
-        "app_label": "api",
-        "model": "album"
+        "created_date": "2020-06-02T15:52:10.797Z",
+        "modified_date": "2020-06-02T17:19:24.638Z",
+        "title": "The second playlist",
+        "caption": "the 2nd playlist caption",
+        "user": "ccd6b4c9-dc99-4fd7-8237-332db6c729d3",
+        "apple_music_id": "pl.acc464c750b94302b8806e5fcbe56e17",
+        "tracks": [
+            "10ccc694-2b2a-4eb2-ae6d-1d51bcd195e2",
+            "260afbe0-0b3a-4d81-9810-174d2c83250a",
+            "56b8abfc-2e1d-4123-ad1d-671d6dd07f79",
+            "b523a72b-27a0-44fc-845b-e18c45391907",
+            "d03d9aab-0bb3-48bc-8794-9beff84a6699"
+        ]
     }
 },
 {
-    "model": "contenttypes.contenttype",
-    "pk": 2,
+    "model": "api.favoritedtrack",
+    "pk": "02613457-3f06-444a-979c-14b76647622a",
     "fields": {
-        "app_label": "api",
-        "model": "artist"
+        "created_date": "2020-05-14T18:55:31.231Z",
+        "modified_date": "2020-05-14T18:55:31.231Z",
+        "user": "15c51ab9-0ac7-4225-897c-5c743021f3a9",
+        "song": "10ccc694-2b2a-4eb2-ae6d-1d51bcd195e2"
     }
 },
 {
-    "model": "contenttypes.contenttype",
-    "pk": 3,
+    "model": "api.favoritedtrack",
+    "pk": "27dff02e-6c10-4894-bbe8-6a12357fb507",
     "fields": {
-        "app_label": "api",
-        "model": "post"
+        "created_date": "2020-05-27T18:23:53.012Z",
+        "modified_date": "2020-05-27T18:23:53.012Z",
+        "user": "c61c83a8-9b69-40c4-aaec-77e0834dcc81",
+        "song": "260afbe0-0b3a-4d81-9810-174d2c83250a"
     }
 },
 {
-    "model": "contenttypes.contenttype",
-    "pk": 4,
+    "model": "api.favoritedtrack",
+    "pk": "3342c5b4-7ab9-4363-abb8-95c011617a5d",
     "fields": {
-        "app_label": "api",
-        "model": "song"
+        "created_date": "2020-05-14T18:55:46.942Z",
+        "modified_date": "2020-05-14T18:55:46.942Z",
+        "user": "ccd6b4c9-dc99-4fd7-8237-332db6c729d3",
+        "song": "d03d9aab-0bb3-48bc-8794-9beff84a6699"
     }
 },
 {
-    "model": "contenttypes.contenttype",
-    "pk": 5,
+    "model": "api.favoritedtrack",
+    "pk": "5d91974c-c5dd-4b9c-a77d-f915425f41de",
     "fields": {
-        "app_label": "api",
-        "model": "user"
+        "created_date": "2020-05-27T18:23:36.566Z",
+        "modified_date": "2020-05-27T18:23:36.566Z",
+        "user": "c61c83a8-9b69-40c4-aaec-77e0834dcc81",
+        "song": "56b8abfc-2e1d-4123-ad1d-671d6dd07f79"
     }
 },
 {
-    "model": "contenttypes.contenttype",
-    "pk": 6,
+    "model": "api.favoritedtrack",
+    "pk": "5db7e686-f058-4065-a53c-9b7bae64df6c",
     "fields": {
-        "app_label": "admin",
-        "model": "logentry"
+        "created_date": "2020-05-14T18:55:36.776Z",
+        "modified_date": "2020-05-14T18:55:36.776Z",
+        "user": "15c51ab9-0ac7-4225-897c-5c743021f3a9",
+        "song": "d03d9aab-0bb3-48bc-8794-9beff84a6699"
     }
 },
 {
-    "model": "contenttypes.contenttype",
-    "pk": 7,
+    "model": "api.favoritedtrack",
+    "pk": "91b12c44-010e-4d8e-b6a5-a9d5bafe1b98",
     "fields": {
-        "app_label": "auth",
-        "model": "permission"
+        "created_date": "2020-05-27T18:24:11.425Z",
+        "modified_date": "2020-05-27T18:24:11.425Z",
+        "user": "9fd1559c-87d2-4291-ad99-640ee98dabc4",
+        "song": "b523a72b-27a0-44fc-845b-e18c45391907"
     }
 },
 {
-    "model": "contenttypes.contenttype",
-    "pk": 8,
+    "model": "api.favoritedplaylist",
+    "pk": "54a54431-a1fe-48b5-8c50-b2895d63bfcd",
     "fields": {
-        "app_label": "auth",
-        "model": "group"
+        "created_date": "2020-06-02T15:54:49.123Z",
+        "modified_date": "2020-06-02T15:54:49.123Z",
+        "user": "7c536691-9e5b-471f-92af-df62cebc51bb",
+        "playlist": "90020c3a-f816-4268-8fe0-f9bf36fcd2bf"
     }
 },
 {
-    "model": "contenttypes.contenttype",
-    "pk": 9,
+    "model": "api.favoritedplaylist",
+    "pk": "76ad3ed0-ae7d-42b2-b7f9-5b999b8197d2",
     "fields": {
-        "app_label": "auth",
-        "model": "user"
+        "created_date": "2020-06-02T15:55:14.023Z",
+        "modified_date": "2020-06-02T15:55:14.023Z",
+        "user": "ccd6b4c9-dc99-4fd7-8237-332db6c729d3",
+        "playlist": "7ce8e9ba-4c15-4dce-afe0-8ba89c8e088a"
     }
 },
 {
-    "model": "contenttypes.contenttype",
-    "pk": 10,
+    "model": "api.favoritedplaylist",
+    "pk": "d965fcf8-8b2a-434e-8f5c-13b9086e1319",
     "fields": {
-        "app_label": "contenttypes",
-        "model": "contenttype"
-    }
-},
-{
-    "model": "contenttypes.contenttype",
-    "pk": 11,
-    "fields": {
-        "app_label": "sessions",
-        "model": "session"
-    }
-},
-{
-    "model": "contenttypes.contenttype",
-    "pk": 12,
-    "fields": {
-        "app_label": "api",
-        "model": "playlist"
+        "created_date": "2020-06-02T15:55:04.020Z",
+        "modified_date": "2020-06-02T15:55:04.020Z",
+        "user": "9fd1559c-87d2-4291-ad99-640ee98dabc4",
+        "playlist": "7ce8e9ba-4c15-4dce-afe0-8ba89c8e088a"
     }
 },
 {
@@ -872,6 +810,114 @@
         "name": "Can view playlist",
         "content_type": 12,
         "codename": "view_playlist"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 49,
+    "fields": {
+        "name": "Can add favorited album",
+        "content_type": 13,
+        "codename": "add_favoritedalbum"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 50,
+    "fields": {
+        "name": "Can change favorited album",
+        "content_type": 13,
+        "codename": "change_favoritedalbum"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 51,
+    "fields": {
+        "name": "Can delete favorited album",
+        "content_type": 13,
+        "codename": "delete_favoritedalbum"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 52,
+    "fields": {
+        "name": "Can view favorited album",
+        "content_type": 13,
+        "codename": "view_favoritedalbum"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 53,
+    "fields": {
+        "name": "Can add favorited playlist",
+        "content_type": 14,
+        "codename": "add_favoritedplaylist"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 54,
+    "fields": {
+        "name": "Can change favorited playlist",
+        "content_type": 14,
+        "codename": "change_favoritedplaylist"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 55,
+    "fields": {
+        "name": "Can delete favorited playlist",
+        "content_type": 14,
+        "codename": "delete_favoritedplaylist"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 56,
+    "fields": {
+        "name": "Can view favorited playlist",
+        "content_type": 14,
+        "codename": "view_favoritedplaylist"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 57,
+    "fields": {
+        "name": "Can add favorited track",
+        "content_type": 15,
+        "codename": "add_favoritedtrack"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 58,
+    "fields": {
+        "name": "Can change favorited track",
+        "content_type": 15,
+        "codename": "change_favoritedtrack"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 59,
+    "fields": {
+        "name": "Can delete favorited track",
+        "content_type": 15,
+        "codename": "delete_favoritedtrack"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 60,
+    "fields": {
+        "name": "Can view favorited track",
+        "content_type": 15,
+        "codename": "view_favoritedtrack"
     }
 }
 ]

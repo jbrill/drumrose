@@ -1,94 +1,48 @@
 <template>
-  <div :class="{ post: true, activePost: (nowPlayingPost && nowPlayingPost.id === post.id) }">
+  <div v-if="post" class="post">
     <div class="postContain">
-      <div class="artistContain">
-        <div class="noselect albumContain">
-          <img class="albumCover" :src="post.song.album.artwork_url">
-        </div>
-        <div class="artistTextContain">
-          <span ref="songName" class="songName">{{ post.song.name }}</span>
-          <span ref="artistName" class="artistName">{{post.song.artist.name
-}}</span>
-        </div>
-      </div>
-      <div class="poster">
-        <div class="posterDetail">
-          <div
-              class="posterImg"
-              v-bind:style="{ backgroundImage: 'url(' +
-                post.user.avatar_url + ')' }"
-          >
-          </div>
-          <nuxt-link class="noselect" :to="'/' + post.user.handle">
-            <div class="posterInfo">
+      <div class="posterDetail">
+          <div class="posterInfo">
+            <nuxt-link class="handle-select noselect" :to="'/people/' + post.user.handle">
+              <div
+                  class="posterImg"
+                  v-bind:style="{ backgroundImage: 'url(' +
+                    post.user.avatar_url + ')' }"
+              >
+              </div>
               <h3 class="posterName">
-                {{ post.user.name }}
+                {{ post.user.handle }}
               </h3>
-              <h5 class="posterHandle">
-                @{{ post.user.handle }}
-              </h5>
-            </div>
-          </nuxt-link>
-        </div>
-        <p class="postCaption">
-          {{ post.caption }}
-        </p>
-        <div class="postBottomContain">
-          <i v-ripple="'rgba(255, 255, 255, 0.35)'"
-            class="audioAction audioPause material-icons"
-            @click="pauseTrack"
-            v-if="nowPlayingPost && nowPlayingPost.id === post.id && playbackState === 2"
-          >pause</i>
-          <i
-            class="audioAction audioPlay material-icons"
-            @click="playTrack"
-            v-else
-          >play_arrow</i>
-          <PostTimeline />
-          <div class="post-action-contain">
-            <i v-ripple="'rgba(255, 255, 255, 0.35)'"
-              class="audioAction audioFavorite material-icons"
-              @click="favoriteTrack"
-            >favorite</i>
+            </nuxt-link>
+            <p class="poster-action"><span>favorited</span>
+a <span>{{ type }}</span></p>
           </div>
-        </div>
       </div>
     </div>
+    <MusicItem v-if="type === 'track'" type="track" :apple_music_id="post.song.apple_music_id" />
+    <MusicItem v-else-if="type === 'album'" type="album" :apple_music_id="post.album.apple_music_id" />
+    <MusicItem v-else-if="type === 'playlist'" type="playlist" :apple_music_id="post.playlist.apple_music_id" />
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
-import PostTimeline from '~/components/PostTimeline';
+import MusicItem from '~/components/MusicItem';
 
 export default {
   name: 'Post',
+  props: ['post', 'index', 'type'],
   components: {
-    PostTimeline
+    MusicItem
   },
-  computed: mapState(['nowPlayingItem', 'nowPlayingPost', 'playbackState']),
-  props: ['post', 'index'],
-  methods: {
-    pauseTrack: async function (event) {
-      await this.$store.dispatch("pause");
-    },
-    playTrack: function (event) {
-      console.log("YO");
-      const posts = this.$store.state.posts.slice(this.index)
-      const tracks = posts.map(a => a.song.apple_music_id);
-      this.$store.dispatch("setQueue", { "songs": tracks }).then( () => {
-        this.$store.dispatch("play");
-        this.$store.dispatch("setNowPlayingPost", this.post);
-      });
-    },
-    favoriteTrack: function (event) {
-      console.log('SHOUDL FAV');
-    },
+  mounted() {
+    console.log(this.post)
+    console.log(this.type)
   },
 };
 </script>
 
-<style scoped>
+<style>
 @media screen and (prefers-color-scheme: dark) {
   .songName:hover, .songName:focus {
     color: black;
@@ -131,26 +85,8 @@ export default {
 .post {
   width: 100%;
   margin: 0 auto;
-  padding: 1em;
-  border-radius: 6px;
-  background-color: white;
-  box-shadow: var(--shadow-medium);
-}
-.post:hover, .post:focus {
-  cursor: pointer;
-  background-color: white;
-  box-shadow: var(--shadow-heavy);
-}
-@media (prefers-color-scheme: dark) {
-  .post {
-    background-color: black;
-  }
-  .post:hover, .post:focus {
-    background-color: var(--primary-black-light);
-  }
-  .postCaption {
-    color: white;
-  }
+  padding: 1rem;
+  display: inline;
 }
 .activePost {
   box-shadow: var(--shadow-heavy-purple);
@@ -158,68 +94,9 @@ export default {
 .activePost:hover, .activePost:focus {
   box-shadow: var(--shadow-heavy-purple);
 }
-.albumContain {
-  z-index: 0;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.albumCover {
-  width: 100%;
-  max-width: 7em;
-  height: auto;
-  border-radius: 2px;
-  box-shadow: var(--shadow-medium);
-}
-.postContain {
-  display: grid;
-  grid-template-columns: 15% 85%;
-}
-.artistContain {
-  display: grid;
-}
-.artistName {
-  font-size: 0.8rem;
-  margin-bottom: 0;
-  font-weight: 600;
-  padding-top: 5px;
-  opacity: 0.8;
-}
-.songName {
-  font-size: 0.75rem;
-  margin-bottom: 0;
-  opacity: 0.8;
-}
-.songName:hover, .songName:focus {
-  cursor: pointer;
-  color: black;
-  opacity: 1;
-}
-.artistName:hover, .artistName:focus {
-  cursor: pointer;
-  color: black;
-  opacity: 1;
-}
-.albumCover:hover, .albumCover:focus {
-  cursor: pointer;
-  box-shadow: var(--shadow-heavy);
-}
-.postBottomContain {
-  display: flex;
-  align-items: center;
-}
 .post-action-contain {
   display: inline-block;
   margin-left: auto;
-}
-.artistTextContain {
-  display: flex;
-  flex-direction: column;
-  color: black;
-  padding-top: 1rem;
-  text-align: left; 
-  font-family: 'Proxima Nova', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 .poster {
   overflow-wrap: break-word;
@@ -227,44 +104,39 @@ export default {
   margin-left: 2rem;
   height: auto;
   display: grid;
-  grid-template-rows: 25% 50% 25%;
+  grid-template-rows: 25% 75%;
 }
 .posterImg {
-  border-radius: 4px;
-  height: 3rem;
-  width: 3rem;
+  border-radius: 50%;
+  height: 1.5rem;
+  width: 1.5rem;
   background-position: center;
   background-size: cover;
-  box-shadow: var(--shadow-medium);
+  border: 1px solid #ccc;
 }
 .posterImg:hover, .posterImg:focus {
   cursor: pointer;
-  box-shadow: var(--shadow-heavy);
 }
 .posterDetail {
   display: flex;
+  align-items: center;
 }
 .posterInfo {
   display: inline-block;
-  color: black;
-  padding: 5px;
-  padding-left: 1em;
+  color: #ccc;
 }
 .posterName {
-  margin-top: 0;
-  color: black;
-  font-size: 1rem;
-  padding-bottom: 0.5rem;
-  line-height: 1.5rem;
+  margin-bottom: 0;
+  color: white;
+  padding-left: 0.5rem;
+  font-size: 0.7rem;
+  font-weight: bold;
 }
 .posterName:hover, .posterName:focus {
   cursor: pointer;
-  text-decoration: underline;
 }
-.posterHandle {
-  font-size: 0.5rem;
-  color: grey;
-  margin-top: -1rem;
+p.poster-action {
+  font-size: 0.7rem;
 }
 .postDate {
   margin-top: 0;
@@ -281,6 +153,11 @@ export default {
 .timeLoop {
   font-size: 1rem;
 }
+.handle-select {
+  padding-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+}
 .postMusicContain {
   margin-top: 1rem;
   height: 20%;
@@ -289,35 +166,5 @@ export default {
   float: right;
   height: 2rem;
   width: 100%;
-}
-.audioAction {
-  color: black;
-  opacity: 0.8;
-  font-size: 100%;
-}
-.audioAction:hover, .audioAction:focus {
-  opacity: 1;
-}
-.audioFavorite {
-  padding-right: 1rem;
-}
-.audioFavorite:hover, .audioFavorite:focus {
-  color: var(--primary-red);
-}
-.audioMore {
-  float: left;
-}
-.audioPause {
-  font-size: 2rem;
-}
-.audioPause:hover, .audioPause:focus {
-  color: var(--primary-purple);
-}
-.audioPlay {
-  font-size: 2rem;
-}
-.audioPlay:hover, .audioPlay:focus {
-  opacity: 1;
-  color: var(--primary-purple);
 }
 </style>

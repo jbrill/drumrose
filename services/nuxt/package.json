@@ -37,6 +37,8 @@
     "uuid": "3.3.2",
     "v-hotkey": "^0.8.0",
     "v-tooltip": "^2.0.3",
+    "vue-carousel": "^0.18.0",
+    "vue-carousel-3d": "^0.2.0",
     "vue-infinite-scroll": "^2.0.2",
     "vue-ripple-directive": "^2.0.1",
     "vue2-touch-events": "^2.2.1",

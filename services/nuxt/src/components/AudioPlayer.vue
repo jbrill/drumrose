@@ -4,7 +4,7 @@
       v-hotkey="{
         'space': playTrack,
       }" 
-      v-if="nowPlayingItem" class="nowPlayingContain"
+      class="nowPlayingContain"
     >
       <i
         ref="volumeButton"

@@ -6,6 +6,7 @@
       @click="showMoreMenu = !showMoreMenu"
     >
     <img class="user-avatar" src="https://upload.wikimedia.org/wikipedia/en/thumb/b/b2/PleasePleasePlease.jpg/220px-PleasePleasePlease.jpg" />
+    <p class="user-handle">jbrilly</p>
     <i
       class="material-icons more--menu__contain__btn"
     >arrow_drop_down</i></div>
@@ -109,9 +110,11 @@ export default {
 
 <style scoped>
 .more--menu__contain {
-  margin-right: 3rem;
   height: 100%;
   display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  margin-right: 0.5rem;
   align-items: center;
 }
 .more--menu__contain__btn {

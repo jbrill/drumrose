@@ -1,40 +1,51 @@
 <template>
-  <div
-		class="timeline-wrap"
-	>
-	<span class="timeline-time timeline-time-begin">{{ currentPlaybackTime }}</span>
-		<div 
-			ref="timeline"
-			class="post-timeline"
+  <div class="timeline-wrap">
+    <span
+      class="timeline-time timeline-time-begin"
+    >
+      {{ currentPlaybackTime }}
+    </span>
+    <div 
+      ref="timeline"
+      class="post-timeline"
       @mouseleave="stopDrag"
       @mousedown="startDrag"
       @mousemove="doDrag"
       @click="moveWheel"
-		>
-			<div :style="{ width: playbackTime ? 100 * (playbackTime.currentPlaybackTime / playbackTime.currentPlaybackDuration) + '%' : '0%' }" class="timeline-before-wheel"></div>
-      <div 
-        ref="buffered-timeline"
-        class="post-timeline-buffer"
-        :style="{ width: bufferedProgress + '%' }"
-      ></div>
-			<!---<div v-if="startedPlaying" :style="{ width: mousePosition }" class="timeline-mouse-hover"></div>-->
-			<!---<div v-if="startedPlaying" :style="{ left: wheelPosition }" ref="wheel" class="post-timeline-wheel"></div>-->
-		</div>
-  <span class="timeline-time timeline-time-end">{{ currentPlaybackDuration }}</span>
-	</div>
+    >
+      <div
+        :style="{
+          width: playbackTime ? 100 * (
+            playbackTime.currentPlaybackTime / 
+            playbackTime.currentPlaybackDuration
+          ) + '%' : '0%'
+        }"
+        class="timeline-before-wheel"
+      >
+        <div 
+          ref="buffered-timeline"
+          class="post-timeline-buffer"
+          :style="{ width: bufferedProgress + '%' }"
+        />
+      </div>
+      <span class="timeline-time timeline-time-end">
+        {{ currentPlaybackDuration }}
+      </span>
+    </div>
+  </div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex';
 
 export default {
-  data() {
+  data () {
     return {
       wheelPosition: "0%",
 			mousePosition: "0%",
       dragging: false,
       startedPlaying: false,
-    }
+    };
   },
   computed: {
     ...mapGetters({
@@ -50,39 +61,43 @@ export default {
     window.addEventListener('mouseup', this.stopDrag);
 	},
   methods: {
-    startDrag() {
+    startDrag () {
       this.dragging = true;
 			this.startedPlaying = true;
     },
-    stopDrag() {
+    stopDrag () {
       this.dragging = false;
     },
-    doDrag(event) {
+    doDrag (event) {
       if (this.dragging) {
-				console.log("DRAGGING");
-				
-        const wheelOffset = 100 * (event.clientX / this.$refs.timeline.clientWidth);
+        const wheelOffset = 100 * (
+          event.clientX / this.$refs.timeline.clientWidth
+        );
 				if (wheelOffset === 0) console.log(event);
 				if (wheelOffset === 0) return;
         this.wheelPosition = wheelOffset + "%";
-				console.log(this.wheelPosition);
       }
     },
     moveWheel (event) {
-			const wheelOffset = 100 * (event.offsetX / this.$refs.timeline.clientWidth);
+			const wheelOffset = 100 * (
+        event.offsetX / this.$refs.timeline.clientWidth
+      );
 			this.wheelPosition = wheelOffset + "%";
-      const currPos = (event.offsetX / this.$refs.timeline.clientWidth) * this.$store.state.playbackTime.currentPlaybackDuration;
+      const currPos = (
+        event.offsetX / this.$refs.timeline.clientWidth
+      ) * this.$store.state.playbackTime.currentPlaybackDuration;
       this.$store.dispatch("seek", currPos); 
     },
-		hoverTimeline(event) {
-			console.log(event);
+		hoverTimeline (event) {
 			if (!this.dragging) {
-				const wheelOffset = 100 * (event.offsetX / this.$refs.timeline.clientWidth);
+				const wheelOffset = 100 * (
+          event.offsetX / this.$refs.timeline.clientWidth
+        );
 				this.mousePosition = wheelOffset + "%";
 			}
-		}
+		},
   }, 
-}
+};
 </script>
 
 <style>

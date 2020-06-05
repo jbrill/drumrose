@@ -1,18 +1,16 @@
 <template>
   <div :class="{ track: true }">
-    <div @mouseenter="trackHover" @mouseleave="trackMouseLeave" class="artistContain">
+    <div
+      class="artistContain"
+      @mouseenter="trackHover"
+      @mouseleave="trackMouseLeave"
+    >
       <div class="noselect albumContain">
         <img class="albumCover" :src="artworkUrl">
         <div ref="audioAction" class="audio-action-contain">
-          <i v-ripple="'rgba(255, 255, 255, 0.35)'"
-            class="audioAction audioPause material-icons"
-            @click="pauseTrack"
-            v-if="nowPlayingPost && nowPlayingPost.id === post.id && playbackState === 2"
-          >pause</i>
           <i
             class="audioAction audioPlay material-icons"
             @click="playTrack"
-            v-else
           >play_arrow</i>
         </div>
       </div>
@@ -29,6 +27,12 @@ import { mapState } from 'vuex';
 
 export default {
   name: 'Track',
+  props: {
+    'appleMusicId': {
+      type: String,
+      default: '',
+    },
+  },
   data () {
     return {
       isLoading: true,
@@ -36,29 +40,36 @@ export default {
       artistName: '',
       artworkUrl: '',
       name: '',
-    }
+    };
   },
-  computed: mapState(['nowPlayingItem', 'nowPlayingPost', 'playbackState']),
-  props: ['apple_music_id'],
+  computed: mapState(
+    ['nowPlayingItem', 'nowPlayingPost', 'playbackState']
+  ),
+  async mounted () {
+    const resp = await this.$store.getters.fetch(
+      `/v1/catalog/us/songs/${this.appleMusicId}`
+    );
+    this.artistName = resp.data[0].attributes.artistName;
+    this.name = resp.data[0].attributes.name;
+    this.artworkUrl = resp.data[0].attributes.artwork.url.replace(
+      '{w}', '250'
+    ).replace(
+      '{h}', '250'
+    );
+    this.isLoading = false;
+  },
   methods: {
     pauseTrack: async function (event) {
       await this.$store.dispatch("pause");
     },
     playTrack: function (event) {
     },
-    trackHover: function() {
+    trackHover: function () {
       this.$refs.audioAction.style.opacity = 1;
     },
-    trackMouseLeave: function() {
+    trackMouseLeave: function () {
       this.$refs.audioAction.style.opacity = 0;
     },
-  },
-  async mounted () {
-    const resp = await this.$store.getters.fetch(`/v1/catalog/us/songs/${this.apple_music_id}`)
-    this.artistName = resp.data[0].attributes.artistName;
-    this.name = resp.data[0].attributes.name;
-    this.artworkUrl = resp.data[0].attributes.artwork.url.replace('{w}', '250').replace('{h}', '250');
-    this.isLoading = false;
   },
 };
 </script>

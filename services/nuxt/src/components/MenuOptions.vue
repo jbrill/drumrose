@@ -4,7 +4,7 @@
       <li>
         <nuxt-link
           to="/"
-          :class="{ isActive: $route.path == '/',  menubtn : true }"
+          :class="{ isActive: $route.path == '/', menubtn : true }"
         >
           Feed
         </nuxt-link>

@@ -2,15 +2,15 @@
   <v-avatar class="avatar-contain">
     <img
       src="https://cdn.vuetifyjs.com/images/john.jpg"
-			alt="John"
-		>
-	</v-avatar>
+      alt="John"
+    >
+  </v-avatar>
 </template>
 
 <script>
 export default {
 
-}
+};
 </script>
 
 <style>

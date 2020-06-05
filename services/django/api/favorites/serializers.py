@@ -17,6 +17,7 @@ class FavoritedTrackSerializer(serializers.ModelSerializer):
 
     song = SongSerializer(read_only=True)
     user = UserSerializer(read_only=True)
+    favorite_type = serializers.SerializerMethodField()
 
     class Meta:
         """
@@ -26,6 +27,13 @@ class FavoritedTrackSerializer(serializers.ModelSerializer):
         model = FavoritedTrack
         fields = "__all__"
 
+    def get_favorite_type(self, _):
+        """
+        Return favorite type
+        """
+
+        return "track"
+
 
 class FavoritedAlbumSerializer(serializers.ModelSerializer):
     """
@@ -34,6 +42,7 @@ class FavoritedAlbumSerializer(serializers.ModelSerializer):
 
     album = AlbumSerializer(read_only=True)
     user = UserSerializer(read_only=True)
+    favorite_type = serializers.SerializerMethodField()
 
     class Meta:
         """
@@ -42,6 +51,13 @@ class FavoritedAlbumSerializer(serializers.ModelSerializer):
 
         model = FavoritedAlbum
         fields = "__all__"
+
+    def get_favorite_type(self, _):
+        """
+        Return favorite type
+        """
+
+        return "album"
 
 
 class FavoritedPlaylistSerializer(serializers.ModelSerializer):
@@ -52,6 +68,7 @@ class FavoritedPlaylistSerializer(serializers.ModelSerializer):
     song = SongSerializer(read_only=True)
     user = UserSerializer(read_only=True)
     playlist = PlaylistSerializer(read_only=True)
+    favorite_type = serializers.SerializerMethodField()
 
     class Meta:
         """
@@ -59,4 +76,38 @@ class FavoritedPlaylistSerializer(serializers.ModelSerializer):
         """
 
         model = FavoritedPlaylist
+        fields = "__all__"
+
+    def get_favorite_type(self, _):
+        """
+        Return favorite type
+        """
+
+        return "playlist"
+
+
+class FavoritedSerializer(serializers.ModelSerializer):
+    """
+    Serializer for posts
+    """
+
+    @classmethod
+    def get_serializer(cls, model):
+        if model == FavoritedPlaylist:
+            serializer = FavoritedPlaylistSerializer
+        elif model == FavoritedTrack:
+            serializer = FavoritedTrackSerializer
+        else:
+            serializer = FavoritedAlbumSerializer
+        return serializer
+
+    def to_representation(self, instance):
+        serializer = self.get_serializer(instance.__class__)
+        return serializer(instance, context=self.context).data
+
+    class Meta:
+        """
+        Serializer Meta Definition
+        """
+
         fields = "__all__"

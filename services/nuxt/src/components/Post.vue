@@ -2,43 +2,96 @@
   <div v-if="post" class="post">
     <div class="postContain">
       <div class="posterDetail">
-          <div class="posterInfo">
-            <nuxt-link class="handle-select noselect" :to="'/people/' + post.user.handle">
-              <div
-                  class="posterImg"
-                  v-bind:style="{ backgroundImage: 'url(' +
-                    post.user.avatar_url + ')' }"
+        <div class="posterInfo">
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                nuxt
+                text
+                color="transparent"
+                class="handle-select noselect"
+                :to="'/people/' + post.user.handle"
+                v-on="on"
               >
-              </div>
-              <h3 class="posterName">
-                {{ post.user.handle }}
-              </h3>
-            </nuxt-link>
-            <p class="poster-action"><span>favorited</span>
-a <span>{{ type }}</span></p>
-          </div>
+                <div
+                  class="posterImg"
+                  :style="{ backgroundImage: 'url(' +
+                    post.user.avatar_url + ')' }"
+                />
+                <h3 class="posterName">
+                  {{ post.user.handle }}
+                </h3>
+              </v-btn>
+            </template>
+            <div>Top tooltip</div>
+          </v-tooltip>
+          <p class="poster-action">
+            <span
+              v-if="postType ===
+                'favorite'"
+            >favorited</span>
+            <span
+              v-else-if="postType === 'rating'"
+            >
+              rated
+            </span> a <span>{{ type }}</span>
+          </p>
+          <v-rating
+            v-if="postType === 'rating'"
+            v-model="rating"
+            background-color="white"
+            color="yellow accent-4"
+            dense
+            half-increments
+            hover
+            size="18"
+          />
+        </div>
       </div>
     </div>
-    <MusicItem v-if="type === 'track'" type="track" :apple_music_id="post.song.apple_music_id" />
-    <MusicItem v-else-if="type === 'album'" type="album" :apple_music_id="post.album.apple_music_id" />
-    <MusicItem v-else-if="type === 'playlist'" type="playlist" :apple_music_id="post.playlist.apple_music_id" />
+    <MusicItem
+      v-if="type === 'track'"
+      type="track"
+      :apple-music-id="post.song.apple_music_id"
+    />
+    <MusicItem
+      v-else-if="type === 'album'"
+      type="album"
+      :apple-music-id="post.album.apple_music_id"
+    />
+    <MusicItem
+      v-else-if="type === 'playlist'"
+      type="playlist"
+      :apple-music-id="post.playlist.apple_music_id"
+    />
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex';
 import MusicItem from '~/components/MusicItem';
 
 export default {
   name: 'Post',
-  props: ['post', 'index', 'type'],
   components: {
-    MusicItem
+    MusicItem,
   },
-  mounted() {
-    console.log(this.post)
-    console.log(this.type)
+  props: {
+    'post': {
+      type: Object, 
+      default: () => {},
+    },
+    'postType': {
+      type: String,
+      default: '',
+    },
+    'type': {
+      type: String,
+      default: '',
+    },
   },
+  data: () => ({
+    rating: 4.3,
+  }),
 };
 </script>
 
@@ -122,6 +175,9 @@ export default {
   align-items: center;
 }
 .posterInfo {
+  text-align: center;
+  margin-bottom: 1rem;
+  width: 100%;
   display: inline-block;
   color: #ccc;
 }
@@ -137,6 +193,7 @@ export default {
 }
 p.poster-action {
   font-size: 0.7rem;
+  margin-bottom: 0;
 }
 .postDate {
   margin-top: 0;

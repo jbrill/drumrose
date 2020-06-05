@@ -1,9 +1,12 @@
 <template>
   <div class="playlist-contain">
     <div class="playlist-title-artwork-contain">
-      <div class="artwork-contain">
-      </div>
-      <nuxt-link to="/playlists/test/"><h2 class="playlist-title">{{ playlist.title }}</h2></nuxt-link>
+      <div class="artwork-contain" />
+      <nuxt-link to="/playlists/test/">
+        <h2 class="playlist-title">
+          {{ playlist.title }}
+        </h2>
+      </nuxt-link>
     </div>
   </div>
 </template>
@@ -13,10 +16,13 @@ import { mapState } from 'vuex';
 
 export default {
   name: 'Playlist',
-  components: {
+  props: {
+    'playlist': {
+      type: Object,
+      default: () => {},
+    },
   },
   computed: mapState(['nowPlayingItem', 'nowPlayingPost', 'playbackState']),
-  props: ['playlist', 'index'],
   methods: {
   },
 };

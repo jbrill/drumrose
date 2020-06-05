@@ -1,7 +1,7 @@
-import Vue from 'vue'
-import Vuetify from 'vuetify'
-import 'vuetify/dist/vuetify.min.css'
-import 'material-design-icons-iconfont/dist/material-design-icons.css'
+import Vue from 'vue';
+import Vuetify from 'vuetify';
+import 'vuetify/dist/vuetify.min.css';
+import 'material-design-icons-iconfont/dist/material-design-icons.css';
 import colors from "vuetify/es5/util/colors";
 
 Vue.use(Vuetify);
@@ -18,12 +18,12 @@ export default ctx => {
            info: colors.teal.lighten1,
            warning: colors.amber.base,
            error: colors.deepOrange.accent4,
-           success: colors.green.accent4
-        }
-      }
+           success: colors.green.accent4,
+        },
+      },
     },
-  })
+  });
 
-  ctx.app.vuetify = vuetify
-  ctx.$vuetify = vuetify.framework
-}
+  ctx.app.vuetify = vuetify;
+  ctx.$vuetify = vuetify.framework;
+};

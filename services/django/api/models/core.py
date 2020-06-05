@@ -111,6 +111,7 @@ class FavoritedTrack(FavoritedItem):
     """
 
     song = models.ForeignKey("Song", on_delete=models.CASCADE)
+    favorite_type = "track"
 
     class Meta:
         unique_together = (
@@ -125,6 +126,7 @@ class FavoritedAlbum(FavoritedItem):
     """
 
     album = models.ForeignKey("Album", on_delete=models.CASCADE)
+    favorite_type = "album"
 
     class Meta:
         unique_together = (
@@ -139,6 +141,7 @@ class FavoritedPlaylist(FavoritedItem):
     """
 
     playlist = models.ForeignKey("Playlist", on_delete=models.CASCADE)
+    favorite_type = "playlist"
 
     class Meta:
         unique_together = (

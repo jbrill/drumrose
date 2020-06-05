@@ -1,12 +1,9 @@
 <template>
-  <div class="profile__contain" />
+  <div>test</div>
 </template>
 
 <script>
-import { getPosts } from '~/utils/post_util';
-
-export default {
-  name: 'UserProfile',
-  components: {},
-};
 </script>
+
+<style scoped>
+</style>

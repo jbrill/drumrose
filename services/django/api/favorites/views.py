@@ -3,22 +3,22 @@ Favorites Route Definitions
 """
 # pylint: disable=W0612,W0613
 
-import json
+from itertools import chain
+from operator import attrgetter
 
 from api.favorites.serializers import (
     FavoritedAlbumSerializer,
     FavoritedPlaylistSerializer,
+    FavoritedSerializer,
     FavoritedTrackSerializer,
 )
 from api.models.core import (
     FavoritedAlbum,
     FavoritedPlaylist,
     FavoritedTrack,
-    Song,
     User,
 )
 from api.users.serializers import UserSerializer
-from django.http import HttpResponseBadRequest
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -135,6 +135,42 @@ class FavoritePlaylistList(APIView):
         serializer = FavoritedPlaylistSerializer(
             favorited_playlists, many=True
         )
+        return Response(serializer.data)
+
+    def post(self, request):
+        """
+        Post favorited playlist
+        """
+
+        return
+
+
+class FavoritesList(APIView):
+    """
+    Description:
+        - API View for User List
+    Routes:
+        - GET /posts/
+            - Gets a list of posts per user
+        - POST /posts/
+            - Creates a new post
+    """
+
+    def get(self, request):
+        """
+        Get favorited tracks
+        """
+        favorited_playlists = FavoritedPlaylist.objects.all()
+        favorited_tracks = FavoritedTrack.objects.all()
+        favorited_albums = FavoritedAlbum.objects.all()
+
+        # merge favorites
+        favorites = sorted(
+            chain(favorited_playlists, favorited_tracks, favorited_albums),
+            key=attrgetter("created_date"),
+        )
+
+        serializer = FavoritedSerializer(favorites, many=True)
         return Response(serializer.data)
 
     def post(self, request):

@@ -17,14 +17,19 @@
         @click="showQueue"
       >queue_music</i>
       <div class="audio-player-artwork">
-        <span :style="{ backgroundImage: 'url('
-+ nowPlayingItem.attributes.artwork.url +')', backgroundSize: 'cover' }">
-</span></div>
+        <span
+          :style="{
+            backgroundImage:
+              'url(' + nowPlayingItem.attributes.artwork.url + ')',
+            backgroundSize: 'cover'
+          }"
+        />
+      </div>
       <div class="audio-player__track-info">
         <span ref="trackArtist" class="audio-player__track-info__track-artist">
           {{ nowPlayingItem.attributes.artistName }}
         </span>
-        <span ref="songName" class="audio-player__track-info__track-name"">
+        <span ref="songName" class="audio-player__track-info__track-name">
           {{ nowPlayingItem.attributes.name }}
         </span>
       </div>
@@ -41,18 +46,18 @@
         @click="prevMusic"
       >skip_previous</i>
       <i
+        v-if="playbackState === 3"
         ref="musicButton"
         class="audio-play
 material-icons"
         @click="playTrack"
-        v-if="playbackState ===  3"
       >play_arrow</i>
       <i
+        v-else
         ref="musicButton"
         class="audio-pause
 material-icons"
         @click="pauseTrack"
-        v-else
       >pause</i>
       <i
         ref="musicNext"
@@ -62,9 +67,9 @@ material-icons"
       <div class="musicNavigationControls">
         <i
           ref="shuffleButton"
+          v-tooltip="'Shuffle'"
           class="shuffle-button material-icons"
           @click="shuffleTrack"
-          v-tooltip="'Shuffle'"
         >shuffles</i>
         <i
           ref="repeatButton"
@@ -83,18 +88,17 @@ import PostTimeline from "~/components/PostTimeline";
 
 export default {
   components: {
-    PostTimeline
+    PostTimeline,
   },
   computed: {
     ...mapState(['nowPlayingItem', 'playbackState']),
-    isOverflowing() {
+    isOverflowing () {
       const element = this.$refs.songName;
       if (element.offsetWidth < element.scrollWidth) {
-        console.log("AYO");
         return true;
       }
       return false;
-    }
+    },
   },
   methods: {
     playTrack () {
@@ -104,7 +108,10 @@ export default {
       this.$store.dispatch("pause");
     },
     prevMusic () {
-      if (this.$store.state.playbackTime.currentPlaybackTime >= 3 || this.$store.state.history.length === 0) {
+      if (
+        this.$store.state.playbackTime.currentPlaybackTime >= 3 || 
+        this.$store.state.history.length === 0
+      ) {
         this.$store.dispatch("seek", 0);
       } else {
         this.$store.dispatch("previous");
@@ -112,9 +119,9 @@ export default {
     },
     nextMusic () {
       let vm = this;
-      this.$store.dispatch("next").then( function() {
+      this.$store.dispatch("next").then( function () {
         const idx = vm.$store.state.posts.filter(a => {
-          return a.song.apple_music_id === vm.$store.state.nowPlayingItem.id
+          return a.song.apple_music_id === vm.$store.state.nowPlayingItem.id;
         });
         console.log(idx);
         vm.$store.dispatch("setNowPlayingPost", idx[0]);
@@ -124,21 +131,21 @@ export default {
       console.log('MORE...');
     },
     repeatTrack () {
-      console.log("REPEAT")
+      console.log("REPEAT");
       this.$store.dispatch("toggleRepeatMode");
     },
     shuffleTrack () {
-      console.log("SHUFFLE")
+      console.log("SHUFFLE");
       this.$store.dispatch("toggleShuffleMode");
     },
     changeVolume () {
-      console.log("VOLUME")
+      console.log("VOLUME");
     },
     showQueue () {
-      console.log("queueueue")
+      console.log("queueueue");
     },
     favoriteTrack () {
-      console.log("favorite")
+      console.log("favorite");
     },
   },
 };

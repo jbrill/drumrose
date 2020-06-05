@@ -65,7 +65,7 @@ export default {
     '~/plugins/tooltip.client.js',
     '~/plugins/hotkey.client.js',
     '~/plugins/vuetify.client.js',
-    '~/plugins/carousel.client.js'
+    '~/plugins/carousel.client.js',
   ],
   /*
    ** Build configuration

@@ -18,6 +18,11 @@ urlpatterns = [
     path("", api_routes.HealthRoute.as_view(), name="Health"),
     path("auth/", auth_routes.AuthRoute.as_view(), name="Auth"),
     path(
+        "favorites/",
+        favorite_routes.FavoritesList.as_view(),
+        name="FavoritesList",
+    ),
+    path(
         "favorites/tracks/",
         favorite_routes.FavoriteTracksList.as_view(),
         name="FavoriteTracksList",

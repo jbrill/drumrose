@@ -1,66 +1,151 @@
 <template>
   <div v-if="!isLoading">
     <div class="artistContain">
-      <div class="noselect albumContain" @mouseenter="isHovering = true" @mouseleave = "isHovering = false">
+      <div
+        class="noselect albumContain"
+        @mouseenter="isHovering = true"
+        @mouseleave="isHovering = false"
+      >
         <img class="albumCover" :src="artworkUrl">
-        <div ref="albumOverlay" :class="{ albumOverlay: true, albumOverlayActive: isHovering }">
+        <div
+          ref="albumOverlay"
+          :class="{
+            albumOverlay: true,
+            albumOverlayActive: isHovering
+          }"
+        >
           <div class="album-overlay-actions-contain">
-						<v-btn
-							icon
-							dark
-						>
-							<v-icon small color="white" class="album-overlay-more">mdi-heart</v-icon>
+            <v-btn
+              icon
+              dark
+            >
+              <v-icon small color="white" class="album-overlay-more">
+                mdi-heart
+              </v-icon>
             </v-btn>
             <v-menu dark offset-y>
-							<template v-slot:activator="{ on }">
-								<v-btn
-									icon
-									dark
-									v-on="on"
-								>
-									<v-icon small color="white" class="album-overlay-more">mdi-dots-horizontal</v-icon>
-								</v-btn>
-							</template>
-							<v-list>
-								<v-list-item
-									@click=""
-								>
-									<v-list-item-title><v-icon>mdi-playlist-plus</v-icon> Add to queue</v-list-item-title>
-								</v-list-item>
-								<v-list-item
-									@click=""
-								>
-									<v-list-item-title><v-icon>mdi-music-box-multiple</v-icon> Add to playlist</v-list-item-title>
-								</v-list-item>
-								<v-list-item
-									@click=""
-								>
-									<v-list-item-title><v-icon>mdi-music-box</v-icon> Add to library</v-list-item-title>
-								</v-list-item>
-							</v-list>
-						</v-menu>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  icon
+                  dark
+                  v-on="on"
+                >
+                  <v-icon small color="white" class="album-overlay-more">
+                    mdi-dots-horizontal
+                  </v-icon>
+                </v-btn>
+              </template>
+              <v-list>
+                <v-list-item>
+                  <v-list-item-title>
+                    <v-icon>mdi-playlist-plus</v-icon> Add to queue
+                  </v-list-item-title>
+                </v-list-item>
+                <v-dialog
+                  v-model="playlistDialog"
+                  width="500"
+                >
+                  <template v-slot:activator="{ on }">
+                    <v-list-item
+                      v-on="on"
+                    >
+                      <v-list-item-title>
+                        <v-icon>mdi-music-box-multiple</v-icon> Add to playlist
+                      </v-list-item-title>
+                    </v-list-item>
+                  </template>
+						
+                  <v-card>
+                    <v-card-title
+                      class="headline grey lighten-2"
+                      primary-title
+                      dark
+                    >
+                      Add to Playlist
+                    </v-card-title>
+						
+                    <v-divider />
+						
+                    <v-card-actions>
+                      <v-spacer />
+                      <v-btn
+                        color="primary"
+                        text
+                        @click="playlistDialog = false"
+                      >
+                        Add
+                      </v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+                <v-list-item>
+                  <v-list-item-title>
+                    <v-icon>
+                      mdi-music-box
+                    </v-icon> Add to library
+                  </v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
           </div>
         </div>
-        <div ref="audioAction" :class="{ audioActionContain: true, audioActionContainActive: isHovering }">
+        <div
+          ref="audioAction"
+          :class="{
+            audioActionContain: true,
+            audioActionContainActive: isHovering,
+          }"
+        >
           <v-icon
             class="audioAction audioPlay material-icons"
-            @click="playTrack"
-            v-if="nowPlayingPost && nowPlayingPost.id === post.id && playbackState === 2"
-            color="var(--primary-red--dark)"
-          >mdi-pause</v-icon>
-          <v-icon
-            class="audioAction audioPlay material-icons"
-            @click="playTrack"
-            v-else
             color="white"
-          >mdi-play</v-icon>
+            @click="playTrack"
+          >
+            mdi-play
+          </v-icon>
         </div>
       </div>
     </div>
     <div class="textContain">
-      <span ref="songName" class="songName">{{ name }}</span>
-      <span v-if="type === 'playlist'" ref="playlistName" class="artistName">{{ curatorName }}</span>
-      <span v-else ref="artistName" class="artistName">{{ artistName }}</span>
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on }">
+          <nuxt-link
+            class="songName"
+            :to="'/tracks/' + appleMusicId"
+          >
+            <span
+              ref="songName"
+              class="songName"
+              v-on="on"
+            >{{ name }}</span>
+          </nuxt-link>
+        </template>
+        <div>track name</div>
+      </v-tooltip>
+      <v-tooltip v-if="type === 'playlist'" bottom>
+        <template v-slot:activator="{ on }">
+          <nuxt-link :to="'/people/' + curatorName" class="artistName">
+            <span
+              ref="curatorName"
+              class="curatorName"
+              v-on="on"
+            >{{ curatorName }}</span>
+          </nuxt-link>
+        </template>
+        <div>track name</div>
+      </v-tooltip>
+      <v-tooltip v-else bottom>
+        <template v-slot:activator="{ on }">
+          <nuxt-link :to="'/artists/' + artistName" class="artistName">
+            <span
+              ref="curatorName"
+              class="artistName"
+              v-on="on"
+            >{{ artistName }}</span>
+          </nuxt-link>
+        </template>
+        <div>artist name</div>
+      </v-tooltip>
     </div>
   </div>
 </template>
@@ -70,8 +155,14 @@ import { mapState } from 'vuex';
 
 export default {
   props: {
-    type: String,
-    apple_music_id: String
+    type: {
+      type: String,
+      default: '',
+    },
+    appleMusicId: {
+      type: String,
+      default: '',
+    },
   },
   data () {
     return {
@@ -82,9 +173,36 @@ export default {
       artworkUrl: '',
       name: '',
       isHovering: false,
-    }
+      playlistDialog: false,
+    };
   },
   computed: mapState(['nowPlayingItem', 'nowPlayingPost', 'playbackState']),
+  async mounted () {
+    let resp = '';
+    if (this.type === 'track') {
+      resp = await this.$store.getters.fetch(
+        `/v1/catalog/us/songs/${this.appleMusicId}`
+      );
+      this.artistName = resp.data[0].attributes.artistName;
+    } else if (this.type === 'album') {
+      resp = await this.$store.getters.fetch(
+        `/v1/catalog/us/albums/${this.appleMusicId}`
+      );
+      this.artistName = resp.data[0].attributes.artistName;
+    } else if (this.type === 'playlist') {
+      resp = await this.$store.getters.fetch(
+        `/v1/catalog/us/playlists/${this.appleMusicId}`
+      );
+      this.curatorName = resp.data[0].attributes.curatorName;
+    }
+    this.name = resp.data[0].attributes.name;
+    this.artworkUrl = resp.data[0].attributes.artwork.url.replace(
+      '{w}', '250'
+    ).replace(
+      '{h}', '250'
+    );
+    this.isLoading = false;
+  },
   methods: {
     pauseTrack: async function (event) {
       await this.$store.dispatch("pause");
@@ -92,23 +210,6 @@ export default {
     playTrack: async function (event) {
       await this.$store.dispatch("play");
     },
-  },
-  async mounted () {
-    let resp = '';
-    if (this.type === 'track') {
-      resp = await this.$store.getters.fetch(`/v1/catalog/us/songs/${this.apple_music_id}`)
-      this.artistName = resp.data[0].attributes.artistName;
-    } else if (this.type === 'album') {
-      resp = await this.$store.getters.fetch(`/v1/catalog/us/albums/${this.apple_music_id}`)
-      this.artistName = resp.data[0].attributes.artistName;
-    } else if (this.type === 'playlist') {
-      resp = await this.$store.getters.fetch(`/v1/catalog/us/playlists/${this.apple_music_id}`);
-      console.log(resp);
-      this.curatorName = resp.data[0].attributes.curatorName;
-    }
-    this.name = resp.data[0].attributes.name;
-    this.artworkUrl = resp.data[0].attributes.artwork.url.replace('{w}', '250').replace('{h}', '250');
-    this.isLoading = false;
   },
 };
 </script>

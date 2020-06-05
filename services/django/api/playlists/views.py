@@ -2,12 +2,9 @@
 Playlist Route Definition
 """
 # pylint: disable=W0612,W0613
-#
-import json
 
 from api.models.core import Playlist
 from api.playlists.serializers import PlaylistSerializer
-from django.http import HttpResponseBadRequest
 from rest_framework.response import Response
 from rest_framework.views import APIView
 

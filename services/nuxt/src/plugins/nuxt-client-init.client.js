@@ -1,3 +1,5 @@
+/* global MusicKit */
+
 export default async context => {
 	// Handle init
 	if (MusicKit) {
@@ -7,4 +9,4 @@ export default async context => {
 			await context.store.dispatch('nuxtClientInit', context);
 		});
 	}
-}
+};

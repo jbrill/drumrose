@@ -1,7 +1,9 @@
+/* global MusicKit */
+
 import axios from 'axios';
-import Cookie from 'cookie';
 import clonedeep from 'lodash';
 import Raven from 'raven-js';
+import { errorMessage } from '~/utils/MusicKit';
 
 export const state = () => ({
 	// State information
@@ -32,13 +34,15 @@ export const state = () => ({
   nowPlayingPost: null,
 });
 
+
 /**
  * Return the appropriate API object.
  */
-let getApi = (library) => {
+let getApi = library => {
   let instance = MusicKit.getInstance();
   return library ? instance.api.library : instance.api;
 };
+
 
 /**
  * Returns headers for a fetch request to the Apple Music API.
@@ -48,9 +52,10 @@ export function apiHeaders () {
     Authorization: 'Bearer ' + MusicKit.getInstance().developerToken,
     Accept: 'application/json',
     'Content-Type': 'application/json',
-    'Music-User-Token': '' + MusicKit.getInstance().musicUserToken
+    'Music-User-Token': '' + MusicKit.getInstance().musicUserToken,
   });
 }
+
 
 export const getters = {
   storefront (state) {
@@ -59,11 +64,13 @@ export const getters = {
 
 	getCurrentPlaybackDuration (state) {
 		if (state.playbackTime && state.playbackTime.currentPlaybackDuration) {
-      const minutes = Math.floor(state.playbackTime.currentPlaybackDuration / 60);
+      const minutes = Math.floor(
+        state.playbackTime.currentPlaybackDuration / 60
+      );
       const seconds = state.playbackTime.currentPlaybackDuration - minutes * 60;
       const parsedMinutes = minutes;
       const parsedSeconds = seconds < 10 ? `0${seconds}` : `${seconds}`;
-      return `${parsedMinutes}:${parsedSeconds}`
+      return `${parsedMinutes}:${parsedSeconds}`;
     }
     return "0:00";
 	},
@@ -74,7 +81,7 @@ export const getters = {
       const seconds = state.playbackTime.currentPlaybackTime - minutes * 60;
       const parsedMinutes = minutes;
       const parsedSeconds = seconds < 10 ? `0${seconds}` : `${seconds}`;
-      return `${parsedMinutes}:${parsedSeconds}`
+      return `${parsedMinutes}:${parsedSeconds}`;
     }
     return "0:00";
 	},
@@ -107,18 +114,25 @@ export const getters = {
   },
   fetch (state) {
     return path => {
-      return fetch(`https://api.music.apple.com${path}`, { headers: apiHeaders() }).then(r => r.json());
+      return fetch(
+        `https://api.music.apple.com${path}`,
+        {
+          headers: apiHeaders(),
+        }
+      ).then(
+        r => r.json()
+      );
     };
   },
   search (state) {
     return (library, query, options) => {
       return getApi(library).search(query, options);
     };
-  }
-}
+  },
+};
 
 export const mutations = {
-	SET_APPLE_MUSIC_TOKEN(state, apple_music_token) {
+	SET_APPLE_MUSIC_TOKEN (state, apple_music_token) {
 		state.appleMusicToken = apple_music_token;
 	},
 	init (state) {
@@ -182,7 +196,7 @@ export const mutations = {
   nowPlayingPost (state, nowPlayingPost) {
     state.nowPlayingPost = nowPlayingPost;
   },
-  posts(state, posts) {
+  posts (state, posts) {
     state.posts = posts;
   },
 
@@ -193,28 +207,34 @@ export const mutations = {
   removeEventListener (state, listener) {
     MusicKit.getInstance().removeEventListener(listener.event, listener.func);
   },
-}
+};
 
 export const actions = {
- 	setAppleMusicToken({commit}) {
-    axios.post('https://teton.drumrose.io/api/apple_music_token/').then(result => {
-			commit('SET_APPLE_MUSIC_TOKEN', result.data.token);
+  setAppleMusicToken ({ commit }) {
+    axios.post(
+      'https://teton.drumrose.io/api/apple_music_token/'
+    ).then( result => {
+      commit('SET_APPLE_MUSIC_TOKEN', result.data.token);
     }).catch(error => {
       throw new Error(`API ${error}`);
     });
   },
- 	setNowPlayingPost({commit}, post) {
+  setNowPlayingPost ({ commit }, post) {
     commit('nowPlayingPost', post);
   },
-	async nuxtClientInit({ commit, state, dispatch }, { req }) {
-		const tokenResponse = await axios.post('https://teton.drumrose.io/api/apple_music_token/');
+	async nuxtClientInit (
+    { commit, state, dispatch }, { req } )
+  {
+		const tokenResponse = await axios.post(
+      'https://teton.drumrose.io/api/apple_music_token/'
+    );
 		let instance = MusicKit.configure({
 			developerToken: tokenResponse.data.token,
 			app: {
 				name: 'DRUMROSE',
 				build: '2.0.0',
-				icon: "ICON"
-			}
+				icon: "ICON",
+			},
 		});
 
     let localStorage = window.localStorage;
@@ -233,7 +253,9 @@ export const actions = {
 
     if (localStorage && localStorage.getItem('volume')) {
       try {
-        dispatch('setVolume', JSON.parse(localStorage.getItem('volume') || '1'));
+        dispatch(
+          'setVolume', JSON.parse(localStorage.getItem('volume') || '1')
+        );
       } catch (err) {
         console.error(err);
         Raven.captureException(err);
@@ -245,7 +267,11 @@ export const actions = {
 
     if (localStorage && localStorage.getItem('bitrate')) {
       try {
-        dispatch('setBitrate', MusicKit.PlaybackBitrate[localStorage.getItem('bitrate') || 'HIGH']);
+        dispatch(
+          'setBitrate', MusicKit.PlaybackBitrate[
+            localStorage.getItem('bitrate') || 'HIGH'
+          ]
+        );
       } catch (err) {
         console.error(err);
         Raven.captureException(err);
@@ -257,7 +283,9 @@ export const actions = {
 
     if (localStorage && localStorage.getItem('shuffle')) {
       try {
-        dispatch('shuffle', JSON.parse(localStorage.getItem('shuffle') || 'false'));
+        dispatch(
+          'shuffle', JSON.parse(localStorage.getItem('shuffle') || 'false')
+        );
       } catch (err) {
         console.error(err);
         Raven.captureException(err);
@@ -289,106 +317,112 @@ export const actions = {
     // Register event handlers
     commit('addEventListener', {
       event: MusicKit.Events.storefrontIdentifierDidChange,
-      func: (evt) => {
+      func: evt => {
         commit('storefront', instance.storefrontId);
-      }
+      },
     });
 
     commit('addEventListener', {
       event: MusicKit.Events.storefrontCountryCodeDidChange,
-      func: (evt) => {
+      func: evt => {
         commit('storefront', instance.storefrontId);
-      }
+      },
     });
 
     commit('addEventListener', {
       event: MusicKit.Events.authorizationStatusDidChange,
-      func: (evt) => {
+      func: evt => {
         if (instance.isAuthorized) {
           setTimeout(() => {
-            MusicKit.getInstance().me().then((me) => {
+            MusicKit.getInstance().me().then(me => {
               commit('storefront', me.storefront);
             });
           }, 1000);
         }
 
         commit('isAuthorized', instance.isAuthorized);
-      }
+      },
     });
 
     commit('addEventListener', {
       event: MusicKit.Events.playbackStateDidChange,
-      func: (evt) => {
+      func: evt => {
         commit('playbackState', evt.state);
-      }
+      },
     });
 
     commit('addEventListener', {
       event: MusicKit.Events.bufferedProgressDidChange,
-      func: (evt) => {
+      func: evt => {
         commit('bufferedProgress', evt.progress);
-      }
+      },
     });
 
     commit('addEventListener', {
       event: MusicKit.Events.mediaItemDidChange,
-      func: (evt) => {
+      func: evt => {
         // Add the current item (if any) to the history.
         if (state.nowPlayingItem) {
           commit('addHistoryItem', state.nowPlayingItem);
         }
 
         commit('nowPlayingItem', clonedeep(evt.item));
-      }
+      },
     });
 
     commit('addEventListener', {
       event: MusicKit.Events.playbackTimeDidChange,
-      func: (evt) => {
+      func: evt => {
         commit('playbackTime', clonedeep(evt));
-      }
+      },
     });
 
     commit('addEventListener', {
       event: MusicKit.Events.playbackVolumeDidChange,
-      func: (evt) => {
+      func: evt => {
         commit('volume', instance.player.volume);
-      }
+      },
     });
 
     commit('addEventListener', {
       event: MusicKit.Events.primaryPlayerDidChange,
-      func: (evt) => {
+      func: evt => {
         commit('supportsEME', instance.player.canSupportDRM);
-      }
+      },
     });
 
     commit('addEventListener', {
       event: MusicKit.Events.playbackBitrateDidChange,
-      func: (evt) => {
+      func: evt => {
         commit('bitrate', instance.bitrate);
-      }
+      },
     });
 
     commit('addEventListener', {
       event: MusicKit.Events.queueItemsDidChange,
-      func: (items) => commit('queue', clonedeep(items))
+      func: items => commit('queue', clonedeep(items)),
     });
 
     commit('addEventListener', {
       event: MusicKit.Events.queuePositionDidChange,
-      func: (evt) => commit('queuePosition', evt.position)
+      func: evt => commit('queuePosition', evt.position),
     });
 
     commit('addEventListener', {
       event: MusicKit.Events.mediaPlaybackError,
-      func: (evt) => {
+      func: evt => {
         console.error('PLAYBACK_ERROR', evt);
         Raven.captureException(evt);
 
         // Notify the user of the error.
-        dispatch('alerts/add', errorMessage({ name: MusicKit.MKError.MEDIA_PLAYBACK }), { root: true });
-      }
+        dispatch(
+          'alerts/add', errorMessage({
+            name: MusicKit.MKError.MEDIA_PLAYBACK,
+          }), { 
+            root: true,
+          }
+        );
+      },
     });
 
     // Initialize the instance
@@ -417,7 +451,9 @@ export const actions = {
     commit('shuffleMode', instance.player.shuffleMode);
 
     if (window.localStorage) {
-      window.localStorage.setItem('shuffle', JSON.stringify(state.shuffleMode === 1));
+      window.localStorage.setItem(
+        'shuffle', JSON.stringify(state.shuffleMode === 1)
+      );
     }
   },
   shuffle ({ commit }, shuffle = true) {
@@ -431,10 +467,13 @@ export const actions = {
   toggleRepeatMode ({ commit }) {
     // Repeat modes: 0 - off, 1 - one, 2 - all
     let instance = MusicKit.getInstance();
-    instance.player.repeatMode = instance.player.repeatMode === 0 ? 2 : instance.player.repeatMode - 1;
+    instance.player.repeatMode = instance.player.repeatMode === 0 ? 
+      2 : instance.player.repeatMode - 1;
     commit('repeatMode', instance.player.repeatMode);
     if (window.localStorage) {
-      window.localStorage.setItem('repeat', JSON.stringify(instance.player.repeatMode));
+      window.localStorage.setItem(
+        'repeat', JSON.stringify(instance.player.repeatMode)
+      );
     }
   },
   repeat ({ commit }, mode = 2) {
@@ -489,13 +528,13 @@ export const actions = {
     return instance.setQueue(queue);
   },
   setVolume (_, volume) {
-    volume = parseFloat(volume);
+    const newVolume = parseFloat(volume);
 
     let instance = MusicKit.getInstance();
-    instance.player.volume = volume;
+    instance.player.volume = newVolume;
 
     if (window.localStorage) {
-      window.localStorage.setItem('volume', JSON.stringify(volume));
+      window.localStorage.setItem('volume', JSON.stringify(newVolume));
     }
   },
 
@@ -509,7 +548,7 @@ export const actions = {
       'library-songs': 'library-songs',
       'library-playlists': 'library-playlists',
       'library-albums': 'library-albums',
-      'library-stations': 'library-stations'
+      'library-stations': 'library-stations',
     };
 
     if (!(item.type in types)) {
@@ -518,16 +557,20 @@ export const actions = {
 
     return new Promise(async (resolve, reject) => {
       try {
-        let res = await fetch(`https://api.music.apple.com/v1/me/ratings/${types[item.type]}/${item.id}`, {
-          method: 'PUT',
-          headers: apiHeaders(),
-          body: JSON.stringify({
-            type: 'rating',
-            attributes: {
-              value: rating
-            }
-          })
-        });
+        let res = await fetch(
+          `https://api.music.apple.com/v1/me/ratings/
+          ${types[item.type]}/${item.id}`,
+          {
+            method: 'PUT',
+            headers: apiHeaders(),
+            body: JSON.stringify({
+              type: 'rating',
+              attributes: {
+                value: rating,
+              },
+            }),
+          }
+        );
 
         if (res.status === 200) {
           resolve(true);
@@ -542,13 +585,13 @@ export const actions = {
   love ({ dispatch }, item) {
     return dispatch('rate', {
       item: item,
-      rating: 1
+      rating: 1,
     });
   },
   dislike ({ dispatch }, item) {
     return dispatch('rate', {
       item: item,
-      rating: -1
+      rating: -1,
     });
   },
 
@@ -561,13 +604,17 @@ export const actions = {
   addToPlaylist (_, { playlistId, items }) {
     return new Promise(async (resolve, reject) => {
       try {
-        let res = await fetch(`https://api.music.apple.com/v1/me/library/playlists/${playlistId}/tracks`, {
-          method: 'POST',
-          headers: apiHeaders(),
-          body: JSON.stringify({
-            data: items
-          })
-        });
+        let res = await fetch(
+          `https://api.music.apple.com/v1/me/library/playlists/
+          ${playlistId}/tracks`,
+          {
+            method: 'POST',
+            headers: apiHeaders(),
+            body: JSON.stringify({
+              data: items,
+            }),
+          }
+        );
 
         if (res.status === 204) {
           // Invalid local cache
@@ -588,20 +635,23 @@ export const actions = {
   newPlaylist (_, { name, items = [] }) {
     return new Promise(async (resolve, reject) => {
       try {
-        let res = await fetch(`https://api.music.apple.com/v1/me/library/playlists`, {
-          method: 'POST',
-          headers: apiHeaders(),
-          body: JSON.stringify({
-            attributes: {
-              name: name
-            },
-            relationships: {
-              tracks: {
-                data: items
-              }
-            }
-          })
-        });
+        let res = await fetch(
+          `https://api.music.apple.com/v1/me/library/playlists`,
+          {
+            method: 'POST',
+            headers: apiHeaders(),
+            body: JSON.stringify({
+              attributes: {
+                name: name,
+              },
+              relationships: {
+                tracks: {
+                  data: items,
+                },
+              },
+            }),
+          }
+        );
 
         if (res.status === 201) {
           // Invalid local cache
@@ -622,10 +672,14 @@ export const actions = {
   getTrackHints (_, { searchInput }) {
     return new Promise(async (resolve, reject) => {
       try {
-        let res = await fetch(`https://api.music.apple.com/v1/catalog/us/}search?term=\${searchInput}&limit=2&types=songs`, {
-          method: 'GET',
-          headers: apiHeaders(),
-        });
+        let res = await fetch(
+          `https://api.music.apple.com/v1/catalog/us/search?term=
+          \${searchInput}&limit=2&types=songs`,
+          {
+            method: 'GET',
+            headers: apiHeaders(),
+          }
+        );
 
         if (res.status === 204) {
           // Invalid local cache
@@ -642,6 +696,6 @@ export const actions = {
       }
     });
   },
-}
+};
 
-export const strict = false
+export const strict = false;

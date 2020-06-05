@@ -4,13 +4,21 @@
       DRUMROSE
     </nuxt-link>
     <div class="navigation-contain">
-      <v-btn color="#ccc" text nuxt to="/">SOCIAL</v-btn>
-      <v-btn color="#ccc" text nuxt to="/discover">DISCOVER</v-btn>
-      <v-btn color="#ccc" text nuxt to="/playlists">PLAYLISTS</v-btn>
-      <v-btn color="#ccc" text nuxt to="/library">LIBRARY</v-btn>
+      <v-btn color="#ccc" text nuxt to="/">
+        SOCIAL
+      </v-btn>
+      <v-btn color="#ccc" text nuxt to="/discover">
+        DISCOVER
+      </v-btn>
+      <v-btn color="#ccc" text nuxt to="/playlists">
+        PLAYLISTS
+      </v-btn>
+      <v-btn color="#ccc" text nuxt to="/library">
+        LIBRARY
+      </v-btn>
     </div>
     <div style="text-align: center">
-			<v-menu dark open-on-hover offset-y>
+      <v-menu dark open-on-hover offset-y>
         <template v-slot:activator="{ on }">
           <v-btn
             tile
@@ -19,20 +27,20 @@
             v-on="on"
           >
             jbrilly
-						<v-icon
+            <v-icon
               style="height: 100%"
-              right dark
-							v-on="on"
-						>
-						 mdi-chevron-down
-						</v-icon>
+              right
+              dark
+              v-on="on"
+            >
+              mdi-chevron-down
+            </v-icon>
           </v-btn>
         </template>
         <v-list>
           <v-list-item
             v-for="(item, index) in profileOptions"
             :key="index"
-            @click=""
             :to="item.link"
           >
             <v-list-item-title>{{ item.title }}</v-list-item-title>
@@ -44,10 +52,11 @@
       <v-menu dark offset-y>
         <template v-slot:activator="{ on }">
           <v-icon
-            dark center
+            dark
+            center
             v-on="on"
           >
-           mdi-dots-horizontal 
+            mdi-dots-horizontal 
           </v-icon>
         </template>
         <v-list>
@@ -55,7 +64,6 @@
             v-for="(item, index) in applicationOptions"
             :key="index"
             :to="item.link"
-            @click=""
           >
             <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item>
@@ -71,7 +79,7 @@ export default {
   },
   data: () => ({
     profileOptions: [
-      { title: 'Profile', link: "/profile" },
+      { title: 'Profile', link: "/users/" },
       { title: 'Likes', link: "/likes" },
       { title: 'Playlists', link: "/playlists" },
       { title: 'Following', link: "/following" },
@@ -83,7 +91,7 @@ export default {
       { title: 'Settings', link: "/settings" },
       { title: 'Sign Out' },
 		],
-	})
+	}),
 };
 </script>
 
@@ -110,8 +118,8 @@ export default {
 .title-button {
   font-weight: bolder;
   color: var(--primary-red) !important;
-  font-size: 1.5rem;
-  padding-left: 1rem;
+  font-size: 1.6rem;
+  padding-left: 1.2rem;
 }
 .profile-menu-icon {
   height: 100%;

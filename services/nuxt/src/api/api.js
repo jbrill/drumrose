@@ -21,11 +21,14 @@ export const getUserDetail = async (bearerToken, userHandle) => {
 
 export const getFavoritedTracks = async bearerToken => {
   try {
-    const response = await axios.get('https://teton.drumrose.io/api/favorites/tracks/', {
-      headers: {
-        Authorization: `Bearer ${bearerToken}`,
-      },
-    });
+    const response = await axios.get(
+      'https://teton.drumrose.io/api/favorites/tracks/',
+      {
+        headers: {
+          Authorization: `Bearer ${bearerToken}`,
+        },
+      }
+    );
     return response;
   } catch (err) {
     console.error(err);
@@ -37,11 +40,14 @@ export const getFavoritedTracks = async bearerToken => {
 
 export const getFavoritedAlbums = async bearerToken => {
   try {
-    const response = await axios.get('https://teton.drumrose.io/api/favorites/albums/', {
-      headers: {
-        Authorization: `Bearer ${bearerToken}`,
+    const response = await axios.get(
+      'https://teton.drumrose.io/api/favorites/albums/',
+      {
+        headers: {
+          Authorization: `Bearer ${bearerToken}`,
+        },
       },
-    });
+    );
     return response;
   } catch (err) {
     console.error(err);
@@ -53,11 +59,33 @@ export const getFavoritedAlbums = async bearerToken => {
 
 export const getFavoritedPlaylists = async bearerToken => {
   try {
-    const response = await axios.get('https://teton.drumrose.io/api/favorites/playlists/', {
-      headers: {
-        Authorization: `Bearer ${bearerToken}`,
-      },
-    });
+    const response = await axios.get(
+      'https://teton.drumrose.io/api/favorites/playlists/',
+      {
+        headers: {
+          Authorization: `Bearer ${bearerToken}`,
+        },
+      }
+    );
+    return response;
+  } catch (err) {
+    console.error(err);
+    return {
+      data: [],
+    };
+  }
+};
+
+export const getFavorites = async bearerToken => {
+  try {
+    const response = await axios.get(
+      'https://teton.drumrose.io/api/favorites/',
+      {
+        headers: {
+          Authorization: `Bearer ${bearerToken}`,
+        },
+      }
+    );
     return response;
   } catch (err) {
     console.error(err);
@@ -72,7 +100,7 @@ export const getPlaylists = async bearerToken => {
     const response = await axios.get(
       `https://teton.drumrose.io/api/playlists/`,
     );
-    console.log(response.data)
+    console.log(response.data);
     return response;
   } catch (err) {
     console.error(err);

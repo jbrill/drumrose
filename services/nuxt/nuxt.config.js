@@ -71,17 +71,10 @@ export default {
    ** Build configuration
    */
   buildModules: [
-    // Simple usage
-    '@nuxtjs/stylelint-module',
-
     // With options
     ['@nuxtjs/stylelint-module', {
       fix: true,
     }],
-
-		// Simple usage
-    '@nuxtjs/vuetify',
-
     // With options
     ['@nuxtjs/vuetify', { /* module options */ }],
   ],

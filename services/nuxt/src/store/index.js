@@ -30,7 +30,7 @@ export const state = () => ({
   history: [],
 
   // Posts
-  posts: [],
+  favoritedPosts: [],
   nowPlayingPost: null,
 });
 
@@ -39,8 +39,8 @@ export const state = () => ({
  * Return the appropriate API object.
  */
 let getApi = library => {
-  let instance = MusicKit.getInstance();
-  return library ? instance.api.library : instance.api;
+  ;
+  return library ? MusicKit.getInstance().api.library : MusicKit.getInstance().api;
 };
 
 
@@ -135,6 +135,9 @@ export const mutations = {
 	SET_APPLE_MUSIC_TOKEN (state, apple_music_token) {
 		state.appleMusicToken = apple_music_token;
 	},
+  favoritedPosts (state, posts) {
+    state.favoritedPosts = posts;
+  },
 	init (state) {
     if (state.isInitialized) {
       console.warn('Already initialized; aborting');
@@ -210,25 +213,13 @@ export const mutations = {
 };
 
 export const actions = {
-  setAppleMusicToken ({ commit }) {
-    axios.post(
-      'https://teton.drumrose.io/api/apple_music_token/'
-    ).then( result => {
-      commit('SET_APPLE_MUSIC_TOKEN', result.data.token);
-    }).catch(error => {
-      throw new Error(`API ${error}`);
-    });
-  },
-  setNowPlayingPost ({ commit }, post) {
-    commit('nowPlayingPost', post);
-  },
 	async nuxtClientInit (
     { commit, state, dispatch }, { req } )
   {
 		const tokenResponse = await axios.post(
       'https://teton.drumrose.io/api/apple_music_token/'
     );
-		let instance = MusicKit.configure({
+		MusicKit.configure({
 			developerToken: tokenResponse.data.token,
 			app: {
 				name: 'DRUMROSE',
@@ -240,16 +231,16 @@ export const actions = {
     let localStorage = window.localStorage;
 
     // Check for EME
-    commit('supportsEME', instance.player.canSupportDRM);
+    commit('supportsEME', MusicKit.getInstance().player.canSupportDRM);
 
     // storefront
-    commit('storefront', instance.storefrontId);
+    commit('storefront', MusicKit.getInstance().storefrontId);
 
     // Update authorization status
-    commit('isAuthorized', instance.isAuthorized);
+    commit('isAuthorized', MusicKit.getInstance().isAuthorized);
 
     // Update volume status
-    commit('volume', instance.player.volume);
+    commit('volume', MusicKit.getInstance().player.volume);
 
     if (localStorage && localStorage.getItem('volume')) {
       try {
@@ -263,7 +254,7 @@ export const actions = {
     }
 
     // Update bitrate
-    commit('bitrate', instance.bitrate);
+    commit('bitrate', MusicKit.getInstance().bitrate);
 
     if (localStorage && localStorage.getItem('bitrate')) {
       try {
@@ -279,7 +270,7 @@ export const actions = {
     }
 
     // Update shuffle mode
-    commit('shuffleMode', instance.player.shuffleMode);
+    commit('shuffleMode', MusicKit.getInstance().player.shuffleMode);
 
     if (localStorage && localStorage.getItem('shuffle')) {
       try {
@@ -293,7 +284,7 @@ export const actions = {
     }
 
     // Update shuffle mode
-    commit('repeatMode', instance.player.repeatMode);
+    commit('repeatMode', MusicKit.getInstance().player.repeatMode);
 
     if (localStorage && localStorage.getItem('repeat')) {
       try {
@@ -305,34 +296,34 @@ export const actions = {
     }
 
     // Update playback state
-    commit('playbackState', instance.playbackState);
+    commit('playbackState', MusicKit.getInstance().playbackState);
 
     // Update bufferred status
-    commit('bufferedProgress', instance.player.currentBufferedProgress);
+    commit('bufferedProgress', MusicKit.getInstance().player.currentBufferedProgress);
 
     // Update queue information
-    commit('queue', clonedeep(instance.player.queue.items));
-    commit('queuePosition', instance.player.queue.position);
+    commit('queue', clonedeep(MusicKit.getInstance().player.queue.items));
+    commit('queuePosition', MusicKit.getInstance().player.queue.position);
 
     // Register event handlers
     commit('addEventListener', {
       event: MusicKit.Events.storefrontIdentifierDidChange,
       func: evt => {
-        commit('storefront', instance.storefrontId);
+        commit('storefront', MusicKit.getInstance().storefrontId);
       },
     });
 
     commit('addEventListener', {
       event: MusicKit.Events.storefrontCountryCodeDidChange,
       func: evt => {
-        commit('storefront', instance.storefrontId);
+        commit('storefront', MusicKit.getInstance().storefrontId);
       },
     });
 
     commit('addEventListener', {
       event: MusicKit.Events.authorizationStatusDidChange,
       func: evt => {
-        if (instance.isAuthorized) {
+        if (MusicKit.getInstance().isAuthorized) {
           setTimeout(() => {
             MusicKit.getInstance().me().then(me => {
               commit('storefront', me.storefront);
@@ -340,7 +331,7 @@ export const actions = {
           }, 1000);
         }
 
-        commit('isAuthorized', instance.isAuthorized);
+        commit('isAuthorized', MusicKit.getInstance().isAuthorized);
       },
     });
 
@@ -380,21 +371,21 @@ export const actions = {
     commit('addEventListener', {
       event: MusicKit.Events.playbackVolumeDidChange,
       func: evt => {
-        commit('volume', instance.player.volume);
+        commit('volume', MusicKit.getInstance().player.volume);
       },
     });
 
     commit('addEventListener', {
       event: MusicKit.Events.primaryPlayerDidChange,
       func: evt => {
-        commit('supportsEME', instance.player.canSupportDRM);
+        commit('supportsEME', MusicKit.getInstance().player.canSupportDRM);
       },
     });
 
     commit('addEventListener', {
       event: MusicKit.Events.playbackBitrateDidChange,
       func: evt => {
-        commit('bitrate', instance.bitrate);
+        commit('bitrate', MusicKit.getInstance().bitrate);
       },
     });
 
@@ -429,15 +420,13 @@ export const actions = {
     commit('init');
   },
   setStorefront ({ commit }, storefront) {
-    let instance = MusicKit.getInstance();
-    instance.storefrontId = storefront;
-    instance.api.userStorefrontId = storefront;
-    instance.storekit.storefrontCountryCode = storefront;
+    MusicKit.getInstance().storefrontId = storefront;
+    MusicKit.getInstance().api.userStorefrontId = storefront;
+    MusicKit.getInstance().storekit.storefrontCountryCode = storefront;
     commit('storefront', storefront);
   },
   async resetStorefront ({ dispatch }) {
-    let instance = MusicKit.getInstance();
-    let me = await instance.me();
+    let me = await MusicKit.getIntance.me();
 
     if (me.storefront) {
       dispatch('setStorefront', me.storefront);
@@ -445,10 +434,24 @@ export const actions = {
       dispatch('setStorefront', 'us');
     }
   },
+  setAppleMusicToken ({ commit }) {
+    axios.post(
+      'https://teton.drumrose.io/api/apple_music_token/'
+    ).then( result => {
+      commit('SET_APPLE_MUSIC_TOKEN', result.data.token);
+    }).catch(error => {
+      throw new Error(`API ${error}`);
+    });
+  },
+  setNowPlayingPost ({ commit }, post) {
+    commit('nowPlayingPost', post);
+  },
+  setFavoritedPosts ({ commit }, posts) {
+    commit('favoritedPosts', posts);
+  },
   toggleShuffleMode ({ commit, state }) {
-    let instance = MusicKit.getInstance();
-    instance.player.shuffle = state.shuffleMode === 0 ? 1 : 0;
-    commit('shuffleMode', instance.player.shuffleMode);
+    MusicKit.getInstance().player.shuffle = state.shuffleMode === 0 ? 1 : 0;
+    commit('shuffleMode', MusicKit.getInstance().player.shuffleMode);
 
     if (window.localStorage) {
       window.localStorage.setItem(
@@ -457,37 +460,33 @@ export const actions = {
     }
   },
   shuffle ({ commit }, shuffle = true) {
-    let instance = MusicKit.getInstance();
-    instance.player.shuffle = shuffle;
+    MusicKit.getInstance().player.shuffle = shuffle;
     if (window.localStorage) {
       window.localStorage.setItem('shuffle', JSON.stringify(shuffle));
     }
-    commit('shuffleMode', instance.player.shuffleMode);
+    commit('shuffleMode', MusicKit.getInstance().player.shuffleMode);
   },
   toggleRepeatMode ({ commit }) {
     // Repeat modes: 0 - off, 1 - one, 2 - all
-    let instance = MusicKit.getInstance();
-    instance.player.repeatMode = instance.player.repeatMode === 0 ? 
-      2 : instance.player.repeatMode - 1;
-    commit('repeatMode', instance.player.repeatMode);
+    MusicKit.getInstance().player.repeatMode = MusicKit.getInstance().player.repeatMode === 0 ? 
+      2 : MusicKit.getInstance().player.repeatMode - 1;
+    commit('repeatMode', MusicKit.getInstance().player.repeatMode);
     if (window.localStorage) {
       window.localStorage.setItem(
-        'repeat', JSON.stringify(instance.player.repeatMode)
+        'repeat', JSON.stringify(MusicKit.getInstance().player.repeatMode)
       );
     }
   },
   repeat ({ commit }, mode = 2) {
-    let instance = MusicKit.getInstance();
-    instance.player.repeatMode = mode;
-    commit('repeatMode', instance.player.repeatMode);
+    MusicKit.getInstance().player.repeatMode = mode;
+    commit('repeatMode', MusicKit.getInstance().player.repeatMode);
     if (window.localStorage) {
       window.localStorage.setItem('repeat', JSON.stringify(mode));
     }
   },
   setBitrate ({ commit }, bitrate) {
-    let instance = MusicKit.getInstance();
-    instance.bitrate = bitrate;
-    commit('bitrate', instance.bitrate);
+    MusicKit.getInstance().bitrate = bitrate;
+    commit('bitrate', MusicKit.getInstance().bitrate);
     if (window.localStorage) {
       window.localStorage.setItem('bitrate', MusicKit.PlaybackBitrate[bitrate]);
     }
@@ -499,39 +498,31 @@ export const actions = {
   async pause (_) {
     await MusicKit.getInstance().player.pause();
   },
-  previous (_) {
-    let instance = MusicKit.getInstance();
-    return instance.player.skipToPreviousItem();
+  async previous (_) {
+    await MusicKit.getInstance().player.skipToPreviousItem();
   },
-  next (_) {
-    let instance = MusicKit.getInstance();
-    return instance.player.skipToNextItem();
+  async next (_) {
+    await MusicKit.getInstance().player.skipToNextItem();
   },
-  seek (_, time) {
-    let instance = MusicKit.getInstance();
-    return instance.player.seekToTime(time);
+  async seek (_, time) {
+    await MusicKit.getInstance().player.seekToTime(time);
   },
-  playNext (_, queue) {
-    let instance = MusicKit.getInstance();
-    return instance.player.queue.prepend(queue);
+  async playNext (_, queue) {
+    await MusicKit.getInstance().player.queue.prepend(queue);
   },
-  playLater (_, queue) {
-    let instance = MusicKit.getInstance();
-    return instance.player.queue.append(queue);
+  async playLater (_, queue) {
+    await MusicKit.getInstance().player.queue.append(queue);
   },
-  changeTo (_, position) {
-    let instance = MusicKit.getInstance();
-    return instance.changeToMediaAtIndex(position);
+  async changeTo (_, position) {
+    await MusicKit.getInstance().changeToMediaAtIndex(position);
   },
-  setQueue (_, queue) {
-    let instance = MusicKit.getInstance();
-    return instance.setQueue(queue);
+  async setQueue (_, queue) {
+    await MusicKit.getInstance().setQueue(queue);
   },
   setVolume (_, volume) {
     const newVolume = parseFloat(volume);
 
-    let instance = MusicKit.getInstance();
-    instance.player.volume = newVolume;
+    MusicKit.getInstance().player.volume = newVolume;
 
     if (window.localStorage) {
       window.localStorage.setItem('volume', JSON.stringify(newVolume));

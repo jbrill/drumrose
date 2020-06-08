@@ -76,8 +76,10 @@ export default {
   components: {
     Post,
   },
-  async asyncData () {
+  async asyncData ({ store }) {
     const favoritesResponse = await getFavorites();
+
+    store.dispatch("setFavoritedPosts", favoritesResponse.data);
 
     return {
       "favorites": favoritesResponse.data,

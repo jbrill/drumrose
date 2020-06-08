@@ -88,7 +88,7 @@ export default {
   },
   mounted () {
     const queue = this.posts.map(a => a.song.apple_music_id);
-    
+
     this.$store.dispatch("setQueue", { "songs": queue } );
   },
 };

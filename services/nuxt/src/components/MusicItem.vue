@@ -1,6 +1,7 @@
 <template>
   <div v-if="!isLoading">
     <div class="artistContain">
+      <nuxt-link to="/tracks/">
       <div
         class="noselect albumContain"
         @mouseenter="isHovering = true"
@@ -105,6 +106,7 @@
           </v-icon>
         </div>
       </div>
+      </nuxt-link>
     </div>
     <div class="textContain">
       <v-tooltip bottom>
@@ -159,6 +161,10 @@ export default {
       type: String,
       default: '',
     },
+    postType: {
+      type: String,
+      default: '',
+    },
     appleMusicId: {
       type: String,
       default: '',
@@ -208,6 +214,22 @@ export default {
       await this.$store.dispatch("pause");
     },
     playTrack: async function (event) {
+      event.preventDefault();
+      console.log("SETTING QUEUE");
+      let queue = [];
+      const favoritedPosts = this.$store.state.favoritedPosts;
+      if (this.postType === "favorite") {
+        queue = favoritedPosts.map(a => {
+          if (a.favorite_type === "track") {
+            return a.song.apple_music_id;
+          } else if (a.favorite_type === "playlist") {
+            return a.playlist.apple_music_id;
+          }
+        });
+      }
+      await this.$store.dispatch("setQueue", { "items": queue } );
+      console.log("SET...")
+      console.log(this.$store.state.queue)
       await this.$store.dispatch("play");
     },
   },

@@ -52,6 +52,7 @@
     <MusicItem
       v-if="type === 'track'"
       type="track"
+      :postType="postType"
       :apple-music-id="post.song.apple_music_id"
     />
     <MusicItem

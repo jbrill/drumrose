@@ -10,7 +10,7 @@ export const EventBus = new Vue();
  * Sets the queue to a single item and starts playback.
  * @param item A single MusicKit entity with {@code attributes.playParams}.
  */
-export function playItem (item) {
+export function playSingleItem (item) {
   const musicKit = MusicKit.getInstance();
   const playParams = item.attributes.playParams;
   musicKit.setQueue({

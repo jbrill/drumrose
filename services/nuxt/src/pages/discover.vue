@@ -72,15 +72,15 @@
 
 <script>
 import MusicItem from '~/components/MusicItem';
-import { getFavoritedTracks, getFavoritedPlaylists } from '~/api/api';
+import { getRecommendedTracks, getRecommendedPlayists } from '~/api/apple-music-api';
 
 export default {
   components: {
     MusicItem,
   },
   async asyncData () {
-    const posts = await getFavoritedTracks();
-    const playlists = await getFavoritedPlaylists();
+    const posts = await getRecommendedTracks();
+    const playlists = await getRecommendedPlaylists();
     return {
       "posts": posts.data,
       "playlists": playlists.data,

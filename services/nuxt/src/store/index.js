@@ -5,6 +5,7 @@ import clonedeep from 'lodash';
 import Raven from 'raven-js';
 import { errorMessage } from '~/utils/MusicKit';
 
+
 export const state = () => ({
 	// State information
   isInitialized: false,
@@ -31,7 +32,9 @@ export const state = () => ({
 
   // Posts
   favoritedPosts: [],
-  nowPlayingPost: null,
+	
+  // Server side
+  appleMusicToken: null,
 });
 
 
@@ -47,13 +50,19 @@ let getApi = library => {
 /**
  * Returns headers for a fetch request to the Apple Music API.
  */
-export function apiHeaders () {
-  return new Headers({
-    Authorization: 'Bearer ' + MusicKit.getInstance().developerToken,
-    Accept: 'application/json',
-    'Content-Type': 'application/json',
-    'Music-User-Token': '' + MusicKit.getInstance().musicUserToken,
-  });
+export function apiHeaders (state) {
+  if (process.client) {
+		return new Headers({
+			Authorization: 'Bearer ' + MusicKit.getInstance().developerToken,
+			Accept: 'application/json', 'Content-Type': 'application/json',
+			'Music-User-Token': '' + MusicKit.getInstance().musicUserToken,
+		});
+  } else {
+		return {
+			Authorization: 'Bearer ' + state.appleMusicToken,
+			Accept: 'application/json', 'Content-Type': 'application/json',
+		};
+  }
 }
 
 
@@ -94,10 +103,12 @@ export const getters = {
       return getApi(true).collection('recently-added', null, options);
     };
   },
-  recentlyPlayed (state) {
-    return getApi(false).recentPlayed();
+  async recentlyPlayed (state) {
+    if (process.server) return
+    await getApi(false).recentPlayed();
   },
   heavyRotation (state) {
+    if (process.server) return
     return getApi(false).historyHeavyRotation();
   },
 
@@ -112,16 +123,32 @@ export const getters = {
       return getApi(library).api.collection(type, id, options);
     };
   },
+  headers ( state ) {
+		if (process.client) {
+			return new Headers({
+				Authorization: 'Bearer ' + MusicKit.getInstance().developerToken,
+				Accept: 'application/json', 'Content-Type': 'application/json',
+				'Music-User-Token': '' + MusicKit.getInstance().musicUserToken,
+			});
+		} else {
+			return {
+				Authorization: 'Bearer ' + state.appleMusicToken,
+				Accept: 'application/json', 'Content-Type': 'application/json',
+			};
+		}
+  },
   fetch (state) {
     return path => {
       return fetch(
         `https://api.music.apple.com${path}`,
         {
-          headers: apiHeaders(),
+          headers: getters.headers( state ),
         }
-      ).then(
-        r => r.json()
-      );
+      ).then( (r) => {
+        return r.json()
+      }).catch( (err) => {
+        console.log(err);
+      });
     };
   },
   search (state) {
@@ -132,9 +159,6 @@ export const getters = {
 };
 
 export const mutations = {
-	SET_APPLE_MUSIC_TOKEN (state, apple_music_token) {
-		state.appleMusicToken = apple_music_token;
-	},
   favoritedPosts (state, posts) {
     state.favoritedPosts = posts;
   },
@@ -146,6 +170,9 @@ export const mutations = {
 
     state.isInitialized = true;
   },
+	setAppleMusicToken (state, apple_music_token) {
+		state.appleMusicToken = apple_music_token;
+	},
   isAuthorized (state, isAuthorized) {
     state.isAuthorized = isAuthorized;
   },
@@ -213,12 +240,20 @@ export const mutations = {
 };
 
 export const actions = {
+  async nuxtServerInit({ commit }) {
+		const tokenResponse = await axios.post(
+      'https://teton.drumrose.io/api/apple_music_token/'
+    );
+		await commit('setAppleMusicToken', tokenResponse.data.token);
+  },
 	async nuxtClientInit (
     { commit, state, dispatch }, { req } )
   {
 		const tokenResponse = await axios.post(
       'https://teton.drumrose.io/api/apple_music_token/'
     );
+		commit('setAppleMusicToken', tokenResponse.data.token);
+
 		MusicKit.configure({
 			developerToken: tokenResponse.data.token,
 			app: {
@@ -433,15 +468,6 @@ export const actions = {
     } else {
       dispatch('setStorefront', 'us');
     }
-  },
-  setAppleMusicToken ({ commit }) {
-    axios.post(
-      'https://teton.drumrose.io/api/apple_music_token/'
-    ).then( result => {
-      commit('SET_APPLE_MUSIC_TOKEN', result.data.token);
-    }).catch(error => {
-      throw new Error(`API ${error}`);
-    });
   },
   setNowPlayingPost ({ commit }, post) {
     commit('nowPlayingPost', post);

@@ -25,25 +25,15 @@
             </template>
             <div>Top tooltip</div>
           </v-tooltip>
-          <p class="poster-action">
-            <span
-              v-if="postType ===
-                'favorite'"
-            >favorited</span>
-            <span
-              v-else-if="postType === 'rating'"
-            >
-              rated
-            </span> a <span>{{ type }}</span>
-          </p>
           <v-rating
             v-if="postType === 'rating'"
             v-model="rating"
             background-color="white"
-            color="yellow accent-4"
+            color="var(--primary-purple)"
             dense
             half-increments
             hover
+            x-small
             size="18"
           />
         </div>

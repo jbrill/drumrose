@@ -2,67 +2,22 @@
   <v-app dark class="app">
     <v-content>
       <v-app-bar><Navbar /></v-app-bar>
+      <v-app-bar color="#f0f0f0" v-if="!isAuthorized" short dense class="authorize-apple-music">
+        <span class="authorize-apple-music-text">
+          <v-btn @click="authorizeAppleMusic" small color="black">Sign in</v-btn> to Apple Music to gain full access to tracks, connect with friends, and view your library.
+        </span>
+      </v-app-bar>
+      <v-app-bar color="#f0f0f0" v-if="!isAuthorized" short dense class="authorize-apple-music">
+        <span class="authorize-apple-music-text">
+          <v-btn small color="black" @click="authorizeAppleMusic">Go Pro</v-btn> to gain stats, advanced discovery algorithms, and ad-free browsing.
+        </span>
+      </v-app-bar>
       <v-container fluid d-flex>
-        <div class="music-search-contain">
-          <v-toolbar
-            dense
-            flat
-            floating
-            elevation="0"
-            color="transparent"
-            class="music-searchbar"
-          >
-            <v-text-field
-              hide-details
-              prepend-icon="search"
-              placeholder="Search for music"
-              single-line
-              class="music-searchbar-textfield"
-            />
-          </v-toolbar>
-          <div>
-            <v-btn small text color="#ccc">
-              LIBRARY
-            </v-btn>
-            <ul class="library-menu-contain">
-              <li>
-                <v-btn x-small color="transparent" tile>
-                  <v-icon x-small left>
-                    mdi-waveform
-                  </v-icon> Tracks
-                </v-btn>
-              </li>
-              <li>
-                <v-btn x-small color="transparent" tile>
-                  <v-icon x-small left>
-                    mdi-album
-                  </v-icon> Albums
-                </v-btn>
-              </li>
-              <li>
-                <v-btn x-small color="transparent" tile>
-                  <v-icon x-small left>
-                    mdi-face
-                  </v-icon> Artists
-                </v-btn>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <v-btn x-small text color="#ccc">
-              PLAYLISTS
-            </v-btn><v-btn
-              color="var(--primary-purple)"
-              x-small
-            >
-              Create a Playlist
-            </v-btn>
-          </div>
-        </div>
+        <MusicLibrary />
         <nuxt class="center-contain" />
       </v-container>
       <transition name="fade">
-        <AudioPlayer v-if="queuePosition >= 0" />
+        <AudioPlayer v-if="nowPlayingItem" />
       </transition>
     </v-content>
   </v-app>
@@ -70,16 +25,42 @@
 
 <script>
 import { mapState } from 'vuex';
+import { getUserDetail } from '~/api/api'
 import Navbar from '~/components/Navbar';
 import AudioPlayer from '~/components/AudioPlayer';
+import MusicLibrary from '~/components/MusicLibrary';
 
 
 export default {
   components: {
     Navbar,
     AudioPlayer,
+    MusicLibrary,
   },
-  computed: mapState(['queuePosition']),
+  computed: {
+    ...mapState(['isAuthorized']),
+    items () {
+      return [
+        {
+          name: 'Artists',
+          children: this.artists
+        }
+      ]
+    },
+  }, 
+  methods: {
+    async authorizeAppleMusic() {
+      MusicKit.getInstance().authorize().then( async (resp) => {
+        console.log(resp);
+        // check to see if user is an authorized apple music user
+        const userResp = await getUserDetail('', 'john2');
+        if (userResp.data.is_authorized_apple_music_user === false) {
+            // send patch to set authorized apple music user
+        }
+        console.log(userResp);
+      });
+    },
+  }, 
 };
 </script>
 
@@ -97,7 +78,6 @@ export default {
 }
 .center-contain {
   width: 80%;
-  margin: 1rem;
 }
 .library-menu-contain {
   list-style: none;
@@ -113,6 +93,16 @@ export default {
     background-color: black;
   }
 }
+
+>>>.authorize-apple-music .v-toolbar__content {
+  text-align: center;
+}
+>>>.authorize-apple-music-text {
+  width: 100%;
+  font-size: small;
+  color: black;
+}
+
 @media screen and (prefers-reduced-motion: reduce) {
   .fade-enter-active, .fade-leave-active {
     transition: none;

@@ -71,6 +71,9 @@ class User(BaseModel):
     name = models.CharField(max_length=200)
     avatar_url = models.CharField(max_length=200)
 
+    # Has logged into apple music
+    is_authorized_apple_music_user = models.BooleanField(default=False)
+
 
 class Playlist(BaseModel):
     """
@@ -90,7 +93,7 @@ class Playlist(BaseModel):
 
 class FavoritedItem(BaseModel):
     """
-    Model for a favorited track
+    Model for a favorited item
     """
 
     user = models.ForeignKey(
@@ -147,4 +150,36 @@ class FavoritedPlaylist(FavoritedItem):
         unique_together = (
             "user",
             "playlist",
+        )
+
+
+class ListenedItem(BaseModel):
+    """
+    Model for a favorited track
+    """
+
+    user = models.ForeignKey(
+        "User", null=True, blank=True, on_delete=models.CASCADE
+    )
+
+    class Meta:
+        """
+        Meta Class Definition
+        """
+
+        abstract = True
+
+
+class ListenedTrack(ListenedItem):
+    """
+    Model for a listened track
+    """
+
+    track = models.ForeignKey("Track", on_delete=models.CASCADE)
+    listened_type = "track"
+
+    class Meta:
+        unique_together = (
+            "user",
+            "track",
         )

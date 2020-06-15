@@ -62,7 +62,7 @@ class UserDetail(APIView):
             - Deletes a user
     """
 
-    def get(self, user_handle):
+    def get(self, request, user_handle):
         """
         GET for UserDetail
         """

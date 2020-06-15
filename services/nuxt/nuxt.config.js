@@ -57,7 +57,6 @@ export default {
     'cookie-universal-nuxt',
   ],
   axios: {
-    proxyHeaders: false,
   },
   plugins: [
     '~/plugins/nuxt-client-init.client.js',

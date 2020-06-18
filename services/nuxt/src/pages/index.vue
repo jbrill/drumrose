@@ -1,121 +1,13 @@
 <template>
   <div>
-    <div class="carousel-contain">
-      <v-btn x-small text dark>
-        Listen in with friends
-      </v-btn>
-      <carousel
-        :touch-drag="false"
-        :loop="true"
-        :mouse-drag="false"
-        :pagination-enabled="false"
-        :navigation-enabled="true"
-        :per-page="4"
-      >
-        <slide
-          v-for="(favorite, index) in favorites"
-          :key="favorite.id"
-          data-index="index"
-          data-name="favorite.id"
-          @slideclick="handleSlideClick"
-        >
-          <Post
-            :key="favorite.id"
-            :index="index"
-            :post="favorite"
-            post-type="favorite"
-            :type="favorite.favorite_type"
-          />
-        </slide>
-      </carousel>
+    <div v-if="!auth.loggedIn" class="welcome-contain">
+      <div><h4>Explore your fandom</h4></div>
+      <img class="welcome-contain-image" src="~/assets/welcome-page.png" />
     </div>
-    <div v-if="isAuthorized" class="carousel-contain">
-      <v-btn x-small text dark>
-        Trending Playlists
-      </v-btn>
-      <carousel
-        :touch-drag="false"
-        :loop="true"
-        :mouse-drag="false"
-        :pagination-enabled="false"
-        :navigation-enabled="true"
-        :per-page="4"
-      >
-        <slide
-          v-for="(playlist, index) in trendingPlaylists"
-          :key="playlist.id"
-          data-index="index"
-          data-name="playlist.id"
-          @slideclick="handleSlideClick"
-        >
-          <Post
-            :key="favorite.id"
-            :index="index"
-            :post="favorite"
-            post-type="rating"
-            :type="favorite.favorite_type"
-          />
-        </slide>
-      </carousel>
-    </div>
-    <div class="carousel-contain">
-      <v-btn x-small text dark>
-        Popular Reviews
-      </v-btn>
-      <carousel
-        :touch-drag="false"
-        :loop="true"
-        :mouse-drag="false"
-        :pagination-enabled="false"
-        :navigation-enabled="true"
-        :per-page="4"
-      >
-        <slide
-          v-for="(favorite, index) in favorites"
-          :key="favorite.id"
-          data-index="index"
-          data-name="favorite.id"
-          @slideclick="handleSlideClick"
-        >
-          <Post
-            :key="favorite.id"
-            :index="index"
-            :post="favorite"
-            post-type="rating"
-            :type="favorite.favorite_type"
-          />
-        </slide>
-      </carousel>
-    </div>
-    <div class="carousel-contain">
-      <v-btn x-small text dark>
-        Playlists from friends
-      </v-btn>
-      <carousel
-        :touch-drag="false"
-        :loop="true"
-        :mouse-drag="false"
-        :pagination-enabled="false"
-        :navigation-enabled="true"
-        :per-page="4"
-      >
-        <slide
-          v-for="(favorite, index) in favorites"
-          :key="favorite.id"
-          data-index="index"
-          data-name="favorite.id"
-          @slideclick="handleSlideClick"
-        >
-          <Post
-            :key="favorite.id"
-            :index="index"
-            :post="favorite"
-            post-type="rating"
-            :type="favorite.favorite_type"
-          />
-        </slide>
-      </carousel>
-    </div>
+    <CarouselSection title="Listen with Friends" :carouselItems="favorites" />
+    <CarouselSection title="Fresh Playlists From Friends" :carouselItems="favorites" />
+    <CarouselSection title="Popular Reviews" :carouselItems="favorites" />
+    <CarouselSection title="Fresh Reviews From Friends" :carouselItems="favorites" />
   </div>
 </template>
 
@@ -123,21 +15,24 @@
 import Post from '~/components/Post';
 import { getFavorites } from '~/api/api';
 import { mapState } from 'vuex';
+import CarouselSection from '~/components/CarouselSection';
 
 
 export default {
   components: {
     Post,
+    CarouselSection,
   },
   computed: {
-    ...mapState(['isAuthorized']),
+    ...mapState(['isAuthorized', 'auth']),
   },
-  async asyncData ({ store }) {
-    const favoritesResponse = await getFavorites();
+  async asyncData ({ store, $auth }) {
+    const favoritesResponse = await getFavorites(
+      $auth.getToken('auth0')
+    );
     const trendingPlaylistsResponse = await store.getters.fetch(
       `/v1/catalog/us/charts?types=playlists`
     );
-    console.log(trendingPlaylistsResponse)
     store.dispatch("setFavoritedPosts", favoritesResponse.data);
     return {
       "favorites": favoritesResponse.data,
@@ -153,22 +48,13 @@ export default {
 </script>
 
 <style scoped>
-.VueCarousel-slide {
-  width: 25%;
-  padding: 1%;
+.welcome-contain {
+  max-height: 45%;
+  overflow: hidden;
+  border-bottom: 1px solid var(--primary-red);
 }
-.carousel-contain {
-  padding: 2rem;
-  border-bottom: 1px solid var(--primary-black-light);
-  margin: 0 auto;
-  width: 95%;
-}
->>>.VueCarousel-navigation-prev {
-  margin-left: 1rem;
-  border: 1px solid #ccc;
-}
->>>.VueCarousel-navigation-next {
-  margin-right: 1rem;
-  border: 1px solid #ccc;
+.welcome-contain-image {
+  width: 100%;
+  height: auto;
 }
 </style>

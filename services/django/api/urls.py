@@ -38,11 +38,6 @@ urlpatterns = [
         name="FavoritePlaylistsList",
     ),
     path(
-        "posts/<post_id>/",
-        favorite_routes.PostDetail.as_view(),
-        name="PostsDetail",
-    ),
-    path(
         "playlists/",
         playlist_routes.PlaylistList.as_view(),
         name="PlaylistList",

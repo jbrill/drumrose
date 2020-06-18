@@ -34,6 +34,9 @@ class FavoriteTracksList(APIView):
             - Creates a new post
     """
 
+    authentication_classes = []
+    permission_classes = []
+
     def get(self, request):
         """
         Get favorited tracks
@@ -50,44 +53,6 @@ class FavoriteTracksList(APIView):
         return
 
 
-class PostDetail(APIView):
-    """
-    Description:
-        - API View for Post Detail
-    Routes:
-        - GET /posts/:post_id
-            - Gets a post
-        - PATCH /posts/:post_id
-            - Updates a post
-        - DELETE /posts/:post_id
-            - Deletes a post
-    """
-
-    def get(self, request, post_id):
-        print(post_id)
-        user_handle = request.body.get("user_handle")
-        user = User.objects.get(handle=user_handle)
-
-        serializer = UserSerializer(user)
-        return Response(serializer.data)
-
-    def patch(self, request, post_id):
-        print(request)
-        post = User.objects.get(handle=post_id)
-
-        # Update user shit
-
-        serializer = UserSerializer(post)
-        return Response(serializer.data)
-
-    def delete(self, request, post_id):
-        print(request)
-        post = User.objects.get(handle=post_id).delete()
-
-        serializer = UserSerializer(post)
-        return Response(serializer.data)
-
-
 class FavoriteAlbumList(APIView):
     """
     Description:
@@ -98,6 +63,9 @@ class FavoriteAlbumList(APIView):
         - POST /posts/
             - Creates a new post
     """
+
+    authentication_classes = []
+    permission_classes = []
 
     def get(self, request):
         """
@@ -125,6 +93,9 @@ class FavoritePlaylistList(APIView):
         - POST /posts/
             - Creates a new post
     """
+
+    authentication_classes = []
+    permission_classes = []
 
     def get(self, request):
         """
@@ -160,6 +131,9 @@ class FavoritesList(APIView):
         """
         Get favorited tracks
         """
+        print("REQUEST")
+        print(request.user)
+        print(request.auth)
         favorited_playlists = FavoritedPlaylist.objects.all()
         favorited_tracks = FavoritedTrack.objects.all()
         favorited_albums = FavoritedAlbum.objects.all()

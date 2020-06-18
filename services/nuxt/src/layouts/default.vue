@@ -1,7 +1,6 @@
 <template>
   <v-app dark class="app">
     <v-content>
-      <v-app-bar><Navbar /></v-app-bar>
       <v-app-bar color="#f0f0f0" v-if="!isAuthorized" short dense class="authorize-apple-music">
         <span class="authorize-apple-music-text">
           <v-btn @click="authorizeAppleMusic" small color="black">Sign in</v-btn> to Apple Music to gain full access to tracks, connect with friends, and view your library.
@@ -12,12 +11,15 @@
           <v-btn small color="black" @click="authorizeAppleMusic">Go Pro</v-btn> to gain stats, advanced discovery algorithms, and ad-free browsing.
         </span>
       </v-app-bar>
-      <v-container fluid d-flex>
-        <MusicLibrary />
-        <nuxt class="center-contain" />
+      <v-container class="content-contain" justify-space-between fluid d-flex>
+        <div class="left-contain"><LeftContain v-if="auth.loggedIn" /></div>
+        <div class="main-contain">
+          <nuxt class="feed-contain" />
+        </div>
+        <div class="right-contain"><RightContain v-if="auth.loggedIn" /></div>
       </v-container>
       <transition name="fade">
-        <AudioPlayer v-if="nowPlayingItem" />
+        <AudioPlayer />
       </transition>
     </v-content>
   </v-app>
@@ -28,17 +30,19 @@ import { mapState } from 'vuex';
 import { getUserDetail } from '~/api/api'
 import Navbar from '~/components/Navbar';
 import AudioPlayer from '~/components/AudioPlayer';
-import MusicLibrary from '~/components/MusicLibrary';
+import LeftContain from '~/components/LeftContain';
+import RightContain from '~/components/RightContain';
 
 
 export default {
   components: {
     Navbar,
     AudioPlayer,
-    MusicLibrary,
+    LeftContain,
+    RightContain,
   },
   computed: {
-    ...mapState(['isAuthorized']),
+    ...mapState(['auth', 'isAuthorized', 'nowPlayingItem']),
     items () {
       return [
         {
@@ -71,22 +75,48 @@ export default {
   margin: 0 auto;
   background-color: #252525;
 }
-.music-search-contain {
-  width: 20%;
-  margin: 1rem;
-  align-self: flex-start;
+.left-contain, .main-contain, .right-contain {
+  overflow: auto;
+	height: auto;
+	padding: .5rem;
+	-webkit-overflow-scrolling: touch;
+	-ms-overflow-style: none;
 }
-.center-contain {
-  width: 80%;
+.feed-contain {
+  padding-top: 4rem;
 }
-.library-menu-contain {
-  list-style: none;
+.main-contain {
+  padding-top: 0;
+  width: 60vw;
 }
->>>.music-searchbar div {
+.left-contain {
+  width: 15vw;
+  justify-content: center;
+  display: flex;
   padding: 0;
 }
->>>.music-searchbar-textfield input {
-  font-size: 0.8rem;
+.right-contain {
+  width: 20vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+.left-contain::-webkit-scrollbar, .main-contain::-webkit-scrollbar, .right-contain::-webkit-scrollbar {
+  display: none;
+}
+.content-contain {
+  background-image: linear-gradient(180deg,#14181c 0,#14181c 250px,#2c3440);
+  background-color: var(--primary-black-light);
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  height: 100vh;
+  padding: 0;
+  position: relative;
+  width: 100%;
+  backface-visibility: hidden;
+  will-change: overflow;
 }
 @media (prefers-color-scheme: dark) {
   .app {

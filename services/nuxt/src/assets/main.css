@@ -12,13 +12,16 @@
 }
 
 * {
-  margin: 0;
+  box-sizing: border-box;
   font-family: Menlo, Monaco, 'Droid Sans Mono', Consolas, 'Lucida Console',
     'Courier New', monospace;
 }
 
-html {
-  background-color: #474747;
+body {
+  overflow-x: hidden;
+  padding: 0;
+  margin: 0;
+  border-top: 2px solid var(--primary-yellow);
 }
 
 ::selection {
@@ -26,7 +29,7 @@ html {
 }
 
 .v-application {
-  background: #474747;
+  background: black;
 }
 
 .noselect {

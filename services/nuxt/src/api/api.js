@@ -33,7 +33,7 @@ export const getFavorites = async bearerToken => {
       'https://teton.drumrose.io/api/favorites/',
       {
         headers: {
-          Authorization: `Bearer ${bearerToken}`,
+          Authorization: `${bearerToken}`,
         },
       }
     );

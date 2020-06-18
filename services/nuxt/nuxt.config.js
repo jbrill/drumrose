@@ -52,6 +52,7 @@ export default {
    */
   modules: [
     '@nuxtjs/axios',
+    '@nuxtjs/auth',
     'nuxt-svg-loader',
     'bootstrap-vue/nuxt',
     'cookie-universal-nuxt',
@@ -94,4 +95,19 @@ export default {
       }
     },
   },
+  auth: {
+    redirect: {
+			login: '/',
+			logout: '/',
+			callback: '/auth/signed-in',
+			home: '/'
+		},
+    strategies: {
+			auth0: {
+				domain: process.env.AUTH0_DOMAIN,
+				client_id: process.env.AUTH0_CLIENT_ID,
+				audience: 'https://django-server:8000',
+			}
+		}
+	}
 };

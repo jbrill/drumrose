@@ -16,7 +16,7 @@
         class="queue-button material-icons"
         @click="showQueue"
       >queue_music</i>
-      <div class="audio-player-artwork">
+      <div v-if="nowPlayingItem" class="audio-player-artwork">
         <span
           :style="{
             backgroundImage:
@@ -25,12 +25,24 @@
           }"
         />
       </div>
-      <div class="audio-player__track-info">
+      <div v-else class="audio-player-artwork">
+        <span
+        />
+      </div>
+      <div v-if="nowPlayingItem" class="audio-player__track-info">
         <span ref="trackArtist" class="audio-player__track-info__track-artist">
           {{ nowPlayingItem.attributes.artistName }}
         </span>
         <span ref="songName" class="audio-player__track-info__track-name">
           {{ nowPlayingItem.attributes.name }}
+        </span>
+      </div>
+      <div v-else class="audio-player__track-info">
+        <span ref="trackArtist" class="audio-player__track-info__track-artist">
+          Artist
+        </span>
+        <span ref="songName" class="audio-player__track-info__track-name">
+          Track
         </span>
       </div>
       <i

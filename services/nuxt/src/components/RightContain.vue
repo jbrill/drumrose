@@ -1,5 +1,5 @@
 <template>
-  <div class="music-search-contain">
+  <div class="right-content-contain">
     <v-toolbar
       dense
       flat
@@ -16,79 +16,74 @@
         class="music-searchbar-textfield"
       />
     </v-toolbar>
-    <div>
-      <div>
-        <v-btn x-small text color="#ccc">
-          LIBRARY
-        </v-btn>
-        <v-btn tile small text>
-          <v-icon small left>mdi-face</v-icon> ARTISTS
-        </v-btn>
-        <v-btn tile small text>
-          <v-icon small left>mdi-album</v-icon> ALBUMS
-        </v-btn>
-        <v-btn tile small text>
-          <v-icon small left>mdi-waveform</v-icon> TRACKS
-        </v-btn>
-      </div>
-      <div>
-        <v-btn x-small text color="#ccc">
-          PLAYLISTS
-        </v-btn>
-        <v-btn tile small text>
-          <v-icon small left>mdi-plus</v-icon> Create Playlist
-        </v-btn>
-        <v-btn tile small text>
-          <v-icon small left>mdi-timelapse</v-icon> Recently Added
-        </v-btn>
-      </div>
-      <div>
-        <v-btn x-small text color="#ccc">
-          Your Favorites
-        </v-btn>
-        <v-list dense>
-          <v-list-item-group>
-            <v-list-item v-for="musicItem in recentlyPlayed">
-							<v-list-item-icon>
-								<v-icon>mdi-waveform</v-icon>
-							</v-list-item-icon>
+    <div class="content-contain-right">
+      <v-btn x-small text color="#ccc">
+        People to Follow
+      </v-btn>
+      <v-list dense>
+        <v-list-item-group>
+          <v-list-item v-for="musicItem in recentlyPlayed">
+            <v-list-item-icon>
+              <v-icon>mdi-person</v-icon>
+            </v-list-item-icon>
 
-							<v-list-item-content>
-								<v-list-item-title v-text="musicItem.attributes.name"></v-list-item-title>
-							</v-list-item-content>
-            </v-list-item>
-          </v-list-item-group>
-        </v-list>
-      </div>
-      <div>
-        <v-btn x-small text color="#ccc">
-          Listening History
-        </v-btn>
-        <v-list dense>
-          <v-list-item-group>
-            <v-list-item v-for="musicItem in favorites">
-							<v-list-item-icon>
-								<v-icon>mdi-waveform</v-icon>
-							</v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title v-text="musicItem.attributes.name"></v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-item-group>
+      </v-list>
+    </div>
+    <div class="content-contain-right">
+      <v-btn x-small text color="#ccc">
+        Your Favorites
+      </v-btn>
+      <v-list dense>
+        <v-list-item-group>
+          <v-list-item v-for="musicItem in recentlyPlayed">
+            <v-list-item-icon>
+              <v-icon>mdi-waveform</v-icon>
+            </v-list-item-icon>
 
-							<v-list-item-content>
-								<v-list-item-title v-text="musicItem"></v-list-item-title>
-							</v-list-item-content>
-            </v-list-item>
-          </v-list-item-group>
-        </v-list>
-      </div>
+            <v-list-item-content>
+              <v-list-item-title v-text="musicItem.attributes.name"></v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-item-group>
+      </v-list>
+    </div>
+    <div class="content-contain-right">
+      <v-btn x-small text color="#ccc">
+        Listening History
+      </v-btn>
+      <v-list dense>
+        <v-list-item-group>
+          <v-list-item v-for="musicItem in favorites">
+            <v-list-item-icon>
+              <v-icon>mdi-waveform</v-icon>
+            </v-list-item-icon>
+
+            <v-list-item-content>
+              <v-list-item-title v-text="musicItem"></v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-item-group>
+      </v-list>
     </div>
   </div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-
+import { getFavorites } from '~/api/api';
 
 export default {
-  data: () => ({
-  }),
+  async asyncData () {
+    const favoritesResponse = await getFavorites();
+    return {
+      "favorites": favoritesResponse.data,
+    }    
+  },
   computed: {
     ...mapState(['isAuthorized']),
     ...mapGetters(['recentlyPlayed', 'heavyRotation']),
@@ -160,13 +155,14 @@ export default {
 </script>
 
 <style scoped>
-.music-search-contain {
-  width: 20%;
-  margin: 1rem;
-  align-self: flex-start;
+.right-content-contain {
+  width: 100%;
 }
 .library-menu-contain {
   list-style: none;
+}
+.content-contain-right {
+  width: 100%;
 }
 >>>.music-searchbar div {
   padding: 0;

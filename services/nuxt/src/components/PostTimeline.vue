@@ -5,33 +5,14 @@
     >
       {{ currentPlaybackTime }}
     </span>
-    <div 
-      ref="timeline"
-      class="post-timeline"
-      @mouseleave="stopDrag"
-      @mousedown="startDrag"
-      @mousemove="doDrag"
-      @click="moveWheel"
-    >
-      <div
-        :style="{
-          width: playbackTime ? 100 * (
-            playbackTime.currentPlaybackTime / 
-            playbackTime.currentPlaybackDuration
-          ) + '%' : '0%'
-        }"
-        class="timeline-before-wheel"
-      >
-        <div 
-          ref="buffered-timeline"
-          class="post-timeline-buffer"
-          :style="{ width: bufferedProgress + '%' }"
-        />
-      </div>
+      <v-progress-linear
+        v-model="currentPlaybackTime"
+        :buffer-value="bufferedProgress || 100"
+        color="var(--primary-red)"
+      ></v-progress-linear>
       <span class="timeline-time timeline-time-end">
         {{ currentPlaybackDuration }}
       </span>
-    </div>
   </div>
 </template>
 

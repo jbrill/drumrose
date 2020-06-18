@@ -3,123 +3,58 @@
     <nuxt-link to="/" color="var(--primary-red)" class="title-button">
       DRUMROSE
     </nuxt-link>
-    <div class="navigation-contain">
-      <v-btn color="#ccc" text nuxt to="/">
-        SOCIAL
-      </v-btn>
-      <v-btn color="#ccc" text nuxt to="/discover">
-        DISCOVER
-      </v-btn>
-      <v-btn color="#ccc" text nuxt to="/playlists">
-        PLAYLISTS
-      </v-btn>
-      <v-btn color="#ccc" text nuxt to="/library">
-        LIBRARY
-      </v-btn>
-    </div>
-    <div style="text-align: center">
-      <v-menu dark open-on-hover offset-y>
-        <template v-slot:activator="{ on }">
-          <v-btn
-            tile
-            dark
-            class="profile-menu-button-contain"
-            v-on="on"
-          >
-            jbrilly
-            <v-icon
-              style="height: 100%"
-              right
-              dark
-              v-on="on"
-            >
-              mdi-chevron-down
-            </v-icon>
-          </v-btn>
-        </template>
-        <v-list>
-          <v-list-item
-            v-for="(item, index) in profileOptions"
-            :key="index"
-            :to="item.link"
-          >
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-    </div>
-    <div class="application-preferences">
-      <v-menu dark offset-y>
-        <template v-slot:activator="{ on }">
-          <v-icon
-            dark
-            center
-            v-on="on"
-          >
-            mdi-dots-horizontal 
-          </v-icon>
-        </template>
-        <v-list>
-          <v-list-item
-            v-for="(item, index) in applicationOptions"
-            :key="index"
-            :to="item.link"
-          >
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-    </div>
+    <v-btn @click="login" v-if="!auth.loggedIn">Log In</v-btn>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
-  components: {
+  computed: {
+    ...mapState(['auth']),
   },
-  data: () => ({
-    profileOptions: [
-      { title: 'Profile', link: "/users/" },
-      { title: 'Likes', link: "/likes" },
-      { title: 'Playlists', link: "/playlists" },
-      { title: 'Following', link: "/following" },
-		],
-    applicationOptions: [
-      { title: 'About Us', links: "about" },
-      { title: 'Terms', link: "terms" },
-      { title: 'Contact', link: "/contact" },
-      { title: 'Settings', link: "/settings" },
-      { title: 'Sign Out' },
-		],
-	}),
+  methods: {
+    login () {
+      this.$auth.loginWith('auth0')
+    },
+    async signOut () {
+      await this.$auth.logout();
+      if (process.client) {
+        const AUTH0_DOMAIN = 'drumrose.auth0.com';
+        const AUTH0_CLIENT_ID = 'nA1RUMeTG88LVxGeEJc9Xu4PhWPHQRTg';
+        console.log(AUTH0_DOMAIN)
+        window.location.href = `https://${AUTH0_DOMAIN}/v2/logout?returnTo=https%3A%2F%2Fteton.drumrose.io&client_id=${AUTH0_CLIENT_ID}`
+      }
+    },
+  },
 };
 </script>
 
 <style>
 .header {
-  position: fixed;
-  z-index: 1000;
-  background-color: var(--primary-black-light);
-  left: 0;
-  display: grid;
-  grid-template-columns: 25% 50% 20% 5%;
-  grid-template-rows: 100%;
-  align-items: center;
-  width: 100%;
-  min-height: 4rem;
+  width: 60vw;
+  min-height: 3rem;
   box-shadow: var(--shadow-heavy);
+  display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 3rem;
+	position: absolute;
+	z-index: 10;
+  background-color: black;
+  border-bottom: 1px solid var(--primary-purple);
+	height: 2rem;
 }
-.navigation-contain {
+.audio-contain {
   display: flex;
   justify-content: center;
   margin: 0 auto;
   width: 100%;
 }
 .title-button {
-  font-weight: bolder;
   color: var(--primary-red) !important;
-  font-size: 1.6rem;
-  padding-left: 1.2rem;
+  font-size: 1.5rem;
 }
 .profile-menu-icon {
   height: 100%;

@@ -18,6 +18,9 @@ class AppleMusicTokenRoute(APIView):
             - Generates a new apple music token
     """
 
+    authentication_classes = []
+    permission_classes = []
+
     def post(self, request):
         """
         Generate Apple Music Token

@@ -181,6 +181,7 @@ export default {
       name: '',
       isHovering: false,
       playlistDialog: false,
+      status: 'loading',
     };
   },
   computed: mapState(['nowPlayingItem', 'nowPlayingPost', 'playbackState']),
@@ -190,11 +191,21 @@ export default {
       resp = await this.$store.getters.fetch(
         `/v1/catalog/us/songs/${this.appleMusicId}`
       );
+      if ('errors' in resp) {
+        console.log("ERRORS")
+        this.status == 'failing';
+        return
+      }
+      console.log(resp);
       this.artistName = resp.data[0].attributes.artistName;
     } else if (this.type === 'album') {
       resp = await this.$store.getters.fetch(
         `/v1/catalog/us/albums/${this.appleMusicId}`
       );
+      if ('errors' in resp) {
+        console.log("ERRORS")
+        this.status == 'failing';
+      }
       this.artistName = resp.data[0].attributes.artistName;
     } else if (this.type === 'playlist') {
       resp = await this.$store.getters.fetch(

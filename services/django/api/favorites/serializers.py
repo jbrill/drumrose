@@ -3,8 +3,14 @@ Module contains serializers for favorites
 """
 
 from api.albums.serializers import AlbumSerializer
-from api.models.core import FavoritedAlbum, FavoritedPlaylist, FavoritedTrack
+from api.models.core import (
+    Auth0ManagementToken,
+    FavoritedAlbum,
+    FavoritedPlaylist,
+    FavoritedTrack,
+)
 from api.playlists.serializers import PlaylistSerializer
+from api.services.auth0 import get_user
 from api.songs.serializers import SongSerializer
 from api.users.serializers import UserSerializer
 from rest_framework import serializers
@@ -16,8 +22,8 @@ class FavoritedTrackSerializer(serializers.ModelSerializer):
     """
 
     song = SongSerializer(read_only=True)
-    user = UserSerializer(read_only=True)
     favorite_type = serializers.SerializerMethodField()
+    user = serializers.SerializerMethodField()
 
     class Meta:
         """
@@ -34,14 +40,19 @@ class FavoritedTrackSerializer(serializers.ModelSerializer):
 
         return "track"
 
+    def get_user(self, obj):
+        token = Auth0ManagementToken.objects.active_token()
+        user = get_user(obj.auth0_user_id.replace(".", "|"), token)
+        return user
+
 
 class FavoritedAlbumSerializer(serializers.ModelSerializer):
     """
     Serializer for posts
     """
 
+    user = serializers.ReadOnlyField()
     album = AlbumSerializer(read_only=True)
-    user = UserSerializer(read_only=True)
     favorite_type = serializers.SerializerMethodField()
 
     class Meta:
@@ -50,7 +61,15 @@ class FavoritedAlbumSerializer(serializers.ModelSerializer):
         """
 
         model = FavoritedAlbum
-        fields = "__all__"
+        fields = (
+            "user",
+            "album",
+            "favorite_type",
+        )
+
+    def get_user(self, obj):
+        print(obj)
+        return "test"
 
     def get_favorite_type(self, _):
         """
@@ -65,8 +84,7 @@ class FavoritedPlaylistSerializer(serializers.ModelSerializer):
     Serializer for posts
     """
 
-    song = SongSerializer(read_only=True)
-    user = UserSerializer(read_only=True)
+    user = serializers.ReadOnlyField()
     playlist = PlaylistSerializer(read_only=True)
     favorite_type = serializers.SerializerMethodField()
 

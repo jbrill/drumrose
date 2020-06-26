@@ -42,7 +42,7 @@ export const state = () => ({
  * Return the appropriate API object.
  */
 let getApi = library => {
-  ;
+  if (process.server) return;
   return library ? MusicKit.getInstance().api.library : MusicKit.getInstance().api;
 };
 
@@ -114,8 +114,10 @@ export const getters = {
 
   // Data fetching
   get (state) {
-    return (library, type, id, options) => {
-      return getApi(library)[type](id, options);
+    return async (library, type, id, options) => {
+      const res = await getApi(library)[type](id, options);
+      console.log(res)
+      return res;
     };
   },
   collection (state) {

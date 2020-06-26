@@ -1,21 +1,54 @@
 <template>
   <div class="audioPlayer">
+    <div class="volumeControls">
+      <v-slider
+				v-model="volume"
+				append-icon="volume_up"
+				prepend-icon="volume_down"
+				min="0"
+				max="100"
+			></v-slider>
+    </div>
+    <div class="musicControls">
+      <v-icon
+        x-small
+        ref="shuffleButton"
+        @click="shuffleTrack"
+      >mdi-shuffle</v-icon>
+      <v-icon
+        ref="musicPrev"
+        class="audio-play__previous material-icons"
+        @click="prevMusic"
+      >mdi-skip-previous</v-icon>
+      <v-icon
+        v-if="playbackState === 3"
+        ref="musicButton"
+        @click="playTrack"
+        large
+      >mdi-play-arrow</v-icon>
+      <v-icon
+        v-else
+        ref="musicButton"
+        @click="pauseTrack"
+        large
+      >mdi-pause</v-icon>
+      <v-icon
+        ref="musicNext"
+        @click="nextMusic"
+      >mdi-skip-next</v-icon>
+      <v-icon
+        x-small
+        ref="repeatButton"
+        @click="repeatTrack"
+      >mdi-repeat</v-icon>
+    </div>
+    <PostTimeline />
     <div
       v-hotkey="{
         'space': playTrack,
       }" 
       class="nowPlayingContain"
     >
-      <i
-        ref="volumeButton"
-        class="volume-button material-icons"
-        @click="changeVolume"
-      >volume_up</i>
-      <i
-        ref="queueButton"
-        class="queue-button material-icons"
-        @click="showQueue"
-      >queue_music</i>
       <div v-if="nowPlayingItem" class="audio-player-artwork">
         <span
           :style="{
@@ -29,68 +62,33 @@
         <span
         />
       </div>
-      <div v-if="nowPlayingItem" class="audio-player__track-info">
-        <span ref="trackArtist" class="audio-player__track-info__track-artist">
+      <div v-if="nowPlayingItem">
+        <span ref="trackArtist">
           {{ nowPlayingItem.attributes.artistName }}
         </span>
-        <span ref="songName" class="audio-player__track-info__track-name">
+        <span ref="songName">
           {{ nowPlayingItem.attributes.name }}
         </span>
       </div>
-      <div v-else class="audio-player__track-info">
-        <span ref="trackArtist" class="audio-player__track-info__track-artist">
+      <div v-else>
+        <span ref="trackArtist">
           Artist
         </span>
-        <span ref="songName" class="audio-player__track-info__track-name">
+        <span ref="songName">
           Track
         </span>
       </div>
-      <i
+      <v-icon
+        small
         ref="favoriteButton"
-        class="favorite-button material-icons"
         @click="favoriteTrack"
-      >favorite</i>
+      >mdi-dots-horizontal</v-icon>
+      <v-icon
+        small
+        ref="queueButton"
+        @click="showQueue"
+      >queue_music</v-icon>
     </div>
-    <div class="musicControls">
-      <i
-        ref="musicPrev"
-        class="audio-play__previous material-icons"
-        @click="prevMusic"
-      >skip_previous</i>
-      <i
-        v-if="playbackState === 3"
-        ref="musicButton"
-        class="audio-play
-material-icons"
-        @click="playTrack"
-      >play_arrow</i>
-      <i
-        v-else
-        ref="musicButton"
-        class="audio-pause
-material-icons"
-        @click="pauseTrack"
-      >pause</i>
-      <i
-        ref="musicNext"
-        class="audio-play__next material-icons"
-        @click="nextMusic"
-      >skip_next</i>
-      <div class="musicNavigationControls">
-        <i
-          ref="shuffleButton"
-          v-tooltip="'Shuffle'"
-          class="shuffle-button material-icons"
-          @click="shuffleTrack"
-        >shuffles</i>
-        <i
-          ref="repeatButton"
-          class="repeat-button material-icons"
-          @click="repeatTrack"
-        >repeat</i>
-      </div>
-    </div>
-    <PostTimeline />
   </div>
 </template>
 
@@ -101,6 +99,11 @@ import PostTimeline from "~/components/PostTimeline";
 export default {
   components: {
     PostTimeline,
+  },
+  data () {
+    return {
+      volume: 10,
+    }
   },
   computed: {
     ...mapState(['nowPlayingItem', 'playbackState']),
@@ -175,15 +178,17 @@ export default {
   position: fixed;
   bottom: 0;
   z-index: 10000;
-  display: grid;
-  grid-template-columns: 35% 15% 50%;
+  display: flex;
 }
-
+.volumeControls {
+  width: 15%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .nowPlayingContain {
-  height: 100%;
-  display: grid;
-  grid-template-columns: 10% 10% 15% 55% 10%;
-  grid-template-rows: 100%;
+  width: 25%;
+  display: flex;
 }
 
 .audio-play__contain i {
@@ -237,50 +242,6 @@ export default {
 .audio-player-artwork:hover, .audio-player-artwork:focus {
   cursor: pointer;
 }
-.audio-play__previous,
-.audio-play__next {
-  font-size: 1rem;
-  align-self: center;
-  color: white;
-}
-.audio-play, .audio-pause {
-  font-size: 1.8rem;
-  padding: 5px;
-  align-self: center;
-  color: white;
-}
-
-.audio-player__track-info {
-  color: white;
-  display: grid;
-  grid-template-rows: 50% 50%;
-}
-
-.audio-player__track-info__track-name {
-  font-size: 0.5rem;
-  margin-bottom: 0;
-}
-
-.audio-player__track-info__track-name:hover,
-.audio-player__track-info__track-name:focus {
-  cursor: pointer;
-  color: white;
-}
-
-.audio-player__track-info__track-artist {
-  font-size: 0.6rem;
-  align-self: flex-end;
-}
-
-.audio-player__track-info span {
-  color: #ccc;
-}
-.audio-player__track-info__track-artist:hover,
-.audio-player__track-info__track-artist:focus {
-  cursor: pointer;
-  color: white;
-}
-
 .audio-player__more-btn {
   right: 1rem;
   color: white;
@@ -291,7 +252,12 @@ export default {
 }
 .musicControls {
   display: flex;
-  margin: 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 25%;
+}
+>>>.musicControls button {
+  padding: 5px;
 }
 .musicNavigationControls {
   display: flex;

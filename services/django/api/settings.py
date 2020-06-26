@@ -15,6 +15,7 @@ import os
 
 import requests
 
+from api.services.auth0 import get_access_token
 from api.utils.authenticate import jwt_get_username_from_payload_handler
 from api.utils.generate_apple_music_token import AppleMusicTokenGenerator
 from cryptography.hazmat.backends import default_backend
@@ -147,6 +148,9 @@ APPLE_MUSIC_SECRET = os.getenv("APPLE_MUSIC_SECRET", None)
 APPLE_MUSIC_TOKEN_GENERATOR = AppleMusicTokenGenerator(
     APPLE_MUSIC_SECRET, APPLE_MUSIC_KEY_ID, APPLE_MUSIC_TEAM_ID,
 )
+
+
+AUTH0_MANAGEMENT_TOKEN = get_access_token
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/

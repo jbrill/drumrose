@@ -20,6 +20,7 @@
 				@slideclick="handleSlideClick"
 			>
 				<Post
+					v-if="carouselItem.user"
 					:key="carouselItem.id"
 					:index="index"
 					:post="carouselItem"
@@ -79,10 +80,8 @@ export default {
 }
 >>>.VueCarousel-navigation-prev {
   margin-left: 1rem;
-  border: 1px solid #ccc;
 }
 >>>.VueCarousel-navigation-next {
   margin-right: 1rem;
-  border: 1px solid #ccc;
 }
 </style>

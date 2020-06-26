@@ -14,6 +14,7 @@
       <v-container class="content-contain" justify-space-between fluid d-flex>
         <div class="left-contain"><LeftContain v-if="auth.loggedIn" /></div>
         <div class="main-contain">
+          <Navbar />
           <nuxt class="feed-contain" />
         </div>
         <div class="right-contain"><RightContain v-if="auth.loggedIn" /></div>

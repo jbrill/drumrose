@@ -1,6 +1,6 @@
 <template>
   <div class="header">
-    <nuxt-link to="/" color="var(--primary-red)" class="title-button">
+    <nuxt-link to="/" color="var(--primary-yellow)" class="title-button">
       DRUMROSE
     </nuxt-link>
     <v-btn @click="login" v-if="!auth.loggedIn">Log In</v-btn>
@@ -33,18 +33,16 @@ export default {
 
 <style>
 .header {
-  width: 60vw;
+  padding-top: 4rem;
+  padding-left: 2rem;
   min-height: 3rem;
-  box-shadow: var(--shadow-heavy);
   display: flex;
 	align-items: center;
-	justify-content: center;
 	font-size: 3rem;
-	position: absolute;
 	z-index: 10;
-  background-color: black;
-  border-bottom: 1px solid var(--primary-purple);
 	height: 2rem;
+  font-family: 'Helvetica', sans-serif;
+  font-weight: bolder;
 }
 .audio-contain {
   display: flex;
@@ -53,15 +51,15 @@ export default {
   width: 100%;
 }
 .title-button {
-  color: var(--primary-red) !important;
   font-size: 1.5rem;
+  letter-spacing: 0.5rem;
 }
 .profile-menu-icon {
   height: 100%;
 }
 @media screen and (prefers-color-scheme: dark) {
   .header {
-    background-color: black;
+    background-color: transparent;
   }
   .title__middle {
     color: var(--primary-red);

@@ -159,6 +159,7 @@ export default {
 }
 >>>.v-btn {
   border-radius: 2rem;
+  padding-bottom: 1rem;
 }
 >>>a.nav-button {
   border-radius: 2rem !important;

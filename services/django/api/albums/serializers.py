@@ -11,8 +11,6 @@ class AlbumSerializer(serializers.ModelSerializer):
     Serializer for Album
     """
 
-    artwork_url = "HELLO"
-
     class Meta:
         """
         Serializer Meta Definition

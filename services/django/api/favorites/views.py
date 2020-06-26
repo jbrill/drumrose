@@ -131,9 +131,6 @@ class FavoritesList(APIView):
         """
         Get favorited tracks
         """
-        print("REQUEST")
-        print(request.user)
-        print(request.auth)
         favorited_playlists = FavoritedPlaylist.objects.all()
         favorited_tracks = FavoritedTrack.objects.all()
         favorited_albums = FavoritedAlbum.objects.all()
@@ -143,7 +140,7 @@ class FavoritesList(APIView):
             chain(favorited_playlists, favorited_tracks, favorited_albums),
             key=attrgetter("created_date"),
         )
-
+        print("efore serializer")
         serializer = FavoritedSerializer(favorites, many=True)
         return Response(serializer.data)
 

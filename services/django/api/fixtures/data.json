@@ -1,951 +1,575 @@
 [
 {
-    "model": "api.artist",
-    "pk": "7134bfed-ee9c-4930-a176-89f8b43279f5",
-    "fields": {
-        "created_date": "2020-04-13T18:34:35.652Z",
-        "modified_date": "2020-04-13T18:34:35.652Z",
-        "name": "James Brown",
-        "artist_photo_url": null
-    }
-},
-{
-    "model": "api.artist",
-    "pk": "85290714-c8d5-4930-8904-083885f56cf0",
-    "fields": {
-        "created_date": "2020-04-13T18:34:35.649Z",
-        "modified_date": "2020-04-13T18:34:35.649Z",
-        "name": "Flying Lotus",
-        "artist_photo_url": null
-    }
-},
-{
-    "model": "api.artist",
-    "pk": "a493b14f-0a5e-447b-a198-03a4be6203df",
-    "fields": {
-        "created_date": "2020-04-13T18:34:35.650Z",
-        "modified_date": "2020-04-13T18:34:35.650Z",
-        "name": "Fiona Apple",
-        "artist_photo_url": null
-    }
-},
-{
-    "model": "api.artist",
-    "pk": "d14b8013-2c6a-47cd-9144-6058c016bedc",
-    "fields": {
-        "created_date": "2020-04-13T18:34:35.653Z",
-        "modified_date": "2020-04-13T18:34:35.654Z",
-        "name": "Grimes",
-        "artist_photo_url": null
-    }
-},
-{
-    "model": "api.artist",
-    "pk": "fe3df008-d786-4549-96e5-4393df573677",
-    "fields": {
-        "created_date": "2020-04-13T18:34:35.645Z",
-        "modified_date": "2020-04-13T18:34:35.645Z",
-        "name": "Death Grips",
-        "artist_photo_url": null
-    }
-},
-{
     "model": "api.song",
-    "pk": "10ccc694-2b2a-4eb2-ae6d-1d51bcd195e2",
+    "pk": "9c1a5ec8-9ded-4c36-8672-9fb7baec2cc2",
     "fields": {
-        "created_date": "2020-04-13T18:35:52.035Z",
-        "modified_date": "2020-04-30T15:06:53.061Z",
-        "name": "Soul Power",
-        "album": "8fae704f-6e68-422a-836a-76071c2e1a59",
-        "artist": "7134bfed-ee9c-4930-a176-89f8b43279f5",
+        "created_date": "2020-06-22T22:34:37.793Z",
+        "modified_date": "2020-06-22T22:34:37.793Z",
         "apple_music_id": "1469577142"
     }
 },
 {
     "model": "api.song",
-    "pk": "260afbe0-0b3a-4d81-9810-174d2c83250a",
+    "pk": "f65bcadc-aaba-438f-9b72-f4d3be753f52",
     "fields": {
-        "created_date": "2020-04-13T18:35:52.030Z",
-        "modified_date": "2020-04-30T15:03:57.285Z",
-        "name": "Please Please Please",
-        "album": "f499acbe-1730-4f59-ad36-1c9c1f9b9907",
-        "artist": "7134bfed-ee9c-4930-a176-89f8b43279f5",
+        "created_date": "2020-06-22T22:34:57.956Z",
+        "modified_date": "2020-06-22T22:34:57.956Z",
         "apple_music_id": "1443828215"
     }
 },
 {
     "model": "api.song",
-    "pk": "56b8abfc-2e1d-4123-ad1d-671d6dd07f79",
+    "pk": "f9b602d6-681a-4ff0-9b3a-20d1720ad821",
     "fields": {
-        "created_date": "2020-04-13T18:35:52.024Z",
-        "modified_date": "2020-04-30T15:07:29.965Z",
-        "name": "Oblivion",
-        "album": "4297b472-79e5-4c39-9175-51e3db64e64e",
-        "artist": "d14b8013-2c6a-47cd-9144-6058c016bedc",
+        "created_date": "2020-06-22T22:35:38.219Z",
+        "modified_date": "2020-06-22T22:35:38.219Z",
         "apple_music_id": "499875050"
     }
 },
 {
-    "model": "api.song",
-    "pk": "b523a72b-27a0-44fc-845b-e18c45391907",
-    "fields": {
-        "created_date": "2020-04-13T18:35:52.045Z",
-        "modified_date": "2020-04-30T15:08:03.912Z",
-        "name": "Criminal",
-        "album": "853e84ec-facd-4195-b2cf-8f362a8ab303",
-        "artist": "a493b14f-0a5e-447b-a198-03a4be6203df",
-        "apple_music_id": "309677247"
-    }
-},
-{
-    "model": "api.song",
-    "pk": "d03d9aab-0bb3-48bc-8794-9beff84a6699",
-    "fields": {
-        "created_date": "2020-04-13T18:35:52.040Z",
-        "modified_date": "2020-04-30T15:05:51.911Z",
-        "name": "Do the Astral Plane",
-        "album": "bc78e72f-bee7-4795-ba9c-314460697de1",
-        "artist": "85290714-c8d5-4930-8904-083885f56cf0",
-        "apple_music_id": "367788945"
-    }
-},
-{
     "model": "api.album",
-    "pk": "4297b472-79e5-4c39-9175-51e3db64e64e",
+    "pk": "2a473d1b-55d4-479c-a5ef-dea22235fc10",
     "fields": {
-        "created_date": "2020-04-13T18:35:52.039Z",
-        "modified_date": "2020-05-27T18:29:16.277Z",
-        "name": "Mrs. Tonya Gomez",
-        "artwork_url": "https://i.ytimg.com/vi/m5H-YlcMSbc/hqdefault.jpg",
-        "apple_music_id": "499874506"
-    }
-},
-{
-    "model": "api.album",
-    "pk": "853e84ec-facd-4195-b2cf-8f362a8ab303",
-    "fields": {
-        "created_date": "2020-04-13T18:35:52.044Z",
-        "modified_date": "2020-05-27T18:26:11.608Z",
-        "name": "Tidal",
-        "artwork_url": "https://upload.wikimedia.org/wikipedia/en/b/b5/FionaAppleTidal.png",
-        "apple_music_id": "309677190"
-    }
-},
-{
-    "model": "api.album",
-    "pk": "8fae704f-6e68-422a-836a-76071c2e1a59",
-    "fields": {
-        "created_date": "2020-04-13T18:35:52.034Z",
-        "modified_date": "2020-05-27T18:20:24.686Z",
-        "name": "Soul Power Pt. 1",
-        "artwork_url": "https://images.genius.com/035506d17f802e21cf91cd7006101d48.1000x1000x1.jpg",
-        "apple_music_id": "1469577132"
-    }
-},
-{
-    "model": "api.album",
-    "pk": "bc78e72f-bee7-4795-ba9c-314460697de1",
-    "fields": {
-        "created_date": "2020-04-13T18:35:52.021Z",
-        "modified_date": "2020-05-27T18:15:08.245Z",
-        "name": "Cosmogramma",
-        "artwork_url": "https://upload.wikimedia.org/wikipedia/en/b/bc/WARPCD195Packshot_480.jpg",
+        "created_date": "2020-06-22T22:39:43.701Z",
+        "modified_date": "2020-06-22T22:39:43.701Z",
         "apple_music_id": "367788829"
     }
 },
 {
     "model": "api.album",
-    "pk": "f499acbe-1730-4f59-ad36-1c9c1f9b9907",
+    "pk": "94036ea9-b284-4244-87c8-6eb81b6f97a0",
     "fields": {
-        "created_date": "2020-04-13T18:35:52.028Z",
-        "modified_date": "2020-05-27T18:27:18.840Z",
-        "name": "Please Please Please",
-        "artwork_url": "https://upload.wikimedia.org/wikipedia/en/thumb/b/b2/PleasePleasePlease.jpg/220px-PleasePleasePlease.jpg",
-        "apple_music_id": "1443828151"
-    }
-},
-{
-    "model": "api.user",
-    "pk": "15c51ab9-0ac7-4225-897c-5c743021f3a9",
-    "fields": {
-        "created_date": "2020-04-13T18:31:51.102Z",
-        "modified_date": "2020-04-13T18:31:51.102Z",
-        "handle": "john1",
-        "name": "Elizabeth Burton",
-        "avatar_url": "test_url",
-        "is_authorized_apple_music_user": false
-    }
-},
-{
-    "model": "api.user",
-    "pk": "4cf3e136-adec-4ad8-abe0-27d5dfd428f1",
-    "fields": {
-        "created_date": "2020-04-13T18:39:56.889Z",
-        "modified_date": "2020-04-18T01:22:23.984Z",
-        "handle": "john5",
-        "name": "Jason Barker",
-        "avatar_url": "https://pickaface.net/gallery/avatar/unr_test_180620_0636_ocf45ak.png",
-        "is_authorized_apple_music_user": false
-    }
-},
-{
-    "model": "api.user",
-    "pk": "660121e6-0b3a-4e8d-9e31-10282838e148",
-    "fields": {
-        "created_date": "2020-04-13T18:31:07.485Z",
-        "modified_date": "2020-04-13T18:31:07.486Z",
-        "handle": "john0",
-        "name": "Jason Brill",
-        "avatar_url": "test_url",
-        "is_authorized_apple_music_user": false
-    }
-},
-{
-    "model": "api.user",
-    "pk": "6d359d14-bb98-41d9-a64e-8ada30437793",
-    "fields": {
-        "created_date": "2020-04-13T18:39:56.893Z",
-        "modified_date": "2020-04-18T01:23:07.044Z",
-        "handle": "john6",
-        "name": "Natalie Morrison",
-        "avatar_url": "https://cdn0.iconfinder.com/data/icons/avatars-3/512/avatar_beanie_girl-512.png",
-        "is_authorized_apple_music_user": false
-    }
-},
-{
-    "model": "api.user",
-    "pk": "7c536691-9e5b-471f-92af-df62cebc51bb",
-    "fields": {
-        "created_date": "2020-04-13T18:39:56.886Z",
-        "modified_date": "2020-04-18T01:19:50.448Z",
-        "handle": "john4",
-        "name": "Matthew Macias",
-        "avatar_url": "https://pickaface.net/gallery/avatar/unr_test_161024_0535_9lih90.png",
-        "is_authorized_apple_music_user": false
-    }
-},
-{
-    "model": "api.user",
-    "pk": "9fd1559c-87d2-4291-ad99-640ee98dabc4",
-    "fields": {
-        "created_date": "2020-04-13T18:39:56.881Z",
-        "modified_date": "2020-04-18T01:24:51.236Z",
-        "handle": "john3",
-        "name": "David Wilson",
-        "avatar_url": "https://avatarfiles.alphacoders.com/131/thumb-131923.jpg",
-        "is_authorized_apple_music_user": false
-    }
-},
-{
-    "model": "api.user",
-    "pk": "c61c83a8-9b69-40c4-aaec-77e0834dcc81",
-    "fields": {
-        "created_date": "2020-04-13T18:31:55.026Z",
-        "modified_date": "2020-04-13T18:31:55.026Z",
-        "handle": "john2",
-        "name": "Heather Brown",
-        "avatar_url": "test_url",
-        "is_authorized_apple_music_user": false
-    }
-},
-{
-    "model": "api.user",
-    "pk": "ccd6b4c9-dc99-4fd7-8237-332db6c729d3",
-    "fields": {
-        "created_date": "2020-04-13T18:39:56.896Z",
-        "modified_date": "2020-04-18T01:25:52.663Z",
-        "handle": "john7",
-        "name": "Jonathan Hall",
-        "avatar_url": "https://avatarfiles.alphacoders.com/204/thumb-204878.png",
-        "is_authorized_apple_music_user": false
+        "created_date": "2020-06-22T22:37:21.579Z",
+        "modified_date": "2020-06-22T22:37:21.579Z",
+        "apple_music_id": "499874506"
     }
 },
 {
     "model": "api.playlist",
-    "pk": "7ce8e9ba-4c15-4dce-afe0-8ba89c8e088a",
+    "pk": "0ffc6b75-43a0-4f6e-9776-09c6a1951608",
     "fields": {
-        "created_date": "2020-06-02T15:47:06.399Z",
-        "modified_date": "2020-06-02T17:19:08.990Z",
-        "title": "The first playlist",
-        "caption": "the first playlist caption",
-        "user": "15c51ab9-0ac7-4225-897c-5c743021f3a9",
+        "created_date": "2020-06-22T22:40:14.158Z",
+        "modified_date": "2020-06-22T22:40:14.158Z",
+        "title": "",
+        "caption": "",
         "apple_music_id": "pl.abe8ba42278f4ef490e3a9fc5ec8e8c5",
-        "tracks": [
-            "10ccc694-2b2a-4eb2-ae6d-1d51bcd195e2",
-            "260afbe0-0b3a-4d81-9810-174d2c83250a",
-            "56b8abfc-2e1d-4123-ad1d-671d6dd07f79",
-            "b523a72b-27a0-44fc-845b-e18c45391907",
-            "d03d9aab-0bb3-48bc-8794-9beff84a6699"
-        ]
+        "tracks": []
     }
 },
 {
     "model": "api.playlist",
-    "pk": "90020c3a-f816-4268-8fe0-f9bf36fcd2bf",
+    "pk": "9d926717-112f-4abc-be22-5cd6d23afd5b",
     "fields": {
-        "created_date": "2020-06-02T15:52:10.797Z",
-        "modified_date": "2020-06-02T17:19:24.638Z",
-        "title": "The second playlist",
-        "caption": "the 2nd playlist caption",
-        "user": "ccd6b4c9-dc99-4fd7-8237-332db6c729d3",
+        "created_date": "2020-06-22T22:40:31.745Z",
+        "modified_date": "2020-06-22T22:40:31.745Z",
+        "title": "",
+        "caption": "",
         "apple_music_id": "pl.acc464c750b94302b8806e5fcbe56e17",
-        "tracks": [
-            "10ccc694-2b2a-4eb2-ae6d-1d51bcd195e2",
-            "260afbe0-0b3a-4d81-9810-174d2c83250a",
-            "56b8abfc-2e1d-4123-ad1d-671d6dd07f79",
-            "b523a72b-27a0-44fc-845b-e18c45391907",
-            "d03d9aab-0bb3-48bc-8794-9beff84a6699"
-        ]
-    }
-},
-{
-    "model": "api.favoritedtrack",
-    "pk": "02613457-3f06-444a-979c-14b76647622a",
-    "fields": {
-        "created_date": "2020-05-14T18:55:31.231Z",
-        "modified_date": "2020-05-14T18:55:31.231Z",
-        "user": "15c51ab9-0ac7-4225-897c-5c743021f3a9",
-        "song": "10ccc694-2b2a-4eb2-ae6d-1d51bcd195e2"
-    }
-},
-{
-    "model": "api.favoritedtrack",
-    "pk": "27dff02e-6c10-4894-bbe8-6a12357fb507",
-    "fields": {
-        "created_date": "2020-05-27T18:23:53.012Z",
-        "modified_date": "2020-05-27T18:23:53.012Z",
-        "user": "c61c83a8-9b69-40c4-aaec-77e0834dcc81",
-        "song": "260afbe0-0b3a-4d81-9810-174d2c83250a"
-    }
-},
-{
-    "model": "api.favoritedtrack",
-    "pk": "3342c5b4-7ab9-4363-abb8-95c011617a5d",
-    "fields": {
-        "created_date": "2020-05-14T18:55:46.942Z",
-        "modified_date": "2020-05-14T18:55:46.942Z",
-        "user": "ccd6b4c9-dc99-4fd7-8237-332db6c729d3",
-        "song": "d03d9aab-0bb3-48bc-8794-9beff84a6699"
-    }
-},
-{
-    "model": "api.favoritedtrack",
-    "pk": "5d91974c-c5dd-4b9c-a77d-f915425f41de",
-    "fields": {
-        "created_date": "2020-05-27T18:23:36.566Z",
-        "modified_date": "2020-05-27T18:23:36.566Z",
-        "user": "c61c83a8-9b69-40c4-aaec-77e0834dcc81",
-        "song": "56b8abfc-2e1d-4123-ad1d-671d6dd07f79"
-    }
-},
-{
-    "model": "api.favoritedtrack",
-    "pk": "5db7e686-f058-4065-a53c-9b7bae64df6c",
-    "fields": {
-        "created_date": "2020-05-14T18:55:36.776Z",
-        "modified_date": "2020-05-14T18:55:36.776Z",
-        "user": "15c51ab9-0ac7-4225-897c-5c743021f3a9",
-        "song": "d03d9aab-0bb3-48bc-8794-9beff84a6699"
-    }
-},
-{
-    "model": "api.favoritedtrack",
-    "pk": "91b12c44-010e-4d8e-b6a5-a9d5bafe1b98",
-    "fields": {
-        "created_date": "2020-05-27T18:24:11.425Z",
-        "modified_date": "2020-05-27T18:24:11.425Z",
-        "user": "9fd1559c-87d2-4291-ad99-640ee98dabc4",
-        "song": "b523a72b-27a0-44fc-845b-e18c45391907"
-    }
-},
-{
-    "model": "api.favoritedalbum",
-    "pk": "eaf17911-4edc-4d52-9b44-12847e4b5eee",
-    "fields": {
-        "created_date": "2020-06-04T03:59:00.678Z",
-        "modified_date": "2020-06-04T03:59:00.678Z",
-        "user": "7c536691-9e5b-471f-92af-df62cebc51bb",
-        "album": "4297b472-79e5-4c39-9175-51e3db64e64e"
-    }
-},
-{
-    "model": "api.favoritedalbum",
-    "pk": "f9da5169-f68c-4752-9448-993ef5ca2213",
-    "fields": {
-        "created_date": "2020-06-04T03:59:14.567Z",
-        "modified_date": "2020-06-04T03:59:14.567Z",
-        "user": "c61c83a8-9b69-40c4-aaec-77e0834dcc81",
-        "album": "f499acbe-1730-4f59-ad36-1c9c1f9b9907"
-    }
-},
-{
-    "model": "api.favoritedplaylist",
-    "pk": "54a54431-a1fe-48b5-8c50-b2895d63bfcd",
-    "fields": {
-        "created_date": "2020-06-02T15:54:49.123Z",
-        "modified_date": "2020-06-02T15:54:49.123Z",
-        "user": "7c536691-9e5b-471f-92af-df62cebc51bb",
-        "playlist": "90020c3a-f816-4268-8fe0-f9bf36fcd2bf"
-    }
-},
-{
-    "model": "api.favoritedplaylist",
-    "pk": "76ad3ed0-ae7d-42b2-b7f9-5b999b8197d2",
-    "fields": {
-        "created_date": "2020-06-02T15:55:14.023Z",
-        "modified_date": "2020-06-02T15:55:14.023Z",
-        "user": "ccd6b4c9-dc99-4fd7-8237-332db6c729d3",
-        "playlist": "7ce8e9ba-4c15-4dce-afe0-8ba89c8e088a"
-    }
-},
-{
-    "model": "api.favoritedplaylist",
-    "pk": "d965fcf8-8b2a-434e-8f5c-13b9086e1319",
-    "fields": {
-        "created_date": "2020-06-02T15:55:04.020Z",
-        "modified_date": "2020-06-02T15:55:04.020Z",
-        "user": "9fd1559c-87d2-4291-ad99-640ee98dabc4",
-        "playlist": "7ce8e9ba-4c15-4dce-afe0-8ba89c8e088a"
+        "tracks": []
     }
 },
 {
     "model": "auth.permission",
     "pk": 1,
     "fields": {
-        "name": "Can add album",
+        "name": "Can add artist",
         "content_type": 1,
-        "codename": "add_album"
+        "codename": "add_artist"
     }
 },
 {
     "model": "auth.permission",
     "pk": 2,
     "fields": {
-        "name": "Can change album",
+        "name": "Can change artist",
         "content_type": 1,
-        "codename": "change_album"
+        "codename": "change_artist"
     }
 },
 {
     "model": "auth.permission",
     "pk": 3,
     "fields": {
-        "name": "Can delete album",
+        "name": "Can delete artist",
         "content_type": 1,
-        "codename": "delete_album"
+        "codename": "delete_artist"
     }
 },
 {
     "model": "auth.permission",
     "pk": 4,
     "fields": {
-        "name": "Can view album",
+        "name": "Can view artist",
         "content_type": 1,
-        "codename": "view_album"
+        "codename": "view_artist"
     }
 },
 {
     "model": "auth.permission",
     "pk": 5,
     "fields": {
-        "name": "Can add artist",
+        "name": "Can add song",
         "content_type": 2,
-        "codename": "add_artist"
+        "codename": "add_song"
     }
 },
 {
     "model": "auth.permission",
     "pk": 6,
     "fields": {
-        "name": "Can change artist",
+        "name": "Can change song",
         "content_type": 2,
-        "codename": "change_artist"
+        "codename": "change_song"
     }
 },
 {
     "model": "auth.permission",
     "pk": 7,
     "fields": {
-        "name": "Can delete artist",
+        "name": "Can delete song",
         "content_type": 2,
-        "codename": "delete_artist"
+        "codename": "delete_song"
     }
 },
 {
     "model": "auth.permission",
     "pk": 8,
     "fields": {
-        "name": "Can view artist",
+        "name": "Can view song",
         "content_type": 2,
-        "codename": "view_artist"
+        "codename": "view_song"
     }
 },
 {
     "model": "auth.permission",
     "pk": 9,
     "fields": {
-        "name": "Can add post",
+        "name": "Can add album",
         "content_type": 3,
-        "codename": "add_post"
+        "codename": "add_album"
     }
 },
 {
     "model": "auth.permission",
     "pk": 10,
     "fields": {
-        "name": "Can change post",
+        "name": "Can change album",
         "content_type": 3,
-        "codename": "change_post"
+        "codename": "change_album"
     }
 },
 {
     "model": "auth.permission",
     "pk": 11,
     "fields": {
-        "name": "Can delete post",
+        "name": "Can delete album",
         "content_type": 3,
-        "codename": "delete_post"
+        "codename": "delete_album"
     }
 },
 {
     "model": "auth.permission",
     "pk": 12,
     "fields": {
-        "name": "Can view post",
+        "name": "Can view album",
         "content_type": 3,
-        "codename": "view_post"
+        "codename": "view_album"
     }
 },
 {
     "model": "auth.permission",
     "pk": 13,
     "fields": {
-        "name": "Can add song",
+        "name": "Can add playlist",
         "content_type": 4,
-        "codename": "add_song"
+        "codename": "add_playlist"
     }
 },
 {
     "model": "auth.permission",
     "pk": 14,
     "fields": {
-        "name": "Can change song",
+        "name": "Can change playlist",
         "content_type": 4,
-        "codename": "change_song"
+        "codename": "change_playlist"
     }
 },
 {
     "model": "auth.permission",
     "pk": 15,
     "fields": {
-        "name": "Can delete song",
+        "name": "Can delete playlist",
         "content_type": 4,
-        "codename": "delete_song"
+        "codename": "delete_playlist"
     }
 },
 {
     "model": "auth.permission",
     "pk": 16,
     "fields": {
-        "name": "Can view song",
+        "name": "Can view playlist",
         "content_type": 4,
-        "codename": "view_song"
+        "codename": "view_playlist"
     }
 },
 {
     "model": "auth.permission",
     "pk": 17,
     "fields": {
-        "name": "Can add user",
+        "name": "Can add favorited track",
         "content_type": 5,
-        "codename": "add_user"
+        "codename": "add_favoritedtrack"
     }
 },
 {
     "model": "auth.permission",
     "pk": 18,
     "fields": {
-        "name": "Can change user",
+        "name": "Can change favorited track",
         "content_type": 5,
-        "codename": "change_user"
+        "codename": "change_favoritedtrack"
     }
 },
 {
     "model": "auth.permission",
     "pk": 19,
     "fields": {
-        "name": "Can delete user",
+        "name": "Can delete favorited track",
         "content_type": 5,
-        "codename": "delete_user"
+        "codename": "delete_favoritedtrack"
     }
 },
 {
     "model": "auth.permission",
     "pk": 20,
     "fields": {
-        "name": "Can view user",
+        "name": "Can view favorited track",
         "content_type": 5,
-        "codename": "view_user"
+        "codename": "view_favoritedtrack"
     }
 },
 {
     "model": "auth.permission",
     "pk": 21,
     "fields": {
-        "name": "Can add log entry",
+        "name": "Can add favorited album",
         "content_type": 6,
-        "codename": "add_logentry"
+        "codename": "add_favoritedalbum"
     }
 },
 {
     "model": "auth.permission",
     "pk": 22,
     "fields": {
-        "name": "Can change log entry",
+        "name": "Can change favorited album",
         "content_type": 6,
-        "codename": "change_logentry"
+        "codename": "change_favoritedalbum"
     }
 },
 {
     "model": "auth.permission",
     "pk": 23,
     "fields": {
-        "name": "Can delete log entry",
+        "name": "Can delete favorited album",
         "content_type": 6,
-        "codename": "delete_logentry"
+        "codename": "delete_favoritedalbum"
     }
 },
 {
     "model": "auth.permission",
     "pk": 24,
     "fields": {
-        "name": "Can view log entry",
+        "name": "Can view favorited album",
         "content_type": 6,
-        "codename": "view_logentry"
+        "codename": "view_favoritedalbum"
     }
 },
 {
     "model": "auth.permission",
     "pk": 25,
     "fields": {
-        "name": "Can add permission",
+        "name": "Can add favorited playlist",
         "content_type": 7,
-        "codename": "add_permission"
+        "codename": "add_favoritedplaylist"
     }
 },
 {
     "model": "auth.permission",
     "pk": 26,
     "fields": {
-        "name": "Can change permission",
+        "name": "Can change favorited playlist",
         "content_type": 7,
-        "codename": "change_permission"
+        "codename": "change_favoritedplaylist"
     }
 },
 {
     "model": "auth.permission",
     "pk": 27,
     "fields": {
-        "name": "Can delete permission",
+        "name": "Can delete favorited playlist",
         "content_type": 7,
-        "codename": "delete_permission"
+        "codename": "delete_favoritedplaylist"
     }
 },
 {
     "model": "auth.permission",
     "pk": 28,
     "fields": {
-        "name": "Can view permission",
+        "name": "Can view favorited playlist",
         "content_type": 7,
-        "codename": "view_permission"
+        "codename": "view_favoritedplaylist"
     }
 },
 {
     "model": "auth.permission",
     "pk": 29,
     "fields": {
-        "name": "Can add group",
+        "name": "Can add listened track",
         "content_type": 8,
-        "codename": "add_group"
+        "codename": "add_listenedtrack"
     }
 },
 {
     "model": "auth.permission",
     "pk": 30,
     "fields": {
-        "name": "Can change group",
+        "name": "Can change listened track",
         "content_type": 8,
-        "codename": "change_group"
+        "codename": "change_listenedtrack"
     }
 },
 {
     "model": "auth.permission",
     "pk": 31,
     "fields": {
-        "name": "Can delete group",
+        "name": "Can delete listened track",
         "content_type": 8,
-        "codename": "delete_group"
+        "codename": "delete_listenedtrack"
     }
 },
 {
     "model": "auth.permission",
     "pk": 32,
     "fields": {
-        "name": "Can view group",
+        "name": "Can view listened track",
         "content_type": 8,
-        "codename": "view_group"
+        "codename": "view_listenedtrack"
     }
 },
 {
     "model": "auth.permission",
     "pk": 33,
     "fields": {
-        "name": "Can add user",
+        "name": "Can add log entry",
         "content_type": 9,
-        "codename": "add_user"
+        "codename": "add_logentry"
     }
 },
 {
     "model": "auth.permission",
     "pk": 34,
     "fields": {
-        "name": "Can change user",
+        "name": "Can change log entry",
         "content_type": 9,
-        "codename": "change_user"
+        "codename": "change_logentry"
     }
 },
 {
     "model": "auth.permission",
     "pk": 35,
     "fields": {
-        "name": "Can delete user",
+        "name": "Can delete log entry",
         "content_type": 9,
-        "codename": "delete_user"
+        "codename": "delete_logentry"
     }
 },
 {
     "model": "auth.permission",
     "pk": 36,
     "fields": {
-        "name": "Can view user",
+        "name": "Can view log entry",
         "content_type": 9,
-        "codename": "view_user"
+        "codename": "view_logentry"
     }
 },
 {
     "model": "auth.permission",
     "pk": 37,
     "fields": {
-        "name": "Can add content type",
+        "name": "Can add permission",
         "content_type": 10,
-        "codename": "add_contenttype"
+        "codename": "add_permission"
     }
 },
 {
     "model": "auth.permission",
     "pk": 38,
     "fields": {
-        "name": "Can change content type",
+        "name": "Can change permission",
         "content_type": 10,
-        "codename": "change_contenttype"
+        "codename": "change_permission"
     }
 },
 {
     "model": "auth.permission",
     "pk": 39,
     "fields": {
-        "name": "Can delete content type",
+        "name": "Can delete permission",
         "content_type": 10,
-        "codename": "delete_contenttype"
+        "codename": "delete_permission"
     }
 },
 {
     "model": "auth.permission",
     "pk": 40,
     "fields": {
-        "name": "Can view content type",
+        "name": "Can view permission",
         "content_type": 10,
-        "codename": "view_contenttype"
+        "codename": "view_permission"
     }
 },
 {
     "model": "auth.permission",
     "pk": 41,
     "fields": {
-        "name": "Can add session",
+        "name": "Can add group",
         "content_type": 11,
-        "codename": "add_session"
+        "codename": "add_group"
     }
 },
 {
     "model": "auth.permission",
     "pk": 42,
     "fields": {
-        "name": "Can change session",
+        "name": "Can change group",
         "content_type": 11,
-        "codename": "change_session"
+        "codename": "change_group"
     }
 },
 {
     "model": "auth.permission",
     "pk": 43,
     "fields": {
-        "name": "Can delete session",
+        "name": "Can delete group",
         "content_type": 11,
-        "codename": "delete_session"
+        "codename": "delete_group"
     }
 },
 {
     "model": "auth.permission",
     "pk": 44,
     "fields": {
-        "name": "Can view session",
+        "name": "Can view group",
         "content_type": 11,
-        "codename": "view_session"
+        "codename": "view_group"
     }
 },
 {
     "model": "auth.permission",
     "pk": 45,
     "fields": {
-        "name": "Can add playlist",
+        "name": "Can add user",
         "content_type": 12,
-        "codename": "add_playlist"
+        "codename": "add_user"
     }
 },
 {
     "model": "auth.permission",
     "pk": 46,
     "fields": {
-        "name": "Can change playlist",
+        "name": "Can change user",
         "content_type": 12,
-        "codename": "change_playlist"
+        "codename": "change_user"
     }
 },
 {
     "model": "auth.permission",
     "pk": 47,
     "fields": {
-        "name": "Can delete playlist",
+        "name": "Can delete user",
         "content_type": 12,
-        "codename": "delete_playlist"
+        "codename": "delete_user"
     }
 },
 {
     "model": "auth.permission",
     "pk": 48,
     "fields": {
-        "name": "Can view playlist",
+        "name": "Can view user",
         "content_type": 12,
-        "codename": "view_playlist"
+        "codename": "view_user"
     }
 },
 {
     "model": "auth.permission",
     "pk": 49,
     "fields": {
-        "name": "Can add favorited album",
+        "name": "Can add content type",
         "content_type": 13,
-        "codename": "add_favoritedalbum"
+        "codename": "add_contenttype"
     }
 },
 {
     "model": "auth.permission",
     "pk": 50,
     "fields": {
-        "name": "Can change favorited album",
+        "name": "Can change content type",
         "content_type": 13,
-        "codename": "change_favoritedalbum"
+        "codename": "change_contenttype"
     }
 },
 {
     "model": "auth.permission",
     "pk": 51,
     "fields": {
-        "name": "Can delete favorited album",
+        "name": "Can delete content type",
         "content_type": 13,
-        "codename": "delete_favoritedalbum"
+        "codename": "delete_contenttype"
     }
 },
 {
     "model": "auth.permission",
     "pk": 52,
     "fields": {
-        "name": "Can view favorited album",
+        "name": "Can view content type",
         "content_type": 13,
-        "codename": "view_favoritedalbum"
+        "codename": "view_contenttype"
     }
 },
 {
     "model": "auth.permission",
     "pk": 53,
     "fields": {
-        "name": "Can add favorited playlist",
+        "name": "Can add session",
         "content_type": 14,
-        "codename": "add_favoritedplaylist"
+        "codename": "add_session"
     }
 },
 {
     "model": "auth.permission",
     "pk": 54,
     "fields": {
-        "name": "Can change favorited playlist",
+        "name": "Can change session",
         "content_type": 14,
-        "codename": "change_favoritedplaylist"
+        "codename": "change_session"
     }
 },
 {
     "model": "auth.permission",
     "pk": 55,
     "fields": {
-        "name": "Can delete favorited playlist",
+        "name": "Can delete session",
         "content_type": 14,
-        "codename": "delete_favoritedplaylist"
+        "codename": "delete_session"
     }
 },
 {
     "model": "auth.permission",
     "pk": 56,
     "fields": {
-        "name": "Can view favorited playlist",
+        "name": "Can view session",
         "content_type": 14,
-        "codename": "view_favoritedplaylist"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 57,
-    "fields": {
-        "name": "Can add favorited track",
-        "content_type": 15,
-        "codename": "add_favoritedtrack"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 58,
-    "fields": {
-        "name": "Can change favorited track",
-        "content_type": 15,
-        "codename": "change_favoritedtrack"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 59,
-    "fields": {
-        "name": "Can delete favorited track",
-        "content_type": 15,
-        "codename": "delete_favoritedtrack"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 60,
-    "fields": {
-        "name": "Can view favorited track",
-        "content_type": 15,
-        "codename": "view_favoritedtrack"
+        "codename": "view_session"
     }
 }
 ]

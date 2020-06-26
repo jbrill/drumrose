@@ -84,8 +84,7 @@ export default {
 <style>
 .timeline-wrap {
 	text-align: center;
-	width: 100%;
-	height: 100%;
+	width: 50%;
 	display: flex;
   justify-content: center;
   align-items: center; 

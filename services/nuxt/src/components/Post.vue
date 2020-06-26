@@ -10,16 +10,16 @@
                 text
                 color="transparent"
                 class="handle-select noselect"
-                :to="'/people/' + post.user.handle"
+                :to="'/people/' + post.user.username"
                 v-on="on"
               >
                 <div
                   class="posterImg"
                   :style="{ backgroundImage: 'url(' +
-                    post.user.avatar_url + ')' }"
+                    post.user.picture + ')' }"
                 />
                 <h3 class="posterName">
-                  {{ post.user.handle }}
+                  {{ post.user.username }}
                 </h3>
               </v-btn>
             </template>
@@ -60,6 +60,8 @@
 
 <script>
 import MusicItem from '~/components/MusicItem';
+import axios from 'axios';
+
 
 export default {
   name: 'Post',
@@ -83,6 +85,9 @@ export default {
   data: () => ({
     rating: 4.3,
   }),
+  created: function() {
+    console.log(this.post)
+  },
 };
 </script>
 

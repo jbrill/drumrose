@@ -2,9 +2,6 @@
   <div class="profileContain">
     <div
       v-if="!loading"
-      :style="{
-        background: `#${trackInfo.attributes.artwork.bgColor}` 
-      }"
       class="track-contain"
     >
       <img
@@ -20,16 +17,30 @@
           {{ trackInfo.attributes.name }}
         </p>
         <div class="artist-name">
-          {{ trackInfo.attributes.artistName }}
+          <nuxt-link to="artists/">{{ trackInfo.attributes.artistName }}</nuxt-link>
         </div>
       </div>
+      <p>{{ trackInfo.attributes.releaseDate }}</p>
+      <v-list><v-list-item v-for="genre in trackInfo.attributes.genreNames"><v-chip>{{ genre }}</v-chip></v-list-item></v-list>
     </div>
+    <v-divider></v-divider>
+			<v-btn small tile dark>
+					<v-icon x-small left>mdi-heart</v-icon> Favorite
+			</v-btn>
+			<v-btn small tile dark>
+					<v-icon x-small left>mdi-plus</v-icon> Add to Queue
+			</v-btn>
+			<v-btn small tile dark>
+					<v-icon x-small left>mdi-plus</v-icon> Add to Playlist
+			</v-btn>
+			<v-btn small tile dark>
+					<v-icon x-small left>mdi-plus</v-icon> Add to Library
+			</v-btn>
   </div>
 </template>
 
 <script>
 export default {
-  layout: 'music',
   data: () => ({
     trackInfo: {},
     loading: true,
@@ -38,6 +49,7 @@ export default {
     const resp = await this.$store.getters.fetch(
       `/v1/catalog/us/songs/${this.$route.params.id}`
     );
+    console.log(resp)
 		this.trackInfo = resp.data[0];
     this.loading = false;
   },

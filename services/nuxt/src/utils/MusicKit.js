@@ -23,6 +23,14 @@ export function playSingleItem (item) {
   });
 }
 
+export function appendWidthHeightToArtworkUrl (url) {
+  return url.replace(
+    '{w}', '250'
+  ).replace(
+    '{h}', '250'
+  );
+}
+
 /**
  * Returns a humanized media duration string for a {@code value} in
  * milliseconds.

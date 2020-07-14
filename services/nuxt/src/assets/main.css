@@ -41,6 +41,10 @@ body {
   user-select: none; /* Non-prefixed version */
 }
 
+>>>.v-input__slot {
+  margin-bottom: 0;
+}
+
 h1 {
   font-size: 40px;
   font-weight: 200;

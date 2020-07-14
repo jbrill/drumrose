@@ -30,6 +30,9 @@ export const state = () => ({
   queuePosition: -1,
   history: [],
 
+  // Library
+  activeCollection: null,
+
   // Posts
   favoritedPosts: [],
 	
@@ -52,16 +55,16 @@ let getApi = library => {
  */
 export function apiHeaders (state) {
   if (process.client) {
-		return new Headers({
+		return {
 			Authorization: 'Bearer ' + MusicKit.getInstance().developerToken,
 			Accept: 'application/json', 'Content-Type': 'application/json',
 			'Music-User-Token': '' + MusicKit.getInstance().musicUserToken,
-		});
+		}
   } else {
 		return {
 			Authorization: 'Bearer ' + state.appleMusicToken,
 			Accept: 'application/json', 'Content-Type': 'application/json',
-		};
+		}
   }
 }
 
@@ -115,9 +118,7 @@ export const getters = {
   // Data fetching
   get (state) {
     return async (library, type, id, options) => {
-      const res = await getApi(library)[type](id, options);
-      console.log(res)
-      return res;
+      return await getApi(library)[type](id, options);
     };
   },
   collection (state) {
@@ -174,6 +175,9 @@ export const mutations = {
   },
 	setAppleMusicToken (state, apple_music_token) {
 		state.appleMusicToken = apple_music_token;
+	},
+	activeCollection (state, activeCollection) {
+		state.activeCollection = activeCollection;
 	},
   isAuthorized (state, isAuthorized) {
     state.isAuthorized = isAuthorized;
@@ -341,6 +345,9 @@ export const actions = {
     // Update queue information
     commit('queue', clonedeep(MusicKit.getInstance().player.queue.items));
     commit('queuePosition', MusicKit.getInstance().player.queue.position);
+    
+    // Update library information
+    commit('activeCollection', 'artists');
 
     // Register event handlers
     commit('addEventListener', {
@@ -476,6 +483,9 @@ export const actions = {
   },
   setFavoritedPosts ({ commit }, posts) {
     commit('favoritedPosts', posts);
+  },
+  setActiveCollection ({ commit }, activeCollection) {
+    commit('activeCollection', activeCollection);
   },
   toggleShuffleMode ({ commit, state }) {
     MusicKit.getInstance().player.shuffle = state.shuffleMode === 0 ? 1 : 0;
@@ -688,32 +698,15 @@ export const actions = {
     });
 	},
   
-  getTrackHints (_, { searchInput }) {
-    return new Promise(async (resolve, reject) => {
-      try {
-        let res = await fetch(
-          `https://api.music.apple.com/v1/catalog/us/search?term=
-          \${searchInput}&limit=2&types=songs`,
-          {
-            method: 'GET',
-            headers: apiHeaders(),
-          }
-        );
-
-        if (res.status === 204) {
-          // Invalid local cache
-          let api = getApi(true);
-          api.clearCacheItems();
-
-          // Return successful
-          resolve(true);
-        } else {
-          reject(MusicKit.MKError(MusicKit.MKError.SERVER_ERROR));
-        }
-      } catch (err) {
-        reject(err);
-      }
-    });
+  async getHints (_, searchInput) {
+     const getHints = {
+       method: "GET",
+       url: `https://api.music.apple.com/v1/catalog/us/search?term=${searchInput}&limit=5&types=songs,artists,albums,playlists,apple-curators,curators,stations`,
+       headers: apiHeaders()
+     };
+     const { data } = await axios(getHints);
+     console.log(data)
+     return data;
   },
 };
 

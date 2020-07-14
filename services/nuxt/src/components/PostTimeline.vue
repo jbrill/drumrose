@@ -1,18 +1,15 @@
 <template>
   <div class="timeline-wrap">
-    <span
-      class="timeline-time timeline-time-begin"
+    <v-slider
+      v-model="currentPlaybackTime"
+      color="var(--primary-red)"
+      track-color="grey"
+      min="0"
+      max="100"
     >
-      {{ currentPlaybackTime }}
-    </span>
-      <v-progress-linear
-        v-model="currentPlaybackTime"
-        :buffer-value="bufferedProgress || 100"
-        color="var(--primary-red)"
-      ></v-progress-linear>
-      <span class="timeline-time timeline-time-end">
-        {{ currentPlaybackDuration }}
-      </span>
+      <template v-slot:prepend>{{ currentPlaybackTime }}</template>
+      <template v-slot:append>{{ currentPlaybackDuration }}</template>
+    </v-slider>
   </div>
 </template>
 
@@ -82,6 +79,9 @@ export default {
 </script>
 
 <style>
+>>>.v-messages {
+  display: none;
+}
 .timeline-wrap {
 	text-align: center;
 	width: 50%;

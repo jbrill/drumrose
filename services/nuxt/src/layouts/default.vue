@@ -83,9 +83,6 @@ export default {
 	-webkit-overflow-scrolling: touch;
 	-ms-overflow-style: none;
 }
-.feed-contain {
-  padding-top: 4rem;
-}
 .main-contain {
   padding-top: 0;
   width: 60vw;

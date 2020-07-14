@@ -1,7 +1,8 @@
 <template>
-  <div class="audioPlayer">
+  <div v-if="queue.length" class="audioPlayer">
     <div class="volumeControls">
       <v-slider
+				class="volume-slider"
 				v-model="volume"
 				append-icon="volume_up"
 				prepend-icon="volume_down"
@@ -14,6 +15,7 @@
         x-small
         ref="shuffleButton"
         @click="shuffleTrack"
+        :class="{ playModeActive: $store.state.shuffleMode === 1 }"
       >mdi-shuffle</v-icon>
       <v-icon
         ref="musicPrev"
@@ -38,9 +40,24 @@
       >mdi-skip-next</v-icon>
       <v-icon
         x-small
+        v-if="$store.state.repeatMode === 1"
         ref="repeatButton"
         @click="repeatTrack"
+        color="var(--primary-red)"
+      >mdi-repeat-once</v-icon>
+      <v-icon
+        x-small
+        v-else-if="$store.state.repeatMode === 2"
+        ref="repeatButton"
+        @click="repeatTrack"
+        color="var(--primary-red)"
       >mdi-repeat</v-icon>
+      <v-icon
+        x-small
+        v-else
+        ref="repeatButton"
+        @click="repeatTrack"
+      >mdi-repeat-off</v-icon>
     </div>
     <PostTimeline />
     <div
@@ -106,7 +123,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['nowPlayingItem', 'playbackState']),
+    ...mapState(['nowPlayingItem', 'queue', 'playbackState']),
     isOverflowing () {
       const element = this.$refs.songName;
       if (element.offsetWidth < element.scrollWidth) {
@@ -150,7 +167,6 @@ export default {
       this.$store.dispatch("toggleRepeatMode");
     },
     shuffleTrack () {
-      console.log("SHUFFLE");
       this.$store.dispatch("toggleShuffleMode");
     },
     changeVolume () {
@@ -185,6 +201,15 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+>>>.volume-slider i {
+  font-size: 1rem;
+}
+>>>.volume-slider .v-messages {
+  display: none;
+}
+>>>.playModeActive {
+  color: var(--primary-red) !important;
 }
 .nowPlayingContain {
   width: 25%;

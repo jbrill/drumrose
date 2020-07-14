@@ -54,7 +54,6 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/auth',
     'nuxt-svg-loader',
-    'bootstrap-vue/nuxt',
     'cookie-universal-nuxt',
   ],
   axios: {

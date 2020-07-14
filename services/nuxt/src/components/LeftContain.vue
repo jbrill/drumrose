@@ -2,19 +2,19 @@
   <div class="nav-contain">
     <div>
       <v-btn-toggle active-class="button-active" class="button-group-contain" borderless background-color="transparent" mandatory v-model="toggle_exclusive">
-        <v-btn rounded class="nav-button" block nuxt to="/" medium text>
+        <v-btn @click="toggle_exclusive = 0" rounded class="nav-button" block nuxt to="/" medium text>
           <v-icon small left>mdi-home</v-icon> HOME
         </v-btn>
-        <v-btn rounded class="nav-button" block nuxt to="/library" medium text>
+        <v-btn @click="toggle_exclusive = 1" rounded class="nav-button" block nuxt to="/library" medium text>
           <v-icon small left>mdi-file-music</v-icon> LIBRARY
         </v-btn>
-        <v-btn class="nav-button" block nuxt to="/discover" medium text>
+        <v-btn @click="toggle_exclusive = 2" class="nav-button" block nuxt to="/discover" medium text>
           <v-icon small left>mdi-waveform</v-icon> DISCOVER
         </v-btn>
-        <v-btn class="nav-button" block nuxt to="/users/" medium text>
+        <v-btn @click="toggle_exclusive = 3" class="nav-button" block nuxt to="/users/" medium text>
           <v-icon small left>mdi-account-music</v-icon> PROFILE
         </v-btn>
-        <v-btn class="nav-button" block nuxt to="/settings" medium text>
+        <v-btn @click="toggle_exclusive = 4" class="nav-button" block nuxt to="/settings" medium text>
           <v-icon small left>mdi-cogs</v-icon> SETTINGS
         </v-btn>
       </v-btn-toggle>
@@ -65,6 +65,12 @@ export default {
       "favorites": favoritesResponse.data,
     }    
   },
+  watch:{
+    $route (to, from){
+      console.log("YOO")
+      this.toggle_exclusive = 4;
+    }
+  }, 
   computed: {
     ...mapState(['auth', 'isAuthorized']),
     artistInfo () {
@@ -146,6 +152,9 @@ export default {
 <style scoped>
 .library-menu-contain {
   list-style: none;
+}
+>>>.nav-button:hover, >>>.nav-button:focus {
+  color: white !important;
 }
 .account-contain {
   position: absolute;

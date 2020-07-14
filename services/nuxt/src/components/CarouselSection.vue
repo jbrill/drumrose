@@ -74,7 +74,6 @@ export default {
 }
 .carousel-contain {
   padding: 2rem;
-  border-bottom: 1px solid var(--primary-black-light);
   margin: 0 auto;
   width: 95%;
 }

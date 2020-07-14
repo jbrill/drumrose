@@ -1,53 +1,131 @@
 <template>
-  <div class="search-bar">
-    <input
-      onfocus="this.placeholder = ''"
-      onblur="this.placeholder = ''"
-      placeholder="Search for music"
-      class="search-bar__input"
-    >
+  <div>
+    <v-autocomplete
+      v-model="selectedSearch"
+      :items="entries"
+      :loading="isLoading"
+      :search-input.sync="search"
+      clearable
+      hide-details
+      hide-selected
+      filled
+      item-text="attributes.name"
+      item-value="attributes.name"
+      no-data-text="Find music and people"
+      placeholder="Search Drumrose"
+      prepend-inner-icon="mdi-database-search"
+      rounded
+      return-object
+      width="100%"
+		>
+      <v-btn
+        v-if="search"
+        width="100%"
+        slot="prepend-item"
+        text
+        nuxt
+        :to="'search/' + search"
+        class="search-button"
+        color="var(--primary-yellow)"
+      >
+        Search for '{{ search }}'
+      </v-btn>	
+        <template v-slot:no-data>
+          <v-list-item>
+            <v-list-item-title>
+              Find <strong>music</strong> and <strong>users</strong>
+            </v-list-item-title>
+          </v-list-item>
+        </template>
+        <template v-slot:item="{ item }">
+						<v-list-item-avatar v-if="item.type === 'songs'" >
+							<img
+								:src="item.attributes.artwork.url.replace(`{w}`,'250').replace(`{h}`, '250')"
+								:alt="item.attributes.name"
+							>
+						</v-list-item-avatar>
+						<v-list-item-avatar v-else-if="item.type === 'artists'" >
+							<v-icon>mdi-account</v-icon>
+						</v-list-item-avatar>
+						<v-list-item-avatar v-else-if="item.type === 'albums'" >
+							<img
+								:src="item.attributes.artwork.url.replace(`{w}`,'250').replace(`{h}`, '250')"
+								:alt="item.attributes.name"
+							>
+						</v-list-item-avatar>
+						<v-list-item-content v-if="item.type === 'songs'">
+							<v-list-item-title v-text="item.attributes.name"></v-list-item-title>
+							<v-list-item-subtitle v-text="item.attributes.artistName"></v-list-item-subtitle>
+						</v-list-item-content>
+						<v-list-item-content v-else-if="item.type === 'artists'">
+							<v-list-item-title v-text="item.attributes.name"></v-list-item-title>
+						</v-list-item-content>
+						<v-list-item-content v-else-if="item.type === 'albums'">
+							<v-list-item-title v-text="item.attributes.name"></v-list-item-title>
+							<v-list-item-subtitle v-text="item.attributes.artistName"></v-list-item-subtitle>
+						</v-list-item-content>
+					<v-list-item-content v-else v-text="item"></v-list-item-content>
+			    <v-list-item-action v-if="item.type === 'songs'">
+            <v-btn icon>
+              <v-icon color="grey lighten-1">mdi-waveform</v-icon>
+            </v-btn>
+          </v-list-item-action>	
+			    <v-list-item-action v-if="item.type === 'artists'">
+            <v-btn icon>
+              <v-icon color="grey lighten-1">mdi-brain</v-icon>
+            </v-btn>
+          </v-list-item-action>	
+			    <v-list-item-action v-if="item.type === 'albums'">
+            <v-btn icon>
+              <v-icon color="grey lighten-1">mdi-record-circle</v-icon>
+            </v-btn>
+          </v-list-item-action>	
+        </template>
+      </v-autocomplete>
   </div>
 </template>
 
 <script>
 export default {
-  components: {},
-};
+  data: () => ({
+    isLoading: false,
+    search: null,
+    selectedSearch: null,
+    entries: []
+  }),
+  watch: {
+    search (val) {
+      // Items have already been requested
+      if (!val) return
+      if (val.length < 1) return
+      this.entries = [{ header: 'Tracks'}, {divider: true}, {header: 'Artists'}, {divider: true}, {header: 'Albums'}];
+      this.isLoading = true
+
+      this.$store.dispatch('getHints', val).then(res => {
+        this.entries = [{ header: 'Tracks'}].concat(res.results.songs.data).concat([{ divider: true }, { header: 'Artists' }]).concat(res.results.artists.data).concat([{ divider: true }, { header: 'Albums' }]).concat(res.results.albums.data);
+        this.isLoading = false;
+        return this.entries;
+      })
+    },
+    selectedSearch (newVal, oldVal) {
+      if (!newVal) return;
+      if (newVal.type === 'songs') {
+				this.$router.push({
+					path: `/tracks/${newVal.id}`
+				})
+      } else if (newVal.type === 'artists') {
+				this.$router.push({
+					path: `/artists/${newVal.id}`
+				})
+      } else if (newVal.type === 'albums') {
+				this.$router.push({
+					path: `/albums/${newVal.id}`
+				})
+      }
+    }
+  },
+}
 </script>
 
 <style scoped>
-@media screen and (prefers-color-scheme: dark) {
-  .search-bar__input {
-    color: white;
-    background-color: grey;
-  }
-}
-.search-bar__input {
-  width: 105%;
-  height: 2rem;
-  background-image: url('~assets/search.png');
-  background-repeat: no-repeat;
-  background-position: left;
-  background-position-x: 0.5rem;
-  background-size: 1rem 1rem;
-  border-radius: 0.2rem;
-  border: 1px solid var(--primary-black--light);
-  background-color: white;
-  font-size: 0.8rem;
-  color: black;
-  padding-left: 2.5rem;
-}
-
-.search-bar__input:focus {
-  outline: none !important;
-  border: .5px solid var(--primary-purple);
-  box-shadow: 0 0 10px #719ece;
-  opacity: 1;
-}
-
-::placeholder {
-  color: var(--primary-black--light);
-  font-weight: 300;
-  font-family: 'Proxima Nova', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-}
 </style>

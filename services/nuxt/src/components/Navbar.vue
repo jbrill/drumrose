@@ -4,13 +4,19 @@
       DRUMROSE
     </nuxt-link>
     <v-btn @click="login" v-if="!auth.loggedIn">Log In</v-btn>
+    <SearchBar />
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
+import SearchBar from '~/components/SearchBar';
+
 
 export default {
+  components: {
+    SearchBar,
+  },
   computed: {
     ...mapState(['auth']),
   },
@@ -33,16 +39,14 @@ export default {
 
 <style>
 .header {
-  padding-top: 4rem;
-  padding-left: 2rem;
+  margin: 1rem;
+  height: 5rem;
   min-height: 3rem;
   display: flex;
+  justify-content: space-between;
 	align-items: center;
 	font-size: 3rem;
 	z-index: 10;
-	height: 2rem;
-  font-family: 'Helvetica', sans-serif;
-  font-weight: bolder;
 }
 .audio-contain {
   display: flex;
@@ -51,8 +55,12 @@ export default {
   width: 100%;
 }
 .title-button {
+  color: #ccc !important;
   font-size: 1.5rem;
   letter-spacing: 0.5rem;
+}
+.title-button:hover, .title-button:focus {
+  opacity: 0.8;
 }
 .profile-menu-icon {
   height: 100%;

@@ -1,19 +1,28 @@
 <template>
   <div class="settings-contain">
-    <div><span>Username</span></div>
-    <div><span>Given Name</span></div>
-    <div><span>Family Name</span></div>
-    <div><span>Password Reset</span></div>
-    <div><span>Audio Quality</span></div>
-    <div><span>Favorite Albums</span></div>
+    <span>Bitrate</span>
+    <v-radio-group v-model="radios" :mandatory="false">
+			<v-radio label="Standard (64 kbps)" value="radio-1"></v-radio>
+			<v-radio label="High (256 kbps)" value="radio-2"></v-radio>
+		</v-radio-group>
+    <v-divider></v-divider>
+    <v-btn color="var(--primary-purple)">Reset Password</v-btn>
+    <v-btn color="var(--primary-red)">Delete Account</v-btn>
   </div>
 </template>
 
-<script></script>
+<script>
+export default {
+  data () {
+    return {
+      radios: 'radio-1',
+    }
+  },
+}
+</script>
 
-<style>
-.settings-contain {
-  margin-top: 7rem;
-  display: inline-block;
+<style scoped>
+>>>.v-label {
+  margin: 0;
 }
 </style>

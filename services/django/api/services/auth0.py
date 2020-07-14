@@ -11,20 +11,14 @@ TOKEN_EXPIRATION_ERR_MESSAGE = (
 
 
 def _build_headers(_access_token_in):
-    print(_access_token_in)
     return {"authorization": "Bearer {}".format(_access_token_in)}
 
 
 def auth0_response_is_valid(response):
-    return True
-    try:
-        print("response")
-        print(response)
-        is_err = response["statusCode"] == 200
-        return is_err
-    except AttributeError:
+    print(response["statusCode"])
+    if response["statusCode"] != 200:
         return False
-    return False
+    return True
 
 
 def get_access_token():
@@ -39,7 +33,6 @@ def get_access_token():
     res = requests.post(
         "{}/oauth/token".format(os.getenv("AUTH0_DOMAIN")), payload, headers
     )
-    print(res)
     try:
         token = res.json()["access_token"]
         return token

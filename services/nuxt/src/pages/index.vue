@@ -1,13 +1,40 @@
 <template>
   <div>
     <div v-if="!auth.loggedIn" class="welcome-contain">
-      <div><h4>Explore your fandom</h4></div>
-      <img class="welcome-contain-image" src="~/assets/welcome-page.png" />
+        <v-carousel
+          height="400"
+          hide-delimiter-background
+        >
+        <v-carousel-item
+          v-for="(slide, i) in slides"
+          :key="i"
+        >
+          <v-sheet
+            :color="colors[i]"
+            height="100%"
+          >
+            <v-row
+              class="fill-height"
+              align="center"
+              justify="center"
+            >
+              <div class="slide-title">{{ slide.title }}</div>
+              <div class="slide-description">{{ slide.description }}</div>
+              <v-btn color="var(--primary-red)">Get Started - IT'S FREE!</v-btn>
+            </v-row>
+          </v-sheet>
+        </v-carousel-item>
+      </v-carousel>
     </div>
-    <CarouselSection title="Listen with Friends" :carouselItems="favorites" />
-    <CarouselSection title="Fresh Playlists From Friends" :carouselItems="favorites" />
+    <CarouselSection v-if="auth.loggedIn" title="Listen with Friends" :carouselItems="favorites" />
+    <v-divider v-if="auth.loggedIn"></v-divider>
+    <CarouselSection v-if="auth.loggedIn" title="Fresh Playlists From Friends" :carouselItems="favorites" />
+    <v-divider v-if="auth.loggedIn"></v-divider>
+    <CarouselSection title="Popular Playlists" :carouselItems="favorites" />
+    <v-divider></v-divider>
     <CarouselSection title="Popular Reviews" :carouselItems="favorites" />
-    <CarouselSection title="Fresh Reviews From Friends" :carouselItems="favorites" />
+    <v-divider></v-divider>
+    <CarouselSection v-if="auth.loggedIn" title="Fresh Reviews From Friends" :carouselItems="favorites" />
   </div>
 </template>
 
@@ -22,6 +49,21 @@ export default {
   components: {
     Post,
     CarouselSection,
+  },
+  data () {
+    return {
+      colors: [
+        'indigo',
+        'warning',
+        'pink darken-2',
+        'red lighten-1',
+        'deep-purple accent-4',
+      ],
+      slides: [
+        { 'title': 'Social', 'description': 'Share music with your friends.' },
+        { 'title': 'Smart', 'description': 'Find new music with state of the art recommendation systems.'},
+      ],
+    }
   },
   computed: {
     ...mapState(['isAuthorized', 'auth']),

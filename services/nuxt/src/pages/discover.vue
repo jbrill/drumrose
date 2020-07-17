@@ -79,11 +79,11 @@ export default {
     MusicItem,
   },
   async asyncData () {
-    const posts = await getRecommendedTracks();
-    const playlists = await getRecommendedPlaylists();
+    /*const posts = await getRecommendedTracks();
+    const playlists = await getRecommendedPlaylists();*/
     return {
-      "posts": posts.data,
-      "playlists": playlists.data,
+      "posts": [],
+      "playlists": [],
     };
   },
   mounted () {

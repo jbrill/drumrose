@@ -106,6 +106,9 @@ export const getters = {
       return getApi(true).collection('recently-added', null, options);
     };
   },
+  getQueue (state) {
+   return state.queue.wrapped();
+  },
   async recentlyPlayed (state) {
     if (process.server) return
     await getApi(false).recentPlayed();

@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <nuxt-link to="/" color="var(--primary-yellow)" class="title-button">
-      DRUMROSE
+      {{ currentRouteName }}
     </nuxt-link>
     <v-btn @click="login" v-if="!auth.loggedIn">Log In</v-btn>
     <SearchBar />
@@ -19,6 +19,9 @@ export default {
   },
   computed: {
     ...mapState(['auth']),
+    currentRouteName() {
+      return this.$route.name !== 'index' ? this.$route.name.toUpperCase() : 'HOME';
+    },
   },
   methods: {
     login () {

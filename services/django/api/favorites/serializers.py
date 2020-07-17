@@ -68,8 +68,9 @@ class FavoritedAlbumSerializer(serializers.ModelSerializer):
         )
 
     def get_user(self, obj):
-        print(obj)
-        return "test"
+        token = Auth0ManagementToken.objects.active_token()
+        user = get_user(obj.auth0_user_id.replace(".", "|"), token)
+        return user
 
     def get_favorite_type(self, _):
         """
@@ -102,6 +103,10 @@ class FavoritedPlaylistSerializer(serializers.ModelSerializer):
         """
 
         return "playlist"
+
+    def get_user(self, obj):
+        print(obj)
+        return "test"
 
 
 class FavoritedSerializer(serializers.ModelSerializer):

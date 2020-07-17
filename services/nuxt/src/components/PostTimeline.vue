@@ -78,16 +78,29 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 >>>.v-messages {
   display: none;
 }
+>>>.v-input__prepend-outer {
+  font-size: smaller;
+}
+>>>.v-input__append-outer {
+  font-size: smaller;
+}
 .timeline-wrap {
 	text-align: center;
-	width: 50%;
+	width: 40%;
 	display: flex;
   justify-content: center;
   align-items: center; 
+}
+>>>.v-input {
+  align-items: center !important;
+  height: 100%;
+}
+>>>.v-input__slot {
+  margin-bottom: 0;
 }
 .post-timeline {
   width: 90%;

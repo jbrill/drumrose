@@ -4,10 +4,12 @@ https://github.com/auth0-samples/auth0-django-api
 """
 
 import os
+
 from functools import wraps
 
 import jwt
 import requests
+
 from cryptography.hazmat.backends import default_backend
 from cryptography.x509 import load_pem_x509_certificate
 from django.contrib.auth import authenticate
@@ -39,11 +41,14 @@ def get_username_from_payload(payload):
     """
     username = payload.get("sub").replace("|", ".")
     authenticate(remote_user=username)
+
+    print(username)
     return username
 
 
 def get_token_auth_header(request):
-    """Obtains the access token from the Authorization Header
+    """
+    Obtains the access token from the Authorization Header
     """
     auth = request.META.get("HTTP_AUTHORIZATION", None)
     parts = auth.split()

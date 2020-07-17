@@ -1,8 +1,8 @@
 <template>
   <div>
     <v-tabs
-        v-model="tab"
-        background-color="primary"
+        v-model="selectedLibraryItem"
+        background-color="transparent"
         dark
       >
         <v-tab
@@ -13,23 +13,26 @@
         </v-tab>
       </v-tabs>
   
-      <v-tabs-items v-model="tab">
+      <v-tabs-items v-model="musicSelections">
         <v-tab-item
           v-for="item in musicSelections"
           :key="item"
         >
-          <v-card flat>
-            <v-card-text>{{ item }}</v-card-text>
-          </v-card>
         </v-tab-item>
       </v-tabs-items>
     <div class="library-contain">
 			<v-btn-toggle borderless rounded background-color="transparent" class="artist-menu-options"><v-btn class="artist-option-button" x-small fab v-for="(artistOption, artistIndex) in artistOptions">{{ artistOption }}</v-btn></v-btn-toggle>
+				<v-progress-circular
+					:size="70"
+					:width="7"
+					color="purple"
+					indeterminate
+				></v-progress-circular>
 			<ul v-if="activeCollection === 'artist'">
 				<v-card
 					:color="item.color"
 					dark
-					v-for="item in artisttCollection"
+					v-for="item in artistCollection"
 				>
 					<div class="d-flex flex-no-wrap justify-space-between">
 						<div>
@@ -68,6 +71,7 @@ export default {
       error: null,
       loading: true,
       collection: [],
+      selectedLibraryItem: 'Artists',
       musicSelections: [
 				'Artists',
 				'Tracks',
@@ -87,7 +91,11 @@ export default {
       this.$store.commit('activeCollection', 'songs')
     }
   },
-  async created () {
+  async mounted () {
+    this.$nextTick(() => {
+      this.$nuxt.$loading.start()
+
+    })
     // Load the collection
     this.loading = true;
     this.error = null;
@@ -109,13 +117,14 @@ export default {
         this.collection = this.collection.concat(res);
         console.log("COLLECTION:\t")
         console.log(this.collection)
+				this.loading = false;
+				this.$nuxt.$loading.finish()
       }
     } catch (err) {
       console.error(err);
       Raven.captureException(err);
       this.error = err;
     }
-    this.loading = false;
   }
 }
 </script>

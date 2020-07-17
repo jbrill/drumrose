@@ -15,8 +15,7 @@ from django.urls import path
 
 
 urlpatterns = [
-    path("", api_routes.HealthRoute.as_view(), name="Health"),
-    path("auth/", auth_routes.AuthRoute.as_view(), name="Auth"),
+    path("", api_routes.HealthRoute.as_view(), name="HealthCheck"),
     path(
         "favorites/",
         favorite_routes.FavoritesList.as_view(),

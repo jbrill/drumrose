@@ -11,7 +11,7 @@
       filled
       item-text="attributes.name"
       item-value="attributes.name"
-      no-data-text="Find music and people"
+      no-data-text="No data found"
       placeholder="Search Drumrose"
       prepend-inner-icon="mdi-database-search"
       rounded
@@ -96,18 +96,20 @@ export default {
   watch: {
     search (val) {
       // Items have already been requested
-      if (!val) return
-      if (val.length < 1) return
+      this.isLoading = false;
+      if (!val) {
+        this.entries = [];
+        return;
+      }
       this.entries = [{ header: 'Tracks'}, {divider: true}, {header: 'Artists'}, {divider: true}, {header: 'Albums'}];
       this.isLoading = true
-
       this.$store.dispatch('getHints', val).then(res => {
-        this.entries = [{ header: 'Tracks'}].concat(res.results.songs.data).concat([{ divider: true }, { header: 'Artists' }]).concat(res.results.artists.data).concat([{ divider: true }, { header: 'Albums' }]).concat(res.results.albums.data);
         this.isLoading = false;
-        return this.entries;
+        this.entries = [{ header: 'Tracks'}].concat(res.results.songs.data).concat([{ divider: true }, { header: 'Artists' }]).concat(res.results.artists.data).concat([{ divider: true }, { header: 'Albums' }]).concat(res.results.albums.data);
       })
     },
     selectedSearch (newVal, oldVal) {
+      this.isLoading = false;
       if (!newVal) return;
       if (newVal.type === 'songs') {
 				this.$router.push({

@@ -15,6 +15,7 @@ def _build_headers(_access_token_in):
 
 
 def auth0_response_is_valid(response):
+    print(response)
     print(response["statusCode"])
     if response["statusCode"] != 200:
         return False
@@ -44,7 +45,7 @@ def get_access_token():
 def auth0_request(url_in, token_in):
     res = requests.get(url_in, headers=_build_headers(token_in)).json()
 
-    if not auth0_response_is_valid(res):
+    if "message" in res and res["message"] == TOKEN_EXPIRATION_ERR_MESSAGE:
         return
 
     return res

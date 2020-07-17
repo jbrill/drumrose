@@ -40,7 +40,7 @@
 
 <script>
 import Post from '~/components/Post';
-import { getFavorites } from '~/api/api';
+import { getFavorites, postFavorite } from '~/api/api';
 import { mapState } from 'vuex';
 import CarouselSection from '~/components/CarouselSection';
 
@@ -69,9 +69,11 @@ export default {
     ...mapState(['isAuthorized', 'auth']),
   },
   async asyncData ({ store, $auth }) {
+    console.log($auth.getToken('auth0'))
     const favoritesResponse = await getFavorites(
       $auth.getToken('auth0')
     );
+    console.log(favoritesResponse)
     const trendingPlaylistsResponse = await store.getters.fetch(
       `/v1/catalog/us/charts?types=playlists`
     );

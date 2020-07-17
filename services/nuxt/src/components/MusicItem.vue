@@ -230,8 +230,7 @@ export default {
     },
     playTrack: async function (event) {
       event.preventDefault();
-      console.log("SETTING QUEUE");
-      let queue = [];
+      /*let queue = [];
       const favoritedPosts = this.$store.state.favoritedPosts;
       if (this.postType === "favorite") {
         queue = favoritedPosts.map(a => {
@@ -242,8 +241,12 @@ export default {
           }
         });
       }
-      await this.$store.dispatch("setQueue", { "items": queue } );
       console.log("SET...")
+      console.log(this.$store.state.queue)*/
+
+      console.log("PLAYING?")
+      console.log(this.appleMusicId)
+      await this.$store.dispatch("setQueue", { "song": this.appleMusicId } );
       console.log(this.$store.state.queue)
       await this.$store.dispatch("play");
     },

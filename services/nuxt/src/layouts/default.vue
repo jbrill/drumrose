@@ -3,12 +3,7 @@
     <v-content>
       <v-app-bar color="#f0f0f0" v-if="!isAuthorized" short dense class="authorize-apple-music">
         <span class="authorize-apple-music-text">
-          <v-btn @click="authorizeAppleMusic" small color="black">Sign in</v-btn> to Apple Music to gain full access to tracks, connect with friends, and view your library.
-        </span>
-      </v-app-bar>
-      <v-app-bar color="#f0f0f0" v-if="!isAuthorized" short dense class="authorize-apple-music">
-        <span class="authorize-apple-music-text">
-          <v-btn small color="black" @click="authorizeAppleMusic">Go Pro</v-btn> to gain stats, advanced discovery algorithms, and ad-free browsing.
+          <v-btn @click="authorizeAppleMusic" small color="black">Sign in</v-btn> to Apple Music to gain full access to tracks and sync your library.
         </span>
       </v-app-bar>
       <v-container class="content-contain" justify-space-between fluid d-flex>

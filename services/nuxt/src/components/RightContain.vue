@@ -56,15 +56,14 @@
 		</v-list>
   </div>
   <v-divider></v-divider>
-  <v-chip-group
-		column
-    class="outbound-links-contain"
-		active-class="primary--text"
-	>
-		<v-chip x-small nuxt-link :to="tag.toLowerCase()" v-for="tag in outboundLinks" :key="tag">
-			{{ tag }}
-		</v-chip>
-	</v-chip-group>
+  <ul class="outbound-links-contain">
+    <li v-for="outboundLink in outboundLinks" :key="outboundLink">
+      <v-btn x-small nuxt-link text :to="outboundLink.toLowerCase()" >
+        {{ outboundLink }}
+      </v-btn>
+    </li>
+  </ul>
+  </div>
 </div>
 </template>
 
@@ -115,7 +114,10 @@ export default {
   font-size: 0.8rem;
 }
 .outbound-links-contain {
-  display: flex;
+  display: list-item;
+  text-align: right;
+  height: 100%;
   align-items: flex-end;
+  list-style-type: none;
 }
 </style>

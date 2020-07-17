@@ -10,6 +10,7 @@ from api.users.serializers import UserSerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+
 # from django.shortcuts import get_object_or_404
 # from django.views.decorators.csrf import csrf_exempt, csrf_protect
 
@@ -69,12 +70,10 @@ class SongDetail(APIView):
             - Deletes a post
     """
 
-    def get(self, request, post_id):
-        print(post_id)
-        user_handle = request.body.get("user_handle")
-        user = User.objects.get(handle=user_handle)
+    def get(self, request, apple_music_id):
+        track = Song.objects.get(apple_music_id=apple_music_id)
 
-        serializer = UserSerializer(user)
+        serializer = SongSerializer(track)
         return Response(serializer.data)
 
     def patch(self, request, post_id):

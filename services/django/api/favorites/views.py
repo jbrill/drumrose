@@ -13,12 +13,16 @@ from api.favorites.serializers import (
     FavoritedTrackSerializer,
 )
 from api.models.core import (
+    Album,
+    Artist,
     FavoritedAlbum,
     FavoritedPlaylist,
     FavoritedTrack,
-    User,
+    Song,
 )
 from api.users.serializers import UserSerializer
+from django.core.paginator import Paginator
+from django.db.models import Q
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -28,9 +32,9 @@ class FavoriteTracksList(APIView):
     Description:
         - API View for User List
     Routes:
-        - GET /posts/
+        - GET /favorites/
             - Gets a list of posts per user
-        - POST /posts/
+        - POST /favorites/
             - Creates a new post
     """
 
@@ -121,32 +125,62 @@ class FavoritesList(APIView):
     Description:
         - API View for User List
     Routes:
-        - GET /posts/
-            - Gets a list of posts per user
-        - POST /posts/
-            - Creates a new post
+        - GET /favorites/
+            - Gets a list of favorites of friends
+        - POST /favorites/
+            - Creates a new favorite
     """
 
     def get(self, request):
         """
-        Get favorited tracks
+        Get favorites
         """
-        favorited_playlists = FavoritedPlaylist.objects.all()
-        favorited_tracks = FavoritedTrack.objects.all()
-        favorited_albums = FavoritedAlbum.objects.all()
+        favorited_playlists = FavoritedPlaylist.objects.filter(
+            ~Q(auth0_user_id=request.user.username)
+        )
+        favorited_tracks = FavoritedTrack.objects.filter(
+            ~Q(auth0_user_id=request.user.username)
+        )
+        favorited_albums = FavoritedAlbum.objects.filter(
+            ~Q(auth0_user_id=request.user.username)
+        )
 
         # merge favorites
-        favorites = sorted(
+        sorted_favorites = sorted(
             chain(favorited_playlists, favorited_tracks, favorited_albums),
             key=attrgetter("created_date"),
+            reverse=True,
         )
-        print("efore serializer")
+        query = Paginator(sorted_favorites, 10)
+        page = query.page(1)
+        favorites = page.object_list
         serializer = FavoritedSerializer(favorites, many=True)
         return Response(serializer.data)
 
     def post(self, request):
         """
-        Post favorited playlist
+        Post favorite
         """
-
-        return
+        if request.data["type"] == "track":
+            song, song_created = Song.objects.get_or_create(
+                apple_music_id=request.data["id"]
+            )
+            favorited_item, created = FavoritedTrack.objects.get_or_create(
+                song=song, auth0_user_id=request.user.username
+            )
+        elif request.data["type"] == "playlist":
+            song, song_created = Artist.objects.get_or_create(
+                apple_music_id=request.data["id"]
+            )
+            favorited_item, created = FavoritedPlaylist.objects.get_or_create(
+                song=song, auth0_user_id=request.user.username
+            )
+        elif request.data["type"] == "album":
+            song, song_created = Album.objects.get_or_create(
+                apple_music_id=request.data["id"]
+            )
+            favorited_item, created = FavoritedAlbum.objects.get_or_create(
+                song=song, auth0_user_id=request.user.username
+            )
+        serializer = FavoritedSerializer(favorited_item)
+        return Response(serializer.data)

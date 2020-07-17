@@ -47,6 +47,27 @@ export const getFavorites = async bearerToken => {
 };
 
 /* 
+ * Fetches a list of favorites. Can consist of albums, tracks, or playlists
+ * */
+export const postFavorite = async (bearerToken, data) => {
+  try {
+    const response = await axios.post(
+      'https://teton.drumrose.io/api/favorites/',
+      data,
+      { headers: {
+          Authorization: `${bearerToken}`,
+      }}
+    );
+    return response;
+  } catch (err) {
+    console.error(err);
+    return {
+      data: [],
+    };
+  }
+};
+
+/* 
  * Fetches a list of favorite tracks
  * */
 export const getFavoritedTracks = async bearerToken => {

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="queue.length" class="audioPlayer">
+  <div v-if="playbackState !== 0" class="audioPlayer">
     <div class="volumeControls">
       <v-slider
 				class="volume-slider"
@@ -10,6 +10,7 @@
 				max="100"
 			></v-slider>
     </div>
+    <v-divider vertical></v-divider>
     <div class="musicControls">
       <v-icon
         x-small
@@ -27,7 +28,7 @@
         ref="musicButton"
         @click="playTrack"
         large
-      >mdi-play-arrow</v-icon>
+      >mdi-play</v-icon>
       <v-icon
         v-else
         ref="musicButton"
@@ -60,6 +61,7 @@
       >mdi-repeat-off</v-icon>
     </div>
     <PostTimeline />
+    <v-divider vertical></v-divider>
     <div
       v-hotkey="{
         'space': playTrack,
@@ -79,12 +81,12 @@
         <span
         />
       </div>
-      <div v-if="nowPlayingItem">
-        <span ref="trackArtist">
-          {{ nowPlayingItem.attributes.artistName }}
-        </span>
+      <div v-if="nowPlayingItem" class="nowPlayingItem">
         <span ref="songName">
-          {{ nowPlayingItem.attributes.name }}
+          <v-btn text x-small nuxt to="/">{{ nowPlayingItem.attributes.name }}</v-btn>
+        </span>
+        <span ref="trackArtist">
+          <v-btn text x-small nuxt to="/">{{ nowPlayingItem.attributes.artistName }}</v-btn>
         </span>
       </div>
       <div v-else>
@@ -96,12 +98,10 @@
         </span>
       </div>
       <v-icon
-        small
         ref="favoriteButton"
         @click="favoriteTrack"
       >mdi-dots-horizontal</v-icon>
       <v-icon
-        small
         ref="queueButton"
         @click="showQueue"
       >queue_music</v-icon>
@@ -179,6 +179,12 @@ export default {
       console.log("favorite");
     },
   },
+	watch: {
+    count (newCount, oldCount) {
+      // Our fancy notification (2).
+      console.log(`We have ${newCount} fruits now, yay!`)
+    }
+  }
 };
 </script>
 
@@ -197,7 +203,7 @@ export default {
   display: flex;
 }
 .volumeControls {
-  width: 15%;
+  width: 10%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -212,8 +218,14 @@ export default {
   color: var(--primary-red) !important;
 }
 .nowPlayingContain {
-  width: 25%;
+  width: 30%;
   display: flex;
+}
+.nowPlayingItem {
+  width: 75%;
+  display: flex;
+  justify-content: center;
+	flex-direction: column;
 }
 
 .audio-play__contain i {
@@ -257,7 +269,7 @@ export default {
   width: 30px;
   height: 30px;
   align-self: center;
-  margin: 0 auto;
+  margin: 0.5rem;
 }
 .audio-player-artwork span {
   width: 30px;
@@ -279,7 +291,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 25%;
+  width: 20%;
 }
 >>>.musicControls button {
   padding: 5px;

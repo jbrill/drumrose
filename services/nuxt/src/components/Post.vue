@@ -25,8 +25,9 @@
             </template>
             <div>Top tooltip</div>
           </v-tooltip>
+          <v-icon x-small v-if="postType === 'favorite'">mdi-heart</v-icon>
           <v-rating
-            v-if="postType === 'rating'"
+            v-else-if="postType === 'rating'"
             v-model="rating"
             background-color="white"
             color="var(--primary-purple)"
@@ -36,6 +37,7 @@
             x-small
             size="18"
           />
+          <span>February 4</span>
         </div>
       </div>
     </div>

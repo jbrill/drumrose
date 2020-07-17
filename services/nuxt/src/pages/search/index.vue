@@ -49,7 +49,6 @@ export default {
   }),
   methods: {
     favoriteTrack: async function () {
-      console.log(this.$auth.getToken('auth0'))
       const favoritesResponse = await postFavorite(
         this.$auth.getToken('auth0'),
         { 'type': 'track', 'id': this.trackInfo.id }
@@ -78,8 +77,8 @@ export default {
   padding-left: 2rem;
 }
 .album-img {
-  width: 100%;
-  height: 100%;
+  width: auto;
+  height: auto;
 }
 >>>.track-name {
   margin-bottom: 0;

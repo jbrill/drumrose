@@ -11,7 +11,7 @@
         <v-btn @click="toggle_exclusive = 2" class="nav-button" block nuxt to="/discover" medium text>
           <v-icon small left>mdi-waveform</v-icon> DISCOVER
         </v-btn>
-        <v-btn @click="toggle_exclusive = 3" class="nav-button" block nuxt to="/users/" medium text>
+        <v-btn @click="toggle_exclusive = 3" class="nav-button" block nuxt :to="'/people/' + auth.user.nickname" medium text>
           <v-icon small left>mdi-account-music</v-icon> PROFILE
         </v-btn>
         <v-btn @click="toggle_exclusive = 4" class="nav-button" block nuxt to="/settings" medium text>

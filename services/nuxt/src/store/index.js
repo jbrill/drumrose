@@ -103,15 +103,17 @@ export const getters = {
   },
   recentlyAdded (state) {
     return options => {
+      console.log(getApi(true).collection('recently-added', null, options));
       return getApi(true).collection('recently-added', null, options);
     };
   },
   getQueue (state) {
-   return state.queue.wrapped();
+   return state.queue;
   },
   async recentlyPlayed (state) {
-    if (process.server) return
-    await getApi(false).recentPlayed();
+    const res = await getApi(false).recentPlayed();
+    console.log(res);
+    return res;
   },
   heavyRotation (state) {
     if (process.server) return
@@ -212,7 +214,7 @@ export const mutations = {
     state.nowPlayingItem = nowPlayingItem.value();
   },
   playbackTime (state, playbackTime) {
-    state.playbackTime = playbackTime.value();
+    state.playbackTime = playbackTime;
   },
   volume (state, volume) {
     state.volume = volume;
@@ -533,8 +535,8 @@ export const actions = {
     }
   },
 
-  async play (_) {
-    await MusicKit.getInstance().player.play();
+  play (_) {
+    return MusicKit.getInstance().player.play();
   },
   async pause (_) {
     await MusicKit.getInstance().player.pause();
@@ -545,8 +547,8 @@ export const actions = {
   async next (_) {
     await MusicKit.getInstance().player.skipToNextItem();
   },
-  async seek (_, time) {
-    await MusicKit.getInstance().player.seekToTime(time);
+  seek (_, time) {
+    return MusicKit.getInstance().player.seekToTime(time);
   },
   async playNext (_, queue) {
     await MusicKit.getInstance().player.queue.prepend(queue);
@@ -557,8 +559,8 @@ export const actions = {
   async changeTo (_, position) {
     await MusicKit.getInstance().changeToMediaAtIndex(position);
   },
-  async setQueue (_, queue) {
-    await MusicKit.getInstance().setQueue(queue);
+  setQueue (_, queue) {
+    return MusicKit.getInstance().setQueue(queue);
   },
   setVolume (_, volume) {
     const newVolume = parseFloat(volume);

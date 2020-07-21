@@ -107,6 +107,7 @@ export default {
         this.isLoading = false;
         this.entries = [{ header: 'Tracks'}].concat(res.results.songs.data).concat([{ divider: true }, { header: 'Artists' }]).concat(res.results.artists.data).concat([{ divider: true }, { header: 'Albums' }]).concat(res.results.albums.data);
       })
+      this.isLoading = false;
     },
     selectedSearch (newVal, oldVal) {
       this.isLoading = false;

@@ -35,20 +35,22 @@
     <CarouselSection title="Popular Reviews" :carouselItems="favorites" />
     <v-divider></v-divider>
     <CarouselSection v-if="auth.loggedIn" title="Fresh Reviews From Friends" :carouselItems="favorites" />
+    <Snackbar />
   </div>
 </template>
 
 <script>
-import Post from '~/components/Post';
-import { getFavorites, postFavorite } from '~/api/api';
-import { mapState } from 'vuex';
 import CarouselSection from '~/components/CarouselSection';
+import Snackbar from '~/components/Snackbar';
+
+import { getFavorites, postFavorite } from '~/api/api';
+import { mapState, mapMutations } from 'vuex';
 
 
 export default {
   components: {
-    Post,
     CarouselSection,
+    Snackbar,
   },
   data () {
     return {
@@ -68,6 +70,11 @@ export default {
   computed: {
     ...mapState(['isAuthorized', 'auth']),
   },
+  methods: {
+    ...mapMutations({
+      setSnack: 'snackbar/setSnack'
+    })
+  },
   async asyncData ({ store, $auth }) {
     console.log($auth.getToken('auth0'))
     const favoritesResponse = await getFavorites(
@@ -83,11 +90,11 @@ export default {
       "trendingPlaylists": trendingPlaylistsResponse.data,
     };
   },
-  methods: {
-		handleSlideClick (dataset) {
-			console.log(dataset.index, dataset.name);
-		},
-	},
+  async fetch () {
+    this.recommendations = await this.$store.getters['recommendations'];
+    console.log(this.recommendations)
+    this.setSnack("TEST YO")
+  },
 };
 </script>
 

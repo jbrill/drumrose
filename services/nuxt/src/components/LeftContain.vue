@@ -1,52 +1,47 @@
 <template>
-  <div class="nav-contain">
-    <div>
-      <v-btn-toggle active-class="button-active" class="button-group-contain" borderless background-color="transparent" mandatory v-model="toggle_exclusive">
-        <v-btn @click="toggle_exclusive = 0" rounded class="nav-button" block nuxt to="/" medium text>
-          <v-icon small left>mdi-home</v-icon> HOME
-        </v-btn>
-        <v-btn @click="toggle_exclusive = 1" rounded class="nav-button" block nuxt to="/library" medium text>
-          <v-icon small left>mdi-file-music</v-icon> LIBRARY
-        </v-btn>
-        <v-btn @click="toggle_exclusive = 2" class="nav-button" block nuxt to="/discover" medium text>
-          <v-icon small left>mdi-waveform</v-icon> DISCOVER
-        </v-btn>
-        <v-btn @click="toggle_exclusive = 3" class="nav-button" block nuxt :to="'/people/' + auth.user.nickname" medium text>
-          <v-icon small left>mdi-account-music</v-icon> PROFILE
-        </v-btn>
-        <v-btn @click="toggle_exclusive = 4" class="nav-button" block nuxt to="/settings" medium text>
-          <v-icon small left>mdi-cogs</v-icon> SETTINGS
-        </v-btn>
-      </v-btn-toggle>
-    </div>
-    <div class="account-contain">
-       <v-menu top dark offset-y>
-        <template v-slot:activator="{ on }">
-          <v-btn
-            tile
-            dark
-            class="profile-menu-button-contain"
-            v-on="on"
-          >{{ auth.user.nickname }}
-            <v-icon
-              right
-              dark
-              v-on="on"
-            >
-              mdi-chevron-down
-            </v-icon>
-          </v-btn>
+      <v-layout flex width="100%">
+        <v-navigation-drawer
+					dark
+          color="transparent"
+					permanent
+				>
+				  <v-list-item>
+          <v-list-item-content>
+            <v-list-item-title>
+              DRUMROSE
+            </v-list-item-title>
+            <v-list-item-subtitle>
+              AFFECT CULTURE
+            </v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+  
+        <v-divider></v-divider>
+					<v-list>
+						<v-list-item
+							v-for="item in items"
+							:key="item.title"
+							link
+							:to="item.title === 'Profile' ? '/profile/' + auth.user.nickname : item.nav"
+						>
+							<v-list-item-icon>
+								<v-icon>{{ item.icon }}</v-icon>
+							</v-list-item-icon>
+		
+							<v-list-item-content>
+								<v-list-item-title>{{ item.title }}</v-list-item-title>
+							</v-list-item-content>
+						</v-list-item>
+					</v-list>
+          <template v-slot:append>
+            <div class="pa-2">
+              <v-btn
+                block
+              >LOGOUT</v-btn>
+            </div>
         </template>
-        <v-list>
-          <v-list-item
-            @click="signOut"
-          >
-            <v-list-item-title>Logout</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-    </div>
-  </div>
+      </v-navigation-drawer>
+  </v-layout>
 </template>
 
 <script>
@@ -56,7 +51,14 @@ import { getFavorites } from '~/api/api';
 export default {
  data () {
     return {
-      toggle_exclusive: 0,
+      items: [
+        { title: 'Home', nav: '/', icon: 'mdi-home' },
+        { title: 'For You', nav: '/foryou', icon: 'mdi-apple' },
+        { title: 'Discover', nav: '/discover', icon: 'mdi-waveform' },
+        { title: 'Library', nav: '/library', icon: 'mdi-library' },
+        { title: 'Profile', nav: '/profile', icon: 'mdi-account' },
+        { title: 'Settings', nav: '/settings', icon: 'mdi-cogs' },
+      ],
     }
   }, 
   async asyncData () {
@@ -153,22 +155,11 @@ export default {
 .library-menu-contain {
   list-style: none;
 }
->>>.nav-button:hover, >>>.nav-button:focus {
-  color: white !important;
-}
-.account-contain {
-  position: absolute;
-  bottom: 10%;
-}
-.button-active {
-  background-color: var(--primary-purple);
-}
-.button-group-contain {
-  padding-top: 5vh;
-}
->>>.v-btn {
-  border-radius: 2rem;
-  padding-bottom: 1rem;
+>>>.nav-contain {
+  justify-content: space-between;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 >>>a.nav-button {
   border-radius: 2rem !important;

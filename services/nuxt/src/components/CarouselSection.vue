@@ -16,16 +16,13 @@
 				v-for="(carouselItem, index) in carouselItems"
 				:key="carouselItem.id"
 				data-index="index"
-				data-name="carouselItem.id"
+				:data-name="carouselItem.id"
 				@slideclick="handleSlideClick"
 			>
 				<Post
-					v-if="carouselItem.user"
 					:key="carouselItem.id"
 					:index="index"
 					:post="carouselItem"
-					post-type="favorite"
-					:type="carouselItem.favorite_type"
 				/>
 			</slide>
 		</carousel>
@@ -33,7 +30,8 @@
 </template>
 
 <script>
-import Post from '~/components/Post';
+import Post from '~/components/PostItem/Post.vue';
+
 import { getFavorites } from '~/api/api';
 import { mapState } from 'vuex';
 
@@ -54,6 +52,10 @@ export default {
   },
   computed: {
     ...mapState(['auth']),
+  },
+  mounted() {
+    console.log("this.carouselItems")
+    console.log(this.carouselItems)
   },
   methods: {
     handleSlideClick (dataset) {

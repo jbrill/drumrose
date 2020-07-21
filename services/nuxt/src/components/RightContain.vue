@@ -1,68 +1,84 @@
 <template>
   <div class="right-content-contain">
     <div class="content-contain-right">
-      <v-btn x-small text color="#ccc">
-        People to Follow
-      </v-btn>
-      <v-list dense>
-        <v-list-item-group>
-          <v-list-item v-for="musicItem in recentlyPlayed">
-            <v-list-item-icon>
-              <v-icon>mdi-person</v-icon>
-            </v-list-item-icon>
+      <v-card class="right-snippet">
+        <v-card-title class="headline">
+          <v-btn width="100%" small text color="#ccc">
+            People to Follow
+          </v-btn>
+        </v-card-title>
+        <v-list dense>
+          <v-list-item-group>
+            <v-list-item v-for="musicItem in favorites">
+              <v-list-item-icon>
+                <v-icon>mdi-person</v-icon>
+              </v-list-item-icon>
 
-            <v-list-item-content>
-              <v-list-item-title v-text="musicItem.attributes.name"></v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list-item-group>
-      </v-list>
-    </div>
-    <v-divider></v-divider>
-    <div class="content-contain-right">
-      <v-btn x-small text color="#ccc">
-        Your Favorites
-      </v-btn>
-      <v-list dense>
-        <v-list-item-group>
-          <v-list-item v-for="musicItem in recentlyPlayed">
-            <v-list-item-icon>
-              <v-icon>mdi-waveform</v-icon>
-            </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title v-text="musicItem"></v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-item-group>
+        </v-list>
+      </v-card>
+      <v-card class="right-snippet">
+        <v-card-title class="headline">
+          <v-btn width="100%" small text color="#ccc">
+            Heavy Rotation
+          </v-btn>
+        </v-card-title>
+        <v-list dense>
+          <v-list-item-group>
+            <v-list-item link :to="'albums/' + musicItem.id" v-for="musicItem in favorites">
+              <v-list-item-icon>
+                <v-icon v-if="musicItem.type === 'stations'">mdi-radio-tower</v-icon>
+                <v-icon v-if="musicItem.type === 'artists'">mdi-brain</v-icon>
+                <v-icon v-if="musicItem.type === 'playlists'">mdi-playlist-music</v-icon>
+                <v-icon v-else-if="musicItem.type === 'albums'">mdi-record-circle</v-icon>
+                <v-icon v-else-if="musicItem.type === 'songs'">mdi-waveform</v-icon>
+              </v-list-item-icon>
 
-            <v-list-item-content>
-              <v-list-item-title v-text="musicItem.attributes.name"></v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list-item-group>
-      </v-list>
+              <v-list-item-content>
+                <v-list-item-title v-text="musicItem.attributes.name"></v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-item-group>
+        </v-list>
+      </v-card>
+      <v-card class="right-snippet">
+        <v-card-title class="headline">
+          <v-btn width="100%" small text color="#ccc">
+            Listening History
+          </v-btn>
+        </v-card-title>
+        <v-list dense>
+          <v-list-item-group>
+            <v-list-item link :to="'/albums/' + musicItem.id" v-for="musicItem in recents">
+              <v-list-item-icon>
+                <v-icon v-if="musicItem.type === 'playlists'">mdi-playlist-music</v-icon>
+                <v-icon v-else-if="musicItem.type === 'albums'">mdi-record-circle</v-icon>
+                <v-icon v-else-if="musicItem.type === 'songs'">mdi-waveform</v-icon>
+              </v-list-item-icon>
+
+              <v-list-item-content>
+                <v-list-item-title v-text="musicItem.attributes.name"></v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-item-group>
+        </v-list>
+      </v-card>
     </div>
-    <v-divider></v-divider>
-    <div class="content-contain-right">
-      <v-btn x-small text color="#ccc">
-        Listening History
-      </v-btn>
-      <v-list dense>
-        <v-list-item-group>
-          <v-list-item v-for="musicItem in history">
-            <v-list-item-icon>
-              <v-icon>mdi-waveform</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title v-text="musicItem"></v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-			</v-list-item-group>
-		</v-list>
+  <div>
+    <ul class="outbound-links-contain">
+      <li v-for="outboundLink in outboundLinks" :key="outboundLink">
+        <v-btn x-small nuxt-link text :to="outboundLink.toLowerCase()" >
+          {{ outboundLink }}
+        </v-btn>
+      </li>
+      <li><v-btn target="_blank" href="https://www.twitter.com/getDrumrose" icon dark><v-icon>mdi-twitter</v-icon></v-btn><v-btn target="_blank" href="https://instagram.com/getDrumrose" icon dark><v-icon>mdi-instagram</v-icon></v-btn></li>
+      <li><span class="company-text">© 2020 Neptune Technologies Inc.</span></li>
+    </ul>
   </div>
-  <v-divider></v-divider>
-  <ul class="outbound-links-contain">
-    <li v-for="outboundLink in outboundLinks" :key="outboundLink">
-      <v-btn x-small nuxt-link text :to="outboundLink.toLowerCase()" >
-        {{ outboundLink }}
-      </v-btn>
-    </li>
-  </ul>
   </div>
 </div>
 </template>
@@ -74,32 +90,40 @@ import SearchBar from '~/components/SearchBar';
 
 export default {
   async asyncData () {
-    const favoritesResponse = await getFavorites();
-    return {
-      "favorites": favoritesResponse.data,
-    }    
+  },
+  async mounted() {
+    const recentResponse = await this.$store.getters.recentlyPlayed;
+    this.recents = recentResponse.slice(0, 5);
+    const favoritesResponse = await this.$store.getters.heavyRotation;
+    this.favorites = favoritesResponse.slice(0, 5);
+    console.log(this.favorites)
   },
   components: {
     SearchBar
   },
   data: () => ({
     favorites: [],
+    recents: [],
     outboundLinks: [
-      'About',
-      'Terms',
-      'Contact',
+      'Support',
+      'Terms of Service',
+      'Privacy Policy',
     ],
   }),
   computed: {
     ...mapState(['isAuthorized', 'history']),
-    ...mapGetters(['recentlyPlayed', 'heavyRotation']),
   }, 
 };
 </script>
 
 <style scoped>
 .right-content-contain {
-  width: 100%;
+  margin: 1rem;
+  width: 18vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
 }
 .library-menu-contain {
   list-style: none;
@@ -119,5 +143,11 @@ export default {
   height: 100%;
   align-items: flex-end;
   list-style-type: none;
+}
+.company-text {
+  font-size: 0.5rem;
+}
+.right-snippet {
+  margin-top: 1rem;
 }
 </style>

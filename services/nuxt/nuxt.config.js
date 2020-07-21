@@ -43,6 +43,9 @@ export default {
     ],
     script: [{ src: 'https://js-cdn.music.apple.com/musickit/v1/musickit.js' }],
   },
+  render: {
+    gzip: false
+  },
   /*
    ** Global CSS
    */

@@ -1,11 +1,12 @@
 <template>
   <div class="timeline-wrap">
     <v-slider
-      v-model="currentPlaybackTime"
-      color="var(--primary-red)"
-      track-color="grey"
+      v-model="playbackTime.currentPlaybackTime"
+      color="var(--primary-purple)"
+      track-color="#ccc"
       min="0"
-      max="100"
+      @change="changePosition"
+      :max="playbackTime.currentPlaybackDuration"
     >
       <template v-slot:prepend>{{ currentPlaybackTime }}</template>
       <template v-slot:append>{{ currentPlaybackDuration }}</template>
@@ -35,45 +36,11 @@ export default {
       'playbackTime',
     ]),
   },
-	mounted () {
-    window.addEventListener('mouseup', this.stopDrag);
-	},
   methods: {
-    startDrag () {
-      this.dragging = true;
-			this.startedPlaying = true;
+    changePosition (e) {
+      console.log(e)
+			this.$store.dispatch("seek", e)
     },
-    stopDrag () {
-      this.dragging = false;
-    },
-    doDrag (event) {
-      if (this.dragging) {
-        const wheelOffset = 100 * (
-          event.clientX / this.$refs.timeline.clientWidth
-        );
-				if (wheelOffset === 0) console.log(event);
-				if (wheelOffset === 0) return;
-        this.wheelPosition = wheelOffset + "%";
-      }
-    },
-    moveWheel (event) {
-			const wheelOffset = 100 * (
-        event.offsetX / this.$refs.timeline.clientWidth
-      );
-			this.wheelPosition = wheelOffset + "%";
-      const currPos = (
-        event.offsetX / this.$refs.timeline.clientWidth
-      ) * this.$store.state.playbackTime.currentPlaybackDuration;
-      this.$store.dispatch("seek", currPos); 
-    },
-		hoverTimeline (event) {
-			if (!this.dragging) {
-				const wheelOffset = 100 * (
-          event.offsetX / this.$refs.timeline.clientWidth
-        );
-				this.mousePosition = wheelOffset + "%";
-			}
-		},
   }, 
 };
 </script>

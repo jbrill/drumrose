@@ -12,8 +12,12 @@
           <Navbar />
           <nuxt class="feed-contain" />
         </div>
-        <div class="right-contain"><RightContain v-if="auth.loggedIn" /></div>
+        <v-divider vertical></v-divider>
+        <RightContain />
       </v-container>
+      <transition name="fade">
+        <Snackbar />
+      </transition>
       <transition name="fade">
         <AudioPlayer />
       </transition>
@@ -28,6 +32,7 @@ import Navbar from '~/components/Navbar';
 import AudioPlayer from '~/components/AudioPlayer';
 import LeftContain from '~/components/LeftContain';
 import RightContain from '~/components/RightContain';
+import Snackbar from '~/components/Snackbar';
 
 
 export default {
@@ -36,6 +41,7 @@ export default {
     AudioPlayer,
     LeftContain,
     RightContain,
+    Snackbar,
   },
   computed: {
     ...mapState(['auth', 'isAuthorized', 'nowPlayingItem']),
@@ -47,7 +53,7 @@ export default {
         }
       ]
     },
-  }, 
+  },
   methods: {
     async authorizeAppleMusic() {
       MusicKit.getInstance().authorize().then( async (resp) => {
@@ -94,6 +100,9 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
+}
+.feed-contain {
+  height: 100%;
 }
 .left-contain::-webkit-scrollbar, .main-contain::-webkit-scrollbar, .right-contain::-webkit-scrollbar {
   display: none;

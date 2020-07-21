@@ -1,81 +1,56 @@
 <template>
-  <div v-if="post" class="post">
-    <div class="postContain">
-      <div class="posterDetail">
-        <div class="posterInfo">
-          <v-tooltip top>
-            <template v-slot:activator="{ on }">
-              <v-btn
-                nuxt
-                text
-                color="transparent"
-                class="handle-select noselect"
-                :to="'/people/' + post.user.username"
-                v-on="on"
-              >
-                <div
-                  class="posterImg"
-                  :style="{ backgroundImage: 'url(' +
-                    post.user.picture + ')' }"
-                />
-                <h3 class="posterName">
-                  {{ post.user.username }}
-                </h3>
-              </v-btn>
-            </template>
-            <div>Top tooltip</div>
-          </v-tooltip>
-          <v-icon x-small v-if="postType === 'favorite'">mdi-heart</v-icon>
-          <v-rating
-            v-else-if="postType === 'rating'"
-            v-model="rating"
-            background-color="white"
-            color="var(--primary-purple)"
-            dense
-            half-increments
-            hover
-            x-small
-            size="18"
+  <div class="posterInfo">
+    <v-tooltip top>
+      <template 
+          v-slot:activator="{ on }"
+      >
+        <v-btn
+          nuxt
+          text
+          color="transparent"
+          class="handle-select noselect"
+          :to="'/people/' + user.username"
+          v-on="on"
+        >
+          <div
+            class="posterImg"
+            :style="{ backgroundImage: 'url(' + user.picture + ')' }"
           />
-          <span>February 4</span>
-        </div>
-      </div>
-    </div>
-    <MusicItem
-      v-if="type === 'track'"
-      type="track"
-      :postType="postType"
-      :apple-music-id="post.song.apple_music_id"
+          <h3 class="posterName">
+            {{ user.username }}
+          </h3>
+        </v-btn>
+      </template>
+      <div>Top tooltip</div>
+    </v-tooltip>
+    <v-icon
+      x-small
+      v-if="postType === 'favorite'"
+    >mdi-heart</v-icon>
+    <v-rating
+      v-else-if="postType === 'rating'"
+      v-model="rating"
+      background-color="white"
+      color="var(--primary-purple)"
+      dense
+      half-increments
+      hover
+      x-small
+      size="18"
     />
-    <MusicItem
-      v-else-if="type === 'album'"
-      type="album"
-      :apple-music-id="post.album.apple_music_id"
-    />
-    <MusicItem
-      v-else-if="type === 'playlist'"
-      type="playlist"
-      :apple-music-id="post.playlist.apple_music_id"
-    />
+    <span>{{ date }}</span>
   </div>
 </template>
 
 <script>
-import MusicItem from '~/components/MusicItem';
-import axios from 'axios';
-
-
 export default {
-  name: 'Post',
-  components: {
-    MusicItem,
-  },
+  name: 'PostHeader',
   props: {
-    'post': {
+    'user': {
       type: Object, 
       default: () => {},
     },
-    'postType': {
+    'date': {
       type: String,
       default: '',
     },
@@ -83,12 +58,16 @@ export default {
       type: String,
       default: '',
     },
+    'rating': {
+      type: String,
+      default: '',
+    },
   },
-  data: () => ({
-    rating: 4.3,
-  }),
   created: function() {
-    console.log(this.post)
+    console.log(this.user)
+    console.log(this.date)
+    console.log(this.type)
+    console.log(this.rating)
   },
 };
 </script>

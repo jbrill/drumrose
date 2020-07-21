@@ -20,40 +20,57 @@
         >
         </v-tab-item>
       </v-tabs-items>
+    <div>
+			<v-btn-toggle borderless rounded background-color="transparent" class="artist-menu-options">
+        <v-hover v-for="(artistOption, artistIndex) in artistOptions">
+          <v-btn slot-scope="{ hover }" :class="`${hover ? 'activeArtistOptionButton': 'artistOptionButton'}`" x-small fab>{{ artistOption }}</v-btn>
+        </v-hover>
+      </v-btn-toggle>
+    </div>
     <div class="library-contain">
-			<v-btn-toggle borderless rounded background-color="transparent" class="artist-menu-options"><v-btn class="artist-option-button" x-small fab v-for="(artistOption, artistIndex) in artistOptions">{{ artistOption }}</v-btn></v-btn-toggle>
-				<v-progress-circular
-					:size="70"
-					:width="7"
-					color="purple"
-					indeterminate
-				></v-progress-circular>
-			<ul v-if="activeCollection === 'artist'">
-				<v-card
-					:color="item.color"
-					dark
-					v-for="item in artistCollection"
-				>
-					<div class="d-flex flex-no-wrap justify-space-between">
-						<div>
-							<v-card-title
-								class="headline"
-								v-text="item.attributes.name"
-							></v-card-title>
+      <v-progress-circular
+        class="progress-contain"
+        v-if="loading"
+        :size="70"
+        :width="7"
+        color="var(--primary-red)"
+        indeterminate
+      ></v-progress-circular>
+      <v-container v-if="activeCollection === 'artists' && !loading" fluid grid-list-md>
+        <v-row align="start"
+          no-gutters
+          style="height: 150px;"
+          v-for="artistCollectionGroup in Math.floor(artistCollection.length / 3)"
+        >
+          <v-col
+            v-for="n in 3"
+            :key="n"
+            cols="12"
+            md="4"
+          >
+            <v-card dark>
+              <div class="d-flex flex-no-wrap justify-space-between">
+									<div>
+										<v-card-title
+											class="headline"
+											v-text="artistCollection[artistCollectionGroup + n].attributes.name"
+										></v-card-title>
 
-							<v-card-subtitle v-text="item.href"></v-card-subtitle>
-						</div>
+									</div>
 
-						<v-avatar
-							class="ma-3"
-							size="125"
-							tile
-						>
-							<v-img :src="item.href"></v-img>
-						</v-avatar>
-					</div>
-				</v-card>
-			</ul>
+									<v-avatar
+										class="ma-3"
+										tile
+									>
+							    	<v-img ></v-img>
+							    </v-avatar>
+						    </div>
+						  </v-card>
+					  </v-flex>
+          </v-col>
+		    	</v-row>
+		    </v-container>
+			</v-card>
     </div>
   </div>
 </template>
@@ -70,6 +87,7 @@ export default {
       item: null,
       error: null,
       loading: true,
+      offset: 0,
       collection: [],
       selectedLibraryItem: 'Artists',
       musicSelections: [
@@ -92,10 +110,6 @@ export default {
     }
   },
   async mounted () {
-    this.$nextTick(() => {
-      this.$nuxt.$loading.start()
-
-    })
     // Load the collection
     this.loading = true;
     this.error = null;
@@ -103,28 +117,17 @@ export default {
     this.trackCollection = [];
     this.albumCollection = [];
     this.playlistCollection = [];
-    let options = {
-      limit: 100
-    };
-    try {
-      for (var offset = 0, res = null; res === null || res.length !== 0; offset += options.limit) {
-        res = await this.$store.getters.get(
-          true,
-          this.$store.state.activeCollection,
-          null,
-          mergeWith(options, { offset: offset })
-        );
-        this.collection = this.collection.concat(res);
-        console.log("COLLECTION:\t")
-        console.log(this.collection)
-				this.loading = false;
-				this.$nuxt.$loading.finish()
-      }
-    } catch (err) {
-      console.error(err);
-      Raven.captureException(err);
-      this.error = err;
+    this.offset = 0;
+    const res = await this.$store.getters.get(
+      true,
+      this.$store.state.activeCollection,
+      null,
+      mergeWith({ limit: 100 }, { offset: this.offset })
+    );
+    if (this.activeCollection === 'artists') {
+      this.artistCollection = this.artistCollection.concat(res);
     }
+    this.loading = false;
   }
 }
 </script>
@@ -132,6 +135,9 @@ export default {
 <style scoped>
 .library-contain {
   display: flex;
+  width: 80%;
+  height: 100%;
+  margin: 0 auto;
 }
 >>>.v-btn--fab.v-size--x-small {
   height: 20px;
@@ -148,7 +154,15 @@ export default {
 >>>.v-btn {
   border-radius: 2rem !important;
 }
->>>.artist-option-button {
+>>>.artistOptionButton {
   background-color: transparent !important;
+}
+>>>.artistOptionButton:hover, >>>.artistOptionButton:focus {
+  background-color: transparent !important;
+  color: white !important;
+}
+>>>.progress-contain {
+  align-self: center;
+  margin: 0 auto;
 }
 </style>

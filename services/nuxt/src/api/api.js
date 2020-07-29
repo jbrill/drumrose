@@ -2,15 +2,15 @@ import axios from 'axios';
 
 
 /*
- * Fetches user detail
+ * Fetches followers
  * */
-export const getUserDetail = async (bearerToken, userHandle) => {
+export const getFollowers = async (bearerToken, userHandle) => {
   try {
     const response = await axios.get(
-      `https://teton.drumrose.io/api/users/${userHandle}/`,
+      `https://teton.drumrose.io/api/followers/${userHandle}/`,
       {
         headers: {
-          Authorization: `Bearer ${bearerToken}`,
+          Authorization: `${bearerToken}`,
         },
       }
     );
@@ -23,6 +23,49 @@ export const getUserDetail = async (bearerToken, userHandle) => {
   }
 };
 
+/*
+ * Fetches user detail
+ * */
+export const getUserDetail = async (bearerToken, userHandle) => {
+  try {
+    const response = await axios.get(
+      `https://teton.drumrose.io/api/users/${userHandle}/`,
+      {
+        headers: {
+          Authorization: `${bearerToken}`,
+        },
+      }
+    );
+    return response;
+  } catch(err) {
+    console.error(err);
+    return {
+      data: [],
+    };
+  }
+};
+
+/*
+ * Fetches user list
+ * */
+export const getUserList = async (bearerToken) => {
+  try {
+    const response = await axios.get(
+      `https://teton.drumrose.io/api/users/`,
+      {
+        headers: {
+          Authorization: `${bearerToken}`,
+        },
+      }
+    );
+    return response;
+  } catch(err) {
+    console.error(err);
+    return {
+      data: [],
+    };
+  }
+};
 
 /* 
  * Fetches a list of favorites. Can consist of albums, tracks, or playlists

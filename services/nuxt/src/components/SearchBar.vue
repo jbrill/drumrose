@@ -8,13 +8,15 @@
       clearable
       hide-details
       hide-selected
-      filled
       item-text="attributes.name"
       item-value="attributes.name"
       no-data-text="No data found"
       placeholder="Search Drumrose"
       prepend-inner-icon="mdi-database-search"
-      rounded
+      outlined
+      light
+      background-color="white"
+      color="black"
       return-object
       width="100%"
 		>

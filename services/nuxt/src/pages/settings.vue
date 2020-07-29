@@ -1,11 +1,29 @@
 <template>
-  <div class="settings-contain">
+  <v-container class="settings-contain">
+    <v-row>
     <v-radio-group type="number" v-model.number="bitrate" label="Bitrate" :mandatory="true">
 			<v-radio label="Standard (64 kbps)" :value="64"></v-radio>
 			<v-radio label="High (256 kbps)" :value="256"></v-radio>
 		</v-radio-group>
     <v-divider></v-divider>
-    <v-btn @click.stop="resetPasswordDialog = true" color="var(--primary-purple)">Reset Password</v-btn>
+    </v-row>
+    <v-row>
+    <span>Select your country</span>
+    <v-select
+      v-model="selectedCountry"
+			:items="countries"
+			:loading="loadingCountries"
+			label="Select your country"
+      outlined
+      persistent-hint
+      hint="Choose from the dropdown"
+      placeholder="Apple Music Storefront"
+      prepend-inner-icon="mdi-earth"
+			solo
+		></v-select>
+		</v-row>
+    <v-divider></v-divider>
+    <v-btn v-if="auth.loggedIn" @click.stop="resetPasswordDialog = true" color="var(--primary-purple)">Reset Password</v-btn>
     <v-dialog
 			v-model="resetPasswordDialog"
 			width="500"
@@ -29,7 +47,7 @@
 				</v-card-actions>
 			</v-card>
 		</v-dialog>
-    <v-btn @click.stop="deleteAccountDialog = true" color="var(--primary-red)">Delete Account</v-btn>
+    <v-btn v-if="auth.loggedIn" @click.stop="deleteAccountDialog = true" color="var(--primary-red)">Delete Account</v-btn>
     <v-dialog
 			v-model="deleteAccountDialog"
       width="500"
@@ -53,7 +71,7 @@
 				</v-card-actions>
 			</v-card>
 		</v-dialog>
-  </div>
+  </v-container>
 </template>
 
 <script>
@@ -64,18 +82,33 @@ export default {
     return {
       resetPasswordDialog: false,
       deleteAccountDialog: false,
+      countries: [],
+      selectedCountry: null,
+      loadingCountries: false,
     }
   },
   computed: {
+    ...mapState(['auth']),
     bitrate: {
 			get () {
 				return this.$store.state.bitrate
 			},
 			set (value) {
-        console.log(value)
-				this.$store.dispatch('setBitrate', value)
+				this.$store.dispatch('setBitrate', value);
 			}
 		}
+  },
+  async fetch () {
+    this.loadingCountries = true;
+    const storefrontResp = await this.$store.getters.fetch(
+      "/v1/storefronts"
+    )
+    const userStorefrontResp = await this.$store.getters.fetch(
+      "/v1/me/storefront"
+    )
+    this.countries = storefrontResp.data.map(country => country.attributes.name)
+    this.selectedCountry = userStorefrontResp.data[0].attributes.name;
+    this.loadingCountries = false;
   },
 }
 </script>

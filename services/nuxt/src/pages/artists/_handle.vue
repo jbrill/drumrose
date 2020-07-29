@@ -15,9 +15,9 @@ export default {
   }),
   async mounted () {
     console.log(this.$route)
-    console.log(this.$route.params.slug)
+    const handle = this.$route.params.handle;
     const resp = await this.$store.getters.fetch(
-			`/v1/catalog/us/artists/${this.$route.params.handle}`
+			`/v1/catalog/us/artists/${handle}`
 		);
     this.loading = false;
     if ('data' in resp) {

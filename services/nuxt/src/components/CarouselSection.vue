@@ -2,7 +2,7 @@
 	<div class="carousel-contain">
 		<div class="top-button-contain">
       <v-btn x-small text dark>{{ title }}</v-btn>
-      <v-btn x-small dark>More</v-btn>
+      <v-btn v-if="moreLink" x-small dark>More</v-btn>
     </div>
 		<carousel
 			:touch-drag="false"
@@ -48,6 +48,10 @@ export default {
     'carouselItems': {
       type: Array,
       default: () => [],
+    },
+    'moreLink': {
+      type: String,
+      default: '',
     },
   },
   computed: {

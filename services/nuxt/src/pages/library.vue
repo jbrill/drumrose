@@ -28,14 +28,7 @@
       </v-btn-toggle>
     </div>
     <div class="library-contain">
-      <v-progress-circular
-        class="progress-contain"
-        v-if="loading"
-        :size="70"
-        :width="7"
-        color="var(--primary-red)"
-        indeterminate
-      ></v-progress-circular>
+      <LoadingCircle v-if="loading" />
       <v-container v-if="activeCollection === 'artists' && !loading" fluid grid-list-md>
         <v-row align="start"
           no-gutters
@@ -79,7 +72,7 @@
 import Raven from 'raven-js';
 import { mergeWith } from 'lodash';
 import { mapState } from 'vuex';
-
+import LoadingCircle from '~/components/LoadingCircle';
 
 export default {
   data () {
@@ -101,6 +94,9 @@ export default {
         'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '#'
       ],
     };
+  },
+  components: {
+    LoadingCircle,
   },
   computed: mapState(['activeCollection']),
   methods: {
@@ -160,9 +156,5 @@ export default {
 >>>.artistOptionButton:hover, >>>.artistOptionButton:focus {
   background-color: transparent !important;
   color: white !important;
-}
->>>.progress-contain {
-  align-self: center;
-  margin: 0 auto;
 }
 </style>

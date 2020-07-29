@@ -1,47 +1,57 @@
 <template>
-      <v-layout flex width="100%">
-        <v-navigation-drawer
-					dark
-          color="transparent"
-					permanent
-				>
-				  <v-list-item>
+<v-layout flex width="100%">
+  <v-navigation-drawer
+    dark
+    color="transparent"
+    permanent
+  >
+    <v-list-item>
+      <v-list-item-content>
+        <v-list-item-title>
+          DRUMROSE
+        </v-list-item-title>
+        <v-list-item-subtitle>
+          AFFECT CULTURE
+        </v-list-item-subtitle>
+      </v-list-item-content>
+    </v-list-item>
+
+    <v-divider></v-divider>
+      <v-list>
+        <v-list-item
+          v-for="navObject in navObjects"
+          v-if="((!auth.loggedIn && !navObject.requiresAuth) || auth.loggedIn) && ((!isAuthorized && !navObject.requiresAppleAuth) || isAuthorized)"
+          :key="navObject.title"
+          link
+          :to="navObject.nav"
+        >
+          <v-list-item-icon>
+            <v-icon>{{ navObject.icon }}</v-icon>
+          </v-list-item-icon>
+
           <v-list-item-content>
-            <v-list-item-title>
-              DRUMROSE
-            </v-list-item-title>
-            <v-list-item-subtitle>
-              AFFECT CULTURE
-            </v-list-item-subtitle>
+            <v-list-item-title>{{ navObject.title }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-  
-        <v-divider></v-divider>
-					<v-list>
-						<v-list-item
-							v-for="item in items"
-							:key="item.title"
-							link
-							:to="item.title === 'Profile' ? '/profile/' + auth.user.nickname : item.nav"
-						>
-							<v-list-item-icon>
-								<v-icon>{{ item.icon }}</v-icon>
-							</v-list-item-icon>
-		
-							<v-list-item-content>
-								<v-list-item-title>{{ item.title }}</v-list-item-title>
-							</v-list-item-content>
-						</v-list-item>
-					</v-list>
-          <template v-slot:append>
-            <div class="pa-2">
-              <v-btn
-                block
-              >LOGOUT</v-btn>
-            </div>
-        </template>
-      </v-navigation-drawer>
-  </v-layout>
+        <v-spacer></v-spacer>
+        <v-list-item v-if="auth.loggedIn" two-line :class="miniVariant && 'px-0'">
+					<v-list-item-avatar>
+					</v-list-item-avatar>
+
+					<v-list-item-content>
+						<v-list-item-title>{{ auth.user.email }}</v-list-item-title>
+						<v-list-item-subtitle>Subtext</v-list-item-subtitle>
+					</v-list-item-content>
+					<div class="pa-2">
+						<v-btn
+							block
+						>LOGOUT</v-btn>
+				  </div>
+        </v-list-item>
+
+			</v-list>
+  </v-navigation-drawer>
+</v-layout>
 </template>
 
 <script>
@@ -51,13 +61,14 @@ import { getFavorites } from '~/api/api';
 export default {
  data () {
     return {
-      items: [
-        { title: 'Home', nav: '/', icon: 'mdi-home' },
-        { title: 'For You', nav: '/foryou', icon: 'mdi-apple' },
-        { title: 'Discover', nav: '/discover', icon: 'mdi-waveform' },
-        { title: 'Library', nav: '/library', icon: 'mdi-library' },
-        { title: 'Profile', nav: '/profile', icon: 'mdi-account' },
-        { title: 'Settings', nav: '/settings', icon: 'mdi-cogs' },
+      navObjects: [
+        { title: 'Home', nav: '/', icon: 'mdi-home', requiresAuth: false, requiresAppleAuth: false },
+        { title: 'For You', nav: '/foryou', icon: 'mdi-apple', requiresAuth: false, requiresAppleAuth: true },
+        { title: 'Trending', nav: '/trending', icon: 'mdi-waveform', requiresAuth: false, requiresAppleAuth: false },
+        { title: 'People', nav: '/people', icon: 'mdi-account', requiresAuth: true, requiresAppleAuth: false },
+        { title: 'Library', nav: '/library', icon: 'mdi-library', requiresAuth: false, requiresAppleAuth: true },
+        { title: 'Profile', nav: '/profile', icon: 'mdi-account', requiresAuth: true, requiresAppleAuth: false },
+        { title: 'Settings', nav: '/settings', icon: 'mdi-cogs', requiresAuth: false, requiresAppleAuth: false },
       ],
     }
   }, 
@@ -69,7 +80,6 @@ export default {
   },
   watch:{
     $route (to, from){
-      console.log("YOO")
       this.toggle_exclusive = 4;
     }
   }, 

@@ -15,7 +15,7 @@
       :attributes="post.attributes"
     />
     <Track
-      v-if="post.type == 'tracks'"
+      v-if="post.type == 'songs'"
       isPlayable
       isActionable
       :id="post.id"

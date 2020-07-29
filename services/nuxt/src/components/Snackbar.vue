@@ -3,6 +3,8 @@
 		v-model="show"
 		bottom
 		right
+    elevation="20"
+    style="z-index: 2"
 		:timeout="timeout"
 	>
 		{{ message }}

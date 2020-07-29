@@ -1,7 +1,7 @@
 /* global MusicKit */
 
 import axios from 'axios';
-import clonedeep from 'lodash';
+import clonedeep from 'lodash.clonedeep';
 import Raven from 'raven-js';
 import { errorMessage } from '~/utils/MusicKit';
 
@@ -112,7 +112,6 @@ export const getters = {
   },
   async recentlyPlayed (state) {
     const res = await getApi(false).recentPlayed();
-    console.log(res);
     return res;
   },
   heavyRotation (state) {
@@ -211,9 +210,10 @@ export const mutations = {
     state.repeatMode = repeatMode;
   },
   nowPlayingItem (state, nowPlayingItem) {
-    state.nowPlayingItem = nowPlayingItem.value();
+    state.nowPlayingItem = nowPlayingItem;
   },
   playbackTime (state, playbackTime) {
+    console.log(playbackTime)
     state.playbackTime = playbackTime;
   },
   volume (state, volume) {
@@ -255,6 +255,7 @@ export const actions = {
 		const tokenResponse = await axios.post(
       'https://teton.drumrose.io/api/apple_music_token/'
     );
+    console.log(tokenResponse);
 		await commit('setAppleMusicToken', tokenResponse.data.token);
   },
 	async nuxtClientInit (
@@ -538,26 +539,28 @@ export const actions = {
   play (_) {
     return MusicKit.getInstance().player.play();
   },
-  async pause (_) {
-    await MusicKit.getInstance().player.pause();
+  pause (_) {
+    return MusicKit.getInstance().player.pause();
   },
-  async previous (_) {
-    await MusicKit.getInstance().player.skipToPreviousItem();
+  previous (_) {
+    return MusicKit.getInstance().player.skipToPreviousItem();
   },
-  async next (_) {
-    await MusicKit.getInstance().player.skipToNextItem();
+  next (_) {
+    return MusicKit.getInstance().player.skipToNextItem();
   },
   seek (_, time) {
+    console.log(time)
+    console.log("TIME TO SEEK")
     return MusicKit.getInstance().player.seekToTime(time);
   },
-  async playNext (_, queue) {
-    await MusicKit.getInstance().player.queue.prepend(queue);
+  playNext (_, queue) {
+    return MusicKit.getInstance().player.queue.prepend(queue);
   },
-  async playLater (_, queue) {
-    await MusicKit.getInstance().player.queue.append(queue);
+  playLater (_, queue) {
+    return MusicKit.getInstance().player.queue.append(queue);
   },
-  async changeTo (_, position) {
-    await MusicKit.getInstance().changeToMediaAtIndex(position);
+  changeTo (_, position) {
+    return MusicKit.getInstance().changeToMediaAtIndex(position);
   },
   setQueue (_, queue) {
     return MusicKit.getInstance().setQueue(queue);

@@ -1,11 +1,14 @@
 <template>
-  <div class="header">
-    <nuxt-link to="/" color="var(--primary-yellow)" class="title-button">
+  <v-banner elevation="15" style="z-index: 2" width="100%" align="center" justify="center" tile sticky>
+    <h2 color="var(--primary-yellow)" class="title-button">
       {{ currentRouteName }}
-    </nuxt-link>
-    <v-btn @click="login" v-if="!auth.loggedIn">Log In</v-btn>
-    <SearchBar />
-  </div>
+    </h2>
+    <template v-slot:actions>
+        <v-btn color="var(--primary-purple)" @click="login" v-if="!auth.loggedIn">Log In</v-btn>
+        <v-spacer></v-spacer>
+        <SearchBar />
+    </template> 
+  </v-banner>
 </template>
 
 <script>
@@ -41,16 +44,6 @@ export default {
 </script>
 
 <style>
-.header {
-  margin: 1rem;
-  height: 5rem;
-  min-height: 3rem;
-  display: flex;
-  justify-content: space-between;
-	align-items: center;
-	font-size: 3rem;
-	z-index: 10;
-}
 .audio-contain {
   display: flex;
   justify-content: center;

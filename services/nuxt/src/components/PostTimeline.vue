@@ -1,11 +1,12 @@
 <template>
   <div class="timeline-wrap">
     <v-slider
+      v-if="playbackTime"
       v-model="playbackTime.currentPlaybackTime"
+      @change="changePosition"
       color="var(--primary-purple)"
       track-color="#ccc"
-      min="0"
-      @change="changePosition"
+      thumb-size="1"
       :max="playbackTime.currentPlaybackDuration"
     >
       <template v-slot:prepend>{{ currentPlaybackTime }}</template>
@@ -20,11 +21,7 @@ import { mapState, mapGetters } from 'vuex';
 export default {
   data () {
     return {
-      wheelPosition: "0%",
-			mousePosition: "0%",
-      dragging: false,
-      startedPlaying: false,
-    };
+    }
   },
   computed: {
     ...mapGetters({
@@ -61,6 +58,15 @@ export default {
 	display: flex;
   justify-content: center;
   align-items: center; 
+}
+>>>.v-slider__thumb {
+	height: 10px;
+	width: 10px;
+  cursor:grabbing;
+}
+
+>>>.v-slider--horizontal .v-slider__track-container {
+	height: 2px;
 }
 >>>.v-input {
   align-items: center !important;

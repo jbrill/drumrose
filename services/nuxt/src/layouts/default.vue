@@ -1,15 +1,16 @@
 <template>
   <v-app dark class="app">
     <v-content>
-      <v-app-bar color="#f0f0f0" v-if="!isAuthorized" short dense class="authorize-apple-music">
+      <v-app-bar color="#f0f0f0" v-if="!isAuthorized" sticky @click="authorizeAppleMusic" short dense class="authorize-apple-music">
         <span class="authorize-apple-music-text">
           <v-btn @click="authorizeAppleMusic" small color="black">Sign in</v-btn> to Apple Music to gain full access to tracks and sync your library.
         </span>
       </v-app-bar>
       <v-container class="content-contain" justify-space-between fluid d-flex>
-        <div class="left-contain"><LeftContain v-if="auth.loggedIn" /></div>
+        <div class="left-contain"><LeftContain /></div>
         <div class="main-contain">
           <Navbar />
+          <RegisterBanner v-if="!auth.loggedIn" />
           <nuxt class="feed-contain" />
         </div>
         <v-divider vertical></v-divider>
@@ -29,10 +30,11 @@
 import { mapState } from 'vuex';
 import { getUserDetail } from '~/api/api'
 import Navbar from '~/components/Navbar';
-import AudioPlayer from '~/components/AudioPlayer';
+import AudioPlayer from '~/components/AudioPlayer/AudioPlayer';
 import LeftContain from '~/components/LeftContain';
 import RightContain from '~/components/RightContain';
 import Snackbar from '~/components/Snackbar';
+import RegisterBanner from '~/components/RegisterBanner';
 
 
 export default {
@@ -42,6 +44,7 @@ export default {
     LeftContain,
     RightContain,
     Snackbar,
+    RegisterBanner,
   },
   computed: {
     ...mapState(['auth', 'isAuthorized', 'nowPlayingItem']),
@@ -80,13 +83,12 @@ export default {
 .left-contain, .main-contain, .right-contain {
   overflow: auto;
 	height: auto;
-	padding: .5rem;
 	-webkit-overflow-scrolling: touch;
 	-ms-overflow-style: none;
 }
 .main-contain {
   padding-top: 0;
-  width: 60vw;
+  width: 65vw;
 }
 .left-contain {
   width: 15vw;

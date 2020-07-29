@@ -16,6 +16,9 @@ class HealthRoute(APIView):
             - Basic response
     """
 
+    permission_classes = []
+    authentication_classes = []
+
     def get(self, request):
         """
         Basic GET

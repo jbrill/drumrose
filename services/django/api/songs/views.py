@@ -4,7 +4,7 @@ Song Views
 
 import json
 
-from api.models.core import Song, User
+from api.models.core import Song, UserProfile
 from api.songs.serializers import SongSerializer
 from api.users.serializers import UserSerializer
 from rest_framework.response import Response
@@ -78,7 +78,7 @@ class SongDetail(APIView):
 
     def patch(self, request, post_id):
         print(request)
-        post = User.objects.get(handle=post_id)
+        post = UserProfile.objects.get(handle=post_id)
 
         # TODO: Update user
 
@@ -87,7 +87,7 @@ class SongDetail(APIView):
 
     def delete(self, request, post_id):
         print(request)
-        post = User.objects.get(handle=post_id).delete()
+        post = UserProfile.objects.get(handle=post_id).delete()
 
         serializer = UserSerializer(post)
         return Response(serializer.data)

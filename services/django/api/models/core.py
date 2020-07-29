@@ -5,7 +5,6 @@ Core Models for  API
 import uuid
 
 from api.services.auth0 import get_access_token, get_user
-from django.contrib.auth.models import User
 from django.db import models
 
 
@@ -67,6 +66,24 @@ class Auth0ManagementToken(BaseModel):
         super(Auth0ManagementToken, self).save(*args, **kwargs)
 
 
+class UserProfile(BaseModel):
+    """
+    Model for a user profile
+    """
+
+    auth0_user_id = models.CharField(
+        max_length=200, unique=True, blank=True, null=True,
+    )
+    username = models.CharField(
+        max_length=200, unique=True, blank=True, null=True,
+    )
+    email = models.EmailField(
+        max_length=200, unique=True, blank=True, null=True,
+    )
+    followers = models.ManyToManyField("self", blank=True)
+    blocked_users = models.ManyToManyField("self", blank=True)
+
+
 class Artist(BaseModel):
     """
     Model for an artist
@@ -115,7 +132,9 @@ class FavoritedItem(BaseModel):
     Model for a favorited item
     """
 
-    auth0_user_id = models.CharField(max_length=200)
+    user = models.ForeignKey(
+        UserProfile, blank=True, null=True, on_delete=models.CASCADE
+    )
 
     class Meta:
         """
@@ -135,7 +154,7 @@ class FavoritedTrack(FavoritedItem):
 
     class Meta:
         unique_together = (
-            "auth0_user_id",
+            "user",
             "song",
         )
 
@@ -150,7 +169,7 @@ class FavoritedAlbum(FavoritedItem):
 
     class Meta:
         unique_together = (
-            "auth0_user_id",
+            "user",
             "album",
         )
 
@@ -165,7 +184,7 @@ class FavoritedPlaylist(FavoritedItem):
 
     class Meta:
         unique_together = (
-            "auth0_user_id",
+            "user",
             "playlist",
         )
 
@@ -175,8 +194,8 @@ class ListenedItem(BaseModel):
     Model for a listened item
     """
 
-    auth0_user_id = models.CharField(
-        max_length=200, default="auth0.5ee91b29c70eb0001935e77"
+    user = models.ForeignKey(
+        UserProfile, blank=True, null=True, on_delete=models.CASCADE
     )
 
     class Meta:
@@ -197,6 +216,6 @@ class ListenedTrack(ListenedItem):
 
     class Meta:
         unique_together = (
-            "auth0_user_id",
+            "user",
             "track",
         )

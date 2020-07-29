@@ -15,7 +15,7 @@
 <script>
 import { mapState } from 'vuex';
 import Navbar from '~/components/Navbar';
-import AudioPlayer from '~/components/AudioPlayer';
+import AudioPlayer from '~/components/AudioPlayer/AudioPlayer';
 
 
 export default {

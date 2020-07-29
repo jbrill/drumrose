@@ -1,7 +1,7 @@
 <template>
   <div class="right-content-contain">
-    <div class="content-contain-right">
-      <v-card class="right-snippet">
+    <div v-if="auth.loggedIn || isAuthorized" class="content-contain-right">
+      <v-card v-if="auth.loggedIn" class="right-snippet">
         <v-card-title class="headline">
           <v-btn width="100%" small text color="#ccc">
             People to Follow
@@ -9,19 +9,19 @@
         </v-card-title>
         <v-list dense>
           <v-list-item-group>
-            <v-list-item v-for="musicItem in favorites">
+            <v-list-item v-for="user in peopleToFollow">
               <v-list-item-icon>
                 <v-icon>mdi-person</v-icon>
               </v-list-item-icon>
 
               <v-list-item-content>
-                <v-list-item-title v-text="musicItem"></v-list-item-title>
+                <v-list-item-title v-text="user.username"></v-list-item-title>
               </v-list-item-content>
             </v-list-item>
           </v-list-item-group>
         </v-list>
       </v-card>
-      <v-card class="right-snippet">
+      <v-card v-if="isAuthorized" class="right-snippet">
         <v-card-title class="headline">
           <v-btn width="100%" small text color="#ccc">
             Heavy Rotation
@@ -45,7 +45,7 @@
           </v-list-item-group>
         </v-list>
       </v-card>
-      <v-card class="right-snippet">
+      <v-card v-if="isAuthorized" class="right-snippet">
         <v-card-title class="headline">
           <v-btn width="100%" small text color="#ccc">
             Listening History
@@ -84,19 +84,38 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex';
-import { getFavorites } from '~/api/api';
+import { mapState, mapMutations, mapGetters } from 'vuex';
+import { getFavorites, getUserList } from '~/api/api';
 import SearchBar from '~/components/SearchBar';
 
 export default {
-  async asyncData () {
-  },
   async mounted() {
-    const recentResponse = await this.$store.getters.recentlyPlayed;
-    this.recents = recentResponse.slice(0, 5);
-    const favoritesResponse = await this.$store.getters.heavyRotation;
-    this.favorites = favoritesResponse.slice(0, 5);
-    console.log(this.favorites)
+    if (this.$store.state.auth && this.$store.state.auth.loggedIn) {
+      console.log(this.$auth.getToken('auth0'))
+      const usersResponse = await getUserList(
+        this.$auth.getToken('auth0')
+      );
+      console.log(usersResponse)
+      this.peopleToFollow = usersResponse.data
+    }
+    if (this.isAuthorized) {
+      try {
+        const recentResponse = await this.$store.getters.recentlyPlayed;
+        this.recents = recentResponse.slice(0, 5);
+      } catch(err) {
+        console.error(err)
+        this.setSnack('Unable to fetch recently played');
+        this.recents = [];
+      }
+      try { 
+        const favoritesResponse = await this.$store.getters.heavyRotation;
+        this.favorites = favoritesResponse.slice(0, 5);
+      } catch(err) {
+        console.error(err)
+        this.setSnack('Unable to fetch heavy rotation');
+        this.favorites = [];
+      }
+    }
   },
   components: {
     SearchBar
@@ -104,6 +123,7 @@ export default {
   data: () => ({
     favorites: [],
     recents: [],
+    peopleToFollow: [],
     outboundLinks: [
       'Support',
       'Terms of Service',
@@ -111,8 +131,13 @@ export default {
     ],
   }),
   computed: {
-    ...mapState(['isAuthorized', 'history']),
-  }, 
+    ...mapState(['auth', 'isAuthorized', 'history']),
+  },
+  methods: {
+    ...mapMutations({
+      setSnack: 'snackbar/setSnack'
+    }),
+  }
 };
 </script>
 

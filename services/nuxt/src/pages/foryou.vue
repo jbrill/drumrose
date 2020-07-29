@@ -1,6 +1,11 @@
 <template>
   <div>
-    <CarouselSection v-if="!loading" v-for="(personalRecommendation) in recommendations" :title="personalRecommendation.attributes.title.stringForDisplay" :carouselItems="personalRecommendation.relationships.contents.data" />
+    <CarouselSection
+      v-if="!loading"
+      v-for="(personalRecommendation) in recommendations"
+      :title="personalRecommendation.attributes.title.stringForDisplay"
+      :carouselItems="personalRecommendation.relationships.contents.data"
+    />
     <v-divider></v-divider>
   </div>
 </template>
@@ -28,7 +33,6 @@ export default {
   async fetch () {
     this.loading = true;
     this.recommendations = await this.$store.getters['recommendations'];
-    console.log(this.recommendations)
     this.loading = false;
   },
 };

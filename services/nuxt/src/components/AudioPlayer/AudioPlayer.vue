@@ -1,67 +1,48 @@
 <template>
-  <div v-if="playbackState !== 0" class="audioPlayer">
-    <div class="volumeControls">
-      <v-slider
-				class="volume-slider"
-				v-model="volume"
-				append-icon="volume_up"
-				prepend-icon="volume_down"
-				min="0"
-				max="100"
-			></v-slider>
-    </div>
-    <v-divider vertical></v-divider>
+  <div v-if="playbackTime" class="audioPlayer">
     <div class="musicControls">
       <v-icon
-        x-small
-        ref="shuffleButton"
-        @click="shuffleTrack"
-        :class="{ playModeActive: $store.state.shuffleMode === 1 }"
-      >mdi-shuffle</v-icon>
-      <v-icon
         ref="musicPrev"
-        class="audio-play__previous material-icons"
         @click="prevMusic"
       >mdi-skip-previous</v-icon>
       <v-icon
         v-if="playbackState === 3"
-        ref="musicButton"
         @click="playTrack"
-        large
       >mdi-play</v-icon>
       <v-icon
         v-else
-        ref="musicButton"
         @click="pauseTrack"
-        large
       >mdi-pause</v-icon>
       <v-icon
         ref="musicNext"
         @click="nextMusic"
       >mdi-skip-next</v-icon>
       <v-icon
-        x-small
+        small
+        @click="shuffleTrack"
+      >mdi-shuffle</v-icon>
+      <v-icon
+        small
         v-if="$store.state.repeatMode === 1"
-        ref="repeatButton"
         @click="repeatTrack"
         color="var(--primary-red)"
       >mdi-repeat-once</v-icon>
       <v-icon
-        x-small
+        small
         v-else-if="$store.state.repeatMode === 2"
-        ref="repeatButton"
         @click="repeatTrack"
         color="var(--primary-red)"
       >mdi-repeat</v-icon>
       <v-icon
-        x-small
+        small
         v-else
-        ref="repeatButton"
         @click="repeatTrack"
       >mdi-repeat-off</v-icon>
     </div>
     <PostTimeline />
-    <v-divider vertical></v-divider>
+    <div class="volumeControls">
+      <VolumeSlider />
+    </div>
     <div
       v-hotkey="{
         'space': playTrack,
@@ -78,8 +59,8 @@
         />
       </div>
       <div v-else class="audio-player-artwork">
-        <span
-        />
+        <v-icon>mdi-person
+        </v-icon>
       </div>
       <div v-if="nowPlayingItem" class="nowPlayingItem">
         <span ref="songName">
@@ -98,11 +79,10 @@
         </span>
       </div>
       <v-icon
-        ref="favoriteButton"
         @click="favoriteTrack"
       >mdi-dots-horizontal</v-icon>
       <v-icon
-        ref="queueButton"
+        small
         @click="showQueue"
       >queue_music</v-icon>
     </div>
@@ -110,20 +90,23 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
 import PostTimeline from "~/components/PostTimeline";
+import VolumeSlider from "~/components/AudioPlayer/VolumeSlider.vue";
+
+import { mapState } from "vuex";
+
 
 export default {
   components: {
     PostTimeline,
+    VolumeSlider
   },
   data () {
     return {
-      volume: 10,
     }
   },
   computed: {
-    ...mapState(['nowPlayingItem', 'queue', 'playbackState']),
+    ...mapState(['nowPlayingItem', 'queue', 'playbackState', 'playbackTime']),
     isOverflowing () {
       const element = this.$refs.songName;
       if (element.offsetWidth < element.scrollWidth) {
@@ -140,30 +123,15 @@ export default {
       this.$store.dispatch("pause");
     },
     prevMusic () {
-      if (
-        this.$store.state.playbackTime.currentPlaybackTime >= 3 || 
-        this.$store.state.history.length === 0
-      ) {
-        this.$store.dispatch("seek", 0);
-      } else {
-        this.$store.dispatch("previous");
-      }
+      this.$store.dispatch("previous");
     },
     nextMusic () {
-      let vm = this;
-      this.$store.dispatch("next").then( function () {
-        const idx = vm.$store.state.posts.filter(a => {
-          return a.song.apple_music_id === vm.$store.state.nowPlayingItem.id;
-        });
-        console.log(idx);
-        vm.$store.dispatch("setNowPlayingPost", idx[0]);
-      });
+      this.$store.dispatch("next")
     },
     moreMusic () {
       console.log('MORE...');
     },
     repeatTrack () {
-      console.log("REPEAT");
       this.$store.dispatch("toggleRepeatMode");
     },
     shuffleTrack () {
@@ -190,6 +158,8 @@ export default {
 
 <style scoped>
 .audioPlayer {
+  padding-left: 10vw;
+  padding-right: 10vw;
   width: 100%;
   height: 3rem;
   background: linear-gradient(
@@ -199,11 +169,11 @@ export default {
   );
   position: fixed;
   bottom: 0;
-  z-index: 10000;
+  z-index: 1;
   display: flex;
 }
 .volumeControls {
-  width: 10%;
+  width: 5%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -220,6 +190,8 @@ export default {
 .nowPlayingContain {
   width: 30%;
   display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .nowPlayingItem {
   width: 75%;

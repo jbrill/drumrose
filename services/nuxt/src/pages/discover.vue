@@ -1,53 +1,104 @@
 <template>
-  <div>
-    <h4 class="recommended-title">
-      Hi <nuxt-link
-        to="/users/jbrill"
+  <v-container>
+    <v-tabs
+      v-model="tab"
+      centered
+      background-color="transparent"
+      color="white"
+    >
+      <v-tab
+        href="#foryou"
+        key="foryou"
+        v-if="isAuthorized"
       >
-        jbrill
-      </nuxt-link>, we've recommended some music for
-      you.
-    </h4>
-    <div class="carousel-contain">
-      <v-btn text nuxt to="playlists" color="#ccc" class="carousel-title">
-        Playlists
-      </v-btn>
-    </div>
-    <div class="carousel-contain">
-      <v-btn text nuxt to="tracks" color="#ccc" class="new-tracks-title">
-        Tracks
-      </v-btn>
-    </div>
-    <div class="new-albums-contain">
-      <v-btn text nuxt to="tracks" color="#ccc" class="new-tracks-title">
-        Albums
-      </v-btn>
-    </div>
-  </div>
+        For you
+      </v-tab>
+      <v-tab
+        href="#trending"
+        key="trending"
+      >
+        Trending
+      </v-tab>
+    </v-tabs>
+    <v-tabs-items v-model="tab">
+			<v-tab-item
+				key="foryou"
+				value="foryou"
+			>
+			  <v-responsive
+          class="overflow-y-auto"
+        >
+          <LoadingCircle v-if="loading" />
+          <CarouselSection
+            v-if="!loading"
+            v-for="(personalRecommendation) in recommendations"
+            :title="personalRecommendation.attributes.title.stringForDisplay"
+            :carouselItems="personalRecommendation.relationships.contents.data"
+          />
+        </v-responsive>
+      </v-tab-item>
+			<v-tab-item
+				key="trending"
+				value="trending"
+			>
+				<CarouselSection v-if="!loading" v-for="trendingAlbumGroup in trendingAlbumGroups" :title="trendingAlbumGroup.name" :carouselItems="trendingAlbumGroup.data" />
+				<CarouselSection v-if="!loading" v-for="trendingPlaylistGroup in trendingPlaylistGroups" :title="trendingPlaylistGroup.name" :carouselItems="trendingPlaylistGroup.data" />
+				<CarouselSection v-if="!loading" v-for="trendingSongGroup in trendingSongGroups" :title="trendingSongGroup.name" :carouselItems="trendingSongGroup.data" />
+      </v-tab-item>
+    </v-tabs-items>
+  </v-container>
 </template>
 
 <script>
+import CarouselSection from '~/components/CarouselSection';
+import LoadingCircle from '~/components/LoadingCircle';
+
+import { getFavorites, postFavorite } from '~/api/api';
+import { mapState, mapMutations } from 'vuex';
+
 
 export default {
+  scrollToTop: true,
   components: {
+    CarouselSection,
+    LoadingCircle,
   },
-  async asyncData () {
-    /*const posts = await getRecommendedTracks();
-    const playlists = await getRecommendedPlaylists();*/
+  data () {
     return {
-      "posts": [],
-      "playlists": [],
-    };
+      loading: false,
+      recommendations: [],
+      trendingAlbumGroups: [],
+      trendingSongGroups: [],
+      trendingPlaylistGroups: [],
+      tab: 'For you',
+    }
   },
-  mounted () {
-    const queue = this.posts.map(a => a.song.apple_music_id);
-
-    this.$store.dispatch("setQueue", { "songs": queue } );
+  computed: {
+    ...mapState(['isAuthorized', 'auth']),
+  },
+  methods: {
+    ...mapMutations({
+      setSnack: 'snackbar/setSnack'
+    })
+  },
+  async fetch () {
+    this.loading = true;
+    const trending = await this.$store.getters.fetch(
+      `/v1/catalog/us/charts?types=playlists,songs,artists,albums,stations`
+    )
+    this.trendingAlbumGroups = trending.results.albums;
+    this.trendingPlaylistGroups = trending.results.playlists;
+    this.trendingSongGroups = trending.results.songs
+    this.recommendations = await this.$store.getters['recommendations'];
+    this.loading = false;
   },
 };
 </script>
 
 <style scoped>
+>>>.v-tabs-items {
+  background-color: transparent;
+}
 .recommended-title {
   padding-left: 1.5rem;
   padding-top: 3rem;

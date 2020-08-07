@@ -1,5 +1,5 @@
 <template>
-  <v-banner elevation="15" style="z-index: 2" width="100%" align="center" justify="center" tile sticky>
+  <v-banner dark elevation="15" style="z-index: 2" width="100%" align="center" justify="center" tile sticky>
     <h2 color="var(--primary-yellow)" class="title-button">
       {{ currentRouteName }}
     </h2>
@@ -23,7 +23,7 @@ export default {
   computed: {
     ...mapState(['auth']),
     currentRouteName() {
-      return this.$route.name !== 'index' ? this.$route.name.toUpperCase() : 'HOME';
+      return 'DRUMROSE'
     },
   },
   methods: {

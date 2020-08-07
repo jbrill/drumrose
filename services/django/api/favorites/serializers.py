@@ -2,18 +2,19 @@
 Module contains serializers for favorites
 """
 
-from api.albums.serializers import AlbumSerializer
+from rest_framework import serializers
 from api.models.core import (
-    Auth0ManagementToken,
+    UserProfile,
     FavoritedAlbum,
-    FavoritedPlaylist,
     FavoritedTrack,
+    FavoritedPlaylist,
+    Auth0ManagementToken,
 )
-from api.playlists.serializers import PlaylistSerializer
 from api.services.auth0 import get_user
 from api.songs.serializers import SongSerializer
-from api.users.serializers import UserSerializer
-from rest_framework import serializers
+from api.users.serializers import UserProfileSerializer
+from api.albums.serializers import AlbumSerializer
+from api.playlists.serializers import PlaylistSerializer
 
 
 class FavoritedTrackSerializer(serializers.ModelSerializer):
@@ -23,7 +24,7 @@ class FavoritedTrackSerializer(serializers.ModelSerializer):
 
     song = SongSerializer(read_only=True)
     favorite_type = serializers.SerializerMethodField()
-    user = serializers.SerializerMethodField()
+    user = UserProfileSerializer(read_only=True)
 
     class Meta:
         """
@@ -40,9 +41,8 @@ class FavoritedTrackSerializer(serializers.ModelSerializer):
 
         return "track"
 
-    def get_user(self, obj):
-        token = Auth0ManagementToken.objects.active_token()
-        user = get_user(obj.auth0_user_id.replace(".", "|"), token)
+    def create(self, validated_data):
+        user = UserProfile.objects.create(**validated_data)
         return user
 
 
@@ -51,7 +51,7 @@ class FavoritedAlbumSerializer(serializers.ModelSerializer):
     Serializer for posts
     """
 
-    user = serializers.ReadOnlyField()
+    user = UserProfileSerializer(read_only=True)
     album = AlbumSerializer(read_only=True)
     favorite_type = serializers.SerializerMethodField()
 
@@ -67,11 +67,6 @@ class FavoritedAlbumSerializer(serializers.ModelSerializer):
             "favorite_type",
         )
 
-    def get_user(self, obj):
-        token = Auth0ManagementToken.objects.active_token()
-        user = get_user(obj.auth0_user_id.replace(".", "|"), token)
-        return user
-
     def get_favorite_type(self, _):
         """
         Return favorite type
@@ -85,7 +80,7 @@ class FavoritedPlaylistSerializer(serializers.ModelSerializer):
     Serializer for posts
     """
 
-    user = serializers.ReadOnlyField()
+    user = UserProfileSerializer()
     playlist = PlaylistSerializer(read_only=True)
     favorite_type = serializers.SerializerMethodField()
 
@@ -103,10 +98,6 @@ class FavoritedPlaylistSerializer(serializers.ModelSerializer):
         """
 
         return "playlist"
-
-    def get_user(self, obj):
-        print(obj)
-        return "test"
 
 
 class FavoritedSerializer(serializers.ModelSerializer):

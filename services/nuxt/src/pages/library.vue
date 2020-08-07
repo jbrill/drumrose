@@ -1,25 +1,26 @@
 <template>
   <div>
     <v-tabs
-        v-model="selectedLibraryItem"
-        background-color="transparent"
-        dark
+      v-model="selectedLibraryItem"
+      background-color="transparent"
+      dark
+      color="white"
+    >
+      <v-tab
+        v-for="item in musicSelections"
+        :key="item"
       >
-        <v-tab
-          v-for="item in musicSelections"
-          :key="item"
-        >
-          {{ item }}
-        </v-tab>
-      </v-tabs>
+        {{ item }}
+      </v-tab>
+    </v-tabs>
   
-      <v-tabs-items v-model="musicSelections">
-        <v-tab-item
-          v-for="item in musicSelections"
-          :key="item"
-        >
-        </v-tab-item>
-      </v-tabs-items>
+    <v-tabs-items v-model="musicSelections">
+      <v-tab-item
+        v-for="item in musicSelections"
+        :key="item"
+      >
+      </v-tab-item>
+    </v-tabs-items>
     <div>
 			<v-btn-toggle borderless rounded background-color="transparent" class="artist-menu-options">
         <v-hover v-for="(artistOption, artistIndex) in artistOptions">
@@ -69,7 +70,6 @@
 </template>
 
 <script>
-import Raven from 'raven-js';
 import { mergeWith } from 'lodash';
 import { mapState } from 'vuex';
 import LoadingCircle from '~/components/LoadingCircle';
@@ -101,7 +101,6 @@ export default {
   computed: mapState(['activeCollection']),
   methods: {
     changeCollection: function() {
-      console.log("CHANGING")
       this.$store.commit('activeCollection', 'songs')
     }
   },

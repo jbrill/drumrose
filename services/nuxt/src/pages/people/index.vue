@@ -1,27 +1,28 @@
 <template>
   <div class="profileContain">
-    <p class="profileName">
-      Jason Brill
+    <p>
+      Find more music lovers here.
     </p>
-    <div class="postsContain">
-      POSTS GO HERE...
-      {{ followers }}
+    <div class="peopleContain">
+      {{ users }}
     </div>
   </div>
 </template>
 
 <script>
-import { getFollowers } from '~/api/api'
+import CarouselSection from '~/components/CarouselSection';
+
+import { getUserList } from '~/api/api'
 
 export default {
+  data () {
+    return {
+    }
+  },
   async asyncData({ store, $auth }) {
-    if (store.auth && store.auth.loggedIn) {
-      const followersResponse = await getFollowers(
-        $auth.getToken('auth0')
-      );
-      return {
-        "followers": followersResponse.data,
-      };
+    const usersResponse = await getUserList();
+    return {
+      "users": usersResponse.data,
     }
   }
 }

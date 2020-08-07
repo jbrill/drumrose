@@ -1,7 +1,7 @@
 <template>
   <div class="right-content-contain">
     <div v-if="auth.loggedIn || isAuthorized" class="content-contain-right">
-      <v-card v-if="auth.loggedIn" class="right-snippet">
+      <v-card dark v-if="auth.loggedIn" class="right-snippet">
         <v-card-title class="headline">
           <v-btn width="100%" small text color="#ccc">
             People to Follow
@@ -17,11 +17,26 @@
               <v-list-item-content>
                 <v-list-item-title v-text="user.username"></v-list-item-title>
               </v-list-item-content>
+              <v-list-item-action>
+								<v-icon
+									v-if="!active"
+									color="grey lighten-1"
+								>
+									mdi-account-plus-outline
+								</v-icon>
+
+								<v-icon
+									v-else
+									color="yellow"
+								>
+									mdi-account-check
+								</v-icon>
+							</v-list-item-action>
             </v-list-item>
           </v-list-item-group>
         </v-list>
       </v-card>
-      <v-card v-if="isAuthorized" class="right-snippet">
+      <v-card dark v-if="isAuthorized" class="right-snippet">
         <v-card-title class="headline">
           <v-btn width="100%" small text color="#ccc">
             Heavy Rotation
@@ -45,7 +60,7 @@
           </v-list-item-group>
         </v-list>
       </v-card>
-      <v-card v-if="isAuthorized" class="right-snippet">
+      <v-card dark v-if="isAuthorized" class="right-snippet">
         <v-card-title class="headline">
           <v-btn width="100%" small text color="#ccc">
             Listening History
@@ -112,6 +127,7 @@ export default {
         this.favorites = favoritesResponse.slice(0, 5);
       } catch(err) {
         console.error(err)
+        this.$sentry.captureException(err);
         this.setSnack('Unable to fetch heavy rotation');
         this.favorites = [];
       }

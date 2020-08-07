@@ -3,8 +3,6 @@ export default {
    ** Router config
    */
   srcDir: 'src/',
-  router: {
-  },
   /*
    ** Headers of the page
    */
@@ -56,18 +54,13 @@ export default {
   modules: [
     '@nuxtjs/axios',
     '@nuxtjs/auth',
+    '@nuxtjs/sentry',
     'nuxt-svg-loader',
-    'cookie-universal-nuxt',
   ],
-  axios: {
-  },
   plugins: [
     '~/plugins/nuxt-client-init.client.js',
-    '~/plugins/ripple.client.js',
-    '~/plugins/tooltip.client.js',
-    '~/plugins/hotkey.client.js',
-    '~/plugins/vuetify.client.js',
     '~/plugins/carousel.client.js',
+    '~/plugins/axios',
   ],
   /*
    ** Build configuration
@@ -111,5 +104,28 @@ export default {
 				audience: 'https://django-server:8000',
 			}
 		}
-	}
+	},
+  sentry: {
+    dsn: process.env.SENTRY_DSN, // Enter your project's DSN here
+    config: {
+      environment: "dev"
+    },
+    webpackConfig: {
+      include: ".",
+      release: "v1.0.0",
+      ignoreFile: ".gitignore"
+    }
+  },
+  vuetify: {
+		theme: {
+			dark: true,
+			themes: {
+				dark: {
+					primary: '#4caf50',
+					secondary: '#ff8c00',
+					accent: '#9c27b0'
+				}
+			}
+		}
+	},
 };

@@ -2,7 +2,6 @@
 
 import axios from 'axios';
 import clonedeep from 'lodash.clonedeep';
-import Raven from 'raven-js';
 import { errorMessage } from '~/utils/MusicKit';
 
 
@@ -35,7 +34,7 @@ export const state = () => ({
 
   // Posts
   favoritedPosts: [],
-	
+
   // Server side
   appleMusicToken: null,
 });
@@ -155,6 +154,7 @@ export const getters = {
         return r.json()
       }).catch( (err) => {
         console.log(err);
+        this.$sentry.captureException(err);
       });
     };
   },
@@ -251,29 +251,38 @@ export const mutations = {
 };
 
 export const actions = {
-  async nuxtServerInit({ commit }) {
-		const tokenResponse = await axios.post(
-      'https://teton.drumrose.io/api/apple_music_token/'
-    );
-    console.log(tokenResponse);
-		await commit('setAppleMusicToken', tokenResponse.data.token);
+  async nuxtServerInit({ commit }, { $sentry }) {
+    try {
+  		const tokenResponse = await axios.post(
+        'https://teton.drumrose.io/api/apple_music_token/'
+      );
+		  await commit('setAppleMusicToken', tokenResponse.data.token);
+    } catch(err) {
+      console.error(err);
+      $sentry.captureException(err);
+    }
   },
 	async nuxtClientInit (
-    { commit, state, dispatch }, { req } )
+    { commit, state, dispatch }, { $sentry, req }, )
   {
-		const tokenResponse = await axios.post(
-      'https://teton.drumrose.io/api/apple_music_token/'
-    );
-		commit('setAppleMusicToken', tokenResponse.data.token);
+    try {
+      const tokenResponse = await axios.post(
+        'https://teton.drumrose.io/api/apple_music_token/'
+      );
+      commit('setAppleMusicToken', tokenResponse.data.token);
 
-		MusicKit.configure({
-			developerToken: tokenResponse.data.token,
-			app: {
-				name: 'DRUMROSE',
-				build: '2.0.0',
-				icon: "ICON",
-			},
-		});
+      MusicKit.configure({
+        developerToken: tokenResponse.data.token,
+        app: {
+          name: 'DRUMROSE',
+          build: '2.0.0',
+          icon: "ICON",
+        },
+      });
+    } catch(err) {
+      console.error(err);
+      $sentry.captureException(err);
+    }
 
     let localStorage = window.localStorage;
 
@@ -296,7 +305,7 @@ export const actions = {
         );
       } catch (err) {
         console.error(err);
-        Raven.captureException(err);
+        $sentry.captureException(error);
       }
     }
 
@@ -312,7 +321,7 @@ export const actions = {
         );
       } catch (err) {
         console.error(err);
-        Raven.captureException(err);
+        $sentry.captureException(error);
       }
     }
 
@@ -326,7 +335,7 @@ export const actions = {
         );
       } catch (err) {
         console.error(err);
-        Raven.captureException(err);
+        $sentry.captureException(error);
       }
     }
 
@@ -338,7 +347,7 @@ export const actions = {
         dispatch('repeat', JSON.parse(localStorage.getItem('repeat') || '0'));
       } catch (err) {
         console.error(err);
-        Raven.captureException(err);
+        $sentry.captureException(error);
       }
     }
 
@@ -453,7 +462,7 @@ export const actions = {
       event: MusicKit.Events.mediaPlaybackError,
       func: evt => {
         console.error('PLAYBACK_ERROR', evt);
-        Raven.captureException(evt);
+        $sentry.captureException(evt);
 
         // Notify the user of the error.
         dispatch(
@@ -549,8 +558,6 @@ export const actions = {
     return MusicKit.getInstance().player.skipToNextItem();
   },
   seek (_, time) {
-    console.log(time)
-    console.log("TIME TO SEEK")
     return MusicKit.getInstance().player.seekToTime(time);
   },
   playNext (_, queue) {
@@ -702,6 +709,7 @@ export const actions = {
         }
       } catch (err) {
         reject(err);
+        $sentry.captureException(err);
       }
     });
 	},

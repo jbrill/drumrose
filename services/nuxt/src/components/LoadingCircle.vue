@@ -1,12 +1,14 @@
 <template>
-  <v-progress-circular
-    class="progress-contain"
-    :size="70"
-    :width="7"
-    color="var(--primary-red)"
-    indeterminate
-  >
-  </v-progress-circular>
+  <v-layout flex>
+    <v-progress-circular
+      class="progress-contain"
+      :size="35"
+      :width="3"
+      color="var(--primary-purple)"
+      indeterminate
+    >
+    </v-progress-circular>
+  </v-layout>
 </template>
 
 <script>
@@ -19,5 +21,7 @@ export default {
 >>>.progress-contain {
   align-self: center;
   margin: 0 auto;
+  width: 100%;
+  padding-top: 20rem;
 }
 </style>

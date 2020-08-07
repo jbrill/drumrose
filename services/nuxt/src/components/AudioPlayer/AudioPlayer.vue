@@ -44,9 +44,6 @@
       <VolumeSlider />
     </div>
     <div
-      v-hotkey="{
-        'space': playTrack,
-      }" 
       class="nowPlayingContain"
     >
       <div v-if="nowPlayingItem" class="audio-player-artwork">
@@ -64,10 +61,10 @@
       </div>
       <div v-if="nowPlayingItem" class="nowPlayingItem">
         <span ref="songName">
-          <v-btn text x-small nuxt to="/">{{ nowPlayingItem.attributes.name }}</v-btn>
+          <v-btn dark text x-small nuxt to="/">{{ nowPlayingItem.attributes.name }}</v-btn>
         </span>
         <span ref="trackArtist">
-          <v-btn text x-small nuxt to="/">{{ nowPlayingItem.attributes.artistName }}</v-btn>
+          <v-btn dark text x-small nuxt to="/">{{ nowPlayingItem.attributes.artistName }}</v-btn>
         </span>
       </div>
       <div v-else>
@@ -80,7 +77,8 @@
       </div>
       <v-icon
         @click="favoriteTrack"
-      >mdi-dots-horizontal</v-icon>
+        small
+      >mdi-heart</v-icon>
       <v-icon
         small
         @click="showQueue"
@@ -92,6 +90,8 @@
 <script>
 import PostTimeline from "~/components/PostTimeline";
 import VolumeSlider from "~/components/AudioPlayer/VolumeSlider.vue";
+
+import { postFavorite, getTrackInfo } from "~/api/api";
 
 import { mapState } from "vuex";
 
@@ -107,8 +107,8 @@ export default {
   },
   computed: {
     ...mapState(['nowPlayingItem', 'queue', 'playbackState', 'playbackTime']),
-    isOverflowing () {
-      const element = this.$refs.songName;
+    isFavorited () {
+      const favorited = this.$refs.songName;
       if (element.offsetWidth < element.scrollWidth) {
         return true;
       }
@@ -143,8 +143,12 @@ export default {
     showQueue () {
       console.log("queueueue");
     },
-    favoriteTrack () {
+    async favoriteTrack () {
       console.log("favorite");
+      if (this.$auth.loggedIn) {
+        await postFavorite(this.$auth.getToken('auth0'), { 'type': this.nowPlayingItem.type, 'id': this.nowPlayingItem.id });
+        
+      }
     },
   },
 	watch: {
@@ -188,7 +192,7 @@ export default {
   color: var(--primary-red) !important;
 }
 .nowPlayingContain {
-  width: 30%;
+  width: 35%;
   display: flex;
   align-items: center;
   justify-content: center;

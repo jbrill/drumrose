@@ -45,6 +45,7 @@
 					<div class="pa-2">
 						<v-btn
 							block
+              @click="signOut"
 						>LOGOUT</v-btn>
 				  </div>
         </v-list-item>
@@ -63,11 +64,10 @@ export default {
     return {
       navObjects: [
         { title: 'Home', nav: '/', icon: 'mdi-home', requiresAuth: false, requiresAppleAuth: false },
-        { title: 'For You', nav: '/foryou', icon: 'mdi-apple', requiresAuth: false, requiresAppleAuth: true },
-        { title: 'Trending', nav: '/trending', icon: 'mdi-waveform', requiresAuth: false, requiresAppleAuth: false },
-        { title: 'People', nav: '/people', icon: 'mdi-account', requiresAuth: true, requiresAppleAuth: false },
+        { title: 'Discover', nav: '/discover', icon: 'mdi-waveform',
+requiresAuth: false, requiresAppleAuth: false },
+        { title: 'People', nav: '/people', icon: 'mdi-account', requiresAuth: false, requiresAppleAuth: false },
         { title: 'Library', nav: '/library', icon: 'mdi-library', requiresAuth: false, requiresAppleAuth: true },
-        { title: 'Profile', nav: '/profile', icon: 'mdi-account', requiresAuth: true, requiresAppleAuth: false },
         { title: 'Settings', nav: '/settings', icon: 'mdi-cogs', requiresAuth: false, requiresAppleAuth: false },
       ],
     }

@@ -1,16 +1,49 @@
 <template>
-  <div>
-    <v-divider v-if="auth.loggedIn"></v-divider>
-    <CarouselSection v-for="trendingAlbumGroup in trendingAlbumGroups" :title="trendingAlbumGroup.name" :carouselItems="trendingAlbumGroup.data" />
-    <v-divider></v-divider>
-    <CarouselSection v-for="trendingPlaylistGroup in trendingPlaylistGroups" :title="trendingPlaylistGroup.name" :carouselItems="trendingPlaylistGroup.data" />
-    <v-divider></v-divider>
-    <CarouselSection v-for="trendingSongGroup in trendingSongGroups" :title="trendingSongGroup.name" :carouselItems="trendingSongGroup.data" />
-  </div>
+  <v-container>
+    <v-tabs
+      v-model="tab"
+      centered
+      background-color="transparent"
+      color="white"
+    >
+      <v-tab
+        href="#foryou"
+        key="foryou"
+      >
+        For you
+      </v-tab>
+      <v-tab
+        href="#trending"
+        key="trending"
+      >
+        Trending
+      </v-tab>
+    </v-tabs>
+    <v-tabs-items v-model="tab">
+			<v-tab-item
+				key="foryou"
+				value="foryou"
+			>
+				<CarouselSection
+					v-if="!loading"
+					v-for="(personalRecommendation) in recommendations"
+					:title="personalRecommendation.attributes.title.stringForDisplay"
+					:carouselItems="personalRecommendation.relationships.contents.data"
+				/>
+      </v-tab-item>
+			<v-tab-item
+				key="trending"
+				value="trending"
+			>
+				<CarouselSection v-if="!loading" v-for="trendingAlbumGroup in trendingAlbumGroups" :title="trendingAlbumGroup.name" :carouselItems="trendingAlbumGroup.data" />
+				<CarouselSection v-if="!loading" v-for="trendingPlaylistGroup in trendingPlaylistGroups" :title="trendingPlaylistGroup.name" :carouselItems="trendingPlaylistGroup.data" />
+				<CarouselSection v-if="!loading" v-for="trendingSongGroup in trendingSongGroups" :title="trendingSongGroup.name" :carouselItems="trendingSongGroup.data" />
+      </v-tab-item>
+    </v-tabs-items>
+  </v-container>
 </template>
 
 <script>
-
 import CarouselSection from '~/components/CarouselSection';
 import LoadingCircle from '~/components/LoadingCircle';
 
@@ -19,6 +52,7 @@ import { mapState, mapMutations } from 'vuex';
 
 
 export default {
+  scrollToTop: true,
   components: {
     CarouselSection,
     LoadingCircle,
@@ -26,13 +60,11 @@ export default {
   data () {
     return {
       loading: false,
+      recommendations: [],
       trendingAlbumGroups: [],
       trendingSongGroups: [],
       trendingPlaylistGroups: [],
-      slides: [
-        { 'title': 'Social', 'description': 'Share music with your friends.' },
-        { 'title': 'Smart', 'description': 'Find new music with state of the art recommendation systems.'},
-      ],
+      tab: 'For you',
     }
   },
   computed: {
@@ -43,20 +75,18 @@ export default {
       setSnack: 'snackbar/setSnack'
     })
   },
-  async created () {
+  async fetch () {
     this.loading = true;
     const trending = await this.$store.getters.fetch(
       `/v1/catalog/us/charts?types=playlists,songs,artists,albums,stations`
     )
-    console.log(trending)
     this.trendingAlbumGroups = trending.results.albums;
     this.trendingPlaylistGroups = trending.results.playlists;
-    this.trendingSongGroups = trending.results.songs;
-    this.setSnack("TEST YO")
+    this.trendingSongGroups = trending.results.songs
+    this.recommendations = await this.$store.getters['recommendations'];
     this.loading = false;
   },
 };
-
 </script>
 
 <style scoped>

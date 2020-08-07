@@ -1,6 +1,5 @@
 /* global MusicKit */
 
-import Raven from 'raven-js';
 import Vue from 'vue';
 
 // TODO: Add EventBus
@@ -19,7 +18,8 @@ export function playSingleItem (item) {
     queue.items.forEach(i => { i.sourceId = i.id; });
     musicKit.play();
   }, err => {
-    Raven.captureException(err);
+    console.error(err);
+    this.$sentry.captureException(err);
   });
 }
 

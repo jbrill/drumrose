@@ -3,15 +3,16 @@ Urls Module
 """
 
 from api import views as api_routes
-from api.albums import views as album_routes
-from api.apple_music_token import views as apple_music_token_routes
-from api.artists import views as artist_routes
 from api.auth import views as auth_routes
-from api.favorites import views as favorite_routes
-from api.playlists import views as playlist_routes
 from api.songs import views as song_routes
 from api.users import views as user_routes
+from api.albums import views as album_routes
+from api.artists import views as artist_routes
+from api.reviews import views as review_routes
 from django.urls import path
+from api.favorites import views as favorite_routes
+from api.playlists import views as playlist_routes
+from api.apple_music_token import views as apple_music_token_routes
 
 
 urlpatterns = [
@@ -20,6 +21,11 @@ urlpatterns = [
         "favorites/",
         favorite_routes.FavoritesList.as_view(),
         name="FavoritesList",
+    ),
+    path(
+        "<user_id>/favorites/",
+        user_routes.UserFavoritesList.as_view(),
+        name="UserFavoritesList",
     ),
     path(
         "favorites/tracks/",
@@ -36,6 +42,7 @@ urlpatterns = [
         favorite_routes.FavoritePlaylistList.as_view(),
         name="FavoritePlaylistsList",
     ),
+    path("reviews/", review_routes.ReviewsList.as_view(), name="ReviewsList",),
     path(
         "playlists/",
         playlist_routes.PlaylistList.as_view(),

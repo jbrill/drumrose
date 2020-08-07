@@ -1,8 +1,8 @@
-from api.models.core import UserProfile
 from rest_framework import serializers
+from api.models.core import UserProfile
 
 
-class UserSerializer(serializers.ModelSerializer):
+class UserProfileSerializer(serializers.ModelSerializer):
     email = serializers.EmailField()
     username = serializers.CharField(max_length=200)
     auth0_user_id = serializers.CharField(max_length=200)

@@ -41,6 +41,15 @@
             <v-icon
               class="audioAction audioPlay material-icons"
               color="white"
+              @click="pauseTrack"
+              v-if="nowPlayingItem && nowPlayingItem.id === this.id && playbackState === 2"
+            >
+              mdi-pause
+            </v-icon>
+            <v-icon
+              v-else
+              class="audioAction audioPlay material-icons"
+              color="white"
               @click="playTrack"
             >
               mdi-play
@@ -120,7 +129,7 @@ export default {
     ActionMenu,
   },
   computed: {
-    ...mapState(['queue']),
+    ...mapState(['nowPlayingItem', 'playbackState', 'queue']),
     appleImage() {
       return this.attributes.artwork.url.replace(
         '{w}', '250'
@@ -134,7 +143,8 @@ export default {
       this.$store.dispatch("setQueue", { "playlist": this.id })
     },
     pauseTrack: async function (event) {
-      await this.$store.dispatch("pause");
+      event.preventDefault();
+      this.$store.dispatch("pause");
     },
     favoriteItem: async function(event) {
       await favoriteTrack(this.appleMusicId);

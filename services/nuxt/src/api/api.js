@@ -2,12 +2,12 @@ import axios from 'axios';
 
 
 /*
- * Fetches followers
+ * Fetches reviews
  * */
-export const getFollowers = async (bearerToken, userHandle) => {
+export const getReviews = async (bearerToken) => {
   try {
     const response = await axios.get(
-      `https://teton.drumrose.io/api/followers/${userHandle}/`,
+      `https://teton.drumrose.io/api/reviews/`,
       {
         headers: {
           Authorization: `${bearerToken}`,
@@ -21,7 +21,31 @@ export const getFollowers = async (bearerToken, userHandle) => {
       data: [],
     };
   }
-};
+}
+
+
+/*
+ * Fetches followers
+ * */
+export const getFollowers = async (bearerToken, userHandle) => {
+  try {
+    const response = await axios.get(
+      `https://teton.drumrose.io/api/followers/${userHandle}/`,
+      {
+        headers: {
+          Authorization: `${bearerToken}`,
+        },
+      }
+    )
+    return response;
+  } catch(err) {
+    console.error(err);
+    return {
+      data: [],
+    }
+  }
+}
+
 
 /*
  * Fetches user detail
@@ -35,15 +59,16 @@ export const getUserDetail = async (bearerToken, userHandle) => {
           Authorization: `${bearerToken}`,
         },
       }
-    );
+    )
     return response;
   } catch(err) {
     console.error(err);
     return {
       data: [],
-    };
+    }
   }
-};
+}
+
 
 /*
  * Fetches user list

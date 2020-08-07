@@ -4,9 +4,8 @@
       v-if="playbackTime"
       v-model="playbackTime.currentPlaybackTime"
       @change="changePosition"
-      color="var(--primary-purple)"
+      color="var(--primary-red)"
       track-color="#ccc"
-      thumb-size="1"
       :max="playbackTime.currentPlaybackDuration"
     >
       <template v-slot:prepend>{{ currentPlaybackTime }}</template>
@@ -47,10 +46,11 @@ export default {
   display: none;
 }
 >>>.v-input__prepend-outer {
-  font-size: smaller;
+  font-size: 0.7rem;
+  color: var(--primary-red);
 }
 >>>.v-input__append-outer {
-  font-size: smaller;
+  font-size: 0.7rem;
 }
 .timeline-wrap {
 	text-align: center;
@@ -60,9 +60,9 @@ export default {
   align-items: center; 
 }
 >>>.v-slider__thumb {
-	height: 10px;
-	width: 10px;
-  cursor:grabbing;
+	height: 8px;
+	width: 8px;
+  cursor: grabbing;
 }
 
 >>>.v-slider--horizontal .v-slider__track-container {

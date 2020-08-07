@@ -4,8 +4,8 @@ Core Models for  API
 
 import uuid
 
-from api.services.auth0 import get_access_token, get_user
 from django.db import models
+from api.services.auth0 import get_user, get_access_token
 
 
 class BaseModel(models.Model):
@@ -89,6 +89,9 @@ class Artist(BaseModel):
     Model for an artist
     """
 
+    page_id = models.CharField(
+        max_length=100, null=True, blank=True, unique=True
+    )
     apple_music_id = models.CharField(
         max_length=200, null=True, blank=True, unique=True
     )
@@ -99,6 +102,9 @@ class Song(BaseModel):
     Model for a song
     """
 
+    page_id = models.CharField(
+        max_length=100, null=True, blank=True, unique=True
+    )
     apple_music_id = models.CharField(
         max_length=200, null=True, blank=True, unique=True
     )
@@ -109,6 +115,9 @@ class Album(BaseModel):
     Model for an album
     """
 
+    page_id = models.CharField(
+        max_length=100, null=True, blank=True, unique=True
+    )
     apple_music_id = models.CharField(
         max_length=200, null=True, blank=True, unique=True
     )
@@ -122,9 +131,72 @@ class Playlist(BaseModel):
     tracks = models.ManyToManyField("Song")
     title = models.CharField(max_length=64)
     caption = models.CharField(max_length=200)
+    page_id = models.CharField(
+        max_length=100, null=True, blank=True, unique=True
+    )
     apple_music_id = models.CharField(
         max_length=200, null=True, blank=True, unique=True
     )
+
+
+class Review(BaseModel):
+    """
+    Model for a favorited item
+    """
+
+    user = models.ForeignKey(
+        UserProfile, blank=True, null=True, on_delete=models.CASCADE
+    )
+    review = models.TextField(blank=True, null=True,)
+
+    class Meta:
+        """
+        Meta Class Definition
+        """
+
+        abstract = True
+
+
+class AlbumReview(Review):
+    """
+    Album Review
+    """
+
+    album = models.ForeignKey("Album", on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = (
+            "user",
+            "album",
+        )
+
+
+class TrackReview(Review):
+    """
+    Track Review
+    """
+
+    track = models.ForeignKey("Song", on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = (
+            "user",
+            "track",
+        )
+
+
+class PlaylistReview(Review):
+    """
+    Playlist Review
+    """
+
+    playlist = models.ForeignKey("Playlist", on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = (
+            "user",
+            "playlist",
+        )
 
 
 class FavoritedItem(BaseModel):

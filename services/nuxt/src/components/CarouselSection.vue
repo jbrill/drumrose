@@ -57,13 +57,8 @@ export default {
   computed: {
     ...mapState(['auth']),
   },
-  mounted() {
-    console.log("this.carouselItems")
-    console.log(this.carouselItems)
-  },
   methods: {
     handleSlideClick (dataset) {
-      console.log(dataset.index, dataset.name);
     },
   },
 }
@@ -85,8 +80,20 @@ export default {
 }
 >>>.VueCarousel-navigation-prev {
   margin-left: 1rem;
+  margin-top: -1rem;
+  border: 1px solid #ccc;
+}
+>>>.VueCarousel-navigation-prev:hover,
+>>>.VueCarousel-navigation-prev:focus {
+  border: 1px solid var(--primary-yellow);
 }
 >>>.VueCarousel-navigation-next {
+  margin-top: -1rem;
   margin-right: 1rem;
+  border: 1px solid #ccc;
+}
+>>>.VueCarousel-navigation-next:hover,
+>>>.VueCarousel-navigation-next:focus {
+  border: 1px solid var(--primary-yellow);
 }
 </style>

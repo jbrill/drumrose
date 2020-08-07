@@ -1,13 +1,10 @@
 <template>
-  <v-container class="settings-contain">
-    <v-row>
+  <v-container flex class="settings-contain">
     <v-radio-group type="number" v-model.number="bitrate" label="Bitrate" :mandatory="true">
 			<v-radio label="Standard (64 kbps)" :value="64"></v-radio>
 			<v-radio label="High (256 kbps)" :value="256"></v-radio>
 		</v-radio-group>
     <v-divider></v-divider>
-    </v-row>
-    <v-row>
     <span>Select your country</span>
     <v-select
       v-model="selectedCountry"
@@ -22,7 +19,8 @@
 			solo
 		></v-select>
 		</v-row>
-    <v-divider></v-divider>
+    <v-divider v-if="auth.loggedIn"></v-divider>
+    <span v-if="auth.loggedIn">Account options</span>
     <v-btn v-if="auth.loggedIn" @click.stop="resetPasswordDialog = true" color="var(--primary-purple)">Reset Password</v-btn>
     <v-dialog
 			v-model="resetPasswordDialog"

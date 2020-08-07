@@ -5,10 +5,10 @@ Song Views
 import json
 
 from api.models.core import Song, UserProfile
-from api.songs.serializers import SongSerializer
-from api.users.serializers import UserSerializer
-from rest_framework.response import Response
 from rest_framework.views import APIView
+from api.songs.serializers import SongSerializer
+from api.users.serializers import UserProfileSerializer
+from rest_framework.response import Response
 
 
 # from django.shortcuts import get_object_or_404
@@ -62,7 +62,7 @@ class SongDetail(APIView):
     Description:
         - API View for Post Detail
     Routes:
-        - GET /posts/:post_id
+        - GET /songs/:song_id/
             - Gets a post
         - PATCH /posts/:post_id
             - Updates a post
@@ -82,12 +82,12 @@ class SongDetail(APIView):
 
         # TODO: Update user
 
-        serializer = UserSerializer(post)
+        serializer = UserProfileSerializer(post)
         return Response(serializer.data)
 
     def delete(self, request, post_id):
         print(request)
         post = UserProfile.objects.get(handle=post_id).delete()
 
-        serializer = UserSerializer(post)
+        serializer = UserProfileSerializer(post)
         return Response(serializer.data)

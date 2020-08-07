@@ -4,11 +4,23 @@
 
 import json
 
-from api.models.core import UserProfile
-from api.users.serializers import UserSerializer
+from operator import attrgetter
+from itertools import chain
+
+from django.http import JsonResponse
 from rest_framework import status
-from rest_framework.response import Response
+from api.models.core import (
+    UserProfile,
+    FavoritedAlbum,
+    FavoritedTrack,
+    FavoritedPlaylist,
+)
 from rest_framework.views import APIView
+from api.users.serializers import UserProfileSerializer
+from django.core.paginator import Paginator
+from rest_framework.response import Response
+from api.favorites.serializers import FavoritedSerializer
+from rest_framework.permissions import AllowAny
 
 
 class UserList(APIView):
@@ -22,6 +34,8 @@ class UserList(APIView):
             Creates a new user
     """
 
+    permission_classes = (AllowAny,)
+
     def get(self, request):
         """
         Description:
@@ -29,8 +43,9 @@ class UserList(APIView):
         Routes:
             Retrieves a list of all users
         """
+        print(request.user)
         users = UserProfile.objects.all()
-        serializer = UserSerializer(users, many=True)
+        serializer = UserProfileSerializer(users, many=True)
         return Response(serializer.data)
 
     def post(self, request):
@@ -45,7 +60,7 @@ class UserList(APIView):
         data["email"] = request_body["user"]["email"]
         data["username"] = request_body["user"]["username"]
         data["auth0_user_id"] = request_body["user"]["id"]
-        serializer = UserSerializer(data=data)
+        serializer = UserProfileSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -71,7 +86,7 @@ class UserDetail(APIView):
         """
         user = UserProfile.objects.get(handle=user_handle)
 
-        serializer = UserSerializer(user)
+        serializer = UserProfileSerializer(user)
         return Response(serializer.data)
 
     def patch(self, request, user_handle):
@@ -91,7 +106,7 @@ class UserDetail(APIView):
 
         user.save()
 
-        serializer = UserSerializer(user)
+        serializer = UserProfileSerializer(user)
         return Response(serializer.data)
 
     def delete(self, request, user_handle):
@@ -103,7 +118,7 @@ class UserDetail(APIView):
 
         user.delete()
 
-        serializer = UserSerializer(user)
+        serializer = UserProfileSerializer(user)
         return Response(serializer.data)
 
 
@@ -128,7 +143,7 @@ class FollowersList(APIView):
         followers = UserProfile.objects.filter(
             user=UserProfile.objects.get(auth0_user_id=request.user)
         )
-        serializer = UserSerializer(followers, many=True)
+        serializer = UserProfileSerializer(followers, many=True)
         return Response(serializer.data)
 
     def post(self, request):
@@ -141,8 +156,39 @@ class FollowersList(APIView):
         # request_body = json.loads(request.body.decode("utf-8"))
         # user_id = request.user
         # follower_id = request_body.get("follower_id")
-        serializer = UserSerializer(data=request.data)
+        serializer = UserProfileSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserFavoritesList(APIView):
+    """
+    Description:
+        API View for a User's Favorites
+    Routes:
+        GET /<user_handle>/favorites/
+            Gets a list of favorites of a user
+    """
+
+    def get(self, request, user_handle):
+        """
+        Get favorites by user's handle
+        """
+        user = UserProfile.get(username=user_handle)
+        favorited_playlists = FavoritedPlaylist.objects.filter(user=user)
+        favorited_tracks = FavoritedTrack.objects.filter(user=user)
+        favorited_albums = FavoritedAlbum.objects.filter(user=user)
+
+        # merge favorites
+        sorted_favorites = sorted(
+            chain(favorited_playlists, favorited_tracks, favorited_albums),
+            key=attrgetter("created_date"),
+            reverse=True,
+        )
+        query = Paginator(sorted_favorites, 10)
+        page = query.page(1)
+        favorites = page.object_list
+        serializer = FavoritedSerializer(favorites, many=True)
+        return JsonResponse(serializer.data, safe=False)

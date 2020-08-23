@@ -88,8 +88,10 @@ export default {
     )
     this.trendingAlbumGroups = trending.results.albums;
     this.trendingPlaylistGroups = trending.results.playlists;
-    this.trendingSongGroups = trending.results.songs
-    this.recommendations = await this.$store.getters['recommendations'];
+    this.trendingSongGroups = trending.results.songs;
+    if (this.$store.state.isAuthorized) {
+      this.recommendations = await this.$store.getters['recommendations'];
+    }
     this.loading = false;
   },
 };

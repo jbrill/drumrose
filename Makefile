@@ -5,7 +5,7 @@ build:
 	docker-compose build
 
 _test-models:
-	coverage run --source . services/django/manage.py test services/django/api/models/tests -v2 --pattern="*_model_tests.py"
+	coverage run --source . services/django/manage.py test services/django/api/tests/model_tests/ -v2 --pattern="*_model_tests.py"
 
 dtest-pylint:
 	docker exec -t drumrose_django-server_1 bash -c "cd /usr/local/drumrose; make _test-pylint"
@@ -23,4 +23,4 @@ dtest-lint:
 	docker exec -t drumrose_nuxt-server_1 bash -c "npm run lint;"
 
 _test-serializers:
-	coverage run --source . services/django/manage.py test services/django/api/serializers/tests -v2 --pattern="test_*.py"
+	coverage run --source . services/django/manage.py test services/django/api/tests/serializer_tests/ -v2 --pattern="test_*.py"

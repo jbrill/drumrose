@@ -4,12 +4,10 @@ https://github.com/auth0-samples/auth0-django-api
 """
 
 import os
-
 from functools import wraps
 
 import jwt
 import requests
-
 from cryptography.hazmat.backends import default_backend
 from cryptography.x509 import load_pem_x509_certificate
 from django.contrib.auth import authenticate
@@ -78,10 +76,7 @@ def requires_scope(required_scope):
             api_identifier = os.environ.get("API_IDENTIFIER")
             public_key = get_public_key()
             decoded = jwt.decode(
-                auth_token,
-                public_key,
-                audience=api_identifier,
-                algorithms=["RS256"],
+                auth_token, public_key, audience=api_identifier, algorithms=["RS256"]
             )
 
             if decoded.get("scope"):

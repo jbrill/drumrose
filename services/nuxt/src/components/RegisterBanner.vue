@@ -1,6 +1,6 @@
 <template>
   <v-carousel
-		height="30vh"
+		height="40vh"
 		hide-delimiter-background
 		show-arrows-on-hover
 		cycle
@@ -23,7 +23,7 @@
           {{ image.description }}
         </v-card-subtitle>
         <v-card-actions class="justify-center">
-          <v-btn @click="login" color="var(--primary-red)">Get Started - IT'S FREE!</v-btn>
+          <v-btn @click="login" color="var(--primary-red)">JOIN THE PARTY - IT'S FREE!</v-btn>
         </v-card-actions>
       </v-card>
     </v-container>
@@ -61,5 +61,8 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+>>>.v-image__image, .v-image__image--cover {
+  opacity: 0.8;
 }
 </style>

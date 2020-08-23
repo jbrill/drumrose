@@ -14,6 +14,7 @@
 		>
 			<slide
 				v-for="(carouselItem, index) in carouselItems"
+				v-if="isValid(carouselItem.type)"
 				:key="carouselItem.id"
 				data-index="index"
 				:data-name="carouselItem.id"
@@ -57,8 +58,15 @@ export default {
   computed: {
     ...mapState(['auth']),
   },
+  created () {
+    console.log(this.carouselItems)
+  },
   methods: {
     handleSlideClick (dataset) {
+    },
+    isValid (type) {
+      console.log(type)
+      return ['songs', 'albums', 'playlists'].includes(type);
     },
   },
 }
@@ -81,7 +89,6 @@ export default {
 >>>.VueCarousel-navigation-prev {
   margin-left: 1rem;
   margin-top: -1rem;
-  border: 1px solid #ccc;
 }
 >>>.VueCarousel-navigation-prev:hover,
 >>>.VueCarousel-navigation-prev:focus {
@@ -90,7 +97,6 @@ export default {
 >>>.VueCarousel-navigation-next {
   margin-top: -1rem;
   margin-right: 1rem;
-  border: 1px solid #ccc;
 }
 >>>.VueCarousel-navigation-next:hover,
 >>>.VueCarousel-navigation-next:focus {

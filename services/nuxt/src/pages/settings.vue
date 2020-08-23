@@ -7,13 +7,11 @@
     <v-divider></v-divider>
     <span>Select your country</span>
     <v-select
-      v-model="selectedCountry"
+      v-model="storefront"
 			:items="countries"
-			:loading="loadingCountries"
 			label="Select your country"
       outlined
       persistent-hint
-      hint="Choose from the dropdown"
       placeholder="Apple Music Storefront"
       prepend-inner-icon="mdi-earth"
 			solo
@@ -92,7 +90,15 @@ export default {
 				return this.$store.state.bitrate
 			},
 			set (value) {
-				this.$store.dispatch('setBitrate', value);
+				this.$store.dispatch('setbitrate', value);
+			}
+		},
+    storefront: {
+			get () {
+				return this.$store.state.storefront
+			},
+			set (value) {
+				this.$store.dispatch('setStorefront', value);
 			}
 		}
   },

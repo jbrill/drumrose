@@ -1,9 +1,13 @@
 <template>
-<v-layout flex width="100%">
+<v-app-bar
+  color="deep-purple"
+  dark
+> 
+  <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
   <v-navigation-drawer
-    dark
-    color="transparent"
-    permanent
+		v-model="drawer"
+		absolute
+		temporary
   >
     <v-list-item>
       <v-list-item-content>
@@ -52,7 +56,7 @@
 
 			</v-list>
   </v-navigation-drawer>
-</v-layout>
+</v-app-bar>
 </template>
 
 <script>
@@ -62,6 +66,7 @@ import { getFavorites } from '~/api/api';
 export default {
  data () {
     return {
+      drawer: null,
       navObjects: [
         { title: 'Home', nav: '/', icon: 'mdi-home', requiresAuth: false, requiresAppleAuth: false },
         { title: 'Discover', nav: '/discover', icon: 'mdi-waveform',

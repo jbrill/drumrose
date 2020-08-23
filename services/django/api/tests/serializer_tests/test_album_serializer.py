@@ -22,6 +22,4 @@ class AlbumSerializerTest(TestCase):
         serialized_album = AlbumSerializer(album, many=False).data
 
         # Assert album fields
-        self.assertEqual(
-            serialized_album["apple_music_id"], str(album.apple_music_id)
-        )
+        self.assertEqual(serialized_album["apple_music_id"], str(album.apple_music_id))

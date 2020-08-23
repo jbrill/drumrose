@@ -36,7 +36,7 @@
           </v-list-item-group>
         </v-list>
       </v-card>
-      <v-card dark v-if="isAuthorized" class="right-snippet">
+      <v-card dark v-if="isAuthorized && favorites.length" class="right-snippet">
         <v-card-title class="headline">
           <v-btn width="100%" small text color="#ccc">
             Heavy Rotation

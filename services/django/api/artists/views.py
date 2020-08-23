@@ -20,9 +20,7 @@ class ArtistRoute(APIView):
          Artist GET
         """
         print(request)
-        artist_1 = {
-            "name": "Dr. Dre",
-        }
+        artist_1 = {"name": "Dr. Dre"}
 
         artists = {"artists": [artist_1]}
         return JsonResponse(artists)

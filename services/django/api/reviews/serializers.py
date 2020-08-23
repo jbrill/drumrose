@@ -2,12 +2,13 @@
 Module contains serializers for favorites
 """
 
-from rest_framework import serializers
-from api.models.core import AlbumReview, TrackReview, Auth0ManagementToken
+from api.albums.serializers import AlbumSerializer
+from api.models.core import AlbumReview, PlaylistReview, TrackReview
+from api.reviews.serializers import PlaylistSerializer
 from api.services.auth0 import get_user
 from api.songs.serializers import SongSerializer
 from api.users.serializers import UserProfileSerializer
-from api.albums.serializers import AlbumSerializer
+from rest_framework import serializers
 
 
 class AlbumReviewSerializer(serializers.ModelSerializer):
@@ -41,6 +42,23 @@ class TrackReviewSerializer(serializers.ModelSerializer):
         """
 
         model = TrackReview
+        fields = "__all__"
+
+
+class PlaylistReviewSerializer(serializers.ModelSerializer):
+    """
+    Serializer for playlist reviews
+    """
+
+    user = UserProfileSerializer()
+    playlist = PlaylistSerializer()
+
+    class Meta:
+        """
+        Serializer Meta Definition
+        """
+
+        model = PlaylistReview
         fields = "__all__"
 
 

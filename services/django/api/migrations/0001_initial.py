@@ -3,8 +3,7 @@
 import uuid
 
 import django.db.models.deletion
-
-from django.db import models, migrations
+from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
@@ -35,7 +34,7 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
-            options={"abstract": False,},
+            options={"abstract": False},
         ),
         migrations.CreateModel(
             name="Artist",
@@ -58,7 +57,7 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
-            options={"abstract": False,},
+            options={"abstract": False},
         ),
         migrations.CreateModel(
             name="Auth0ManagementToken",
@@ -80,7 +79,7 @@ class Migration(migrations.Migration):
                 ),
                 ("is_authorized", models.BooleanField(default=False)),
             ],
-            options={"abstract": False,},
+            options={"abstract": False},
         ),
         migrations.CreateModel(
             name="FavoritedAlbum",
@@ -99,8 +98,7 @@ class Migration(migrations.Migration):
                 (
                     "album",
                     models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE,
-                        to="api.Album",
+                        on_delete=django.db.models.deletion.CASCADE, to="api.Album"
                     ),
                 ),
             ],
@@ -176,7 +174,7 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
-            options={"abstract": False,},
+            options={"abstract": False},
         ),
         migrations.CreateModel(
             name="Song",
@@ -199,7 +197,7 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
-            options={"abstract": False,},
+            options={"abstract": False},
         ),
         migrations.CreateModel(
             name="UserProfile",
@@ -250,7 +248,7 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
-            options={"abstract": False,},
+            options={"abstract": False},
         ),
         migrations.AddField(
             model_name="playlist",
@@ -319,15 +317,15 @@ class Migration(migrations.Migration):
             ),
         ),
         migrations.AlterUniqueTogether(
-            name="listenedtrack", unique_together={("user", "track")},
+            name="listenedtrack", unique_together={("user", "track")}
         ),
         migrations.AlterUniqueTogether(
-            name="favoritedtrack", unique_together={("user", "song")},
+            name="favoritedtrack", unique_together={("user", "song")}
         ),
         migrations.AlterUniqueTogether(
-            name="favoritedplaylist", unique_together={("user", "playlist")},
+            name="favoritedplaylist", unique_together={("user", "playlist")}
         ),
         migrations.AlterUniqueTogether(
-            name="favoritedalbum", unique_together={("user", "album")},
+            name="favoritedalbum", unique_together={("user", "album")}
         ),
     ]

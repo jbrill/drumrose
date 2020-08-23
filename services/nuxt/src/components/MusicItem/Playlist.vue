@@ -1,102 +1,52 @@
 <template>
   <div>
-    <div class="artworkContain">
-        <div
-          class="noselect albumContain"
-          @mouseenter="isHovering = true"
-          @mouseleave="isHovering = false"
-        >
-          <img class="albumCover" :src="appleImage"/>
-          <div
-            v-if="isActionable"
-            ref="albumOverlay"
-            :class="{
-              albumOverlay: true,
-              albumOverlayActive: isHovering
-            }"
-          >
-            <div class="album-overlay-actions-contain">
-              <v-btn
-                icon
-                dark
-                @click="favoriteItem"
-              >
-                <v-icon small color="white" class="album-overlay-more">
-                  mdi-heart
-                </v-icon>
-              </v-btn>
-            <ActionMenu
-              :id="id"
-            />
-            </div>
-          </div>
-          <div
-            ref="audioAction"
-            v-if="isPlayable"
-            :class="{
-              audioActionContain: true,
-              audioActionContainActive: isHovering,
-            }"
-          >
-            <v-icon
-              class="audioAction audioPlay material-icons"
-              color="white"
-              @click="pauseTrack"
-              v-if="nowPlayingItem && nowPlayingItem.id === this.id && playbackState === 2"
-            >
-              mdi-pause
-            </v-icon>
-            <v-icon
-              v-else
-              class="audioAction audioPlay material-icons"
-              color="white"
-              @click="playTrack"
-            >
-              mdi-play
-            </v-icon>
-          </div>
-        </div>
-    </div>
+    <v-badge
+      avatar
+      bordered
+      overlap
+      icon="mdi-playlist-music"
+      style="width: 100%"
+      color="var(--primary-purple)"
+    >
+      <Artwork
+        :id="id"
+        :isPlayable="isPlayable"
+        :isActionable="isActionable"
+        :artworkUrl="appleImage"
+        type="playlist"
+      />
+    </v-badge>
     <div class="textContain">
-      <v-tooltip bottom>
-        <template v-slot:activator="{ on }">
-          <nuxt-link
-            class="songName"
-            :to="'/playlists/' + id"
-          >
-            <span
-              ref="songName"
-              class="songName"
-              v-on="on"
-            >{{ attributes.name }}</span>
-          </nuxt-link>
-        </template>
-        <div>track name</div>
-      </v-tooltip>
-      <v-tooltip bottom>
-        <template v-slot:activator="{ on }">
-          <nuxt-link :to="'/people/' + attributes.curatorName" class="artistName">
-            <span
-              ref="curatorName"
-              class="artistName"
-              v-on="on"
-            >{{ attributes.curatorName }}</span>
-          </nuxt-link>
-        </template>
-        <div>artist name</div>
-      </v-tooltip>
+      <nuxt-link
+        class="songName"
+        :to="'/playlists/' + id"
+      >
+        <span
+          ref="songName"
+          class="songName"
+        >{{ attributes.name }}</span>
+      </nuxt-link>
+      <nuxt-link :to="'/people/' + attributes.curatorName" class="artistName">
+        <span
+          ref="curatorName"
+          class="artistName"
+        >{{ attributes.curatorName }}</span>
+      </nuxt-link>
     </div>
   </div>
 </template>
 
 <script>
-import ActionMenu from '~/components/MusicItem/ActionMenu';
+import Artwork from '~/components/MusicItem/Artwork';
 
 import { mapState } from 'vuex';
-import { favoriteTrack } from '~/api/api';
+import { favoriteTrack, getTrackDetail } from '~/api/api';
 
 
 export default {
+  components: {
+    Artwork,
+  },
   props: {
     id: {
       type: String,
@@ -122,11 +72,15 @@ export default {
       artistName: '',
       artworkUrl: '',
       name: '',
-      isHovering: false,
+      isFavorited: false,
     };
   },
-  components: {
-    ActionMenu,
+  created () {
+    const resp = getTrackDetail(
+      this.$auth.getToken('auth0'),
+      this.id
+    )
+    console.log(resp)
   },
   computed: {
     ...mapState(['nowPlayingItem', 'playbackState', 'queue']),
@@ -192,64 +146,11 @@ export default {
     color: grey;
   }
 }
-
-.albumContain {
-  z-index: 0;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  border-radius: 1px;
-  box-shadow: var(--shadow-medium);
-}
-.albumContain:hover, .albumContain:focus {
-  cursor: pointer;
-}
->>>.v-list-item__title, >>>.v-icon {
-  font-size: 0.8rem;
-}
 >>>.v-list-item {
   min-height: 2rem;
 }
 >>>.v-sheet {
   padding: 0;
-}
-.albumCover {
-  width: 100%;
-  height: auto;
-  border-radius: 2px;
-}
-.albumOverlay {
-  width:100%;
-	height:100%;
-	position:absolute;
-  background: rgb(255,255,255);
-  background: linear-gradient(180deg, rgba(0,0,0,0) 41%, rgba(0,0,0,0.5) 100%);
-  opacity: 0;
-  border-radius: 2px;
-}
-.albumOverlayActive {
-  opacity: 1;
-  border: 2px solid var(--primary-yellow);
-}
-.album-overlay-actions-contain {
-  position: absolute;
-  width: 100%;
-  bottom: 0;
-  right: 0;
-  display: flex;
-}
-.album-overlay-more {
-  opacity: 1;
-  align-self: flex-end;
-}
-.album-overlay-favorite {
-  opacity: 1;
-  align-self: flex-start;
-}
-.album-overlay:hover, .album-overlay:focus {
-  opacity:1;
 }
 .artistName {
   font-size: 0.8rem;
@@ -268,6 +169,7 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   opacity: 0.8;
+  color: white;
 }
 .songName:hover, .songName:focus {
   cursor: pointer;
@@ -279,10 +181,6 @@ export default {
   color: white;
   opacity: 1;
 }
-.albumCover:hover, .albumCover:focus {
-  cursor: pointer;
-  box-shadow: var(--shadow-heavy);
-}
 .textContain {
   display: flex;
   bottom: 0;
@@ -290,36 +188,5 @@ export default {
   padding-top: 0.5rem;
   flex-direction: column;
   color: var(--primary-black-light);
-}
-.audioActionContain {
-	width: 2.5rem;
-	height: 2.5rem;
-	position: absolute;
-	display: flex;
-  opacity: 0;
-	border-radius: 50%;
-	align-items: center;
-	justify-content: center;
-}
-.audioActionContainActive {
-  opacity: 1;
-}
-.audioAction {
-  color: black;
-  font-size: 2.5rem;
-  background-color: var(--primary-red--dark);
-  border-radius: 50%;
-}
-.audioFavorite {
-  padding-right: 1rem;
-}
-.audioFavorite:hover, .audioFavorite:focus {
-  color: var(--primary-red);
-}
-.audioMore {
-  float: left;
-}
-.audioPause:hover, .audioPause:focus {
-  color: var(--primary-purple);
 }
 </style>

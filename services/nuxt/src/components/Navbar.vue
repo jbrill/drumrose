@@ -1,27 +1,70 @@
 <template>
-  <v-banner dark elevation="15" style="z-index: 2" width="100%" align="center" justify="center" tile sticky>
-    <h2 color="var(--primary-yellow)" class="title-button">
-      {{ currentRouteName }}
-    </h2>
-    <template v-slot:actions>
-        <v-btn color="var(--primary-purple)" @click="login" v-if="!auth.loggedIn">Log In</v-btn>
-        <v-spacer></v-spacer>
-        <SearchBar />
-    </template> 
-  </v-banner>
+<div>
+	<v-navigation-drawer
+		v-model="drawer"
+		app
+    color="#272727"
+    dark
+	>
+		<v-list nav>
+      <v-list-item
+        active-class="activeListItem"
+        v-for="navObject in navObjects"
+        v-if="((!auth.loggedIn && !navObject.requiresAuth) || auth.loggedIn) && ((!isAuthorized && !navObject.requiresAppleAuth) || isAuthorized)"
+        :key="navObject.title"
+        link
+        :to="navObject.nav"
+      >
+        <v-list-item-icon>
+          <v-icon>{{ navObject.icon }}</v-icon>
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title>{{ navObject.title }}</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+   </v-list>
+   <template v-if="auth.loggedIn" v-slot:append>
+     <div class="pa-2">
+       <v-btn @click="signOut" block>Logout</v-btn>
+     </div>
+  </template>
+</v-navigation-drawer>      
+<v-app-bar fixed app>
+  <v-app-bar-nav-icon @click="drawer=!drawer"></v-app-bar-nav-icon>
+	<v-toolbar-title style="padding-left: 25px"><nuxt-link to="/"><span>DRUMROSE</span></nuxt-link></v-toolbar-title>
+	<v-spacer></v-spacer>
+  <v-btn color="var(--primary-purple)" @click="login" v-if="!auth.loggedIn">Log In</v-btn>
+  <v-spacer></v-spacer>
+  <SearchBar />
+</v-app-bar>  
+</div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
 import SearchBar from '~/components/SearchBar';
-
+import LeftContain from '~/components/LeftContain';
 
 export default {
   components: {
     SearchBar,
+    LeftContain
+  },
+  data () {
+    return {
+      drawer: false,
+      navObjects: [
+        { title: 'Home', nav: '/', icon: 'mdi-home', requiresAuth: false, requiresAppleAuth: false },
+        { title: 'Discover', nav: '/discover', icon: 'mdi-waveform',
+requiresAuth: false, requiresAppleAuth: false },
+        { title: 'People', nav: '/people', icon: 'mdi-account', requiresAuth: false, requiresAppleAuth: false },
+        { title: 'Library', nav: '/library', icon: 'mdi-library', requiresAuth: false, requiresAppleAuth: true },
+        { title: 'Settings', nav: '/settings', icon: 'mdi-cogs', requiresAuth: false, requiresAppleAuth: false },
+      ],
+    }
   },
   computed: {
-    ...mapState(['auth']),
+    ...mapState(['auth', 'isAuthorized']),
     currentRouteName() {
       return 'DRUMROSE'
     },
@@ -43,71 +86,7 @@ export default {
 };
 </script>
 
-<style>
-.audio-contain {
-  display: flex;
-  justify-content: center;
-  margin: 0 auto;
-  width: 100%;
-}
-.title-button {
-  color: #ccc !important;
-  font-size: 1.5rem;
-  letter-spacing: 0.5rem;
-}
-.title-button:hover, .title-button:focus {
-  opacity: 0.8;
-}
-.profile-menu-icon {
-  height: 100%;
-}
-@media screen and (prefers-color-scheme: dark) {
-  .header {
-    background-color: transparent;
-  }
-  .title__middle {
-    color: var(--primary-red);
-  }
-  .title__middle:hover, .title__middle:focus {
-    color: white;
-  }
-  .search-bar__contain:hover, .search-bar__contain:focus {
-    color: ghostwhite;
-  }
-}
-.header img {
-  height: 3rem;
-}
-.title {
-  margin-left: 2em;
-  font-size: 1.4em;
-}
-.title__img {
-  width: 3rem;
-  height: auto;
-  vertical-align: middle;
-}
-.title__middle {
-  letter-spacing: 2px;
-  font-size: 1.5rem;
-  color: ghostwhite;
-  font-weight: bolder;
-  margin: 0 auto;
-  margin-left: 3rem;
-}
-.title__middle:hover, .title__middle:focus {
-  color: var(--primary-red);
-}
-a {
-  text-decoration: none;
-}
-.registerLink {
-  padding-right: 2%;
-}
-
-.nav-bar__right--actions .moreListContain {
-  float: right;
-}
+<style scoped>
 .search-bar__contain {
   margin: 0 auto;
   opacity: 0.9;
@@ -124,5 +103,8 @@ a {
   color: black;
   opacity: 1;
   transition: opacity 0.2s ease-out;
+}
+.activeListItem {
+  color: var(--primary-yellow) !important;
 }
 </style>

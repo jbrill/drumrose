@@ -3,15 +3,12 @@
 import uuid
 
 import django.db.models.deletion
-
-from django.db import models, migrations
+from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ("api", "0001_initial"),
-    ]
+    dependencies = [("api", "0001_initial")]
 
     operations = [
         migrations.CreateModel(
@@ -68,30 +65,22 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="album",
             name="page_id",
-            field=models.CharField(
-                blank=True, max_length=100, null=True, unique=True
-            ),
+            field=models.CharField(blank=True, max_length=100, null=True, unique=True),
         ),
         migrations.AddField(
             model_name="artist",
             name="page_id",
-            field=models.CharField(
-                blank=True, max_length=100, null=True, unique=True
-            ),
+            field=models.CharField(blank=True, max_length=100, null=True, unique=True),
         ),
         migrations.AddField(
             model_name="playlist",
             name="page_id",
-            field=models.CharField(
-                blank=True, max_length=100, null=True, unique=True
-            ),
+            field=models.CharField(blank=True, max_length=100, null=True, unique=True),
         ),
         migrations.AddField(
             model_name="song",
             name="page_id",
-            field=models.CharField(
-                blank=True, max_length=100, null=True, unique=True
-            ),
+            field=models.CharField(blank=True, max_length=100, null=True, unique=True),
         ),
         migrations.AddField(
             model_name="trackreview",
@@ -145,12 +134,12 @@ class Migration(migrations.Migration):
             ),
         ),
         migrations.AlterUniqueTogether(
-            name="trackreview", unique_together={("user", "track")},
+            name="trackreview", unique_together={("user", "track")}
         ),
         migrations.AlterUniqueTogether(
-            name="playlistreview", unique_together={("user", "playlist")},
+            name="playlistreview", unique_together={("user", "playlist")}
         ),
         migrations.AlterUniqueTogether(
-            name="albumreview", unique_together={("user", "album")},
+            name="albumreview", unique_together={("user", "album")}
         ),
     ]

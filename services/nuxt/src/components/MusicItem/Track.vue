@@ -1,93 +1,52 @@
 <template>
   <div>
-    <div class="artworkContain">
-        <div
-          class="noselect albumContain"
-          @mouseenter="isHovering = true"
-          @mouseleave="isHovering = false"
-        >
-          <img class="albumCover" :src="appleImage"/>
-          <div
-            v-if="isActionable"
-            ref="albumOverlay"
-            :class="{
-              albumOverlay: true,
-              albumOverlayActive: isHovering
-            }"
-          >
-            <div class="album-overlay-actions-contain">
-              <v-btn
-                icon
-                dark
-                @click="favoriteItem"
-              >
-                <v-icon small color="white" class="album-overlay-more">
-                  mdi-heart
-                </v-icon>
-              </v-btn>
-            <ActionMenu />
-            </div>
-          </div>
-          <div
-            ref="audioAction"
-            v-if="isPlayable"
-            :class="{
-              audioActionContain: true,
-              audioActionContainActive: isHovering,
-            }"
-          >
-            <v-icon
-              class="audioAction audioPlay material-icons"
-              color="white"
-              @click="playTrack"
-            >
-              mdi-play
-            </v-icon>
-          </div>
-        </div>
-    </div>
+    <v-badge
+      avatar
+      bordered
+      overlap
+      style="width: 100%"
+      icon="mdi-waveform"
+      color="var(--primary-purple)"
+    >
+      <Artwork
+        :id="id"
+        :isPlayable="isPlayable"
+        :isActionable="isActionable"
+        :artworkUrl="appleImage"
+        :link="'tracks/' + pageId"
+        type="song"
+      />
+    </v-badge>
     <div class="textContain">
-      <v-tooltip bottom>
-        <template v-slot:activator="{ on }">
-          <nuxt-link
-            class="songName"
-            :to="'/albums/' + id"
-          >
-            <span
-              ref="songName"
-              class="songName"
-              v-on="on"
-            >{{ attributes.name }}</span>
-          </nuxt-link>
-        </template>
-        <div>track name</div>
-      </v-tooltip>
-      <v-tooltip bottom>
-        <template v-slot:activator="{ on }">
-          <nuxt-link :to="'/artists/' + attributes.artistName" class="artistName">
-            <span
-              ref="curatorName"
-              class="artistName"
-              v-on="on"
-            >{{ attributes.artistName }}</span>
-          </nuxt-link>
-        </template>
-        <div>artist name</div>
-      </v-tooltip>
+      <nuxt-link
+        class="songName"
+        :to="'/tracks/' + pageId"
+      >
+        <span
+          ref="songName"
+          class="songName"
+        >{{ attributes.name }}</span>
+      </nuxt-link>
+      <nuxt-link :to="'/artists/' + attributes.artistName" class="artistName">
+        <span
+          ref="curatorName"
+          class="artistName"
+        >{{ attributes.artistName }}</span>
+      </nuxt-link>
     </div>
   </div>
 </template>
 
 <script>
-import ActionMenu from '~/components/MusicItem/ActionMenu';
+import Artwork from '~/components/MusicItem/Artwork';
 
 import { mapState } from 'vuex';
-import { favoriteTrack } from '~/api/api';
+import { favoriteTrack, getTrackDetail } from '~/api/api';
 
 
 export default {
   components: {
-    ActionMenu,
+    Artwork,
   },
   props: {
     id: {
@@ -114,11 +73,11 @@ export default {
       artistName: '',
       artworkUrl: '',
       name: '',
-      isHovering: false,
+      pageId: '',
     };
   },
   computed: {
-    ...mapState(['queue']),
+    ...mapState(['nowPlayingItem', 'playbackState', 'queue']),
     appleImage() {
       return this.attributes.artwork.url.replace(
         '{w}', '250'
@@ -127,21 +86,36 @@ export default {
       )
     },
   },
-  async fetch () {
-    console.log("HELLOOO")
-    this.isLoading = false;
+  async created () {
+    try {
+      const resp = await getTrackDetail(
+        this.$auth.getToken('auth0'),
+        this.id
+      )
+      console.log(resp)
+      this.pageId = resp.data.track.page_id
+    } catch (err) {
+      console.error(err.response)
+      if (err.response == 409) {
+        console.log("409!")
+      } 
+      console.error(err)
+    }
   },
   methods: {
     pauseTrack: async function (event) {
-      await this.$store.dispatch("pause");
+      event.preventDefault();
+      this.$store.dispatch("pause");
     },
     favoriteItem: async function(event) {
-      await favoriteTrack(this.appleMusicId);
+      await favoriteTrack(this.id);
     },
-    playTrack: async function (event) {
+    playTrack: function (event) {
       event.preventDefault();
-      await this.$store.dispatch("setQueue", { "song": this.id } );
-      await this.$store.dispatch("play");
+      console.log(this.id)
+      this.$store.dispatch("setQueue", { "song": this.id } ).then( () => {
+        this.$store.dispatch("play");
+      });
     },
   },
 };
@@ -180,64 +154,11 @@ export default {
     color: grey;
   }
 }
-
-.albumContain {
-  z-index: 0;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  border-radius: 1px;
-  box-shadow: var(--shadow-medium);
-}
-.albumContain:hover, .albumContain:focus {
-  cursor: pointer;
-}
->>>.v-list-item__title, >>>.v-icon {
-  font-size: 0.8rem;
-}
 >>>.v-list-item {
   min-height: 2rem;
 }
 >>>.v-sheet {
   padding: 0;
-}
-.albumCover {
-  width: 100%;
-  height: auto;
-  border-radius: 2px;
-}
-.albumOverlay {
-  width:100%;
-	height:100%;
-	position:absolute;
-  background: rgb(255,255,255);
-  background: linear-gradient(180deg, rgba(0,0,0,0) 41%, rgba(0,0,0,0.5) 100%);
-  opacity: 0;
-  border-radius: 2px;
-}
-.albumOverlayActive {
-  opacity: 1;
-  border: 2px solid var(--primary-yellow);
-}
-.album-overlay-actions-contain {
-  position: absolute;
-  width: 100%;
-  bottom: 0;
-  right: 0;
-  display: flex;
-}
-.album-overlay-more {
-  opacity: 1;
-  align-self: flex-end;
-}
-.album-overlay-favorite {
-  opacity: 1;
-  align-self: flex-start;
-}
-.album-overlay:hover, .album-overlay:focus {
-  opacity:1;
 }
 .artistName {
   font-size: 0.8rem;
@@ -250,12 +171,13 @@ export default {
   opacity: 0.8;
 }
 .songName {
+  color: white;
   font-size: 0.75rem;
   margin-bottom: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  opacity: 0.8;
+  opacity: 0.9;
 }
 .songName:hover, .songName:focus {
   cursor: pointer;
@@ -267,47 +189,11 @@ export default {
   color: white;
   opacity: 1;
 }
-.albumCover:hover, .albumCover:focus {
-  cursor: pointer;
-  box-shadow: var(--shadow-heavy);
-}
 .textContain {
   display: flex;
   bottom: 0;
   width: 100%;
   padding-top: 0.5rem;
   flex-direction: column;
-  color: var(--primary-black-light);
-}
-.audioActionContain {
-	width: 2.5rem;
-	height: 2.5rem;
-	position: absolute;
-	display: flex;
-  opacity: 0;
-	border-radius: 50%;
-	align-items: center;
-	justify-content: center;
-}
-.audioActionContainActive {
-  opacity: 1;
-}
-.audioAction {
-  color: black;
-  font-size: 2.5rem;
-  background-color: var(--primary-red--dark);
-  border-radius: 50%;
-}
-.audioFavorite {
-  padding-right: 1rem;
-}
-.audioFavorite:hover, .audioFavorite:focus {
-  color: var(--primary-red);
-}
-.audioMore {
-  float: left;
-}
-.audioPause:hover, .audioPause:focus {
-  color: var(--primary-purple);
 }
 </style>

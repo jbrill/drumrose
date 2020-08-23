@@ -4,15 +4,15 @@ Song Views
 
 import json
 
-from api.models.core import Song, UserProfile
-from rest_framework.views import APIView
+from api.models.core import FavoritedTrack, Song, UserProfile
 from api.songs.serializers import SongSerializer
 from api.users.serializers import UserProfileSerializer
+from django.http import JsonResponse
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-
-
-# from django.shortcuts import get_object_or_404
-# from django.views.decorators.csrf import csrf_exempt, csrf_protect
+from rest_framework.views import APIView
+from rest_framework_auth0.authentication import Auth0JSONWebTokenAuthentication
 
 
 class SongList(APIView):
@@ -28,11 +28,7 @@ class SongList(APIView):
 
     def get(self, request):
         """
-        If 'feed'
-          # Grab followers
-            # Grab most recent posts
-        If 'discover'
-          # Grab recommended
+        Get all tracks
         """
         print(request)
         songs = Song.objects.all()
@@ -41,16 +37,17 @@ class SongList(APIView):
         return Response(serializer.data)
 
     def post(self, request):
-        # create new user
+        """
+        Create new user
+        """
         print(request)
         print(request.body.decode("utf-8"))
         request_body = json.loads(request.body.decode("utf-8"))
         print(type(request_body))
         print(request_body["name"])
         # print(request_body["handle"])
-        new_song = Song.objects.create(
-            name=request_body["name"],
-            apple_music_id=request_body["apple_music_id"],
+        new_song = Song.objects.create_song(
+            name=request_body["name"], apple_music_id=request_body["apple_music_id"]
         )
 
         serializer = SongSerializer(new_song)
@@ -70,11 +67,29 @@ class SongDetail(APIView):
             - Deletes a post
     """
 
-    def get(self, request, apple_music_id):
-        track = Song.objects.get(apple_music_id=apple_music_id)
+    authentication_classes = []
+    permission_classes = []
 
-        serializer = SongSerializer(track)
-        return Response(serializer.data)
+    def get(self, request, apple_music_id):
+        try:
+            song = Song.objects.get(apple_music_id=apple_music_id)
+        except Song.DoesNotExist:
+            return JsonResponse(
+                {"message": "Song does not exist."}, status=status.HTTP_409_CONFLICT
+            )
+
+        print(song.page_id)
+        is_favorited = False
+
+        # HACK: checks if 'logged in' by checking request username
+        if request.user.username:
+            is_favorited = FavoritedTrack.objects.filter(
+                user=request.user, song=song
+            ).exists()
+
+        serializer = SongSerializer(song, context={"is_favorited": is_favorited})
+
+        return JsonResponse({"track": serializer.data})
 
     def patch(self, request, post_id):
         print(request)

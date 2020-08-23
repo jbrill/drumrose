@@ -4,20 +4,19 @@ Factories for api
 import random
 
 import factory
-
-from faker import Faker
-from factory import fuzzy
 from api.models.core import (
-    Song,
     Album,
     Artist,
-    Playlist,
-    UserProfile,
     FavoritedAlbum,
-    FavoritedTrack,
     FavoritedPlaylist,
+    FavoritedTrack,
+    Playlist,
+    Song,
+    TrackReview,
+    UserProfile,
 )
-
+from factory import fuzzy
+from faker import Faker
 
 fake = Faker()
 
@@ -35,7 +34,7 @@ class SongFactory(factory.DjangoModelFactory):
         model = Song
 
     apple_music_id = fuzzy.FuzzyInteger(1469577142, 1469597142)
-    page_id = factory.Sequence(lambda n: "page %03d" % n)
+    page_id = fuzzy.FuzzyText()
 
 
 class AlbumFactory(factory.DjangoModelFactory):
@@ -72,8 +71,8 @@ class UserProfileFactory(factory.DjangoModelFactory):
         model = UserProfile
 
     auth0_user_id = fuzzy.FuzzyInteger(1469577142, 1469597142)
-    username = factory.Sequence(lambda n: "Agent %03d" % n)
-    email = factory.Sequence(lambda n: "person{}@example.com".format(n))
+    username = fuzzy.FuzzyText()
+    email = factory.Faker("email")
 
     @factory.post_generation
     def followers(self, create, extracted, **kwargs):
@@ -119,4 +118,14 @@ class FavoritedPlaylistFactory(factory.DjangoModelFactory):
         model = FavoritedPlaylist
 
     user = factory.SubFactory("api.models.factories.UserProfileFactory")
-    playlist = factory.SubFactory("api.models.factories.Playlist")
+    playlist = factory.SubFactory("api.models.factories.PlaylistFactory")
+
+
+class TrackReviewFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = TrackReview
+        django_get_or_create = ("user", "track")
+
+    user = factory.SubFactory("api.models.factories.UserProfileFactory")
+    track = factory.SubFactory("api.models.factories.SongFactory")
+    review = fuzzy.FuzzyText()

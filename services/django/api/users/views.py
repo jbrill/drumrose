@@ -3,24 +3,24 @@
 """
 
 import json
-
-from operator import attrgetter
 from itertools import chain
+from operator import attrgetter
 
-from django.http import JsonResponse
-from rest_framework import status
+from api.favorites.serializers import FavoritedSerializer
 from api.models.core import (
-    UserProfile,
     FavoritedAlbum,
-    FavoritedTrack,
     FavoritedPlaylist,
+    FavoritedTrack,
+    UserProfile,
 )
-from rest_framework.views import APIView
 from api.users.serializers import UserProfileSerializer
 from django.core.paginator import Paginator
+from django.http import JsonResponse
+from rest_framework import status
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from api.favorites.serializers import FavoritedSerializer
-from rest_framework.permissions import AllowAny
+from rest_framework.views import APIView
+from rest_framework_auth0.authentication import Auth0JSONWebTokenAuthentication
 
 
 class UserList(APIView):
@@ -34,7 +34,8 @@ class UserList(APIView):
             Creates a new user
     """
 
-    permission_classes = (AllowAny,)
+    authentication_classes = []
+    permission_classes = []
 
     def get(self, request):
         """
@@ -43,10 +44,9 @@ class UserList(APIView):
         Routes:
             Retrieves a list of all users
         """
-        print(request.user)
         users = UserProfile.objects.all()
         serializer = UserProfileSerializer(users, many=True)
-        return Response(serializer.data)
+        return JsonResponse({"users": serializer.data})
 
     def post(self, request):
         """
@@ -55,22 +55,52 @@ class UserList(APIView):
         Description
           Create a new user
         """
-        request_body = json.loads(request.body.decode("utf-8"))
-        data = {}
-        data["email"] = request_body["user"]["email"]
-        data["username"] = request_body["user"]["username"]
-        data["auth0_user_id"] = request_body["user"]["id"]
-        serializer = UserProfileSerializer(data=data)
+        try:
+            serializer = UserProfileSerializer(
+                data={
+                    "email": request.data["email"],
+                    "username": request.data["username"],
+                    "auth0_user_id": request.data["id"],
+                }
+            )
+        except KeyError:
+            return JsonResponse(
+                {"message": "Missing data required for serialization."},
+                status=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            )
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse(
+                serializer.data, status=status.HTTP_201_CREATED, safe=False
+            )
+        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class PopularUserList(APIView):
+    """
+    API View for User List
+    Routes:
+        GET /users/popular/
+            Retrieves a list of all users
+        POST /users/popular/
+            Creates a new user
+    """
+
+    authentication_classes = []
+    permission_classes = []
+
+    def get(self, request):
+        """
+        Fetches all users by popularity
+        """
+        users = UserProfile.objects.all()
+        serializer = UserProfileSerializer(users, many=True)
+        return JsonResponse({"users": serializer.data})
 
 
 class UserDetail(APIView):
     """
-    Description:
-        API View for User Detail
+    API View for User Detail
     Routes:
         GET /users/:user_handle
             Fetches a user
@@ -127,31 +157,27 @@ class FollowersList(APIView):
     Description:
         API View for Followers List
     Routes:
-        GET /followers/<user_id>/
+        GET /users/<user_id>/followers/
             Retrieves a list of all followers by user
-        POST /users/<user_id>/
+        POST /users/<user_id>/followers/
             Creates a new follower for that user
     """
 
     def get(self, request):
         """
         Description:
-            Fetches all users
-        Routes:
-            Retrieves a list of all users
+            Retrieves a list of all followers by user
         """
         followers = UserProfile.objects.filter(
-            user=UserProfile.objects.get(auth0_user_id=request.user)
-        )
+            user=UserProfile.objects.get(username=request.user.username)
+        ).followers
         serializer = UserProfileSerializer(followers, many=True)
         return Response(serializer.data)
 
     def post(self, request):
         """
-        Route
-          POST /users/
         Description
-          Create a new user
+          Creates a new follower request.user for the user by <user_id>
         """
         # request_body = json.loads(request.body.decode("utf-8"))
         # user_id = request.user
@@ -168,7 +194,7 @@ class UserFavoritesList(APIView):
     Description:
         API View for a User's Favorites
     Routes:
-        GET /<user_handle>/favorites/
+        GET /users/<user_handle>/favorites/
             Gets a list of favorites of a user
     """
 

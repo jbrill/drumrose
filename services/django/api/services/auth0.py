@@ -2,12 +2,9 @@ import os
 
 import requests
 
-
 AUTH0_MANAGEMENT_URL = "https://drumrose.auth0.com/api/v2/"
 
-TOKEN_EXPIRATION_ERR_MESSAGE = (
-    "Expired token received for JSON Web Token validation"
-)
+TOKEN_EXPIRATION_ERR_MESSAGE = "Expired token received for JSON Web Token validation"
 
 
 def _build_headers(_access_token_in):

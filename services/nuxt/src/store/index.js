@@ -102,7 +102,6 @@ export const getters = {
   },
   recentlyAdded (state) {
     return options => {
-      console.log(getApi(true).collection('recently-added', null, options));
       return getApi(true).collection('recently-added', null, options);
     };
   },
@@ -153,7 +152,7 @@ export const getters = {
       ).then( (r) => {
         return r.json()
       }).catch( (err) => {
-        console.log(err);
+        console.error(err);
         this.$sentry.captureException(err);
       });
     };
@@ -213,7 +212,6 @@ export const mutations = {
     state.nowPlayingItem = nowPlayingItem;
   },
   playbackTime (state, playbackTime) {
-    console.log(playbackTime)
     state.playbackTime = playbackTime;
   },
   volume (state, volume) {
@@ -669,9 +667,11 @@ export const actions = {
           resolve(true);
         } else {
           reject(MusicKit.MKError(MusicKit.MKError.SERVER_ERROR));
+          $sentry.captureException(err);
         }
       } catch (err) {
         reject(err);
+        $sentry.captureException(err);
       }
     });
   },
@@ -706,6 +706,7 @@ export const actions = {
           resolve(true);
         } else {
           reject(MusicKit.MKError(MusicKit.MKError.SERVER_ERROR));
+          $sentry.captureException(err);
         }
       } catch (err) {
         reject(err);
@@ -721,7 +722,6 @@ export const actions = {
        headers: apiHeaders()
      };
      const { data } = await axios(getHints);
-     console.log(data)
      return data;
   },
 };

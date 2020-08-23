@@ -5,7 +5,6 @@
       :user="post.user"
       :date="post.date"
       :type="post.postType"
-      :rating="post.rating"
     />
     <Album
       v-if="post.type == 'albums'"
@@ -16,20 +15,6 @@
     />
     <Track
       v-if="post.type == 'songs'"
-      isPlayable
-      isActionable
-      :id="post.id"
-      :attributes="post.attributes"
-    />
-    <Artist
-      v-if="post.type == 'artists'"
-      isPlayable
-      isActionable
-      :id="post.id"
-      :attributes="post.attributes"
-    />
-    <Station
-      v-if="post.type == 'stations'"
       isPlayable
       isActionable
       :id="post.id"
@@ -75,8 +60,6 @@ export default {
       type: String, 
       default: '',
     },
-  },
-  created: function() {
   },
 };
 </script>

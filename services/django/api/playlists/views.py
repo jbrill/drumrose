@@ -3,9 +3,10 @@ Playlist Route Definition
 """
 # pylint: disable=W0612,W0613
 
-from api.models.core import Playlist
+from api.models.core import FavoritedPlaylist, Playlist
 from api.playlists.serializers import PlaylistSerializer
-from rest_framework.response import Response
+from django.http import JsonResponse
+from rest_framework import status
 from rest_framework.views import APIView
 
 
@@ -24,10 +25,7 @@ class PlaylistList(APIView):
         """
         Returns a list of playlists
         """
-        playlists = Playlist.objects.all()
-
-        serializer = PlaylistSerializer(playlists, many=True)
-        return Response(serializer.data)
+        return
 
     def post(self, request):
         """
@@ -50,10 +48,34 @@ class PlaylistDetail(APIView):
     """
 
     def get(self, request, playlist_id):
+        """
+        Returns a serialized playlist
+        """
+        try:
+            playlist = Playlist.objects.get(id=playlist_id)
+        except Playlist.DoesNotExist:
+            return JsonResponse(
+                {"message": "Playlist does not exist."}, status=status.HTTP_409_CONFLICT
+            )
+        is_favorited = FavoritedPlaylist.objects.filter(
+            user=request.user, playlist=playlist
+        ).exists()
+
+        serializer = PlaylistSerializer(
+            playlist, context={"is_favorited": is_favorited}
+        )
+        return JsonResponse({"playlist": serializer.data})
+
+    def post(self, request):
+        """
+        Returns a 201 if successful
+        """
         pass
 
     def patch(self, request, playlist_id):
+        print(playlist_id)
         pass
 
     def delete(self, request, playlist_id):
+        print(playlist_id)
         pass

@@ -1,7 +1,7 @@
 <template>
   <div class="profileContain">
     <div
-      v-if="!loading"
+      v-if="!loading && trackInfo"
       class="track-contain"
     >
       <img
@@ -44,7 +44,7 @@ import { postFavorite } from '~/api/api';
 
 export default {
   data: () => ({
-    trackInfo: {},
+    trackInfo: null,
     loading: true,
   }),
   methods: {
@@ -57,12 +57,17 @@ export default {
     }
   },
   async mounted () {
-    const resp = await this.$store.getters.fetch(
-      `/v1/catalog/us/songs/${this.$route.params.id}`
-    );
-    console.log(resp)
-		this.trackInfo = resp.data[0];
-    this.loading = false;
+    try {
+      const resp = await this.$store.getters.fetch(
+        `/v1/catalog/us/songs/${this.$route.params.id}`
+      );
+      console.log(resp)
+      this.trackInfo = resp.data[0];
+      this.loading = false;
+    } catch (err) {
+      this.loading = false;
+      console.error(err);
+    }
   },
 };
 </script>

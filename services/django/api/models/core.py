@@ -4,8 +4,8 @@ Core Models for  API
 
 import uuid
 
+from api.services.auth0 import get_access_token, get_user
 from django.db import models
-from api.services.auth0 import get_user, get_access_token
 
 
 class BaseModel(models.Model):
@@ -71,15 +71,9 @@ class UserProfile(BaseModel):
     Model for a user profile
     """
 
-    auth0_user_id = models.CharField(
-        max_length=200, unique=True, blank=True, null=True,
-    )
-    username = models.CharField(
-        max_length=200, unique=True, blank=True, null=True,
-    )
-    email = models.EmailField(
-        max_length=200, unique=True, blank=True, null=True,
-    )
+    auth0_user_id = models.CharField(max_length=200, unique=True, blank=True, null=True)
+    username = models.CharField(max_length=200, unique=True, blank=True, null=True)
+    email = models.EmailField(max_length=200, unique=True, blank=True, null=True)
     followers = models.ManyToManyField("self", blank=True)
     blocked_users = models.ManyToManyField("self", blank=True)
 
@@ -89,12 +83,26 @@ class Artist(BaseModel):
     Model for an artist
     """
 
-    page_id = models.CharField(
-        max_length=100, null=True, blank=True, unique=True
-    )
+    page_id = models.CharField(max_length=100, null=True, blank=True, unique=True)
     apple_music_id = models.CharField(
         max_length=200, null=True, blank=True, unique=True
     )
+
+
+class SongManager(models.Manager):
+    def create(self, *args, **kwargs):
+        # TODO: fetch track info from apple music api
+        # apple_music_id = kwargs["apple_music_id"]
+        #
+        name = kwargs["name"]
+        name_list = name.split()
+        formatted_page_plain = "-".join(name_list)
+        kwargs["page_id"] = formatted_page_plain
+        count = Song.objects.filter(name=name).count()
+        if count:
+            kwargs["page_id"] = "{}-{}".format(formatted_page_plain, count)
+        song = super(SongManager, self).create(*args, **kwargs)
+        return song
 
 
 class Song(BaseModel):
@@ -102,12 +110,13 @@ class Song(BaseModel):
     Model for a song
     """
 
-    page_id = models.CharField(
-        max_length=100, null=True, blank=True, unique=True
-    )
+    name = models.CharField(max_length=100, null=True, blank=True)
     apple_music_id = models.CharField(
         max_length=200, null=True, blank=True, unique=True
     )
+    page_id = models.CharField(max_length=100, null=True, blank=True, unique=True)
+
+    objects = SongManager()
 
 
 class Album(BaseModel):
@@ -115,9 +124,7 @@ class Album(BaseModel):
     Model for an album
     """
 
-    page_id = models.CharField(
-        max_length=100, null=True, blank=True, unique=True
-    )
+    page_id = models.CharField(max_length=100, null=True, blank=True, unique=True)
     apple_music_id = models.CharField(
         max_length=200, null=True, blank=True, unique=True
     )
@@ -131,9 +138,7 @@ class Playlist(BaseModel):
     tracks = models.ManyToManyField("Song")
     title = models.CharField(max_length=64)
     caption = models.CharField(max_length=200)
-    page_id = models.CharField(
-        max_length=100, null=True, blank=True, unique=True
-    )
+    page_id = models.CharField(max_length=100, null=True, blank=True, unique=True)
     apple_music_id = models.CharField(
         max_length=200, null=True, blank=True, unique=True
     )
@@ -147,7 +152,7 @@ class Review(BaseModel):
     user = models.ForeignKey(
         UserProfile, blank=True, null=True, on_delete=models.CASCADE
     )
-    review = models.TextField(blank=True, null=True,)
+    review = models.TextField(blank=True, null=True)
 
     class Meta:
         """
@@ -165,10 +170,7 @@ class AlbumReview(Review):
     album = models.ForeignKey("Album", on_delete=models.CASCADE)
 
     class Meta:
-        unique_together = (
-            "user",
-            "album",
-        )
+        unique_together = ("user", "album")
 
 
 class TrackReview(Review):
@@ -179,10 +181,7 @@ class TrackReview(Review):
     track = models.ForeignKey("Song", on_delete=models.CASCADE)
 
     class Meta:
-        unique_together = (
-            "user",
-            "track",
-        )
+        unique_together = ("user", "track")
 
 
 class PlaylistReview(Review):
@@ -193,10 +192,7 @@ class PlaylistReview(Review):
     playlist = models.ForeignKey("Playlist", on_delete=models.CASCADE)
 
     class Meta:
-        unique_together = (
-            "user",
-            "playlist",
-        )
+        unique_together = ("user", "playlist")
 
 
 class FavoritedItem(BaseModel):
@@ -225,10 +221,7 @@ class FavoritedTrack(FavoritedItem):
     favorite_type = "track"
 
     class Meta:
-        unique_together = (
-            "user",
-            "song",
-        )
+        unique_together = ("user", "song")
 
 
 class FavoritedAlbum(FavoritedItem):
@@ -240,10 +233,7 @@ class FavoritedAlbum(FavoritedItem):
     favorite_type = "album"
 
     class Meta:
-        unique_together = (
-            "user",
-            "album",
-        )
+        unique_together = ("user", "album")
 
 
 class FavoritedPlaylist(FavoritedItem):
@@ -255,10 +245,7 @@ class FavoritedPlaylist(FavoritedItem):
     favorite_type = "playlist"
 
     class Meta:
-        unique_together = (
-            "user",
-            "playlist",
-        )
+        unique_together = ("user", "playlist")
 
 
 class ListenedItem(BaseModel):
@@ -287,7 +274,4 @@ class ListenedTrack(ListenedItem):
     listened_type = "track"
 
     class Meta:
-        unique_together = (
-            "user",
-            "track",
-        )
+        unique_together = ("user", "track")

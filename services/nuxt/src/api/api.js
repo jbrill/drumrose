@@ -4,6 +4,25 @@ import axios from 'axios';
 /*
  * Fetches reviews
  * */
+export const getTrackReviews = async (bearerToken) => {
+  try {
+    const response = await axios.get(
+      `https://teton.drumrose.io/api/reviews/tracks/`,
+      {
+        headers: {
+          Authorization: `${bearerToken}`,
+        },
+      }
+    );
+    return response;
+  } catch(err) {
+    throw new Error(err);
+  }
+}
+
+/*
+ * Fetches reviews
+ * */
 export const getReviews = async (bearerToken) => {
   try {
     const response = await axios.get(
@@ -191,5 +210,65 @@ export const favoriteTrack = async (bearerToken, appleMusicId) => {
     return {
       data: [],
     };
+  }
+};
+
+
+/*
+ * Fetches detail route for a track
+ * */
+export const getTrackDetail = async (bearerToken, appleMusicId) => {
+  try {
+    const response = await axios.get(
+      `https://teton.drumrose.io/api/tracks/${appleMusicId}/`,
+      {
+        headers: {
+          Authorization: `Bearer ${bearerToken}`,
+        },
+      }
+    );
+    return response;
+  } catch(err) {
+    throw new Error(err);
+  }
+};
+
+
+/*
+ * Fetches detail route for an album
+ * */
+export const getAlbumDetail = async (bearerToken, appleMusicId) => {
+  try {
+    const response = await axios.get(
+      `https://teton.drumrose.io/api/albums/${appleMusicId}/`,
+      {
+        headers: {
+          Authorization: `Bearer ${bearerToken}`,
+        },
+      }
+    );
+    return response;
+  } catch(err) {
+    throw new Error(err);
+  }
+};
+
+
+/*
+ * Fetches detail route for a playlist
+ * */
+export const getPlaylistDetail = async (bearerToken, appleMusicId) => {
+  try {
+    const response = await axios.get(
+      `https://teton.drumrose.io/api/playlists/${appleMusicId}/`,
+      {
+        headers: {
+          Authorization: `Bearer ${bearerToken}`,
+        },
+      }
+    );
+    return response;
+  } catch(err) {
+    throw new Error(err);
   }
 };

@@ -1,28 +1,42 @@
 <template>
-	<v-menu open-on-hover :close-on-content-click="false" top color="black" :offset-y="true" dark>
-		<template v-slot:activator="{ on }">
-			<v-btn
-				icon
-				v-on="on"
-			>
-				<v-icon color="white" class="album-overlay-more">
-					mdi-volume-vibrate
-				</v-icon>
-			</v-btn>
-		</template>
-	   <v-slider
+  <div class="volumeSlider">
+    <v-menu
+      :close-on-content-click="false"
+      top
+      :offset-y="true"
       dark
-			class="volume-slider"
-			v-model="volume"
-			append-icon="volume_up"
-      vertical
-			min="0"
-			max="100"
-		></v-slider>
-  </v-menu>
+      transition="slide-y-transition"
+      elevation="10"
+    >
+      <template v-slot:activator="{ on }">
+        <v-btn
+          icon
+          v-on="on"
+        >
+          <v-icon color="white" class="album-overlay-more">
+            mdi-volume-vibrate
+          </v-icon>
+        </v-btn>
+      </template>
+      <v-slider
+        dark
+        class="volume-slider"
+        v-model="mappedVolume"
+        vertical
+        min="0"
+        max="1"
+        step="0.01"
+        color="var(--primary-red)"
+        background-color="#272727"
+      >
+      </v-slider>
+    </v-menu>
+  </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
   props: {
     id: {
@@ -33,8 +47,18 @@ export default {
   data () {
     return {
       playlistDialog: false,
-      volume: 10,
     };
+  },
+  computed: {
+    ...mapState(['volume']),
+    mappedVolume: {
+      get() {
+        return this.volume;
+      },
+      set(val) {
+        this.$store.dispatch('setVolume', `${val}`);
+      }
+    }
   },
   methods: {
     addToQueue: function () {
@@ -48,4 +72,12 @@ export default {
 </script>
 
 <style scoped>
+.volumeSlider {
+  display:flex;
+  align-items: center;
+  padding: 5px;
+}
+.v-menu__content {
+  overflow-y: hidden !important;
+}
 </style>

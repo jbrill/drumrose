@@ -14,9 +14,9 @@ class AlbumTest(TestCase):
         """
         Tests retrieving a single album
         """
-        AlbumFactory(name="Test Album")
-        test_album = Album.objects.get(name="Test Album")
-        self.assertEqual(test_album.artwork_url, "test_url")
+        album = AlbumFactory()
+        self.assertTrue(Album.objects.count(), 25)
+        self.assertIsInstance(album, Album)
 
     def test_get_multiple_albums_simple(self):
         """

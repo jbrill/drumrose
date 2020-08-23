@@ -14,13 +14,11 @@ import json
 import os
 
 import requests
-
 from api.services.auth0 import get_access_token
 from api.utils.authenticate import jwt_get_username_from_payload_handler
 from api.utils.generate_apple_music_token import AppleMusicTokenGenerator
 from cryptography.hazmat.backends import default_backend
 from cryptography.x509 import load_pem_x509_certificate
-
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -37,12 +35,7 @@ if os.getenv("DEBUG") == "1":
     Debug = True
 
 # TODO: Revisit
-ALLOWED_HOSTS = [
-    "django-server",
-    "127.0.0.1",
-    "localhost",
-    "teton.drumrose.io",
-]
+ALLOWED_HOSTS = ["django-server", "127.0.0.1", "localhost", "teton.drumrose.io"]
 
 # Application definition
 INSTALLED_APPS = [
@@ -54,8 +47,9 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
-    "rest_framework_jwt",
     "corsheaders",
+    "rest_framework_jwt",
+    "rest_framework_auth0",
 ]
 
 MIDDLEWARE = [
@@ -88,9 +82,9 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-            ],
+            ]
         },
-    },
+    }
 ]
 
 WSGI_APPLICATION = "api.wsgi.application"
@@ -113,12 +107,10 @@ DATABASES = {
 # Rest Framework
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": (
-        "rest_framework.permissions.IsAuthenticated",
+        "rest_framework.permissions.IsAuthenticatedOrReadOnly",
     ),
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_jwt.authentication.JSONWebTokenAuthentication",
-        "rest_framework.authentication.SessionAuthentication",
-        "rest_framework.authentication.BasicAuthentication",
+        "rest_framework_auth0.authentication.Auth0JSONWebTokenAuthentication",
     ),
 }
 
@@ -127,17 +119,11 @@ REST_FRAMEWORK = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
     },
-    {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
-    },
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
 
@@ -146,7 +132,7 @@ APPLE_MUSIC_TEAM_ID = os.getenv("APPLE_MUSIC_TEAM_ID", None)
 APPLE_MUSIC_SECRET = os.getenv("APPLE_MUSIC_SECRET", None)
 
 APPLE_MUSIC_TOKEN_GENERATOR = AppleMusicTokenGenerator(
-    APPLE_MUSIC_SECRET, APPLE_MUSIC_KEY_ID, APPLE_MUSIC_TEAM_ID,
+    APPLE_MUSIC_SECRET, APPLE_MUSIC_KEY_ID, APPLE_MUSIC_TEAM_ID
 )
 
 
@@ -183,7 +169,7 @@ LOGGING = {
             "handlers": ["console"],
             "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
             "propagate": False,
-        },
+        }
     },
 }
 
@@ -203,13 +189,11 @@ if AUTH0_DOMAIN:
         + jwks["keys"][0]["x5c"][0]
         + "\n-----END CERTIFICATE-----"
     )
-    certificate = load_pem_x509_certificate(
-        cert.encode("utf-8"), default_backend()
-    )
+    certificate = load_pem_x509_certificate(cert.encode("utf-8"), default_backend())
     PUBLIC_KEY = certificate.public_key()
     JWT_ISSUER = "https://" + AUTH0_DOMAIN + "/"
 
-
+"""
 JWT_AUTH = {
     "JWT_PAYLOAD_GET_USERNAME_HANDLER": jwt_get_username_from_payload_handler,
     "JWT_PUBLIC_KEY": PUBLIC_KEY,
@@ -217,4 +201,24 @@ JWT_AUTH = {
     "JWT_AUDIENCE": API_IDENTIFIER,
     "JWT_ISSUER": JWT_ISSUER,
     "JWT_AUTH_HEADER_PREFIX": "Bearer",
+}
+"""
+#
+#
+# AUTH0 SETTINGS
+AUTH0 = {
+    "CLIENTS": {
+        "default": {
+            "AUTH0_CLIENT_ID": "ApqgC9UHWyDV0Qb6rv3cby0gP47u5ZmO",
+            "AUTH0_AUDIENCE": API_IDENTIFIER,
+            "AUTH0_ALGORITHM": "RS256",  # default used in Auth0 apps
+            "PUBLIC_KEY": PUBLIC_KEY,
+        }
+    },
+    # Management API - For roles and permissions validation
+    "MANAGEMENT_API": {
+        "AUTH0_DOMAIN": "<YOUR_AUTH0_DOMAIN>",
+        "AUTH0_CLIENT_ID": "<YOUR_AUTH0_M2M_API_MANAGEMENT_CLIENT_ID>",
+        "AUTH0_CLIENT_SECRET": "<YOUR_AUTH0_M2M_API_MANAGEMENT_CLIENT_SECRET>",
+    },
 }

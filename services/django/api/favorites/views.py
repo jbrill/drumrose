@@ -3,31 +3,32 @@ Favorites Route Definitions
 """
 # pylint: disable=W0612,W0613
 import json
-
-from operator import attrgetter
 from itertools import chain
+from operator import attrgetter
 
-from django.http import JsonResponse
-from rest_framework import status
+from api.favorites.serializers import (
+    FavoritedAlbumSerializer,
+    FavoritedPlaylistSerializer,
+    FavoritedSerializer,
+    FavoritedTrackSerializer,
+)
 from api.models.core import (
-    Song,
     Album,
     Artist,
-    UserProfile,
     FavoritedAlbum,
-    FavoritedTrack,
     FavoritedPlaylist,
+    FavoritedTrack,
+    Song,
+    UserProfile,
 )
-from django.db.models import Q
-from rest_framework.views import APIView
 from api.users.serializers import UserProfileSerializer
 from django.core.paginator import Paginator
-from api.favorites.serializers import (
-    FavoritedSerializer,
-    FavoritedAlbumSerializer,
-    FavoritedTrackSerializer,
-    FavoritedPlaylistSerializer,
-)
+from django.db.models import Q
+from django.http import JsonResponse
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
+from rest_framework_auth0.authentication import Auth0JSONWebTokenAuthentication
 
 
 class FavoriteTracksList(APIView):
@@ -39,8 +40,8 @@ class FavoriteTracksList(APIView):
             Gets a list of favorited tracks
     """
 
-    authentication_classes = []
-    permission_classes = []
+    authentication_classes = [Auth0JSONWebTokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
         """
@@ -55,29 +56,25 @@ class FavoriteTracksList(APIView):
         """
         Create favorited track
         """
-        print(request.body)
-        print(request.user.username)
-        print("request.user.username")
-        user = UserProfile.objects.get(auth0_user_id=request.user.username)
-        song, song_created = Song.objects.get_or_create(
-            apple_music_id=request.data["id"]
-        )
-        print(vars(song))
-        print(user)
-        favorited_item, created = FavoritedTrack.objects.get_or_create(
-            song=song, user=user
-        )
-        serializer = FavoritedTrackSerializer(
-            data={"user": user, "song": song}
-        )
+        try:
+            serializer = FavoritedTrackSerializer(
+                data={
+                    "apple_music_id": request.data["apple_music_id"],
+                    "name": request.data["name"],
+                },
+                context={"request": request},
+            )
+        except KeyError:
+            return JsonResponse(
+                {"message": "Missing data required for serialization."},
+                status=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            )
         if serializer.is_valid():
             serializer.save()
             return JsonResponse(
                 serializer.data, status=status.HTTP_201_CREATED, safe=False
             )
-        return JsonResponse(
-            serializer.errors, status=status.HTTP_400_BAD_REQUEST
-        )
+        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class FavoriteAlbumList(APIView):
@@ -91,8 +88,8 @@ class FavoriteAlbumList(APIView):
             Creates a new favorited album
     """
 
-    authentication_classes = []
-    permission_classes = []
+    authentication_classes = [Auth0JSONWebTokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
         """
@@ -107,7 +104,25 @@ class FavoriteAlbumList(APIView):
         """
         Create favorited album
         """
-        return
+        try:
+            serializer = FavoritedAlbumSerializer(
+                data={
+                    "apple_music_id": request.data["apple_music_id"],
+                    "name": request.data["name"],
+                },
+                context={"request": request},
+            )
+        except KeyError:
+            return JsonResponse(
+                {"message": "Missing data required for serialization."},
+                status=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            )
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(
+                serializer.data, status=status.HTTP_201_CREATED, safe=False
+            )
+        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class FavoritePlaylistList(APIView):
@@ -121,8 +136,8 @@ class FavoritePlaylistList(APIView):
             - Creates a new favorited playlist
     """
 
-    authentication_classes = []
-    permission_classes = []
+    authentication_classes = [Auth0JSONWebTokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
         """
@@ -130,9 +145,7 @@ class FavoritePlaylistList(APIView):
         """
         favorited_playlists = FavoritedPlaylist.objects.all()
 
-        serializer = FavoritedPlaylistSerializer(
-            favorited_playlists, many=True
-        )
+        serializer = FavoritedPlaylistSerializer(favorited_playlists, many=True)
         return JsonResponse(serializer.data, safe=False)
 
     def post(self, request):
@@ -151,6 +164,9 @@ class FollowersFavoritesList(APIView):
         GET /favorites/
             Gets a list of followers' favorites
     """
+
+    authentication_classes = [Auth0JSONWebTokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
         """
@@ -182,6 +198,9 @@ class FavoritesList(APIView):
             Gets a list of favorites
     """
 
+    authentication_classes = [Auth0JSONWebTokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
         """
         Get favorites
@@ -200,33 +219,4 @@ class FavoritesList(APIView):
         page = query.page(1)
         favorites = page.object_list
         serializer = FavoritedSerializer(favorites, many=True)
-        return JsonResponse(serializer.data, safe=False)
-
-    def post(self, request):
-        """
-        Post favorite
-        """
-        user = UserProfile.objects.get(auth0_user_id=request.user)
-        if request.data["type"] == "song":
-            song, song_created = Song.objects.get_or_create(
-                apple_music_id=request.data["id"]
-            )
-            favorited_item, created = FavoritedTrack.objects.get_or_create(
-                song=song, user=user
-            )
-        elif request.data["type"] == "playlist":
-            song, song_created = Artist.objects.get_or_create(
-                apple_music_id=request.data["id"]
-            )
-            favorited_item, created = FavoritedPlaylist.objects.get_or_create(
-                song=song, user=user
-            )
-        elif request.data["type"] == "album":
-            song, song_created = Album.objects.get_or_create(
-                apple_music_id=request.data["id"]
-            )
-            favorited_item, created = FavoritedAlbum.objects.get_or_create(
-                song=song, user=user
-            )
-        serializer = FavoritedSerializer(favorited_item)
         return JsonResponse(serializer.data, safe=False)

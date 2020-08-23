@@ -1,27 +1,26 @@
 import json
 
-from django.test import TestCase, RequestFactory
-from django.urls import reverse
-from rest_framework import status
-from api.models.core import FavoritedAlbum, FavoritedTrack, FavoritedPlaylist
-from api.favorites.views import FavoritesList, FavoriteTracksList
-from rest_framework.test import APIRequestFactory, force_authenticate
-from api.models.factories import (
-    SongFactory,
-    AlbumFactory,
-    PlaylistFactory,
-    UserProfileFactory,
-    FavoritedAlbumFactory,
-    FavoritedTrackFactory,
-    FavoritedPlaylistFactory,
-)
-from api.tests.api_tests.util import get_test_token
 from api.favorites.serializers import (
     FavoritedAlbumSerializer,
-    FavoritedTrackSerializer,
     FavoritedPlaylistSerializer,
+    FavoritedTrackSerializer,
 )
-
+from api.favorites.views import FavoritesList, FavoriteTracksList
+from api.models.core import FavoritedAlbum, FavoritedPlaylist, FavoritedTrack
+from api.models.factories import (
+    AlbumFactory,
+    FavoritedAlbumFactory,
+    FavoritedPlaylistFactory,
+    FavoritedTrackFactory,
+    PlaylistFactory,
+    SongFactory,
+    UserProfileFactory,
+)
+from api.tests.api_tests.util import get_test_token
+from django.test import RequestFactory, TestCase
+from django.urls import reverse
+from rest_framework import status
+from rest_framework.test import APIRequestFactory, force_authenticate
 
 factory = APIRequestFactory()
 
@@ -66,9 +65,7 @@ class FavoritesTest(TestCase):
         )
         response = view(request)
         favorited_response = json.loads(response.content)
-        favorited_track = FavoritedTrack.objects.get(
-            id=self.favorited_track.id
-        )
+        favorited_track = FavoritedTrack.objects.get(id=self.favorited_track.id)
         serializer = FavoritedTrackSerializer(favorited_track)
         self.assertEqual(
             favorited_response[0]["user"]["username"],
@@ -85,9 +82,7 @@ class FavoritesTest(TestCase):
             HTTP_AUTHORIZATION="Bearer " + self.token,
         )
         response = view(request)
-        favorited_track = FavoritedTrack.objects.get(
-            id=self.favorited_track.id
-        )
+        favorited_track = FavoritedTrack.objects.get(id=self.favorited_track.id)
         serializer = FavoritedTrackSerializer(favorited_track)
         favorited_track_response = json.loads(response.content)
         self.assertEqual(
@@ -103,9 +98,7 @@ class FavoritesTest(TestCase):
             data={},
             HTTP_AUTHORIZATION="Bearer " + self.token,
         )
-        favorited_album = FavoritedAlbum.objects.get(
-            id=self.favorited_album.id
-        )
+        favorited_album = FavoritedAlbum.objects.get(id=self.favorited_album.id)
         serializer = FavoritedAlbumSerializer(favorited_album)
         favorited_album_response = response.json()
 
@@ -138,15 +131,14 @@ class FavoritesTest(TestCase):
         request = factory.post(
             reverse("FavoriteTracksList"),
             content_type="application/json",
-            data={"id": self.favorited_track.id},
+            data={"track_id": self.favorited_track.id, "track_name": "test"},
             HTTP_AUTHORIZATION="Bearer " + self.token,
         )
-        request.user = self.user.auth0_user_id
         response = view(request)
-        favorited_track = FavoritedTrack.objects.get(
-            id=self.favorited_track.id
-        )
+        print(response)
+        favorited_track = FavoritedTrack.objects.get(id=self.favorited_track.id)
         serializer = FavoritedTrackSerializer(favorited_track)
+        print(response.content)
         favorited_track_response = json.loads(response.content)
         self.assertEqual(
             favorited_track_response[0]["user"]["username"],

@@ -25,6 +25,22 @@ export default {
   computed: mapState(['nowPlayingItem', 'nowPlayingPost', 'playbackState']),
   methods: {
   },
+  async created () {
+    try {
+      const resp = await getPlaylistDetail(
+        this.$auth.getToken('auth0'),
+        this.id
+      )
+      console.log(resp)
+      this.pageId = resp.data.playlist.page_id
+    } catch (err) {
+      console.error(err.response)
+      if (err.response == 409) {
+        console.log("409!")
+      }
+      console.error(err)
+    }
+  },
 };
 </script>
 

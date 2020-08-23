@@ -1,95 +1,78 @@
 <template>
-  <div v-if="playbackTime" class="audioPlayer">
+  <div style="z-index: 10" v-if="playbackTime" class="audioPlayer">
     <div class="musicControls">
-      <v-icon
+      <v-btn
+        icon
         ref="musicPrev"
         @click="prevMusic"
-      >mdi-skip-previous</v-icon>
-      <v-icon
+      >
+        <v-icon>mdi-skip-previous</v-icon>
+      </v-btn>
+      <v-btn
+        icon
         v-if="playbackState === 3"
         @click="playTrack"
-      >mdi-play</v-icon>
-      <v-icon
+      >
+        <v-icon>mdi-play</v-icon>
+      </v-btn>
+      <v-btn
+        icon
         v-else
         @click="pauseTrack"
-      >mdi-pause</v-icon>
-      <v-icon
+      >
+        <v-icon>mdi-pause</v-icon>
+      </v-btn>
+      <v-btn
+        icon
         ref="musicNext"
         @click="nextMusic"
-      >mdi-skip-next</v-icon>
-      <v-icon
+      >
+        <v-icon>mdi-skip-next</v-icon>
+      </v-btn>
+      <v-btn
+        icon
         small
         @click="shuffleTrack"
-      >mdi-shuffle</v-icon>
-      <v-icon
+      >
+        <v-icon x-small>mdi-shuffle</v-icon>
+      </v-btn>
+      <v-btn
+        icon
         small
         v-if="$store.state.repeatMode === 1"
         @click="repeatTrack"
         color="var(--primary-red)"
-      >mdi-repeat-once</v-icon>
-      <v-icon
+      >
+        <v-icon x-small>mdi-repeat-once</v-icon>
+      </v-btn>
+      <v-btn
+        icon
         small
         v-else-if="$store.state.repeatMode === 2"
         @click="repeatTrack"
         color="var(--primary-red)"
-      >mdi-repeat</v-icon>
-      <v-icon
+      >
+        <v-icon x-small>mdi-repeat</v-icon>
+      </v-btn>
+      <v-btn
+        icon
         small
         v-else
         @click="repeatTrack"
-      >mdi-repeat-off</v-icon>
+      >
+        <v-icon x-small>mdi-repeat-off</v-icon>
+      </v-btn>
     </div>
     <PostTimeline />
-    <div class="volumeControls">
-      <VolumeSlider />
-    </div>
-    <div
-      class="nowPlayingContain"
-    >
-      <div v-if="nowPlayingItem" class="audio-player-artwork">
-        <span
-          :style="{
-            backgroundImage:
-              'url(' + nowPlayingItem.attributes.artwork.url + ')',
-            backgroundSize: 'cover'
-          }"
-        />
-      </div>
-      <div v-else class="audio-player-artwork">
-        <v-icon>mdi-person
-        </v-icon>
-      </div>
-      <div v-if="nowPlayingItem" class="nowPlayingItem">
-        <span ref="songName">
-          <v-btn dark text x-small nuxt to="/">{{ nowPlayingItem.attributes.name }}</v-btn>
-        </span>
-        <span ref="trackArtist">
-          <v-btn dark text x-small nuxt to="/">{{ nowPlayingItem.attributes.artistName }}</v-btn>
-        </span>
-      </div>
-      <div v-else>
-        <span ref="trackArtist">
-          Artist
-        </span>
-        <span ref="songName">
-          Track
-        </span>
-      </div>
-      <v-icon
-        @click="favoriteTrack"
-        small
-      >mdi-heart</v-icon>
-      <v-icon
-        small
-        @click="showQueue"
-      >queue_music</v-icon>
-    </div>
+    <VolumeSlider />
+    <Queue />
   </div>
 </template>
 
 <script>
-import PostTimeline from "~/components/PostTimeline";
-import VolumeSlider from "~/components/AudioPlayer/VolumeSlider.vue";
+import PostTimeline from "~/components/AudioPlayer/PostTimeline";
+import Queue from "~/components/AudioPlayer/Queue";
+import VolumeSlider from "~/components/AudioPlayer/VolumeSlider";
 
 import { postFavorite, getTrackInfo } from "~/api/api";
 
@@ -99,14 +82,11 @@ import { mapState } from "vuex";
 export default {
   components: {
     PostTimeline,
-    VolumeSlider
-  },
-  data () {
-    return {
-    }
+    VolumeSlider,
+    Queue,
   },
   computed: {
-    ...mapState(['nowPlayingItem', 'queue', 'playbackState', 'playbackTime']),
+    ...mapState(['queue', 'playbackState', 'playbackTime']),
     isFavorited () {
       const favorited = this.$refs.songName;
       if (element.offsetWidth < element.scrollWidth) {
@@ -128,9 +108,6 @@ export default {
     nextMusic () {
       this.$store.dispatch("next")
     },
-    moreMusic () {
-      console.log('MORE...');
-    },
     repeatTrack () {
       this.$store.dispatch("toggleRepeatMode");
     },
@@ -140,23 +117,7 @@ export default {
     changeVolume () {
       console.log("VOLUME");
     },
-    showQueue () {
-      console.log("queueueue");
-    },
-    async favoriteTrack () {
-      console.log("favorite");
-      if (this.$auth.loggedIn) {
-        await postFavorite(this.$auth.getToken('auth0'), { 'type': this.nowPlayingItem.type, 'id': this.nowPlayingItem.id });
-        
-      }
-    },
   },
-	watch: {
-    count (newCount, oldCount) {
-      // Our fancy notification (2).
-      console.log(`We have ${newCount} fruits now, yay!`)
-    }
-  }
 };
 </script>
 
@@ -191,19 +152,6 @@ export default {
 >>>.playModeActive {
   color: var(--primary-red) !important;
 }
-.nowPlayingContain {
-  width: 35%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.nowPlayingItem {
-  width: 75%;
-  display: flex;
-  justify-content: center;
-	flex-direction: column;
-}
-
 .audio-play__contain i {
   color: white;
   padding-top: 2.5px; /* slight nudge down */
@@ -277,33 +225,11 @@ export default {
   align-items: center;
   padding: 1rem;
 }
-.musicNavigationControls i {
-  color: white;
+>>>.v-icon {
+  opacity: 0.8;
   font-size: 1rem;
 }
-.volume-button {
-  color: white;
-  align-self: center;
-  margin: 0 auto;
-}
-.volume-button:hover, .volume-button:focus {
-  color: var(--primary-yellow);
-}
-.queue-button {
-  color: white;
-  align-self: center;
-  margin: 0 auto;
-}
-.queue-button:hover, .queue-button:focus {
-  color: var(--primary-yellow);
-}
-.favorite-button {
-  color: white;
-  align-self: center;
-  margin: 0 auto;
-  font-size: 0.9rem;
-}
-.favorite-button:hover, .favorite-button:focus {
-  color: var(--primary-red);
+>>>.v-icon:hover, >>>.v-icon:focus {
+  opacity: 1;
 }
 </style>

@@ -10,12 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
-import json
 import os
 
 import requests
 from api.services.auth0 import get_access_token
-from api.utils.authenticate import jwt_get_username_from_payload_handler
 from api.utils.generate_apple_music_token import AppleMusicTokenGenerator
 from cryptography.hazmat.backends import default_backend
 from cryptography.x509 import load_pem_x509_certificate
@@ -193,19 +191,6 @@ if AUTH0_DOMAIN:
     PUBLIC_KEY = certificate.public_key()
     JWT_ISSUER = "https://" + AUTH0_DOMAIN + "/"
 
-"""
-JWT_AUTH = {
-    "JWT_PAYLOAD_GET_USERNAME_HANDLER": jwt_get_username_from_payload_handler,
-    "JWT_PUBLIC_KEY": PUBLIC_KEY,
-    "JWT_ALGORITHM": "RS256",
-    "JWT_AUDIENCE": API_IDENTIFIER,
-    "JWT_ISSUER": JWT_ISSUER,
-    "JWT_AUTH_HEADER_PREFIX": "Bearer",
-}
-"""
-#
-#
-# AUTH0 SETTINGS
 AUTH0 = {
     "CLIENTS": {
         "default": {

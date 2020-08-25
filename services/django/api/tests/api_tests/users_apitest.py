@@ -7,11 +7,11 @@ from api.models.core import UserProfile
 from api.models.factories import UserProfileFactory
 from api.tests.api_tests.util import get_test_token
 from api.users.serializers import UserProfileSerializer
-from api.users.views import UserDetail, UserList
-from django.test import RequestFactory, TestCase
+from api.users.views import UserList
+from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
-from rest_framework.test import APIRequestFactory, force_authenticate
+from rest_framework.test import APIRequestFactory
 
 factory = APIRequestFactory()
 

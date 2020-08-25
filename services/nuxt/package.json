@@ -5,9 +5,9 @@
   "author": "Drumrose",
   "private": true,
   "scripts": {
-    "dev": "HOST=0.0.0.0 PORT=3000 nuxt",
-    "build": "nuxt build",
-    "start": "nuxt start",
+    "dev": "HOST=0.0.0.0 PORT=3000 --max-old-space-size=4096 nuxt",
+    "build": "nuxt --max-old-space-size=4096 build",
+    "start": "nuxt --max-old-space-size=4096  start",
     "generate": "nuxt generate",
     "cypress:open": "cypress open",
     "lint": "npm run lint:eslint && npm run lint:stylelint",

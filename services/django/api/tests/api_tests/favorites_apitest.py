@@ -17,10 +17,10 @@ from api.models.factories import (
     UserProfileFactory,
 )
 from api.tests.api_tests.util import get_test_token
-from django.test import RequestFactory, TestCase
+from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
-from rest_framework.test import APIRequestFactory, force_authenticate
+from rest_framework.test import APIRequestFactory
 
 factory = APIRequestFactory()
 

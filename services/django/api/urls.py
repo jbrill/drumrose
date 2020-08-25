@@ -5,7 +5,6 @@ from api import views as api_routes
 from api.albums import views as album_routes
 from api.apple_music_token import views as apple_music_token_routes
 from api.artists import views as artist_routes
-from api.auth import views as auth_routes
 from api.favorites import views as favorite_routes
 from api.playlists import views as playlist_routes
 from api.reviews import views as review_routes

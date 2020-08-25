@@ -16,7 +16,7 @@ class SongSerializerTest(TestCase):
         """
         Test single song serializer
         """
-        song = SongFactory(apple_music_id="1422627289")
+        song = SongFactory(apple_music_id="1422627289", name="I Want You")
 
         # Do the serialization
         serialized_song = SongSerializer(song, many=False).data

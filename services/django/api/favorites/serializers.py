@@ -1,10 +1,11 @@
 """
 Module contains serializers for favorites
 """
+# pylint: disable=W0221
+
 from api.albums.serializers import AlbumSerializer
 from api.models.core import (
     Album,
-    Auth0ManagementToken,
     FavoritedAlbum,
     FavoritedPlaylist,
     FavoritedTrack,
@@ -13,7 +14,6 @@ from api.models.core import (
     UserProfile,
 )
 from api.playlists.serializers import PlaylistSerializer
-from api.services.auth0 import get_user
 from api.songs.serializers import SongSerializer
 from api.users.serializers import UserProfileSerializer
 from django.db import transaction

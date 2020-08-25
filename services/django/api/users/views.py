@@ -1,5 +1,5 @@
 """
- User Route Module
+User Route Module
 """
 
 import json
@@ -17,10 +17,8 @@ from api.users.serializers import UserProfileSerializer
 from django.core.paginator import Paginator
 from django.http import JsonResponse
 from rest_framework import status
-from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework_auth0.authentication import Auth0JSONWebTokenAuthentication
 
 
 class UserList(APIView):

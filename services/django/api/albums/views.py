@@ -80,11 +80,11 @@ class AlbumDetail(APIView):
         Update an album
         """
         print(post_id)
-        pass
+        return JsonResponse({})
 
     def delete(self, request, post_id):
         """
         Delete an album
         """
         print(post_id)
-        pass
+        return JsonResponse({})

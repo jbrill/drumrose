@@ -2,7 +2,6 @@
 Favorites Route Definitions
 """
 # pylint: disable=W0612,W0613
-import json
 from itertools import chain
 from operator import attrgetter
 
@@ -12,18 +11,8 @@ from api.favorites.serializers import (
     FavoritedSerializer,
     FavoritedTrackSerializer,
 )
-from api.models.core import (
-    Album,
-    Artist,
-    FavoritedAlbum,
-    FavoritedPlaylist,
-    FavoritedTrack,
-    Song,
-    UserProfile,
-)
-from api.users.serializers import UserProfileSerializer
+from api.models.core import FavoritedAlbum, FavoritedPlaylist, FavoritedTrack
 from django.core.paginator import Paginator
-from django.db.models import Q
 from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated

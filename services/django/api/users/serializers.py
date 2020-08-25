@@ -11,13 +11,13 @@ class UserProfileSerializer(serializers.ModelSerializer):
         model = UserProfile
         fields = "__all__"
 
-    def validate(self, data):
+    def validate_email(self, value):
         """
         Validate uniqueness constraints
         """
-        if UserProfile.objects.filter(email=data.get("email")).count():
+        if UserProfile.objects.filter(email=value).count():
             raise serializers.ValidationError("A user with this email already exists.")
-        return data
+        return value
 
     def create(self, validated_data):
         user = UserProfile.objects.create(**validated_data)

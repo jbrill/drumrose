@@ -5,7 +5,6 @@ Module contains serializers for favorites
 from api.albums.serializers import AlbumSerializer
 from api.models.core import AlbumReview, PlaylistReview, TrackReview
 from api.playlists.serializers import PlaylistSerializer
-from api.services.auth0 import get_user
 from api.songs.serializers import SongSerializer
 from api.users.serializers import UserProfileSerializer
 from rest_framework import serializers

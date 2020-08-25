@@ -2,9 +2,11 @@
 Core Models for  API
 """
 
+# pylint: disable=W0222
+
 import uuid
 
-from api.services.auth0 import get_access_token, get_user
+from api.services.auth0 import get_access_token
 from django.db import models
 
 

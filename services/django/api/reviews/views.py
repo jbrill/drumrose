@@ -1,27 +1,19 @@
 """
 Reivews Route Definitions
 """
+
 # pylint: disable=W0612,W0613
-import json
 from itertools import chain
 from operator import attrgetter
 
-from api.models.core import (
-    AlbumReview,
-    PlaylistReview,
-    Review,
-    TrackReview,
-    UserProfile,
-)
+from api.models.core import AlbumReview, PlaylistReview, TrackReview
 from api.reviews.serializers import (
     AlbumReviewSerializer,
     PlaylistReviewSerializer,
     ReviewSerializer,
     TrackReviewSerializer,
 )
-from api.users.serializers import UserProfileSerializer
 from django.core.paginator import Paginator
-from django.db.models import Q
 from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated

@@ -1,7 +1,7 @@
 <template>
   <div class="profileContain">
-    <p>
-      Find more music lovers here.
+    <p style="text-align: center">
+      Find friends passionate about music
     </p>
     <div class="peopleContain">
       {{ users }}

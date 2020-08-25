@@ -70,12 +70,12 @@ class PlaylistDetail(APIView):
         """
         Returns a 201 if successful
         """
-        pass
+        return JsonResponse({})
 
     def patch(self, request, playlist_id):
         print(playlist_id)
-        pass
+        return JsonResponse({})
 
     def delete(self, request, playlist_id):
         print(playlist_id)
-        pass
+        return JsonResponse({})

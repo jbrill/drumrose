@@ -20,7 +20,7 @@ _test-views:
 	coverage run --source . services/django/manage.py test services/django/api/tests/api_tests/ -v2 --pattern="*_apitest.py"
 
 dtest-lint:
-	docker exec -t drumrose_nuxt-server_1 bash -c "npm run lint;"
+	docker exec -t drumrose_nuxt-server_1 /bin/sh -c "npm run lint;"
 
 _test-serializers:
 	coverage run --source . services/django/manage.py test services/django/api/tests/serializer_tests/ -v2 --pattern="test_*.py"

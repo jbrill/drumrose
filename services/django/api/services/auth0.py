@@ -40,12 +40,7 @@ def get_access_token():
 
 
 def auth0_request(url_in, token_in):
-    res = requests.get(url_in, headers=_build_headers(token_in)).json()
-
-    if "message" in res and res["message"] == TOKEN_EXPIRATION_ERR_MESSAGE:
-        return
-
-    return res
+    return requests.get(url_in, headers=_build_headers(token_in)).json()
 
 
 def get_user(user_id, token):

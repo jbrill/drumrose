@@ -1,7 +1,6 @@
 """
 Favorites Serializers Test Module
 """
-from unittest.mock import Mock, patch
 
 from api.favorites.serializers import (
     FavoritedAlbumSerializer,
@@ -28,7 +27,7 @@ class FavoritedTrackSerializerTest(TestCase):
         Creates models on setup
         """
         self.user = UserProfileFactory.create(username="test_user")
-        self.song = SongFactory.create(apple_music_id="1422627289")
+        self.song = SongFactory.create(name="I Want You", apple_music_id="1422627289")
 
     def test_favorited_track_serializer_single(self):
         """
@@ -47,12 +46,6 @@ class FavoritedTrackSerializerTest(TestCase):
             str(favorited_track.song.apple_music_id),
         )
         self.assertEqual(serialized_favorited_track["user"]["username"], "test_user")
-
-    def test_favorited_track_create_many(self):
-        """
-        Test many track serializer
-        """
-        pass
 
     def test_favorited_track_duplicate(self):
         """

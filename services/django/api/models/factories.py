@@ -1,7 +1,6 @@
 """
-Factories for api
+Factories
 """
-import random
 
 import factory
 from api.models.core import (
@@ -34,7 +33,7 @@ class SongFactory(factory.DjangoModelFactory):
         model = Song
 
     apple_music_id = fuzzy.FuzzyInteger(1469577142, 1469597142)
-    page_id = fuzzy.FuzzyText()
+    name = fuzzy.FuzzyText()
 
 
 class AlbumFactory(factory.DjangoModelFactory):
@@ -55,7 +54,7 @@ class PlaylistFactory(factory.DjangoModelFactory):
     title = fuzzy.FuzzyText()
 
     @factory.post_generation
-    def tracks(self, create, extracted, **kwargs):
+    def tracks(self, create, extracted):
         if not create:
             # Simple build, do nothing.
             return
@@ -75,7 +74,7 @@ class UserProfileFactory(factory.DjangoModelFactory):
     email = factory.Faker("email")
 
     @factory.post_generation
-    def followers(self, create, extracted, **kwargs):
+    def followers(self, create, extracted):
         if not create:
             # Simple build, do nothing.
             return
@@ -86,7 +85,7 @@ class UserProfileFactory(factory.DjangoModelFactory):
                 self.followers.add(follower)
 
     @factory.post_generation
-    def blocked_users(self, create, extracted, **kwargs):
+    def blocked_users(self, create, extracted):
         if not create:
             # Simple build, do nothing.
             return

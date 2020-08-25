@@ -35,9 +35,9 @@
       title="Fresh Reviews From Friends"
       :carousel-items="reviews"
     />
-    <v-divider />
+    <v-divider v-if="listeningHistory.length" />
     <CarouselSection
-      v-if="listeningHistory"
+      v-if="listeningHistory.length"
       title="Listening History"
       :carousel-items="listeningHistory"
     />

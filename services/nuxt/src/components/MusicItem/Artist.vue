@@ -1,113 +1,113 @@
 <template>
   <div>
     <div class="artworkContain">
+      <div
+        class="noselect albumContain"
+        @mouseenter="isHovering = true"
+        @mouseleave="isHovering = false"
+      >
+        <img class="albumCover" :src="appleImage">
         <div
-          class="noselect albumContain"
-          @mouseenter="isHovering = true"
-          @mouseleave="isHovering = false"
+          v-if="isActionable"
+          ref="albumOverlay"
+          :class="{
+            albumOverlay: true,
+            albumOverlayActive: isHovering
+          }"
         >
-          <img class="albumCover" :src="appleImage"/>
-          <div
-            v-if="isActionable"
-            ref="albumOverlay"
-            :class="{
-              albumOverlay: true,
-              albumOverlayActive: isHovering
-            }"
-          >
-            <div class="album-overlay-actions-contain">
-              <v-btn
-                icon
-                dark
-                @click="favoriteItem"
-              >
-                <v-icon small color="white" class="album-overlay-more">
-                  mdi-heart
-                </v-icon>
-              </v-btn>
-              <v-menu dark offset-y>
-                <template v-slot:activator="{ on }">
-                  <v-btn
-                    icon
-                    dark
-                    v-on="on"
-                  >
-                    <v-icon small color="white" class="album-overlay-more">
-                      mdi-dots-horizontal
-                    </v-icon>
-                  </v-btn>
-                </template>
-                <v-list>
-                  <v-list-item>
-                    <v-list-item-title>
-                      <v-icon> mdi-music-box-multiple</v-icon> Add to queue
-                    </v-list-item-title>
-                  </v-list-item>
-                  <v-dialog
-                    v-model="playlistDialog"
-                    width="500"
-                  >
-                    <template v-slot:activator="{ on }">
-                      <v-list-item
-                        v-on="on"
-                      >
-                        <v-list-item-title>
-                          <v-icon>mdi-playlist-music</v-icon> Add to playlist
-                        </v-list-item-title>
-                      </v-list-item>
-                    </template>
-              
-                    <v-card>
-                      <v-card-title
-                        class="headline grey lighten-2"
-                        primary-title
-                        dark
-                      >
-                        Add to Playlist
-                      </v-card-title>
-              
-                      <v-divider />
-              
-                      <v-card-actions>
-                        <v-spacer />
-                        <v-btn
-                          color="primary"
-                          text
-                          @click="playlistDialog = false"
-                        >
-                          Add
-                        </v-btn>
-                      </v-card-actions>
-                    </v-card>
-                  </v-dialog>
-                  <v-list-item>
-                    <v-list-item-title>
-                      <v-icon>
-                        mdi-plus
-                      </v-icon> Add to library
-                    </v-list-item-title>
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-            </div>
-          </div>
-          <div
-            ref="audioAction"
-            v-if="isPlayable"
-            :class="{
-              audioActionContain: true,
-              audioActionContainActive: isHovering,
-            }"
-          >
-            <v-icon
-              class="audioAction audioPlay material-icons"
-              color="white"
-              @click="playTrack"
+          <div class="album-overlay-actions-contain">
+            <v-btn
+              icon
+              dark
+              @click="favoriteItem"
             >
-              mdi-play
-            </v-icon>
+              <v-icon small color="white" class="album-overlay-more">
+                mdi-heart
+              </v-icon>
+            </v-btn>
+            <v-menu dark offset-y>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  icon
+                  dark
+                  v-on="on"
+                >
+                  <v-icon small color="white" class="album-overlay-more">
+                    mdi-dots-horizontal
+                  </v-icon>
+                </v-btn>
+              </template>
+              <v-list>
+                <v-list-item>
+                  <v-list-item-title>
+                    <v-icon> mdi-music-box-multiple</v-icon> Add to queue
+                  </v-list-item-title>
+                </v-list-item>
+                <v-dialog
+                  v-model="playlistDialog"
+                  width="500"
+                >
+                  <template v-slot:activator="{ on }">
+                    <v-list-item
+                      v-on="on"
+                    >
+                      <v-list-item-title>
+                        <v-icon>mdi-playlist-music</v-icon> Add to playlist
+                      </v-list-item-title>
+                    </v-list-item>
+                  </template>
+              
+                  <v-card>
+                    <v-card-title
+                      class="headline grey lighten-2"
+                      primary-title
+                      dark
+                    >
+                      Add to Playlist
+                    </v-card-title>
+              
+                    <v-divider />
+              
+                    <v-card-actions>
+                      <v-spacer />
+                      <v-btn
+                        color="primary"
+                        text
+                        @click="playlistDialog = false"
+                      >
+                        Add
+                      </v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+                <v-list-item>
+                  <v-list-item-title>
+                    <v-icon>
+                      mdi-plus
+                    </v-icon> Add to library
+                  </v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
           </div>
         </div>
+        <div
+          v-if="isPlayable"
+          ref="audioAction"
+          :class="{
+            audioActionContain: true,
+            audioActionContainActive: isHovering,
+          }"
+        >
+          <v-icon
+            class="audioAction audioPlay material-icons"
+            color="white"
+            @click="playTrack"
+          >
+            mdi-play
+          </v-icon>
+        </div>
+      </div>
     </div>
     <div class="textContain">
       <v-tooltip bottom>
@@ -127,7 +127,10 @@
       </v-tooltip>
       <v-tooltip bottom>
         <template v-slot:activator="{ on }">
-          <nuxt-link :to="'/artists/' + attributes.artistName" class="artistName">
+          <nuxt-link
+            :to="'/artists/' + attributes.artistName"
+            class="artistName"
+          >
             <span
               ref="curatorName"
               class="artistName"
@@ -165,6 +168,10 @@ export default {
       default: false,
     },
   },
+  async fetch () {
+    console.log("HELLOOO");
+    this.isLoading = false;
+  },
   data () {
     return {
       isLoading: true,
@@ -177,23 +184,19 @@ export default {
   },
   computed: {
     ...mapState(['queue']),
-    appleImage() {
+    appleImage () {
       return this.attributes.artwork.url.replace(
         '{w}', '250'
       ).replace(
         '{h}', '250'
-      )
+      );
     },
-  },
-  async fetch () {
-    console.log("HELLOOO")
-    this.isLoading = false;
   },
   methods: {
     pauseTrack: async function (event) {
       await this.$store.dispatch("pause");
     },
-    favoriteItem: async function(event) {
+    favoriteItem: async function (event) {
       await favoriteTrack(this.appleMusicId);
     },
     playTrack: async function (event) {

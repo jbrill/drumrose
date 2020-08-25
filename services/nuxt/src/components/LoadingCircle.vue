@@ -6,15 +6,14 @@
       :width="3"
       color="var(--primary-purple)"
       indeterminate
-    >
-    </v-progress-circular>
+    />
   </v-layout>
 </template>
 
 <script>
 export default {
 
-}
+};
 </script>
 
 <style scoped>

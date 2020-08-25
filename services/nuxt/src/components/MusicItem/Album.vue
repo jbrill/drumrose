@@ -8,13 +8,13 @@
       style="width: 100%"
       color="var(--primary-purple)"
     >
-			<Artwork
-				:id="id"
-				:isPlayable="isPlayable"
-				:isActionable="isActionable"
-				:artworkUrl="appleImage"
-				type="album"
-			/>
+      <Artwork
+        :id="id"
+        :is-playable="isPlayable"
+        :is-actionable="isActionable"
+        :artwork-url="appleImage"
+        type="album"
+      />
     </v-badge>
     <div class="textContain">
       <nuxt-link
@@ -37,9 +37,9 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import Artwork from '~/components/MusicItem/Artwork';
 
-import { mapState } from 'vuex';
 import { getAlbumDetail, favoriteTrack } from '~/api/api';
 
 
@@ -76,23 +76,39 @@ export default {
   },
   computed: {
     ...mapState(['nowPlayingItem', 'playbackState', 'queue']),
-    appleImage() {
+    appleImage () {
       return this.attributes.artwork.url.replace(
         '{w}', '2500'
       ).replace(
         '{h}', '2500'
-      )
+      );
     },
+  },
+  async created () {
+    try {
+      const resp = await getAlbumDetail(
+        this.$auth.getToken('auth0'),
+        this.id
+      );
+      console.log(resp);
+      this.pageId = resp.data.playlist.page_id;
+    } catch (err) {
+      console.error(err.response);
+      if (err.response == 409) {
+        console.log("409!");
+      }
+      console.error(err);
+    }
   },
   methods: {
     addToQueue: function () {
-      this.$store.dispatch("setQueue", { "playlist": this.id })
+      this.$store.dispatch("setQueue", { "playlist": this.id });
     },
     pauseTrack: async function (event) {
       event.preventDefault();
       this.$store.dispatch("pause");
     },
-    favoriteItem: async function(event) {
+    favoriteItem: async function (event) {
       await favoriteTrack(this.appleMusicId);
     },
     playTrack: function (event) {
@@ -102,22 +118,6 @@ export default {
       });
     },
   },
-  async created () {
-    try {
-      const resp = await getAlbumDetail(
-        this.$auth.getToken('auth0'),
-        this.id
-      )
-      console.log(resp)
-      this.pageId = resp.data.playlist.page_id
-    } catch (err) {
-      console.error(err.response)
-      if (err.response == 409) {
-        console.log("409!")
-      }
-      console.error(err)
-    }
-  }
 };
 </script>
 

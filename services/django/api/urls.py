@@ -53,6 +53,7 @@ urlpatterns = [
     ),
     path("artists/", artist_routes.ArtistRoute.as_view(), name="ArtistsRoute"),
     path("albums/", album_routes.AlbumRoute.as_view(), name="AlbumsRoute"),
+    path("albums/<album_id>", album_routes.AlbumDetail.as_view(), name="AlbumDetail"),
     path("users/", user_routes.UserList.as_view(), name="UserList"),
     path("users/<user_handle>/", user_routes.UserDetail.as_view(), name="UserDetail"),
     path(

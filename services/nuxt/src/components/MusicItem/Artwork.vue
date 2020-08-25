@@ -1,138 +1,149 @@
 <template>
-<div width="100%" class="artworkContain">
-	<v-hover class="albumContain" v-slot:default="{ hover }">
-    <v-card
-			:elevation="hover ? 12 : 2"
-			:class="{ 'on-hover': hover }"
-		>
-		<nuxt-link style="width: 100%" :to="link">
-      <v-img
-        class="albumCover"
-        :src="artworkUrl"
+  <div width="100%" class="artworkContain">
+    <v-hover v-slot:default="{ hover }" class="albumContain">
+      <v-card
+        :elevation="hover ? 12 : 2"
+        :class="{ 'on-hover': hover }"
       >
-        <div v-if="hover" style="position: absolute"  class="fill-height bottom-gradient"></div>
-        <v-container fill-height fluid align="center">
-          <v-row align="center" justify="center">
-            <v-btn
-              v-if="nowPlayingItem && playbackState === 2"
-              :class="{ 'not-show-btns': !hover, 'show-btns': hover }"
-              @click.native="pauseTrack"
-              fab
-              medium
-              color="var(--primary-purple)"
-            >
-              <v-icon
-                :class="{ 'show-btns': hover }"
-                color="transparent"
-              >
-                mdi-pause
-              </v-icon>
-            </v-btn>
-            <v-btn
-              v-else
-              :class="{ 'not-show-btns': !hover, 'show-btns': hover }"
-              @click.native="playTrack"
-              fab
-              medium
-              color="var(--primary-purple)"
-            >
-              <v-icon
-                :class="{ 'show-btns': hover }"
-                color="transparent"
-              >
-                mdi-play
-              </v-icon>
-            </v-btn>
-          </v-row>
-          <v-card-actions class="card-actions">
-            <v-btn
-              icon
-              @click="auth.loggedIn ? favoriteItem() : login()"
-              @click.native.stop.prevent
-              :class="{ 'show-btns': hover }"
-            >
-              <v-icon
-                small
-                :class="{ 'show-btns': hover }"
-                color="transparent">
-                mdi-heart
-              </v-icon>
-            </v-btn>
-            <v-menu
-              origin="bottom right"
-              z-index="100"
-              attach
-              top
-              left
-              dark
-              two-line
-              max-width="25rem"
-              transition="scale-transition"
-            >
-              <template v-slot:activator="{ on }">
+        <nuxt-link style="width: 100%" :to="link">
+          <v-img
+            class="albumCover"
+            :src="artworkUrl"
+          >
+            <div
+              v-if="hover"
+              style="position: absolute"
+              class="fill-height bottom-gradient"
+            />
+            <v-container fill-height fluid align="center">
+              <v-row align="center" justify="center">
+                <v-btn
+                  v-if="nowPlayingItem && playbackState === 2"
+                  :class="{ 'not-show-btns': !hover, 'show-btns': hover }"
+                  fab
+                  medium
+                  color="var(--primary-purple)"
+                  @click.native="pauseTrack"
+                >
+                  <v-icon
+                    :class="{ 'show-btns': hover }"
+                    color="transparent"
+                  >
+                    mdi-pause
+                  </v-icon>
+                </v-btn>
+                <v-btn
+                  v-else
+                  :class="{ 'not-show-btns': !hover, 'show-btns': hover }"
+                  fab
+                  medium
+                  color="var(--primary-purple)"
+                  @click.native="playTrack"
+                >
+                  <v-icon
+                    :class="{ 'show-btns': hover }"
+                    color="transparent"
+                  >
+                    mdi-play
+                  </v-icon>
+                </v-btn>
+              </v-row>
+              <v-card-actions class="card-actions">
                 <v-btn
                   icon
-                  @click.native.stop.prevent
-                  dark
-                  v-on="on"
                   :class="{ 'show-btns': hover }"
+                  @click="auth.loggedIn ? favoriteItem() : login()"
+                  @click.native.stop.prevent
                 >
                   <v-icon
                     small
-                    color="transparent"
                     :class="{ 'show-btns': hover }"
-                    class="album-overlay-more"
+                    color="transparent"
                   >
-                    mdi-dots-horizontal
+                    mdi-heart
                   </v-icon>
                 </v-btn>
-              </template>
-              <v-list dense>
-                <v-list-item @click.native.stop.prevent @click="addToPlaylist">
-									<v-list-item-icon>
-										<v-icon>mdi-playlist-music</v-icon>
-									</v-list-item-icon>
-									<v-list-item-content>
-										<v-list-item-title>Add to playlist</v-list-item-title>
-									</v-list-item-content>
-                </v-list-item>
-                <v-divider></v-divider>
-                <v-list-item @click.native.stop.prevent @click="addToQueue">
-									<v-list-item-icon>
-										<v-icon>mdi-playlist-star</v-icon>
-									</v-list-item-icon>
-									<v-list-item-content>
-										<v-list-item-title>Add to queue</v-list-item-title>
-									</v-list-item-content>
-                </v-list-item>
-                <v-divider></v-divider>
-                <v-list-item @click.native.stop.prevent @click="(isAuthorized || auth.loggedIn) ? addToLibrary() : login()">
-									<v-list-item-icon>
-										<v-icon>mdi-library</v-icon>
-									</v-list-item-icon>
-									<v-list-item-content>
-										<v-list-item-title>Add to library</v-list-item-title>
-									</v-list-item-content>
-                </v-list-item>
-              </v-list>
-            </v-menu>
-          </v-card-actions>
-        </v-container>
-      </v-img>
-    </nuxt-link>
-  </v-card>
-</v-hover>
-</div>
+                <v-menu
+                  origin="bottom right"
+                  z-index="100"
+                  attach
+                  top
+                  left
+                  dark
+                  two-line
+                  max-width="25rem"
+                  transition="scale-transition"
+                >
+                  <template v-slot:activator="{ on }">
+                    <v-btn
+                      icon
+                      dark
+                      :class="{ 'show-btns': hover }"
+                      @click.native.stop.prevent
+                      v-on="on"
+                    >
+                      <v-icon
+                        small
+                        color="transparent"
+                        :class="{ 'show-btns': hover }"
+                        class="album-overlay-more"
+                      >
+                        mdi-dots-horizontal
+                      </v-icon>
+                    </v-btn>
+                  </template>
+                  <v-list dense>
+                    <v-list-item
+                      @click.native.stop.prevent
+                      @click="addToPlaylist"
+                    >
+                      <v-list-item-icon>
+                        <v-icon>mdi-playlist-music</v-icon>
+                      </v-list-item-icon>
+                      <v-list-item-content>
+                        <v-list-item-title>Add to playlist</v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                    <v-divider />
+                    <v-list-item @click.native.stop.prevent @click="addToQueue">
+                      <v-list-item-icon>
+                        <v-icon>mdi-playlist-star</v-icon>
+                      </v-list-item-icon>
+                      <v-list-item-content>
+                        <v-list-item-title>Add to queue</v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                    <v-divider />
+                    <v-list-item
+                      @click.native.stop.prevent
+                      @click="
+                        (isAuthorized || auth.loggedIn) ? 
+                          addToLibrary() : login()
+                      "
+                    >
+                      <v-list-item-icon>
+                        <v-icon>mdi-library</v-icon>
+                      </v-list-item-icon>
+                      <v-list-item-content>
+                        <v-list-item-title>Add to library</v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
+              </v-card-actions>
+            </v-container>
+          </v-img>
+        </nuxt-link>
+      </v-card>
+    </v-hover>
+  </div>
 </template>
 
 <script>
-import ActionMenu from '~/components/MusicItem/ActionMenu';
 import { mapState } from 'vuex';
+import { favoriteTrack } from '~/api/api';
 
 export default {
-  components: {
-    ActionMenu,
-  },
   props: {
     id: {
       type: String,
@@ -162,15 +173,15 @@ export default {
   data () {
     return {
       isHovering: false,
-    }
+    };
   },
   computed: {
-    ...mapState(['auth', 'isAuthorized', 'nowPlayingItem', 'playbackState'])
+    ...mapState(['auth', 'isAuthorized', 'nowPlayingItem', 'playbackState']),
   },
   methods: {
 		async addToQueue (e) {
-      e.preventDefault()
-      console.log(this.type)
+      e.preventDefault();
+      console.log(this.type);
       if (this.type == 'song') {
         await this.$store.dispatch("playLater", { 'song': this.id });
       }
@@ -182,23 +193,23 @@ export default {
       }
     },
 		addToLibrary: function () {
-      this.$store.dispatch("setQueue", { "playlist": this.id })
+      this.$store.dispatch("setQueue", { "playlist": this.id });
     },
 		addToPlaylist: function () {
-      this.$store.dispatch("setQueue", { "playlist": this.id })
+      this.$store.dispatch("setQueue", { "playlist": this.id });
     },
     pauseTrack: async function (event) {
       event.preventDefault();
       this.$store.dispatch("pause");
     },
-    favoriteItem: async function(event) {
+    favoriteItem: async function (event) {
       await favoriteTrack(this.appleMusicId);
     },
     async login () {
-      console.log("AYY")
-      await this.$auth.loginWith('auth0')
+      await this.$auth.loginWith('auth0');
     },
     playTrack: async function (event) {
+      console.log("playin?");
       event.preventDefault();
       if (this.type == 'song') {
         await this.$store.dispatch("setQueue", { 'song': this.id });
@@ -212,7 +223,7 @@ export default {
       await this.$store.dispatch("play");
     },
   },
-}
+};
 </script>
 
 <style scoped>
@@ -228,7 +239,9 @@ export default {
 .bottom-gradient {
   height: 100%;
   width: 100%;
-  background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 72px);
+  background-image: linear-gradient(
+    to top, rgba(0, 0, 0, 0.8) 0%, transparent 72px
+  );
 }
 .v-card:not(.on-hover) {
   opacity: 0.8;

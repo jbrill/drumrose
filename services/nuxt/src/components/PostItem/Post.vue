@@ -8,23 +8,23 @@
     />
     <Album
       v-if="post.type == 'albums'"
-      isPlayable
-      isActionable
       :id="post.id"
+      is-playable
+      is-actionable
       :attributes="post.attributes"
     />
     <Track
       v-if="post.type == 'songs'"
-      isPlayable
-      isActionable
       :id="post.id"
+      is-playable
+      is-actionable
       :attributes="post.attributes"
     />
     <Playlist
       v-if="post.type == 'playlists'"
-      isPlayable
-      isActionable
       :id="post.id"
+      is-playable
+      is-actionable
       :attributes="post.attributes"
     />
   </div>
@@ -33,12 +33,9 @@
 <script>
 import Album from '~/components/MusicItem/Album.vue';
 import Track from '~/components/MusicItem/Track.vue';
-import Artist from '~/components/MusicItem/Artist.vue';
-import Station from '~/components/MusicItem/Station.vue';
 import Playlist from '~/components/MusicItem/Playlist.vue';
 import PostHeader from '~/components/PostItem/PostHeader.vue';
 
-import axios from 'axios';
 
 
 export default {
@@ -46,9 +43,7 @@ export default {
   components: {
     PostHeader,
     Album,
-    Artist,
     Track,
-    Station,
     Playlist,
   },
   props: {

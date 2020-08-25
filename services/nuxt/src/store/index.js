@@ -45,7 +45,8 @@ export const state = () => ({
  */
 let getApi = library => {
   if (process.server) return;
-  return library ? MusicKit.getInstance().api.library : MusicKit.getInstance().api;
+  return library ? 
+    MusicKit.getInstance().api.library : MusicKit.getInstance().api;
 };
 
 
@@ -58,12 +59,12 @@ export function apiHeaders (state) {
 			Authorization: 'Bearer ' + MusicKit.getInstance().developerToken,
 			Accept: 'application/json', 'Content-Type': 'application/json',
 			'Music-User-Token': '' + MusicKit.getInstance().musicUserToken,
-		}
+		};
   } else {
 		return {
 			Authorization: 'Bearer ' + state.appleMusicToken,
 			Accept: 'application/json', 'Content-Type': 'application/json',
-		}
+		};
   }
 }
 
@@ -113,7 +114,7 @@ export const getters = {
     return res;
   },
   heavyRotation (state) {
-    if (process.server) return
+    if (process.server) return;
     return getApi(false).historyHeavyRotation();
   },
 
@@ -131,7 +132,8 @@ export const getters = {
   headers ( state ) {
 		if (process.client) {
 			return new Headers({
-				Authorization: 'Bearer ' + MusicKit.getInstance().developerToken,
+				Authorization: 'Bearer ' +
+          MusicKit.getInstance().developerToken,
 				Accept: 'application/json', 'Content-Type': 'application/json',
 				'Music-User-Token': '' + MusicKit.getInstance().musicUserToken,
 			});
@@ -142,18 +144,18 @@ export const getters = {
 			};
 		}
   },
-  fetch (state) {
+  fetch (state, { $sentry }) {
     return path => {
       return fetch(
         `https://api.music.apple.com${path}`,
         {
           headers: getters.headers( state ),
         }
-      ).then( (r) => {
-        return r.json()
-      }).catch( (err) => {
+      ).then( r => {
+        return r.json();
+      }).catch( err => {
         console.error(err);
-        this.$sentry.captureException(err);
+        $sentry.captureException(err);
       });
     };
   },
@@ -249,12 +251,12 @@ export const mutations = {
 };
 
 export const actions = {
-  async nuxtServerInit({ commit }, { $sentry }) {
+  async nuxtServerInit ({ commit }, { $sentry }) {
     try {
-  		const tokenResponse = await axios.post(
+      const tokenResponse = await axios.post(
         'https://teton.drumrose.io/api/apple_music_token/'
       );
-		  await commit('setAppleMusicToken', tokenResponse.data.token);
+      await commit('setAppleMusicToken', tokenResponse.data.token);
     } catch(err) {
       console.error(err);
       $sentry.captureException(err);
@@ -303,7 +305,7 @@ export const actions = {
         );
       } catch (err) {
         console.error(err);
-        $sentry.captureException(error);
+        $sentry.captureException(err);
       }
     }
 
@@ -319,7 +321,7 @@ export const actions = {
         );
       } catch (err) {
         console.error(err);
-        $sentry.captureException(error);
+        $sentry.captureException(err);
       }
     }
 
@@ -333,7 +335,7 @@ export const actions = {
         );
       } catch (err) {
         console.error(err);
-        $sentry.captureException(error);
+        $sentry.captureException(err);
       }
     }
 
@@ -345,7 +347,7 @@ export const actions = {
         dispatch('repeat', JSON.parse(localStorage.getItem('repeat') || '0'));
       } catch (err) {
         console.error(err);
-        $sentry.captureException(error);
+        $sentry.captureException(err);
       }
     }
 
@@ -353,7 +355,10 @@ export const actions = {
     commit('playbackState', MusicKit.getInstance().playbackState);
 
     // Update bufferred status
-    commit('bufferedProgress', MusicKit.getInstance().player.currentBufferedProgress);
+    commit(
+      'bufferedProgress',
+      MusicKit.getInstance().player.currentBufferedProgress
+    );
 
     // Update queue information
     commit('queue', clonedeep(MusicKit.getInstance().player.queue.items));
@@ -519,7 +524,8 @@ export const actions = {
   },
   toggleRepeatMode ({ commit }) {
     // Repeat modes: 0 - off, 1 - one, 2 - all
-    MusicKit.getInstance().player.repeatMode = MusicKit.getInstance().player.repeatMode === 0 ? 
+    MusicKit.getInstance().player.repeatMode = 
+      MusicKit.getInstance().player.repeatMode === 0 ? 
       2 : MusicKit.getInstance().player.repeatMode - 1;
     commit('repeatMode', MusicKit.getInstance().player.repeatMode);
     if (window.localStorage) {
@@ -569,6 +575,9 @@ export const actions = {
   },
   setQueue (_, queue) {
     return MusicKit.getInstance().setQueue(queue);
+  },
+  authorize (_) {
+    return MusicKit.getInstance().authorize();
   },
   setVolume (_, volume) {
     const newVolume = parseFloat(volume);
@@ -643,7 +652,7 @@ export const actions = {
     return api.addToLibrary(items);
   },
 
-  addToPlaylist (_, { playlistId, items }) {
+  addToPlaylist (_, { playlistId, items }, { $sentry }) {
     return new Promise(async (resolve, reject) => {
       try {
         let res = await fetch(
@@ -667,7 +676,9 @@ export const actions = {
           resolve(true);
         } else {
           reject(MusicKit.MKError(MusicKit.MKError.SERVER_ERROR));
-          $sentry.captureException(err);
+          $sentry.captureException(
+            MusicKit.MKError(MusicKit.MKError.SERVER_ERROR)
+          );
         }
       } catch (err) {
         reject(err);
@@ -676,7 +687,7 @@ export const actions = {
     });
   },
 
-  newPlaylist (_, { name, items = [] }) {
+  newPlaylist (_, { name, items = [] }, { $sentry }) {
     return new Promise(async (resolve, reject) => {
       try {
         let res = await fetch(
@@ -706,7 +717,9 @@ export const actions = {
           resolve(true);
         } else {
           reject(MusicKit.MKError(MusicKit.MKError.SERVER_ERROR));
-          $sentry.captureException(err);
+          $sentry.captureException(
+            MusicKit.MKError(MusicKit.MKError.SERVER_ERROR)
+          );
         }
       } catch (err) {
         reject(err);
@@ -718,8 +731,10 @@ export const actions = {
   async getHints (_, searchInput) {
      const getHints = {
        method: "GET",
-       url: `https://api.music.apple.com/v1/catalog/us/search?term=${searchInput}&limit=5&types=songs,artists,albums,playlists,apple-curators,curators,stations`,
-       headers: apiHeaders()
+       url: `https://api.music.apple.com/v1/catalog/us/search?term=` + 
+            `${searchInput}&limit=5&types=` +
+            `songs,artists,albums,playlists,`,
+       headers: apiHeaders(),
      };
      const { data } = await axios(getHints);
      return data;

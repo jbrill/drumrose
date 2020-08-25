@@ -1,30 +1,30 @@
 <template>
-  <div style="z-index: 10" v-if="playbackTime" class="audioPlayer">
+  <div v-if="playbackTime" style="z-index: 10" class="audioPlayer">
     <div class="musicControls">
       <v-btn
-        icon
         ref="musicPrev"
+        icon
         @click="prevMusic"
       >
         <v-icon>mdi-skip-previous</v-icon>
       </v-btn>
       <v-btn
-        icon
         v-if="playbackState === 3"
+        icon
         @click="playTrack"
       >
         <v-icon>mdi-play</v-icon>
       </v-btn>
       <v-btn
-        icon
         v-else
+        icon
         @click="pauseTrack"
       >
         <v-icon>mdi-pause</v-icon>
       </v-btn>
       <v-btn
-        icon
         ref="musicNext"
+        icon
         @click="nextMusic"
       >
         <v-icon>mdi-skip-next</v-icon>
@@ -34,33 +34,41 @@
         small
         @click="shuffleTrack"
       >
-        <v-icon x-small>mdi-shuffle</v-icon>
+        <v-icon x-small>
+          mdi-shuffle
+        </v-icon>
       </v-btn>
       <v-btn
-        icon
-        small
         v-if="$store.state.repeatMode === 1"
-        @click="repeatTrack"
-        color="var(--primary-red)"
-      >
-        <v-icon x-small>mdi-repeat-once</v-icon>
-      </v-btn>
-      <v-btn
         icon
         small
+        color="var(--primary-red)"
+        @click="repeatTrack"
+      >
+        <v-icon x-small>
+          mdi-repeat-once
+        </v-icon>
+      </v-btn>
+      <v-btn
         v-else-if="$store.state.repeatMode === 2"
-        @click="repeatTrack"
-        color="var(--primary-red)"
-      >
-        <v-icon x-small>mdi-repeat</v-icon>
-      </v-btn>
-      <v-btn
         icon
         small
-        v-else
+        color="var(--primary-red)"
         @click="repeatTrack"
       >
-        <v-icon x-small>mdi-repeat-off</v-icon>
+        <v-icon x-small>
+          mdi-repeat
+        </v-icon>
+      </v-btn>
+      <v-btn
+        v-else
+        icon
+        small
+        @click="repeatTrack"
+      >
+        <v-icon x-small>
+          mdi-repeat-off
+        </v-icon>
       </v-btn>
     </div>
     <PostTimeline />
@@ -70,13 +78,10 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import PostTimeline from "~/components/AudioPlayer/PostTimeline";
 import Queue from "~/components/AudioPlayer/Queue";
 import VolumeSlider from "~/components/AudioPlayer/VolumeSlider";
-
-import { postFavorite, getTrackInfo } from "~/api/api";
-
-import { mapState } from "vuex";
 
 
 export default {
@@ -87,13 +92,6 @@ export default {
   },
   computed: {
     ...mapState(['queue', 'playbackState', 'playbackTime']),
-    isFavorited () {
-      const favorited = this.$refs.songName;
-      if (element.offsetWidth < element.scrollWidth) {
-        return true;
-      }
-      return false;
-    },
   },
   methods: {
     playTrack () {
@@ -106,7 +104,7 @@ export default {
       this.$store.dispatch("previous");
     },
     nextMusic () {
-      this.$store.dispatch("next")
+      this.$store.dispatch("next");
     },
     repeatTrack () {
       this.$store.dispatch("toggleRepeatMode");

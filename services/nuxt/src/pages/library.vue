@@ -7,8 +7,8 @@
       color="white"
     >
       <v-tab
-        v-for="item in musicSelections"
-        :key="item"
+        v-for="(musicItem, index) in musicSelections"
+        :key="index"
       >
         {{ item }}
       </v-tab>
@@ -16,25 +16,25 @@
   
     <v-tabs-items v-model="musicSelections">
       <v-tab-item
-        v-for="item in musicSelections"
-        :key="item"
-      >
-      </v-tab-item>
+        v-for="musicSelection in musicSelections"
+        :key="musicSelection"
+      />
     </v-tabs-items>
-    <div>
-			<v-btn-toggle borderless rounded background-color="transparent" class="artist-menu-options">
-        <v-hover v-for="(artistOption, artistIndex) in artistOptions">
-          <v-btn slot-scope="{ hover }" :class="`${hover ? 'activeArtistOptionButton': 'artistOptionButton'}`" x-small fab>{{ artistOption }}</v-btn>
-        </v-hover>
-      </v-btn-toggle>
-    </div>
     <div class="library-contain">
       <LoadingCircle v-if="loading" />
-      <v-container v-if="activeCollection === 'artists' && !loading" fluid grid-list-md>
-        <v-row align="start"
+      <v-container
+        v-if="activeCollection === 'artists' && !loading"
+        fluid
+        grid-list-md
+      >
+        <v-row
+          v-for="(artistCollectionGroup, index) in Math.floor(
+            artistCollection.length / 3
+          )"
+          :key="index"
+          align="start"
           no-gutters
           style="height: 150px;"
-          v-for="artistCollectionGroup in Math.floor(artistCollection.length / 3)"
         >
           <v-col
             v-for="n in 3"
@@ -44,27 +44,28 @@
           >
             <v-card dark>
               <div class="d-flex flex-no-wrap justify-space-between">
-									<div>
-										<v-card-title
-											class="headline"
-											v-text="artistCollection[artistCollectionGroup + n].attributes.name"
-										></v-card-title>
+                <div>
+                  <v-card-title
+                    class="headline"
+                    v-text="artistCollection[
+                      artistCollectionGroup + n
+                    ].attributes.name"
+                  />
+                </div>
 
-									</div>
-
-									<v-avatar
-										class="ma-3"
-										tile
-									>
-							    	<v-img ></v-img>
-							    </v-avatar>
-						    </div>
-						  </v-card>
-					  </v-flex>
+                <v-avatar
+                  class="ma-3"
+                  tile
+                >
+                  <v-img />
+                </v-avatar>
+              </div>
+            </v-card>
+            </v-flex>
           </v-col>
-		    	</v-row>
-		    </v-container>
-			</v-card>
+        </v-row>
+      </v-container>
+      </v-card>
     </div>
   </div>
 </template>
@@ -75,6 +76,9 @@ import { mapState } from 'vuex';
 import LoadingCircle from '~/components/LoadingCircle';
 
 export default {
+  components: {
+    LoadingCircle,
+  },
   data () {
     return {
       item: null,
@@ -90,20 +94,9 @@ export default {
 				'Playlists',
 			],
       numArtistOptions: 27,
-      artistOptions: [
-        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '#'
-      ],
     };
   },
-  components: {
-    LoadingCircle,
-  },
   computed: mapState(['activeCollection']),
-  methods: {
-    changeCollection: function() {
-      this.$store.commit('activeCollection', 'songs')
-    }
-  },
   async mounted () {
     // Load the collection
     this.loading = true;
@@ -123,8 +116,13 @@ export default {
       this.artistCollection = this.artistCollection.concat(res);
     }
     this.loading = false;
-  }
-}
+  },
+  methods: {
+    changeCollection: function () {
+      this.$store.commit('activeCollection', 'songs');
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -148,12 +146,5 @@ export default {
 }
 >>>.v-btn {
   border-radius: 2rem !important;
-}
->>>.artistOptionButton {
-  background-color: transparent !important;
-}
->>>.artistOptionButton:hover, >>>.artistOptionButton:focus {
-  background-color: transparent !important;
-  color: white !important;
 }
 </style>

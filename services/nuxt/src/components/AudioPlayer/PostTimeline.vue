@@ -3,13 +3,17 @@
     <v-slider
       v-if="playbackTime"
       v-model="playbackTime.currentPlaybackTime"
-      @change="changePosition"
       color="var(--primary-red)"
       track-color="#ccc"
       :max="playbackTime.currentPlaybackDuration"
+      @change="changePosition"
     >
-      <template v-slot:prepend>{{ currentPlaybackTime }}</template>
-      <template v-slot:append>{{ currentPlaybackDuration }}</template>
+      <template v-slot:prepend>
+        {{ currentPlaybackTime }}
+      </template>
+      <template v-slot:append>
+        {{ currentPlaybackDuration }}
+      </template>
     </v-slider>
   </div>
 </template>
@@ -20,7 +24,7 @@ import { mapState, mapGetters } from 'vuex';
 export default {
   data () {
     return {
-    }
+    };
   },
   computed: {
     ...mapGetters({
@@ -34,8 +38,8 @@ export default {
   },
   methods: {
     changePosition (e) {
-      console.log(e)
-			this.$store.dispatch("seek", e)
+      console.log(e);
+			this.$store.dispatch("seek", e);
     },
   }, 
 };

@@ -10,9 +10,9 @@
     >
       <Artwork
         :id="id"
-        :isPlayable="isPlayable"
-        :isActionable="isActionable"
-        :artworkUrl="appleImage"
+        :is-playable="isPlayable"
+        :is-actionable="isActionable"
+        :artwork-url="appleImage"
         :link="'tracks/' + pageId"
         type="song"
       />
@@ -38,9 +38,9 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import Artwork from '~/components/MusicItem/Artwork';
 
-import { mapState } from 'vuex';
 import { favoriteTrack, getTrackDetail } from '~/api/api';
 
 
@@ -78,12 +78,12 @@ export default {
   },
   computed: {
     ...mapState(['nowPlayingItem', 'playbackState', 'queue']),
-    appleImage() {
+    appleImage () {
       return this.attributes.artwork.url.replace(
         '{w}', '250'
       ).replace(
         '{h}', '250'
-      )
+      );
     },
   },
   async created () {
@@ -91,15 +91,15 @@ export default {
       const resp = await getTrackDetail(
         this.$auth.getToken('auth0'),
         this.id
-      )
-      console.log(resp)
-      this.pageId = resp.data.track.page_id
+      );
+      console.log(resp);
+      this.pageId = resp.data.track.page_id;
     } catch (err) {
-      console.error(err.response)
+      console.error(err.response);
       if (err.response == 409) {
-        console.log("409!")
+        console.log("409!");
       } 
-      console.error(err)
+      console.error(err);
     }
   },
   methods: {
@@ -107,12 +107,12 @@ export default {
       event.preventDefault();
       this.$store.dispatch("pause");
     },
-    favoriteItem: async function(event) {
+    favoriteItem: async function (event) {
       await favoriteTrack(this.id);
     },
     playTrack: function (event) {
       event.preventDefault();
-      console.log(this.id)
+      console.log(this.id);
       this.$store.dispatch("setQueue", { "song": this.id } ).then( () => {
         this.$store.dispatch("play");
       });

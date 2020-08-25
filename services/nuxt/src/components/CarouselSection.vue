@@ -1,40 +1,41 @@
 <template>
-	<div class="carousel-contain">
-		<div class="top-button-contain">
-      <v-btn x-small text dark>{{ title }}</v-btn>
-      <v-btn v-if="moreLink" x-small dark>More</v-btn>
+  <div class="carousel-contain">
+    <div class="top-button-contain">
+      <v-btn x-small text dark>
+        {{ title }}
+      </v-btn>
+      <v-btn v-if="moreLink" x-small dark>
+        More
+      </v-btn>
     </div>
-		<carousel
-			:touch-drag="false"
-			:loop="true"
-			:mouse-drag="false"
-			:pagination-enabled="false"
-			:navigation-enabled="true"
-			:per-page="4"
-		>
-			<slide
-				v-for="(carouselItem, index) in carouselItems"
-				v-if="isValid(carouselItem.type)"
-				:key="carouselItem.id"
-				data-index="index"
-				:data-name="carouselItem.id"
-				@slideclick="handleSlideClick"
-			>
-				<Post
-					:key="carouselItem.id"
-					:index="index"
-					:post="carouselItem"
-				/>
-			</slide>
-		</carousel>
-	</div>
+    <carousel
+      :touch-drag="false"
+      :loop="true"
+      :mouse-drag="false"
+      :pagination-enabled="false"
+      :navigation-enabled="true"
+      :per-page="4"
+    >
+      <slide
+        v-for="(carouselItem, index) in validCarouselItems"
+        :key="carouselItem.id"
+        data-index="index"
+        :data-name="carouselItem.id"
+        @slideclick="handleSlideClick"
+      >
+        <Post
+          :key="carouselItem.id"
+          :index="index"
+          :post="carouselItem"
+        />
+      </slide>
+    </carousel>
+  </div>
 </template>
 
 <script>
-import Post from '~/components/PostItem/Post.vue';
-
-import { getFavorites } from '~/api/api';
 import { mapState } from 'vuex';
+import Post from '~/components/PostItem/Post.vue';
 
 
 export default {
@@ -57,19 +58,20 @@ export default {
   },
   computed: {
     ...mapState(['auth']),
-  },
-  created () {
-    console.log(this.carouselItems)
+    validCarouselItems () {
+      return this.carouselItems.filter(
+        carouselItem => this.isValid(carouselItem.type)
+      );
+    },
   },
   methods: {
     handleSlideClick (dataset) {
     },
     isValid (type) {
-      console.log(type)
       return ['songs', 'albums', 'playlists'].includes(type);
     },
   },
-}
+};
 </script>
 
 <style scoped>

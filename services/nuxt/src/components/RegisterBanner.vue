@@ -1,21 +1,26 @@
 <template>
   <v-carousel
-		height="40vh"
-		hide-delimiter-background
-		show-arrows-on-hover
-		cycle
-	>
-		<v-carousel-item
-			v-for="(image, i) in images"
-      :src="image.src"
+    height="40vh"
+    hide-delimiter-background
+    show-arrows-on-hover
+    cycle
+  >
+    <v-carousel-item
+      v-for="(image, i) in images"
+      :key="i"
+      :src="require(`@/assets/img/${image.src}`)"
       eager
       reverse-transition="fade-transition"
       transition="fade-transition"
       align="center"
       justify="center"
-	    :key="i"
-		>
-     <v-card class="register-card" height="100%" color="transparent" background-color="transparent">
+    >
+      <v-card
+        class="register-card"
+        height="100%"
+        color="transparent"
+        background-color="transparent"
+      >
         <v-card-title color="white" class="justify-center">
           {{ image.title }}
         </v-card-title>
@@ -23,12 +28,14 @@
           {{ image.description }}
         </v-card-subtitle>
         <v-card-actions class="justify-center">
-          <v-btn @click="login" color="var(--primary-red)">JOIN THE PARTY - IT'S FREE!</v-btn>
+          <v-btn color="var(--primary-red)" @click="login">
+            JOIN THE PARTY - IT'S FREE!
+          </v-btn>
         </v-card-actions>
       </v-card>
-    </v-container>
-		</v-carousel-item>
-	</v-carousel>
+      </v-container>
+    </v-carousel-item>
+  </v-carousel>
 </template>
 
 <script>
@@ -39,20 +46,25 @@ export default {
       trendingSongGroups: [],
       trendingPlaylistGroups: [],
       images: [
-        { 'src':
-'https://images.unsplash.com/photo-1553190781-4490b9b6d06b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2250&q=80', 'title': 'SOCIAL', 'description': 'Share your favorite music with friends.' },
-        { 'src':
-'https://images.unsplash.com/photo-1530352865347-3c2e277abefe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2253&q=80',
-'title': 'SMART', 'description': 'Explore with our recommendation services.' },
+        {
+          'src': "register-banner-image-0.jpg",
+          'title': 'SOCIAL',
+          'description': 'Share your favorite music with friends.',
+        },
+        {
+          'src': "register-banner-image-1.jpg",
+          'title': 'SMART',
+          'description': 'Explore with our recommendation services.',
+        },
       ],
-    }
+    };
   },
   methods: {
     login () {
-      this.$auth.loginWith('auth0')
+      this.$auth.loginWith('auth0');
     },
   },
-}
+};
 </script>
 
 <style scoped>

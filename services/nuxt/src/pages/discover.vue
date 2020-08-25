@@ -7,54 +7,74 @@
       color="white"
     >
       <v-tab
-        href="#foryou"
-        key="foryou"
         v-if="isAuthorized"
+        key="foryou"
+        href="#foryou"
       >
         For you
       </v-tab>
       <v-tab
-        href="#trending"
         key="trending"
+        href="#trending"
       >
         Trending
       </v-tab>
     </v-tabs>
     <v-tabs-items v-model="tab">
-			<v-tab-item
-				key="foryou"
-				value="foryou"
-			>
-			  <v-responsive
+      <v-tab-item
+        key="foryou"
+        value="foryou"
+      >
+        <LoadingCircle v-if="loading" />
+        <v-responsive
+          v-else
           class="overflow-y-auto"
         >
-          <LoadingCircle v-if="loading" />
           <CarouselSection
-            v-if="!loading"
-            v-for="(personalRecommendation) in recommendations"
+            v-for="(personalRecommendation, index) in recommendations"
+            :key="`recommendation-${index}`"
             :title="personalRecommendation.attributes.title.stringForDisplay"
-            :carouselItems="personalRecommendation.relationships.contents.data"
+            :carousel-items="personalRecommendation.relationships.contents.data"
           />
         </v-responsive>
       </v-tab-item>
-			<v-tab-item
-				key="trending"
-				value="trending"
-			>
-				<CarouselSection v-if="!loading" v-for="trendingAlbumGroup in trendingAlbumGroups" :title="trendingAlbumGroup.name" :carouselItems="trendingAlbumGroup.data" />
-				<CarouselSection v-if="!loading" v-for="trendingPlaylistGroup in trendingPlaylistGroups" :title="trendingPlaylistGroup.name" :carouselItems="trendingPlaylistGroup.data" />
-				<CarouselSection v-if="!loading" v-for="trendingSongGroup in trendingSongGroups" :title="trendingSongGroup.name" :carouselItems="trendingSongGroup.data" />
+      <v-tab-item
+        key="trending"
+        value="trending"
+      >
+        <LoadingCircle v-if="loading" />
+        <v-responsive
+          v-else
+          class="overflow-y-auto"
+        >
+          <CarouselSection
+            v-for="(trendingAlbumGroup, index) in trendingAlbumGroups"
+            :key="`trending-album-${index}`"
+            :title="trendingAlbumGroup.name"
+            :carousel-items="trendingAlbumGroup.data"
+          />
+          <CarouselSection
+            v-for="(trendingPlaylistGroup, index) in trendingPlaylistGroups"
+            :key="`trending-playlist-${index}`"
+            :title="trendingPlaylistGroup.name"
+            :carousel-items="trendingPlaylistGroup.data"
+          />
+          <CarouselSection
+            v-for="(trendingSongGroup, index) in trendingSongGroups"
+            :key="`trending-track-${index}`"
+            :title="trendingSongGroup.name"
+            :carousel-items="trendingSongGroup.data"
+          />
+        </v-responsive>
       </v-tab-item>
     </v-tabs-items>
   </v-container>
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex';
 import CarouselSection from '~/components/CarouselSection';
 import LoadingCircle from '~/components/LoadingCircle';
-
-import { getFavorites, postFavorite } from '~/api/api';
-import { mapState, mapMutations } from 'vuex';
 
 
 export default {
@@ -62,6 +82,20 @@ export default {
   components: {
     CarouselSection,
     LoadingCircle,
+  },
+  async fetch () {
+    this.loading = true;
+    const trending = await this.$store.getters.fetch(
+      `/v1/catalog/${this.$store.state.storefront}/` +
+      `charts?types=playlists,songs,albums`
+    );
+    this.trendingAlbumGroups = trending.results.albums;
+    this.trendingPlaylistGroups = trending.results.playlists;
+    this.trendingSongGroups = trending.results.songs;
+    if (this.$store.state.isAuthorized) {
+      this.recommendations = await this.$store.getters['recommendations'];
+    }
+    this.loading = false;
   },
   data () {
     return {
@@ -71,28 +105,15 @@ export default {
       trendingSongGroups: [],
       trendingPlaylistGroups: [],
       tab: 'For you',
-    }
+    };
   },
   computed: {
     ...mapState(['isAuthorized', 'auth']),
   },
   methods: {
     ...mapMutations({
-      setSnack: 'snackbar/setSnack'
-    })
-  },
-  async fetch () {
-    this.loading = true;
-    const trending = await this.$store.getters.fetch(
-      `/v1/catalog/us/charts?types=playlists,songs,artists,albums,stations`
-    )
-    this.trendingAlbumGroups = trending.results.albums;
-    this.trendingPlaylistGroups = trending.results.playlists;
-    this.trendingSongGroups = trending.results.songs;
-    if (this.$store.state.isAuthorized) {
-      this.recommendations = await this.$store.getters['recommendations'];
-    }
-    this.loading = false;
+      setSnack: 'snackbar/setSnack',
+    }),
   },
 };
 </script>

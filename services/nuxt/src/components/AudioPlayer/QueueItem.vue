@@ -15,50 +15,54 @@
         width="30px"
         max-width="30px"
       />
-	  	<div class="nowPlayingItem">
-	  		<nuxt-link class="nowPlayingItemLink songName" :to="'tracks/' + track_page_id">{{ trackObject.attributes.name }}</nuxt-link>
-		  	<nuxt-link class="nowPlayingItemLink artistName" :to="'artists/' + artist_page_id">{{ trackObject.attributes.artistName }}</nuxt-link>
+      <div class="nowPlayingItem">
+        <nuxt-link
+          class="nowPlayingItemLink songName"
+          :to="'tracks/' + track_page_id"
+        >
+          {{ trackObject.attributes.name }}
+        </nuxt-link>
+        <nuxt-link
+          class="nowPlayingItemLink artistName"
+          :to="'artists/' + artist_page_id"
+        >
+          {{ trackObject.attributes.artistName }}
+        </nuxt-link>
       </div>
-		</div>
+    </div>
     <div class="nowPlayingActions">
       <v-icon
         v-if="isFavorited"
-        @click="favoriteTrack"
         x-small
         color="red"
-      >mdi-heart</v-icon>
+        @click="favoriteTrack"
+      >
+        mdi-heart
+      </v-icon>
       <v-icon
         v-else
-        @click="favoriteTrack"
         class="favoriteButton"
         x-small
-      >mdi-heart</v-icon>
+        @click="favoriteTrack"
+      >
+        mdi-heart
+      </v-icon>
       <v-icon
         v-if="!nowPlaying"
         class="moreButton"
         x-small
-      >mdi-dots-horizontal</v-icon>
-		</div>
-	</div>
+      >
+        mdi-dots-horizontal
+      </v-icon>
+    </div>
+  </div>
 </template>
 
 <script>
-import Artwork from '~/components/MusicItem/Artwork';
-import { getTrackDetail, postFavorite } from '~/api/api';
-import { mapState } from 'vuex';
+import { postFavorite } from '~/api/api';
 
 
 export default {
-  components: {
-    Artwork,
-  },
-  data () {
-    return {
-      isFavorited: false,
-      artist_page_id: '',
-      track_page_id: ''
-    }
-  },
   props: {
     'trackObject': {
       type: Object,
@@ -67,6 +71,22 @@ export default {
     'nowPlaying': {
       type: Boolean,
       default: false,
+    },
+  },
+  data () {
+    return {
+      isFavorited: false,
+      artist_page_id: '',
+      track_page_id: '',
+    };
+  },
+  computed: {
+		appleImage () {
+      return this.trackObject.attributes.artwork.url.replace(
+        '{w}', '250'
+      ).replace(
+        '{h}', '250'
+      );
     },
   },
   created () {
@@ -89,22 +109,13 @@ export default {
       ).then( () => {
         // set favorite color
         this.isFavorited = true;
-      }).catch ( (err) => {
+      }).catch ( err => {
         console.error(err);
         this.$sentry.captureException(err);
         });
     },
   },
-  computed: {
-		appleImage() {
-      return this.trackObject.attributes.artwork.url.replace(
-        '{w}', '250'
-      ).replace(
-        '{h}', '250'
-      )
-    },
-  },
-}
+};
 </script>
 
 <style scoped>

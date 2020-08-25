@@ -2,7 +2,7 @@
   <div class="posterInfo">
     <v-tooltip top>
       <template 
-          v-slot:activator="{ on }"
+        v-slot:activator="{ on }"
       >
         <v-btn
           nuxt
@@ -24,9 +24,11 @@
       <div>Top tooltip</div>
     </v-tooltip>
     <v-icon
-      x-small
       v-if="postType === 'favorite'"
-    >mdi-heart</v-icon>
+      x-small
+    >
+      mdi-heart
+    </v-icon>
     <v-rating
       v-else-if="postType === 'rating'"
       v-model="rating"
@@ -63,11 +65,11 @@ export default {
       default: '',
     },
   },
-  created: function() {
-    console.log(this.user)
-    console.log(this.date)
-    console.log(this.type)
-    console.log(this.rating)
+  created: function () {
+    console.log(this.user);
+    console.log(this.date);
+    console.log(this.type);
+    console.log(this.rating);
   },
 };
 </script>

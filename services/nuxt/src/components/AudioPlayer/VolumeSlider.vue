@@ -19,17 +19,16 @@
         </v-btn>
       </template>
       <v-slider
+        v-model="mappedVolume"
         dark
         class="volume-slider"
-        v-model="mappedVolume"
         vertical
         min="0"
         max="1"
         step="0.01"
         color="var(--primary-red)"
         background-color="#272727"
-      >
-      </v-slider>
+      />
     </v-menu>
   </div>
 </template>
@@ -52,23 +51,23 @@ export default {
   computed: {
     ...mapState(['volume']),
     mappedVolume: {
-      get() {
+      get () {
         return this.volume;
       },
-      set(val) {
+      set (val) {
         this.$store.dispatch('setVolume', `${val}`);
-      }
-    }
+      },
+    },
   },
   methods: {
     addToQueue: function () {
-      this.$store.dispatch("setQueue", { "playlist": this.id })
+      this.$store.dispatch("setQueue", { "playlist": this.id });
     },
     addToLibrary: function () {
-      this.$store.dispatch("addToLibrary", { 'playlist': this.id })
+      this.$store.dispatch("addToLibrary", { 'playlist': this.id });
     },
-  }
-}
+  },
+};
 </script>
 
 <style scoped>

@@ -17,25 +17,42 @@
           {{ trackInfo.attributes.name }}
         </p>
         <div class="artist-name">
-          <nuxt-link to="artists/">{{ trackInfo.attributes.artistName }}</nuxt-link>
+          <nuxt-link to="artists/">
+            {{ trackInfo.attributes.artistName }}
+          </nuxt-link>
         </div>
       </div>
       <p>{{ trackInfo.attributes.releaseDate }}</p>
-      <v-list><v-list-item v-for="genre in trackInfo.attributes.genreNames"><v-chip>{{ genre }}</v-chip></v-list-item></v-list>
+      <v-list>
+        <v-list-item
+          v-for="(genre, index) in trackInfo.attributes.genreNames"
+          :key="index"
+        >
+          <v-chip>{{ genre }}</v-chip>
+        </v-list-item>
+      </v-list>
     </div>
-    <v-divider></v-divider>
-			<v-btn @click="favoriteTrack" small tile dark>
-					<v-icon x-small left>mdi-heart</v-icon> Favorite
-			</v-btn>
-			<v-btn small tile dark>
-					<v-icon x-small left>mdi-plus</v-icon> Add to Queue
-			</v-btn>
-			<v-btn small tile dark>
-					<v-icon x-small left>mdi-plus</v-icon> Add to Playlist
-			</v-btn>
-			<v-btn small tile dark>
-					<v-icon x-small left>mdi-plus</v-icon> Add to Library
-			</v-btn>
+    <v-divider />
+    <v-btn small tile dark @click="favoriteTrack">
+      <v-icon x-small left>
+        mdi-heart
+      </v-icon> Favorite
+    </v-btn>
+    <v-btn small tile dark>
+      <v-icon x-small left>
+        mdi-plus
+      </v-icon> Add to Queue
+    </v-btn>
+    <v-btn small tile dark>
+      <v-icon x-small left>
+        mdi-plus
+      </v-icon> Add to Playlist
+    </v-btn>
+    <v-btn small tile dark>
+      <v-icon x-small left>
+        mdi-plus
+      </v-icon> Add to Library
+    </v-btn>
   </div>
 </template>
 
@@ -47,27 +64,30 @@ export default {
     trackInfo: null,
     loading: true,
   }),
-  methods: {
-    favoriteTrack: async function () {
-      console.log(this.$auth.getToken('auth0'))
-      const favoritesResponse = await postFavorite(
-        this.$auth.getToken('auth0'),
-        { 'type': 'track', 'id': this.trackInfo.id }
-      );
-    }
-  },
   async mounted () {
     try {
       const resp = await this.$store.getters.fetch(
         `/v1/catalog/us/songs/${this.$route.params.id}`
       );
-      console.log(resp)
+      console.log(resp);
       this.trackInfo = resp.data[0];
       this.loading = false;
     } catch (err) {
       this.loading = false;
       console.error(err);
     }
+  },
+  methods: {
+    favoriteTrack: async function () {
+      try {
+        await postFavorite(
+          this.$auth.getToken('auth0'),
+          { 'type': 'track', 'id': this.trackInfo.id }
+        );
+      } catch (err) {
+        console.error(err);
+      }
+    },
   },
 };
 </script>

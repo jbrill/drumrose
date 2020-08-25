@@ -42,7 +42,7 @@ export default {
     script: [{ src: 'https://js-cdn.music.apple.com/musickit/v1/musickit.js' }],
   },
   render: {
-    gzip: false
+    gzip: false,
   },
   /*
    ** Global CSS
@@ -95,26 +95,26 @@ export default {
 			login: '/',
 			logout: '/',
 			callback: '/auth/signed-in',
-			home: '/'
+			home: '/',
 		},
     strategies: {
 			auth0: {
 				domain: process.env.AUTH0_DOMAIN,
 				client_id: process.env.AUTH0_CLIENT_ID,
 				audience: 'https://django-server:8000',
-			}
-		}
+			},
+		},
 	},
   sentry: {
     dsn: process.env.SENTRY_DSN, // Enter your project's DSN here
     config: {
-      environment: "dev"
+      environment: "dev",
     },
     webpackConfig: {
       include: ".",
       release: "v1.0.0",
-      ignoreFile: ".gitignore"
-    }
+      ignoreFile: ".gitignore",
+    },
   },
   vuetify: {
 		theme: {
@@ -123,9 +123,9 @@ export default {
 				dark: {
 					primary: '#4caf50',
 					secondary: '#ff8c00',
-					accent: '#9c27b0'
-				}
-			}
-		}
+					accent: '#9c27b0',
+				},
+			},
+		},
 	},
 };

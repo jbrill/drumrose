@@ -72,7 +72,7 @@
 </template>
 
 <script>
-import Playlist from '~/components/Playlist';
+import Playlist from '~/components/MusicItem/Playlist';
 import { getPlaylists } from '~/api/api.js';
 
 export default {

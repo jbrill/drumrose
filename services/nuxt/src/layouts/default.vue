@@ -1,37 +1,45 @@
 <template>
-<div id="app">
-  <v-app class="app">
-      <v-app-bar color="#f0f0f0" v-if="!isAuthorized" sticky @click="authorizeAppleMusic" short dense class="authorize-apple-music">
+  <div id="app">
+    <v-app class="app">
+      <v-app-bar
+        v-if="!isAuthorized"
+        color="#f0f0f0"
+        sticky
+        short
+        dense
+        class="authorize-apple-music"
+        @click="authorizeAppleMusic"
+      >
         <span class="authorize-apple-music-text">
-          <v-btn @click="authorizeAppleMusic" small color="black">Sign in</v-btn> to Apple Music to gain full access to tracks and sync your library.
+          <v-btn
+            small
+            color="black"
+            @click="authorizeAppleMusic"
+          >
+            Sign in
+          </v-btn> 
+          to Apple Music to gain full access to tracks and sync your library.
         </span>
       </v-app-bar>
       <Navbar />
-       <RegisterBanner v-if="!auth.loggedIn" />
-       <!-- <div class="left-contain"><LeftContain /></div>-->
+      <RegisterBanner v-if="!auth.loggedIn" />
+      <!-- <div class="left-contain"><LeftContain /></div>-->
       <v-content class="content-contain">
-      <v-container class="main-contain">
-        <nuxt class="feed-contain" />
-      </v-container>
-      <transition name="fade">
-        <Snackbar />
-      </transition>
-      <transition name="fade">
-        <AudioPlayer />
-      </transition>
-    </v-content>
-  </v-app>
-</div>
+        <v-container class="main-contain">
+          <nuxt class="feed-contain" />
+        </v-container>
+        <transition name="fade">
+          <AudioPlayer />
+        </transition>
+      </v-content>
+    </v-app>
+  </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
-import { getUserDetail } from '~/api/api'
 import Navbar from '~/components/Navbar';
 import AudioPlayer from '~/components/AudioPlayer/AudioPlayer';
-import LeftContain from '~/components/LeftContain';
-import RightContain from '~/components/RightContain';
-import Snackbar from '~/components/Snackbar';
 import RegisterBanner from '~/components/RegisterBanner';
 
 
@@ -39,9 +47,6 @@ export default {
   components: {
     Navbar,
     AudioPlayer,
-    LeftContain,
-    RightContain,
-    Snackbar,
     RegisterBanner,
   },
   computed: {
@@ -50,20 +55,18 @@ export default {
       return [
         {
           name: 'Artists',
-          children: this.artists
-        }
-      ]
+          children: this.artists,
+        },
+      ];
     },
   },
   methods: {
-    async authorizeAppleMusic() {
-      MusicKit.getInstance().authorize().then( async (resp) => {
-        // check to see if user is an authorized apple music user
-        const userResp = await getUserDetail('', 'john2');
-        if (userResp.data.is_authorized_apple_music_user === false) {
-            // send patch to set authorized apple music user
-        }
-      });
+    async authorizeAppleMusic () {
+      try {
+        this.$store.commit('authorize');
+      } catch (err) {
+        console.error(err);
+      }
     },
   }, 
 };

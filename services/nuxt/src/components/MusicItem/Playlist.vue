@@ -10,9 +10,9 @@
     >
       <Artwork
         :id="id"
-        :isPlayable="isPlayable"
-        :isActionable="isActionable"
-        :artworkUrl="appleImage"
+        :is-playable="isPlayable"
+        :is-actionable="isActionable"
+        :artwork-url="appleImage"
         type="playlist"
       />
     </v-badge>
@@ -37,9 +37,9 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import Artwork from '~/components/MusicItem/Artwork';
 
-import { mapState } from 'vuex';
 import { favoriteTrack, getTrackDetail } from '~/api/api';
 
 
@@ -75,32 +75,32 @@ export default {
       isFavorited: false,
     };
   },
-  created () {
-    const resp = getTrackDetail(
-      this.$auth.getToken('auth0'),
-      this.id
-    )
-    console.log(resp)
-  },
   computed: {
     ...mapState(['nowPlayingItem', 'playbackState', 'queue']),
-    appleImage() {
+    appleImage () {
       return this.attributes.artwork.url.replace(
         '{w}', '250'
       ).replace(
         '{h}', '250'
-      )
+      );
     },
+  },
+  created () {
+    const resp = getTrackDetail(
+      this.$auth.getToken('auth0'),
+      this.id
+    );
+    console.log(resp);
   },
   methods: {
     addToQueue: function () {
-      this.$store.dispatch("setQueue", { "playlist": this.id })
+      this.$store.dispatch("setQueue", { "playlist": this.id });
     },
     pauseTrack: async function (event) {
       event.preventDefault();
       this.$store.dispatch("pause");
     },
-    favoriteItem: async function(event) {
+    favoriteItem: async function (event) {
       await favoriteTrack(this.appleMusicId);
     },
     playTrack: function (event) {

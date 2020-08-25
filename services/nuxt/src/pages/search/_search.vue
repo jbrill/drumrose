@@ -2,7 +2,7 @@
   <div>
     <div
       v-if="!loading"
-    ></div>
+    />
   </div>
 </template>
 
@@ -12,10 +12,10 @@ export default {
     searchResults: null,
     loading: true,
   }),
-  methods: {
-  },
   async mounted () {
     this.loading = false;
+  },
+  methods: {
   },
 };
 </script>

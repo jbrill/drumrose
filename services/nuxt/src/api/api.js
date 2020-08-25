@@ -4,7 +4,7 @@ import axios from 'axios';
 /*
  * Fetches reviews
  * */
-export const getTrackReviews = async (bearerToken) => {
+export const getTrackReviews = async bearerToken => {
   try {
     const response = await axios.get(
       `https://teton.drumrose.io/api/reviews/tracks/`,
@@ -18,12 +18,12 @@ export const getTrackReviews = async (bearerToken) => {
   } catch(err) {
     throw new Error(err);
   }
-}
+};
 
 /*
  * Fetches reviews
  * */
-export const getReviews = async (bearerToken) => {
+export const getReviews = async bearerToken => {
   try {
     const response = await axios.get(
       `https://teton.drumrose.io/api/reviews/`,
@@ -40,7 +40,7 @@ export const getReviews = async (bearerToken) => {
       data: [],
     };
   }
-}
+};
 
 
 /*
@@ -55,15 +55,15 @@ export const getFollowers = async (bearerToken, userHandle) => {
           Authorization: `${bearerToken}`,
         },
       }
-    )
+    );
     return response;
   } catch(err) {
     console.error(err);
     return {
       data: [],
-    }
+    };
   }
-}
+};
 
 
 /*
@@ -78,21 +78,21 @@ export const getUserDetail = async (bearerToken, userHandle) => {
           Authorization: `${bearerToken}`,
         },
       }
-    )
+    );
     return response;
   } catch(err) {
     console.error(err);
     return {
       data: [],
-    }
+    };
   }
-}
+};
 
 
 /*
  * Fetches user list
  * */
-export const getUserList = async (bearerToken) => {
+export const getUserList = async bearerToken => {
   try {
     const response = await axios.get(
       `https://teton.drumrose.io/api/users/`,
@@ -143,7 +143,7 @@ export const postFavorite = async (bearerToken, data) => {
       data,
       { headers: {
           Authorization: `${bearerToken}`,
-      }}
+      } }
     );
     return response;
   } catch (err) {

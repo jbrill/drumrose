@@ -56,6 +56,7 @@ export default {
     '@nuxtjs/auth',
     '@nuxtjs/sentry',
     'nuxt-svg-loader',
+    'nuxt-healthcheck',
   ],
   plugins: [
     '~/plugins/nuxt-client-init.client.js',

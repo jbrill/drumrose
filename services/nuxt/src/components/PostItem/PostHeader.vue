@@ -76,6 +76,9 @@ export default {
 
 <style>
 @media screen and (prefers-color-scheme: dark) {
+  .postCaption {
+    color: white;
+  } 
   .songName:hover, .songName:focus {
     color: black;
   }
@@ -113,7 +116,6 @@ export default {
   font-family: 'Proxima Nova', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   margin-top: 1rem;
 }
-
 .post {
   width: 100%;
   margin: 0 auto;

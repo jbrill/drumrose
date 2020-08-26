@@ -30,6 +30,7 @@ lintjs:
   stage: test
   script:
     - docker-compose up -d --build nuxt-server
+    - ./scripts/wait_till_container_healthy.sh drumrose_nuxt-server_1
     - make dtest-lint
   tags:
     - full-stack

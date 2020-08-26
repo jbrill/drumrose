@@ -313,35 +313,10 @@ export default {
 .album-overlay:hover, .album-overlay:focus {
   opacity:1;
 }
-.audioActionContain {
-  width: 2.5rem;
-  height: 2.5rem;
-  position: absolute;
-  display: flex;
-  opacity: 0;
-  border-radius: 50%;
-  align-items: center;
-  justify-content: center;
-}
-.audioActionContainActive {
-  opacity: 1;
-}
-.audioAction {
-  color: black;
-  font-size: 2.5rem;
-  background-color: var(--primary-red--dark);
-  border-radius: 50%;
-}
 .audioFavorite {
   padding-right: 1rem;
 }
-.audioFavorite:hover, .audioFavorite:focus {
-  color: var(--primary-red);
-}
 .audioMore {
   float: left;
-}
-.audioPause:hover, .audioPause:focus {
-  color: var(--primary-purple);
 }
 </style>

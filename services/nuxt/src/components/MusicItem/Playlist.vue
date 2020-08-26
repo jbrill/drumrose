@@ -115,6 +115,9 @@ export default {
 
 <style scoped>
 @media screen and (prefers-color-scheme: dark) {
+  .songName {
+    color: black;
+  }
   .songName:hover, .songName:focus {
     color: black;
   }

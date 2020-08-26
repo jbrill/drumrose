@@ -144,9 +144,6 @@ export default {
 >>>.volume-slider i {
   font-size: 1rem;
 }
->>>.volume-slider .v-messages {
-  display: none;
-}
 >>>.playModeActive {
   color: var(--primary-red) !important;
 }
@@ -180,11 +177,8 @@ export default {
   .audio-player__track-info__track-artist:focus {
     color: white;
   }
-  .audio-player__more-btn {
-    color: white;
-  }
-  .audio-player__more-btn:hover, .audio-player__more-btn:focus {
-    color: white;
+  >>>.playModeActive {
+    color: var(--primary-red);
   }
 }
 .audio-player-artwork {
@@ -200,14 +194,6 @@ export default {
 }
 .audio-player-artwork:hover, .audio-player-artwork:focus {
   cursor: pointer;
-}
-.audio-player__more-btn {
-  right: 1rem;
-  color: white;
-}
-.audio-player__more-btn:hover,
-.audio-player__more-btn:focus {
-  color: var(--primary-yellow);
 }
 .musicControls {
   display: flex;

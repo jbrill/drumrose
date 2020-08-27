@@ -86,15 +86,20 @@ export default {
       );
     },
   },
-  async created () {
+  async asyncData () {
     try {
-      const resp = await getTrackDetail(
-        this.$auth.getToken('auth0'),
-        this.id
-      );
+       await axios.get(
+				`https://teton.drumrose.io/api/tracks/${this.id}/`,
+				{
+					headers: {
+						Authorization: `Bearer ${this.$auth.getToken('auth0')}`,
+					},
+				}
+			)
       console.log(resp);
       this.pageId = resp.data.track.page_id;
     } catch (err) {
+      console.error("err.response");
       console.error(err.response);
       if (err.response == 409) {
         console.log("409!");

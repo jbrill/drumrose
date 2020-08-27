@@ -1,46 +1,40 @@
 <template>
-  <div class="posterInfo">
-    <v-tooltip top>
-      <template 
-        v-slot:activator="{ on }"
+  <div>
+    <v-row
+			align="end"
+			class="fill-height"
+		>
+			<nuxt-link
+				:to="'/people/' + user.username"
+        style="display: flex"
       >
-        <v-btn
-          nuxt
-          text
-          color="transparent"
-          class="handle-select noselect"
-          :to="'/people/' + user.username"
-          v-on="on"
-        >
-          <div
-            class="posterImg"
-            :style="{ backgroundImage: 'url(' + user.picture + ')' }"
-          />
-          <h3 class="posterName">
-            {{ user.username }}
-          </h3>
-        </v-btn>
-      </template>
-      <div>Top tooltip</div>
-    </v-tooltip>
-    <v-icon
-      v-if="postType === 'favorite'"
-      x-small
-    >
-      mdi-heart
-    </v-icon>
-    <v-rating
-      v-else-if="postType === 'rating'"
-      v-model="rating"
-      background-color="white"
-      color="var(--primary-purple)"
-      dense
-      half-increments
-      hover
-      x-small
-      size="18"
-    />
-    <span>{{ date }}</span>
+				<v-avatar
+					left
+					size="36"
+					<v-img
+						width="25px"
+						src="https://cdn.vuetifyjs.com/images/john.jpg"
+						alt="John"
+					></v-img>
+        </v-avatar>
+			  {{ user.username }}
+      </nuxt-link>
+			</v-btn>
+    </v-row>
+    <v-row>
+			<v-rating
+				v-if="postType === 'rating'"
+				v-model="rating"
+				background-color="white"
+				color="var(--primary-purple)"
+				dense
+				half-increments
+				hover
+				x-small
+				size="18"
+			/>
+			<span>{{ date }}</span>
+    </v-row>
   </div>
 </template>
 
@@ -74,7 +68,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 @media screen and (prefers-color-scheme: dark) {
   .postCaption {
     color: white;
@@ -115,12 +109,6 @@ export default {
   color: black;
   font-family: 'Proxima Nova', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   margin-top: 1rem;
-}
-.post {
-  width: 100%;
-  margin: 0 auto;
-  padding: 1rem;
-  display: inline;
 }
 .activePost {
   box-shadow: var(--shadow-heavy-purple);

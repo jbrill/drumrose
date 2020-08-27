@@ -18,8 +18,9 @@
             <v-container fill-height fluid align="center">
               <v-row align="center" justify="center">
                 <v-btn
-                  v-if="nowPlayingItem && playbackState === 2"
+                  v-if="isPlaying === true && playbackState === 2"
                   :class="{ 'not-show-btns': !hover, 'show-btns': hover }"
+                  :loading="isPlaying === true && playbackState !== 2"
                   fab
                   medium
                   color="var(--primary-purple)"
@@ -35,6 +36,7 @@
                 <v-btn
                   v-else
                   :class="{ 'not-show-btns': !hover, 'show-btns': hover }"
+                  :loading="isPlaying === true && playbackState !== 2"
                   fab
                   medium
                   color="var(--primary-purple)"
@@ -173,23 +175,22 @@ export default {
   data () {
     return {
       isHovering: false,
+      isPlaying: false,
     };
   },
   computed: {
     ...mapState(['auth', 'isAuthorized', 'nowPlayingItem', 'playbackState']),
   },
   methods: {
-		async addToQueue (e) {
-      e.preventDefault();
-      console.log(this.type);
+		async addToQueue () {
       if (this.type == 'song') {
-        await this.$store.dispatch("playLater", { 'song': this.id });
+        await this.$store.dispatch("playNext", { 'song': this.id });
       }
       if (this.type == 'playlist') {
-        await this.$store.dispatch("playLater", { 'playlist': this.id });
+        await this.$store.dispatch("playNext", { 'playlist': this.id });
       }
       if (this.type == 'album') {
-        await this.$store.dispatch("playLater", { 'album': this.id });
+        await this.$store.dispatch("playNext", { 'album': this.id });
       }
     },
 		addToLibrary: function () {
@@ -198,9 +199,9 @@ export default {
 		addToPlaylist: function () {
       this.$store.dispatch("setQueue", { "playlist": this.id });
     },
-    pauseTrack: async function (event) {
-      event.preventDefault();
-      this.$store.dispatch("pause");
+    pauseTrack: async function () {
+      await this.$store.dispatch("pause");
+      this.isPlaying = false;
     },
     favoriteItem: async function (event) {
       await favoriteTrack(this.appleMusicId);
@@ -208,19 +209,32 @@ export default {
     async login () {
       await this.$auth.loginWith('auth0');
     },
-    playTrack: async function (event) {
-      console.log("playin?");
-      event.preventDefault();
-      if (this.type == 'song') {
-        await this.$store.dispatch("setQueue", { 'song': this.id });
-      }
-      if (this.type == 'playlist') {
-        await this.$store.dispatch("setQueue", { 'playlist': this.id });
-      }
-      if (this.type == 'album') {
-        await this.$store.dispatch("setQueue", { 'album': this.id });
+    playTrack: async function () {
+      if (this.nowPlayingItem) {
+        if (this.nowPlayingItem.id !== this.id) {
+          if (this.type == 'song') {
+            await this.$store.dispatch("setQueue", { 'song': this.id });
+          }
+          if (this.type == 'playlist') {
+            await this.$store.dispatch("setQueue", { 'playlist': this.id });
+          }
+          if (this.type == 'album') {
+            await this.$store.dispatch("setQueue", { 'album': this.id });
+          }
+        }
+      } else {
+        if (this.type == 'song') {
+          await this.$store.dispatch("setQueue", { 'song': this.id });
+        }
+        if (this.type == 'playlist') {
+          await this.$store.dispatch("setQueue", { 'playlist': this.id });
+        }
+        if (this.type == 'album') {
+          await this.$store.dispatch("setQueue", { 'album': this.id });
+        }
       }
       await this.$store.dispatch("play");
+      this.isPlaying = true;
     },
   },
 };

@@ -176,7 +176,6 @@ export default {
   },
   methods: {
     appleImage (image) {
-      console.log(image);
       return image.attributes.artwork.url.replace(
         '{w}', '2500'
       ).replace(

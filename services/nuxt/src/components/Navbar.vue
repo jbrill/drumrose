@@ -24,6 +24,7 @@
       </v-list>
       <template v-if="auth.loggedIn" v-slot:append>
         <div class="pa-2">
+          <v-btn to="profile" block>Profile</v-btn>
           <v-btn block @click="signOut">
             Logout
           </v-btn>

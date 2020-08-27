@@ -218,19 +218,14 @@ export const favoriteTrack = async (bearerToken, appleMusicId) => {
  * Fetches detail route for a track
  * */
 export const getTrackDetail = async (bearerToken, appleMusicId) => {
-  try {
-    const response = await axios.get(
-      `https://teton.drumrose.io/api/tracks/${appleMusicId}/`,
-      {
-        headers: {
-          Authorization: `Bearer ${bearerToken}`,
-        },
-      }
-    );
-    return response;
-  } catch(err) {
-    throw new Error(err);
-  }
+  return await axios.get(
+    `https://teton.drumrose.io/api/tracks/${appleMusicId}/`,
+    {
+      headers: {
+        Authorization: `Bearer ${bearerToken}`,
+      },
+    }
+  );
 };
 
 

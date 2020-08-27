@@ -121,6 +121,22 @@ class Song(BaseModel):
     objects = SongManager()
 
 
+class AlbumManager(models.Manager):
+    def create(self, *args, **kwargs):
+        # TODO: fetch track info from apple music api
+        # apple_music_id = kwargs["apple_music_id"]
+        #
+        name = kwargs["name"]
+        name_list = name.split()
+        formatted_page_plain = "-".join(name_list)
+        kwargs["page_id"] = formatted_page_plain
+        count = Song.objects.filter(name=name).count()
+        if count:
+            kwargs["page_id"] = "{}-{}".format(formatted_page_plain, count)
+        song = super(SongManager, self).create(*args, **kwargs)
+        return song
+
+
 class Album(BaseModel):
     """
     Model for an album
@@ -130,6 +146,24 @@ class Album(BaseModel):
     apple_music_id = models.CharField(
         max_length=200, null=True, blank=True, unique=True
     )
+
+    objects = AlbumManager()
+
+
+class PlaylistManager(models.Manager):
+    def create(self, *args, **kwargs):
+        # TODO: fetch track info from apple music api
+        # apple_music_id = kwargs["apple_music_id"]
+        #
+        name = kwargs["name"]
+        name_list = name.split()
+        formatted_page_plain = "-".join(name_list)
+        kwargs["page_id"] = formatted_page_plain
+        count = Song.objects.filter(name=name).count()
+        if count:
+            kwargs["page_id"] = "{}-{}".format(formatted_page_plain, count)
+        song = super(SongManager, self).create(*args, **kwargs)
+        return song
 
 
 class Playlist(BaseModel):
@@ -144,6 +178,8 @@ class Playlist(BaseModel):
     apple_music_id = models.CharField(
         max_length=200, null=True, blank=True, unique=True
     )
+
+    objects = PlaylistManager()
 
 
 class Review(BaseModel):

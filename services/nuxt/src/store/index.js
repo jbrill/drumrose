@@ -34,6 +34,7 @@ export const state = () => ({
 
   // Posts
   favoritedPosts: [],
+  activePost: null,
 
   // Server side
   appleMusicToken: null,
@@ -549,23 +550,23 @@ export const actions = {
     }
   },
 
-  play (_) {
-    return MusicKit.getInstance().player.play();
+  async play (_) {
+    await MusicKit.getInstance().player.play();
   },
-  pause (_) {
-    return MusicKit.getInstance().player.pause();
+  async pause (_) {
+    await MusicKit.getInstance().player.pause();
   },
   previous (_) {
     return MusicKit.getInstance().player.skipToPreviousItem();
   },
-  next (_) {
-    return MusicKit.getInstance().player.skipToNextItem();
+  async next (_) {
+    await MusicKit.getInstance().player.skipToNextItem();
   },
   seek (_, time) {
     return MusicKit.getInstance().player.seekToTime(time);
   },
-  playNext (_, queue) {
-    return MusicKit.getInstance().player.queue.prepend(queue);
+  async playNext (_, queue) {
+    await MusicKit.getInstance().player.queue.prepend(queue);
   },
   playLater (_, queue) {
     return MusicKit.getInstance().player.queue.append(queue);

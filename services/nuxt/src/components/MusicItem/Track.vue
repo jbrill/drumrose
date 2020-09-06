@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="!loading">
     <v-badge
       avatar
       bordered
@@ -9,29 +9,29 @@
       color="var(--primary-purple)"
     >
       <Artwork
-        :id="id"
+        :id="trackObject.id"
         :is-playable="isPlayable"
         :is-actionable="isActionable"
         :artwork-url="appleImage"
-        :link="'tracks/' + pageId"
+        :link="'/tracks/' + trackObject.id"
         type="song"
       />
     </v-badge>
     <div class="textContain">
       <nuxt-link
         class="songName"
-        :to="'/tracks/' + pageId"
+        :to="'/tracks/' + trackObject.id"
       >
         <span
           ref="songName"
           class="songName"
-        >{{ attributes.name }}</span>
+        >{{ trackObject.attributes.name }}</span>
       </nuxt-link>
-      <nuxt-link :to="'/artists/' + attributes.artistName" class="artistName">
+      <nuxt-link :to="'/artists/' + trackObject.relationships.artists.data[0].id" class="artistName">
         <span
           ref="curatorName"
           class="artistName"
-        >{{ attributes.artistName }}</span>
+        >{{ trackObject.attributes.artistName }}</span>
       </nuxt-link>
     </div>
   </div>
@@ -53,10 +53,6 @@ export default {
       type: String,
       default: '',
     },
-    attributes: {
-      type: Object,
-      default: () => {},
-    },
     isActionable: {
       type: Boolean,
       default: false,
@@ -68,42 +64,55 @@ export default {
   },
   data () {
     return {
-      isLoading: true,
+      loading: true,
       playlistDialog: false,
       artistName: '',
       artworkUrl: '',
       name: '',
-      pageId: '',
+      trackObject: {},
     };
   },
   computed: {
     ...mapState(['nowPlayingItem', 'playbackState', 'queue']),
     appleImage () {
-      return this.attributes.artwork.url.replace(
+      console.log("this.trackObject")
+      console.log(this.trackObject)
+      return this.trackObject.attributes.artwork.url.replace(
         '{w}', '250'
       ).replace(
         '{h}', '250'
       );
     },
   },
-  async asyncData () {
+  async asyncData ({ store }) {
     try {
-       await axios.get(
-				`https://teton.drumrose.io/api/tracks/${this.id}/`,
+       /***await axios.get(
+				`https://teton.drumrose.io/api/tracks/${this.trackObject.id}/`,
 				{
 					headers: {
 						Authorization: `Bearer ${this.$auth.getToken('auth0')}`,
 					},
 				}
-			)
-      console.log(resp);
-      this.pageId = resp.data.track.page_id;
+			)***/
     } catch (err) {
       console.error("err.response");
       console.error(err.response);
       if (err.response == 409) {
         console.log("409!");
       } 
+      console.error(err);
+    }
+  },
+  async mounted () {
+    try {
+      const resp = await this.$store.getters.fetch(
+        `/v1/catalog/us/songs/${this.id}`
+      );
+      console.log(resp);
+      this.trackObject = resp.data[0];
+      this.loading = false;
+    } catch (err) {
+      this.loading = false;
       console.error(err);
     }
   },
@@ -122,6 +131,9 @@ export default {
         this.$store.dispatch("play");
       });
     },
+  },
+  created() {
+    console.log(this.trackObject)
   },
 };
 </script>

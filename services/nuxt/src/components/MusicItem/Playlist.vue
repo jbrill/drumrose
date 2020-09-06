@@ -13,6 +13,7 @@
         :is-playable="isPlayable"
         :is-actionable="isActionable"
         :artwork-url="appleImage"
+        :link="'/playlists/' + id"
         type="playlist"
       />
     </v-badge>
@@ -40,7 +41,7 @@
 import { mapState } from 'vuex';
 import Artwork from '~/components/MusicItem/Artwork';
 
-import { favoriteTrack, getTrackDetail } from '~/api/api';
+import { favoriteTrack, getPlaylistDetail } from '~/api/api';
 
 
 export default {
@@ -86,7 +87,7 @@ export default {
     },
   },
   created () {
-    const resp = getTrackDetail(
+    const resp = getPlaylistDetail(
       this.$auth.getToken('auth0'),
       this.id
     );

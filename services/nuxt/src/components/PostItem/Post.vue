@@ -15,10 +15,9 @@
     />
     <Track
       v-if="post.type == 'songs'"
-      :id="post.id"
       is-playable
       is-actionable
-      :attributes="post.attributes"
+      :id="post.id"
     />
     <Playlist
       v-if="post.type == 'playlists'"
@@ -35,7 +34,6 @@ import Album from '~/components/MusicItem/Album.vue';
 import Track from '~/components/MusicItem/Track.vue';
 import Playlist from '~/components/MusicItem/Playlist.vue';
 import PostHeader from '~/components/PostItem/PostHeader.vue';
-
 
 
 export default {

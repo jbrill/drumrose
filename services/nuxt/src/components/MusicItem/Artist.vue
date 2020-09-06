@@ -40,7 +40,8 @@
               <v-list>
                 <v-list-item>
                   <v-list-item-title>
-                    <v-icon> mdi-music-box-multiple</v-icon> Add to queue
+                    <v-icon> mdi-music-box-multiple</v-icon>
+                    Add to queue
                   </v-list-item-title>
                 </v-list-item>
                 <v-dialog
@@ -52,7 +53,8 @@
                       v-on="on"
                     >
                       <v-list-item-title>
-                        <v-icon>mdi-playlist-music</v-icon> Add to playlist
+                        <v-icon>mdi-playlist-music</v-icon>
+                        Add to playlist
                       </v-list-item-title>
                     </v-list-item>
                   </template>
@@ -168,16 +170,11 @@ export default {
       default: false,
     },
   },
-  async fetch () {
-    console.log("HELLOOO");
-    this.isLoading = false;
-  },
   data () {
     return {
       isLoading: true,
       playlistDialog: false,
       artistName: '',
-      artworkUrl: '',
       name: '',
       isHovering: false,
     };

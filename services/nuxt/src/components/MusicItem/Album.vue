@@ -13,6 +13,7 @@
         :is-playable="isPlayable"
         :is-actionable="isActionable"
         :artwork-url="appleImage"
+        :link="'/albums/' + id"
         type="album"
       />
     </v-badge>
@@ -74,31 +75,20 @@ export default {
       name: '',
     };
   },
+  mounted () {
+    console.log(this.attributes)
+  },
   computed: {
     ...mapState(['nowPlayingItem', 'playbackState', 'queue']),
     appleImage () {
+      console.log("this.attributes")
+      console.log(this.attributes)
       return this.attributes.artwork.url.replace(
         '{w}', '2500'
       ).replace(
         '{h}', '2500'
       );
     },
-  },
-  async created () {
-    try {
-      const resp = await getAlbumDetail(
-        this.$auth.getToken('auth0'),
-        this.id
-      );
-      console.log(resp);
-      this.pageId = resp.data.playlist.page_id;
-    } catch (err) {
-      console.error(err.response);
-      if (err.response == 409) {
-        console.log("409!");
-      }
-      console.error(err);
-    }
   },
   methods: {
     addToQueue: function () {

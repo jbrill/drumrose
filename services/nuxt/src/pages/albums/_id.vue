@@ -11,12 +11,7 @@
               <v-flex justify-space-between>
 								<div>
 								<v-row>
-									<v-btn
-                    fab
-                    medium
-                    color="var(--primary-purple"
-                    @click="playTrack"  
-                  ><v-icon>mdi-play</v-icon></v-btn>
+									<v-btn fab medium color="var(--primary-purple"><v-icon>mdi-play</v-icon></v-btn>
                   <v-flex>
 									<h2
 										class="headline"
@@ -30,20 +25,14 @@
                 <v-row>
 									<span>Released in <strong> {{ trackInfo.attributes.releaseDate.split('-')[0] }}</strong></span>
                 </v-row>
-                <v-row>
-									<span>Track <strong> {{ trackInfo.attributes.trackNumber }}</strong> from 
-                    <nuxt-link
-                      :to="'/albums/' + trackInfo.relationships.albums.data[0].id"
-                    >{{ trackInfo.attributes.albumName }}</nuxt-link>
-                  </span>
-                </v-row>
                 <v-divider />
-                <v-row>
+                <v-row height="30%" class="fill-height">
                   <v-chip
-                     v-for="(genre, genreIdx) in trackInfo.attributes.genreNames"
-                    :key="'genre-' + genreIdx"
+                    nuxt
                     label
                     small
+                    :to="'/genres/' + genre.replace(' ', '-').toLowerCase()"
+                    v-for="genre in trackInfo.attributes.genreNames"
                   >
                     #{{ genre }}
                   </v-chip>
@@ -95,7 +84,7 @@ export default {
   async mounted () {
     try {
       const resp = await this.$store.getters.fetch(
-        `/v1/catalog/us/songs/${this.$route.params.id}`
+        `/v1/catalog/us/albums/${this.$route.params.id}`
       );
       console.log(resp);
       this.trackInfo = resp.data[0];
@@ -115,32 +104,6 @@ export default {
       } catch (err) {
         console.error(err);
       }
-    },
-    playTrack: async function () {
-      if (this.nowPlayingItem) {
-        if (this.nowPlayingItem.id !== this.id) {
-          if (this.type == 'song') {
-            await this.$store.dispatch("setQueue", { 'song': this.id });
-          }
-          if (this.type == 'playlist') {
-            await this.$store.dispatch("setQueue", { 'playlist': this.id });
-          }
-          if (this.type == 'album') {
-            await this.$store.dispatch("setQueue", { 'album': this.id });
-          }
-        }
-      } else {
-        if (this.type == 'song') {
-          await this.$store.dispatch("setQueue", { 'song': this.id });
-        }
-        if (this.type == 'playlist') {
-          await this.$store.dispatch("setQueue", { 'playlist': this.id });
-        }
-        if (this.type == 'album') {
-          await this.$store.dispatch("setQueue", { 'album': this.id });
-        }
-      }
-      await this.$store.dispatch("play");
     },
   },
   computed: {

@@ -1,29 +1,18 @@
 <template>
   <div>
     <v-row
-			align="end"
 			class="fill-height"
+      align="center"
+      justify="center"
 		>
-			<nuxt-link
+			<v-btn
+        text
+        color="#ccc"
 				:to="'/people/' + user.username"
-        style="display: flex"
       >
-				<v-avatar
-					left
-					size="36"
-					<v-img
-						width="25px"
-						src="https://cdn.vuetifyjs.com/images/john.jpg"
-						alt="John"
-					></v-img>
-        </v-avatar>
 			  {{ user.username }}
-      </nuxt-link>
-			</v-btn>
-    </v-row>
-    <v-row>
-			<v-rating
-				v-if="postType === 'rating'"
+      </v-btn>
+      <v-rating
 				v-model="rating"
 				background-color="white"
 				color="var(--primary-purple)"
@@ -33,7 +22,6 @@
 				x-small
 				size="18"
 			/>
-			<span>{{ date }}</span>
     </v-row>
   </div>
 </template>
@@ -56,7 +44,7 @@ export default {
     },
     'rating': {
       type: String,
-      default: '',
+      default: '.5',
     },
   },
   created: function () {
@@ -192,5 +180,8 @@ p.poster-action {
   float: right;
   height: 2rem;
   width: 100%;
+}
+.profile-name {
+  color: #ccc;
 }
 </style>

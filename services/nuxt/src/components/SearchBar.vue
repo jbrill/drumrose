@@ -1,6 +1,7 @@
 <template>
   <div>
     <v-autocomplete
+      background-color="var(--primary-black-light)"
       v-model="selectedSearch"
       :items="entries"
       :loading="isLoading"
@@ -15,7 +16,6 @@
       placeholder="Search Drumrose"
       prepend-inner-icon="mdi-database-search"
       outlined
-      rounded
       return-object
       width="100%"
     >
@@ -25,7 +25,7 @@
         width="100%"
         text
         nuxt
-        :to="'search/' + search"
+        :to="'/search/' + search"
         class="search-button"
         color="var(--primary-yellow)"
       >

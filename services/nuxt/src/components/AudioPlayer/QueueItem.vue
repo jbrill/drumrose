@@ -1,13 +1,6 @@
 <template>
   <div :class="nowPlaying ? 'nowPlayingContain' : 'queueItemContain'">
     <div v-if="trackObject" class="musicItem">
-      <!--<Artwork
-        :id="trackObject.id"
-        isPlayable
-        class="audio-player-artwork"
-        :artworkUrl="appleImage"
-        type="album"
-      />-->
       <v-img
         :src="appleImage"
         class="audio-player-artwork"
@@ -18,13 +11,13 @@
       <div class="nowPlayingItem">
         <nuxt-link
           class="nowPlayingItemLink songName"
-          :to="'tracks/' + track_page_id"
+          :to="'/tracks/' + trackObject.id"
         >
           {{ trackObject.attributes.name }}
         </nuxt-link>
         <nuxt-link
           class="nowPlayingItemLink artistName"
-          :to="'artists/' + artist_page_id"
+          :to="'/artists/'"
         >
           {{ trackObject.attributes.artistName }}
         </nuxt-link>
@@ -90,6 +83,8 @@ export default {
     },
   },
   created () {
+    console.log("this.trackObject")
+    console.log(this.trackObject)
     /***getTrackDetail(
       this.$auth.getToken('auth0'),
       this.trackObject.id

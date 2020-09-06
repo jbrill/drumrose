@@ -24,7 +24,8 @@
                   fab
                   medium
                   color="var(--primary-purple)"
-                  @click.native="pauseTrack"
+                  @click="pauseTrack"
+                  @click.native.stop.prevent
                 >
                   <v-icon
                     :class="{ 'show-btns': hover }"
@@ -40,7 +41,8 @@
                   fab
                   medium
                   color="var(--primary-purple)"
-                  @click.native="playTrack"
+                  @click="playTrack"
+                  @click.native.stop.prevent
                 >
                   <v-icon
                     :class="{ 'show-btns': hover }"
@@ -95,17 +97,41 @@
                     </v-btn>
                   </template>
                   <v-list dense>
-                    <v-list-item
-                      @click.native.stop.prevent
-                      @click="addToPlaylist"
-                    >
-                      <v-list-item-icon>
-                        <v-icon>mdi-playlist-music</v-icon>
-                      </v-list-item-icon>
-                      <v-list-item-content>
-                        <v-list-item-title>Add to playlist</v-list-item-title>
-                      </v-list-item-content>
-                    </v-list-item>
+                      <v-list-item :style="{
+                        'justify-content':'center'
+                      }">
+                        <v-rating
+                          @click.native.stop.prevent
+                          background-color="white"
+                          color="var(--primary-purple)"
+                          dense
+                          half-increments
+                          hover
+                          size="18"
+                        />
+                      </v-list-item>
+                      <v-dialog v-model="dialog" scrollable max-width="300px">
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-list-item
+                          v-bind="attrs"
+                          v-on="on"
+                          @click.native.stop.prevent
+                        >
+                        <v-list-item-icon>
+                          <v-icon>mdi-playlist-music</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-content>
+                          <v-list-item-title>Add to playlist</v-list-item-title>
+                        </v-list-item-content>
+                      </v-list-item>
+                     </template>
+                     <v-card>
+                       <v-tabs>
+                        <v-tab>Add to playlist</v-tab>
+                        <v-tab>Create a playlist</v-tab>
+                        </v-tabs>
+                      </v-card>
+                    </v-dialog>
                     <v-divider />
                     <v-list-item @click.native.stop.prevent @click="addToQueue">
                       <v-list-item-icon>
@@ -119,8 +145,7 @@
                     <v-list-item
                       @click.native.stop.prevent
                       @click="
-                        (isAuthorized || auth.loggedIn) ? 
-                          addToLibrary() : login()
+                          addToLibrary()
                       "
                     >
                       <v-list-item-icon>
@@ -151,10 +176,6 @@ export default {
       type: String,
       default: '',
     },
-    link: {
-      type: String,
-      default: '',
-    },
     isActionable: {
       type: Boolean,
       default: false,
@@ -171,11 +192,16 @@ export default {
       type: String,
       default: '',
     },
+    link: {
+      type: String,
+      default: '',
+    },
   },
   data () {
     return {
       isHovering: false,
       isPlaying: false,
+      dialog: false,
     };
   },
   computed: {
@@ -194,16 +220,29 @@ export default {
       }
     },
 		addToLibrary: function () {
-      this.$store.dispatch("setQueue", { "playlist": this.id });
+      this.$store.dispatch(
+        "addToLibrary", [this.id]
+      );
     },
-		addToPlaylist: function () {
-      this.$store.dispatch("setQueue", { "playlist": this.id });
+		addToPlaylist: function (name, items) {
+      // TODO
+      this.$store.dispatch("addToPlaylist", {
+        "name": name,
+        "items": items,
+      });
     },
-    pauseTrack: async function () {
+    createPlaylist: function (name, items) {
+      // TODO
+      this.$store.dispatch("newPlaylist", {
+        "name": name,
+        "items": items,
+      });
+    },
+    async pauseTrack () {
       await this.$store.dispatch("pause");
       this.isPlaying = false;
     },
-    favoriteItem: async function (event) {
+    async favoriteItem () {
       await favoriteTrack(this.appleMusicId);
     },
     async login () {
@@ -211,18 +250,6 @@ export default {
     },
     playTrack: async function () {
       if (this.nowPlayingItem) {
-        if (this.nowPlayingItem.id !== this.id) {
-          if (this.type == 'song') {
-            await this.$store.dispatch("setQueue", { 'song': this.id });
-          }
-          if (this.type == 'playlist') {
-            await this.$store.dispatch("setQueue", { 'playlist': this.id });
-          }
-          if (this.type == 'album') {
-            await this.$store.dispatch("setQueue", { 'album': this.id });
-          }
-        }
-      } else {
         if (this.type == 'song') {
           await this.$store.dispatch("setQueue", { 'song': this.id });
         }

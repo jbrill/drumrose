@@ -1,38 +1,54 @@
 <template>
-  <div>
-    <v-sheet v-if="!loading">
-      <p>{{ artistData.attributes.name }}</p>
-      <v-list>
-        <v-list-item
-          v-for="genre in artistData.attributes.genreNames"
-          :key="`genre-${genre}`"
-        >
-          {{ genre }}
-        </v-list-item>
-      </v-list>
-    </v-sheet>
+  <div v-if="!loading">
+    <h1>{{ artistData.attributes.name }}</h1>
+    <v-chip
+      v-for="(genre, idx) in artistData.attributes.genreNames"
+      :key="`genre-${idx}`"
+    >
+      #{{ genre }}
+    </v-chip>
+    <h6>Albums</h6>
+    <Album
+      v-for="(album, idx) in artistData.relationships.albums.data"       
+      :key="`album-${idx}`"
+      :id="album.id"
+      :attributes="attributeData[idx]"
+      is-playable
+      is-actionable
+    />
   </div>
 </template>
 
 <script>
+import Album from '~/components/MusicItem/Album';
+
 export default {
+  components: {
+    Album,
+  },
   data: () => ({
     artistData: {},
+    attributeData: [],
     loading: true,
   }),
-  async mounted () {
-    console.log(this.$route);
+  async created () {
+    this.loading = true;
     const handle = this.$route.params.handle;
     const resp = await this.$store.getters.fetch(
 			`/v1/catalog/us/artists/${handle}`
 		);
-    this.loading = false;
-    if ('data' in resp) {
-      this.artistData = resp.data[0];
-    }
-    console.log(this.$route.params.slug);
+    this.artistData = resp.data[0];
+    this.artistData.relationships.albums.data.forEach( async (album) => {
+      const attributeResp = await this.$store.getters.fetch(
+        `/v1/catalog/us/albums/${album.id}`
+      );
+      this.attributeData.push(attributeResp.data[0].attributes);
+    });
+    console.log(this.artistData)
+    console.log(this.attributeData)
     console.log(resp);
-  }, 
+    this.loading = false;
+  },
 };
 </script>
 

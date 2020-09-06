@@ -100,23 +100,22 @@ export const getters = {
 	},
 
   recommendations (state) {
-    return getApi(false).recommendations();
+    return MusicKit.getInstance().recommendations();
   },
-  recentlyAdded (state) {
-    return options => {
-      return getApi(true).collection('recently-added', null, options);
-    };
-  },
-  getQueue (state) {
-   return state.queue;
+  async recentlyAdded (state) {
+    await MusicKit.getInstance().library.collection(
+      'recently-added', null, options
+    );
   },
   async recentlyPlayed (state) {
-    const res = await getApi(false).recentPlayed();
-    return res;
+    await getApi(false).recentPlayed();
   },
-  heavyRotation (state) {
-    if (process.server) return;
-    return getApi(false).historyHeavyRotation();
+  async heavyRotation (state) {
+    await getApi(false).historyHeavyRotation();
+  },
+
+  getQueue (state) {
+   return state.queue;
   },
 
   // Data fetching
@@ -556,14 +555,14 @@ export const actions = {
   async pause (_) {
     await MusicKit.getInstance().player.pause();
   },
-  previous (_) {
-    return MusicKit.getInstance().player.skipToPreviousItem();
+  async previous (_) {
+    await MusicKit.getInstance().player.skipToPreviousItem();
   },
   async next (_) {
     await MusicKit.getInstance().player.skipToNextItem();
   },
-  seek (_, time) {
-    return MusicKit.getInstance().player.seekToTime(time);
+  async seek (_, time) {
+    await MusicKit.getInstance().player.seekToTime(time);
   },
   async playNext (_, queue) {
     await MusicKit.getInstance().player.queue.prepend(queue);
@@ -649,8 +648,7 @@ export const actions = {
 
   // Library
   addToLibrary (_, items) {
-    let api = getApi(false);
-    return api.addToLibrary(items);
+    return MusicKit.getInstance().addToLibrary(items);
   },
 
   addToPlaylist (_, { playlistId, items }, { $sentry }) {

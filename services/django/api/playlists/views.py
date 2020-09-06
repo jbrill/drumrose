@@ -47,6 +47,9 @@ class PlaylistDetail(APIView):
             - Deletes a post
     """
 
+    authentication_classes = []
+    permission_classes = []
+
     def get(self, request, playlist_id):
         """
         Returns a serialized playlist

@@ -1,14 +1,15 @@
 <template>
   <div>
     <v-autocomplete
-      background-color="var(--primary-black-light)"
       v-model="selectedSearch"
+      background-color="var(--primary-black-light)"
       :items="entries"
       :loading="isLoading"
       :search-input.sync="search"
       clearable
       hide-details
       hide-selected
+      hide-no-data
       dense
       item-text="attributes.name"
       item-value="attributes.name"
@@ -108,23 +109,23 @@ export default {
         this.entries = [];
         return;
       }
-      this.entries = [
-        {
-          header: 'Tracks',
-        },
-        {
-          divider: true,
-        },
-        {
-          header: 'Artists',
-        },
-        {
-          divider: true,
-        },
-        {
-          header: 'Albums',
-        },
-      ];
+      // this.entries = [
+      //   {
+      //     header: 'Tracks',
+      //   },
+      //   {
+      //     divider: true,
+      //   },
+      //   {
+      //     header: 'Artists',
+      //   },
+      //   {
+      //     divider: true,
+      //   },
+      //   {
+      //     header: 'Albums',
+      //   },
+      // ];
       this.isLoading = true;
       this.$store.dispatch('getHints', val).then(res => {
         this.isLoading = false;

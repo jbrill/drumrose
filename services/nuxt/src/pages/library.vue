@@ -65,7 +65,6 @@
           </v-col>
         </v-row>
       </v-container>
-      </v-card>
     </div>
   </div>
 </template>
@@ -96,8 +95,10 @@ export default {
       numArtistOptions: 27,
     };
   },
-  computed: mapState(['activeCollection']),
-  async mounted () {
+  computed: {
+    ...mapState(['activeCollection']),
+  },
+  async mounted ({ store }) {
     // Load the collection
     this.loading = true;
     this.error = null;
@@ -106,15 +107,21 @@ export default {
     this.albumCollection = [];
     this.playlistCollection = [];
     this.offset = 0;
-    const res = await this.$store.getters.get(
-      true,
-      this.$store.state.activeCollection,
-      null,
-      mergeWith({ limit: 100 }, { offset: this.offset })
-    );
-    if (this.activeCollection === 'artists') {
-      this.artistCollection = this.artistCollection.concat(res);
+    let activeCollection = this.$store.state.activeCollection;
+    try {
+      const res = await this.$store.getters.get(
+        true,
+        activeCollection,
+        null,
+        mergeWith({ limit: 100 }, { offset: this.offset })
+      );
+      if (this.activeCollection === 'artists') {
+        this.artistCollection = this.artistCollection.concat(res);
+      }
+    } catch (err) {
+      this.$toast.show(err);
     }
+
     this.loading = false;
   },
   methods: {

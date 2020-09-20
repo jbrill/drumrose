@@ -24,7 +24,10 @@
       prepend-inner-icon="mdi-earth"
       solo
     />
-    </v-row>
+    <v-divider />
+    <v-btn large>
+      Connect Apple Music
+    </v-btn>
     <v-divider v-if="auth.loggedIn" />
     <span v-if="auth.loggedIn">Account options</span>
     <v-btn
@@ -86,7 +89,7 @@
             color="var(--primary-red)"
             @click="deleteAccountDialog = false"
           >
-            Reset
+            Delete
           </v-btn>
         </v-card-actions>
       </v-card>

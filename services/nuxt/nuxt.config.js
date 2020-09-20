@@ -55,6 +55,7 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/auth',
     '@nuxtjs/sentry',
+    '@nuxtjs/toast',
     'nuxt-svg-loader',
     'nuxt-healthcheck',
   ],
@@ -128,5 +129,24 @@ export default {
 				},
 			},
 		},
-	},
+  },
+  toast: {
+    position: 'top-right',
+    register: [ // Register custom toasts
+      {
+        name: 'my-error',
+        message: 'Oops...Something went wrong',
+        options: {
+          type: 'error',
+        },
+      },
+      {
+        name: 'apple_login',
+        message: 'Sign into Apple Music for full track access',
+        options: {
+          type: 'info',
+        },
+      },
+    ],
+  },
 };

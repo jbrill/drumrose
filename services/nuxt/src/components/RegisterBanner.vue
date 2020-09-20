@@ -4,6 +4,7 @@
     hide-delimiter-background
     show-arrows-on-hover
     cycle
+    class="register-carousel"
   >
     <v-carousel-item
       v-for="(image, i) in images"
@@ -24,16 +25,15 @@
         <v-card-title color="white" class="justify-center">
           {{ image.title }}
         </v-card-title>
-        <v-card-subtitle style="text-align: center" class="justify-center">
+        <v-card-subtitle background-color="black" style="{text-align: center, padding: 5px}" class="justify-center">
           {{ image.description }}
         </v-card-subtitle>
         <v-card-actions class="justify-center">
-          <v-btn color="var(--primary-red)" @click="login">
+          <v-btn large color="var(--primary-purple)" @click="login">
             JOIN THE PARTY - IT'S FREE!
           </v-btn>
         </v-card-actions>
       </v-card>
-      </v-container>
     </v-carousel-item>
   </v-carousel>
 </template>
@@ -74,7 +74,7 @@ export default {
   justify-content: center;
   align-items: center;
 }
->>>.v-image__image, .v-image__image--cover {
-  opacity: 0.8;
+.register-carousel {
+  border-bottom: 2px solid var(--primary-black-light);
 }
 </style>

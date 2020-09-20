@@ -85,16 +85,26 @@ export default {
   },
   async fetch () {
     this.loading = true;
-    const trending = await this.$store.getters.fetch(
-      `/v1/catalog/${this.$store.state.storefront}/` +
-      `charts?types=playlists,songs,albums`
-    );
-    this.trendingAlbumGroups = trending.results.albums;
-    this.trendingPlaylistGroups = trending.results.playlists;
-    this.trendingSongGroups = trending.results.songs;
-    if (this.$store.state.isAuthorized) {
-      this.recommendations = await this.$store.getters['recommendations'];
+    try {
+      const trendingResponse = await this.$store.getters.fetch(
+        `/v1/catalog/${this.$store.state.storefront}/` +
+        `charts?types=playlists,songs,albums`
+      );
+      this.trendingAlbumGroups = trendingResponse.results.albums;
+      this.trendingPlaylistGroups = trendingResponse.results.playlists;
+      this.trendingSongGroups = trendingResponse.results.songs;
+    } catch (err) {
+      this.$toast.error(err.message);
     }
+
+    if (this.$store.state.isAuthorized) {
+      try {
+        this.recommendations = await this.$store.getters['recommendations'];
+      } catch (err) {
+        this.$toast.error(err.message);
+      }
+    }
+    console.log(this.recommendations);
     this.loading = false;
   },
   data () {
@@ -109,11 +119,6 @@ export default {
   },
   computed: {
     ...mapState(['isAuthorized', 'auth']),
-  },
-  methods: {
-    ...mapMutations({
-      setSnack: 'snackbar/setSnack',
-    }),
   },
 };
 </script>

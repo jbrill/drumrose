@@ -1,11 +1,13 @@
 <template>
   <div id="app">
     <v-app class="app">
+      <Navbar />
       <v-app-bar
         v-if="!isAuthorized"
         color="#f0f0f0"
         sticky
         short
+        app
         dense
         class="authorize-apple-music"
         @click="authorizeAppleMusic"
@@ -21,10 +23,8 @@
           to Apple Music to gain full access to tracks and sync your library.
         </span>
       </v-app-bar>
-      <Navbar />
-      <RegisterBanner v-if="!auth.loggedIn" />
-      <!-- <div class="left-contain"><LeftContain /></div>-->
       <v-content class="content-contain">
+        <RegisterBanner v-if="!auth.loggedIn" />
         <v-container class="main-contain">
           <nuxt class="feed-contain" />
         </v-container>
@@ -63,7 +63,7 @@ export default {
   methods: {
     async authorizeAppleMusic () {
       try {
-        this.$store.commit('authorize');
+        this.$store.dispatch('authorize');
       } catch (err) {
         console.error(err);
       }
@@ -76,7 +76,8 @@ export default {
 .app {
   font-family: Menlo, Monaco, 'Droid Sans Mono', Consolas, 'Lucida Console',
     'Courier New', monospace;
-  background-color: #252525;
+  background-image: linear-gradient(180deg,#14181c 0,#14181c 250px,#2c3440);
+  background-color: var(--primary-black-light);
 }
 .main-contain {
   width: 80vw;
@@ -87,8 +88,6 @@ export default {
   height: 100%;
 }
 .content-contain {
-  background-image: linear-gradient(180deg,#14181c 0,#14181c 250px,#2c3440);
-  background-color: var(--primary-black-light);
   padding: 0;
   position: relative;
   width: 100%;

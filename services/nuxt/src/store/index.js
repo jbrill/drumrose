@@ -99,12 +99,12 @@ export const getters = {
     return "0:00";
 	},
 
-  recommendations (state) {
-    return MusicKit.getInstance().recommendations();
+  async recommendations (state) {
+    await MusicKit.getInstance().api.recommendations();
   },
   async recentlyAdded (state) {
-    await MusicKit.getInstance().library.collection(
-      'recently-added', null, options
+    await MusicKit.getInstance().api.library.collection(
+      'recently-added', null, {}
     );
   },
   async recentlyPlayed (state) {
@@ -120,9 +120,15 @@ export const getters = {
 
   // Data fetching
   get (state) {
-    return async (library, type, id, options) => {
-      return await getApi(library)[type](id, options);
-    };
+    try {
+      async (library, type, id, options) => {
+        await getApi(library)[type](id, options);
+      };
+    } catch (err) {
+      if (err == MusicKit.MKError.ACCESS_DENIED) {
+        console.log("AY")
+      }
+    }
   },
   collection (state) {
     return (library, type, id, options) => {
@@ -567,8 +573,8 @@ export const actions = {
   async playNext (_, queue) {
     await MusicKit.getInstance().player.queue.prepend(queue);
   },
-  playLater (_, queue) {
-    return MusicKit.getInstance().player.queue.append(queue);
+  async playLater (_, queue) {
+    await MusicKit.getInstance().player.queue.append(queue);
   },
   changeTo (_, position) {
     return MusicKit.getInstance().changeToMediaAtIndex(position);
@@ -647,11 +653,26 @@ export const actions = {
   },
 
   // Library
-  addToLibrary (_, items) {
-    return MusicKit.getInstance().addToLibrary(items);
+  addToLibrary (_, { type, id }) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        await fetch(
+          `https://api.music.apple.com/v1/me/library/?ids[${type}s]=${id}`,
+          {
+            method: 'POST',
+            headers: apiHeaders(),
+            body: {},
+          }
+        );
+
+        resolve(true);
+      } catch (err) {
+        reject(err);
+      }
+    });
   },
 
-  addToPlaylist (_, { playlistId, items }, { $sentry }) {
+  addToPlaylist (_, { playlistId, items }, { sentry }) {
     return new Promise(async (resolve, reject) => {
       try {
         let res = await fetch(
@@ -675,13 +696,9 @@ export const actions = {
           resolve(true);
         } else {
           reject(MusicKit.MKError(MusicKit.MKError.SERVER_ERROR));
-          $sentry.captureException(
-            MusicKit.MKError(MusicKit.MKError.SERVER_ERROR)
-          );
         }
       } catch (err) {
         reject(err);
-        $sentry.captureException(err);
       }
     });
   },
@@ -716,13 +733,9 @@ export const actions = {
           resolve(true);
         } else {
           reject(MusicKit.MKError(MusicKit.MKError.SERVER_ERROR));
-          $sentry.captureException(
-            MusicKit.MKError(MusicKit.MKError.SERVER_ERROR)
-          );
         }
       } catch (err) {
         reject(err);
-        $sentry.captureException(err);
       }
     });
 	},

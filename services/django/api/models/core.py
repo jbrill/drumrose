@@ -92,19 +92,11 @@ class Artist(BaseModel):
 
 
 class SongManager(models.Manager):
-    def create(self, *args, **kwargs):
-        # TODO: fetch track info from apple music api
-        # apple_music_id = kwargs["apple_music_id"]
-        #
-        name = kwargs["name"]
-        name_list = name.split()
-        formatted_page_plain = "-".join(name_list)
-        kwargs["page_id"] = formatted_page_plain
-        count = Song.objects.filter(name=name).count()
-        if count:
-            kwargs["page_id"] = "{}-{}".format(formatted_page_plain, count)
-        song = super(SongManager, self).create(*args, **kwargs)
-        return song
+    """
+    Song Manager
+    """
+
+    pass
 
 
 class Song(BaseModel):
@@ -122,19 +114,11 @@ class Song(BaseModel):
 
 
 class AlbumManager(models.Manager):
-    def create(self, *args, **kwargs):
-        # TODO: fetch track info from apple music api
-        # apple_music_id = kwargs["apple_music_id"]
-        #
-        name = kwargs["name"]
-        name_list = name.split()
-        formatted_page_plain = "-".join(name_list)
-        kwargs["page_id"] = formatted_page_plain
-        count = Song.objects.filter(name=name).count()
-        if count:
-            kwargs["page_id"] = "{}-{}".format(formatted_page_plain, count)
-        song = super(SongManager, self).create(*args, **kwargs)
-        return song
+    """
+    Album Manager
+    """
+
+    pass
 
 
 class Album(BaseModel):
@@ -151,19 +135,11 @@ class Album(BaseModel):
 
 
 class PlaylistManager(models.Manager):
-    def create(self, *args, **kwargs):
-        # TODO: fetch track info from apple music api
-        # apple_music_id = kwargs["apple_music_id"]
-        #
-        name = kwargs["name"]
-        name_list = name.split()
-        formatted_page_plain = "-".join(name_list)
-        kwargs["page_id"] = formatted_page_plain
-        count = Song.objects.filter(name=name).count()
-        if count:
-            kwargs["page_id"] = "{}-{}".format(formatted_page_plain, count)
-        song = super(SongManager, self).create(*args, **kwargs)
-        return song
+    """
+    Playlist Manager
+    """
+
+    pass
 
 
 class Playlist(BaseModel):
@@ -182,6 +158,14 @@ class Playlist(BaseModel):
     objects = PlaylistManager()
 
 
+class ReviewManager(models.Manager):
+    """
+    Review Manager
+    """
+
+    pass
+
+
 class Review(BaseModel):
     """
     Model for a favorited item
@@ -191,6 +175,7 @@ class Review(BaseModel):
         UserProfile, blank=True, null=True, on_delete=models.CASCADE
     )
     review = models.TextField(blank=True, null=True)
+    rating = models.TextField(blank=True, null=True)
 
     class Meta:
         """
@@ -198,6 +183,8 @@ class Review(BaseModel):
         """
 
         abstract = True
+
+    objects = ReviewManager()
 
 
 class AlbumReview(Review):

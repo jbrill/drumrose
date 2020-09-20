@@ -102,12 +102,12 @@ export default {
         this.$auth.getToken('auth0'),
         { 'type': this.trackObject.type, 'id': this.trackObject.id }
       ).then( () => {
-        // set favorite color
+        // set favorite
         this.isFavorited = true;
       }).catch ( err => {
         console.error(err);
         this.$sentry.captureException(err);
-        });
+      });
     },
   },
 };

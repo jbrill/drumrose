@@ -35,9 +35,9 @@
       title="Fresh Reviews From Friends"
       :carousel-items="reviews"
     />
-    <v-divider v-if="listeningHistory.length" />
+    <v-divider v-if="listeningHistory && listeningHistory.length" />
     <CarouselSection
-      v-if="listeningHistory.length"
+      v-if="listeningHistory && listeningHistory.length"
       title="Listening History"
       :carousel-items="listeningHistory"
     />
@@ -48,6 +48,7 @@
 import { mapState, mapMutations } from 'vuex';
 import CarouselSection from '~/components/CarouselSection';
 import LoadingCircle from '~/components/LoadingCircle';
+import RegisterBanner from '~/components/RegisterBanner';
 
 import { getFavorites, getTrackReviews } from '~/api/api';
 
@@ -56,6 +57,7 @@ export default {
   components: {
     CarouselSection,
     LoadingCircle,
+    RegisterBanner,
   },
   async asyncData ({ store, $auth }) {
     if (store.auth && store.auth.loggedIn) {
@@ -91,7 +93,7 @@ export default {
   data () {
     return {
       tab: null,
-      tabs: ['Social', 'Activity'],
+      tabs: ['Social', 'Trending'],
       loading: false,
       favorites: [],
       reviews: [],
@@ -114,16 +116,14 @@ export default {
     ...mapState(['isAuthorized', 'auth']),
   },
   async mounted () {
-    try {
-			this.listeningHistory = await this.$store.getters.recentlyPlayed;
-		} catch(err) {
-			console.error(err);
-		}
-  },
-  methods: {
-    ...mapMutations({
-      setSnack: 'snackbar/setSnack',
-    }),
+    if (this.$store.state.isAuthorized) {
+      try {
+        this.listeningHistory = await this.$store.getters.recentlyPlayed;
+      } catch(err) {
+        console.error(err);
+        this.$toast.error(err.message);
+      }
+    }
   },
 };
 </script>

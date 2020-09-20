@@ -24,14 +24,20 @@
       </v-list>
       <template v-if="auth.loggedIn" v-slot:append>
         <div class="pa-2">
-          <v-btn to="profile" block>Profile</v-btn>
+          <v-btn to="/profile" block>
+            Profile
+          </v-btn>
           <v-btn block @click="signOut">
             Logout
           </v-btn>
         </div>
       </template>
     </v-navigation-drawer>      
-    <v-app-bar fixed app>
+    <v-app-bar 
+      :class="{ 'needs-apple-auth': !isAuthorized }"
+      fixed
+      app
+    >
       <v-app-bar-nav-icon @click="drawer=!drawer" />
       <v-toolbar-title style="padding-left: 25px">
         <nuxt-link to="/">
@@ -44,7 +50,7 @@
       </v-btn>
       <v-spacer />
       <SearchBar />
-    </v-app-bar>  
+    </v-app-bar> 
   </div>
 </template>
 
@@ -70,7 +76,28 @@ export default {
         {
           title: 'Discover',
           nav: '/discover',
+          icon: 'mdi-folder-music-outline',
+          requiresAuth: false,
+          requiresAppleAuth: false,
+        },
+        {
+          title: 'Tracks',
+          nav: '/tracks',
           icon: 'mdi-waveform',
+          requiresAuth: false,
+          requiresAppleAuth: false,
+        },
+        {
+          title: 'Albums',
+          nav: '/albums',
+          icon: 'mdi-record-circle-outline',
+          requiresAuth: false,
+          requiresAppleAuth: false,
+        },
+        {
+          title: 'Playlists',
+          nav: '/playlists',
+          icon: 'mdi-playlist-music',
           requiresAuth: false,
           requiresAppleAuth: false,
         },
@@ -86,7 +113,7 @@ export default {
           nav: '/library',
           icon: 'mdi-library',
           requiresAuth: false,
-          requiresAppleAuth: true,
+          requiresAppleAuth: false,
         },
         {
           title: 'Settings',
@@ -151,5 +178,8 @@ export default {
 }
 .activeListItem {
   color: var(--primary-yellow) !important;
+}
+>>>.needs-apple-auth {
+  margin-top: 50px !important;
 }
 </style>

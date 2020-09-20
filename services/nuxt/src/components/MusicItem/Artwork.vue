@@ -68,6 +68,7 @@
                   </v-icon>
                 </v-btn>
                 <v-menu
+                  close-on-content-click
                   origin="bottom right"
                   z-index="100"
                   attach
@@ -97,38 +98,43 @@
                     </v-btn>
                   </template>
                   <v-list dense>
-                      <v-list-item :style="{
+                    <v-list-item 
+                      :style="{
                         'justify-content':'center'
-                      }">
-                        <v-rating
-                          @click.native.stop.prevent
-                          background-color="white"
-                          color="var(--primary-purple)"
-                          dense
-                          half-increments
-                          hover
-                          size="18"
-                        />
-                      </v-list-item>
-                      <v-dialog v-model="dialog" scrollable max-width="300px">
+                      }"
+                    >
+                      <v-rating
+                        background-color="white"
+                        color="var(--primary-purple)"
+                        dense
+                        half-increments
+                        hover
+                        size="18"
+                        @input="changeRating"
+                        @click.native.stop.prevent
+                      />
+                    </v-list-item>
+                    <v-dialog v-model="dialog" scrollable max-width="300px">
                       <template v-slot:activator="{ on, attrs }">
                         <v-list-item
                           v-bind="attrs"
                           v-on="on"
                           @click.native.stop.prevent
                         >
-                        <v-list-item-icon>
-                          <v-icon>mdi-playlist-music</v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-content>
-                          <v-list-item-title>Add to playlist</v-list-item-title>
-                        </v-list-item-content>
-                      </v-list-item>
-                     </template>
-                     <v-card>
-                       <v-tabs>
-                        <v-tab>Add to playlist</v-tab>
-                        <v-tab>Create a playlist</v-tab>
+                          <v-list-item-icon>
+                            <v-icon>mdi-playlist-music</v-icon>
+                          </v-list-item-icon>
+                          <v-list-item-content>
+                            <v-list-item-title>
+                              Add to playlist
+                            </v-list-item-title>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </template>
+                      <v-card>
+                        <v-tabs>
+                          <v-tab>Add to playlist</v-tab>
+                          <v-tab>Create a playlist</v-tab>
                         </v-tabs>
                       </v-card>
                     </v-dialog>
@@ -145,7 +151,7 @@
                     <v-list-item
                       @click.native.stop.prevent
                       @click="
-                          addToLibrary()
+                        addToLibrary()
                       "
                     >
                       <v-list-item-icon>
@@ -168,7 +174,14 @@
 
 <script>
 import { mapState } from 'vuex';
-import { favoriteTrack } from '~/api/api';
+import {
+  favoriteTrack,
+  favoriteAlbum,
+  favoritePlaylist,
+  postTrackReview,
+  postAlbumReview,
+  postPlaylistReview
+} from '~/api/api';
 
 export default {
   props: {
@@ -218,11 +231,19 @@ export default {
       if (this.type == 'album') {
         await this.$store.dispatch("playNext", { 'album': this.id });
       }
+      this.$toast.show(`Added ${this.type} to queue`);
     },
-		addToLibrary: function () {
-      this.$store.dispatch(
-        "addToLibrary", [this.id]
-      );
+		async addToLibrary () {
+      try {
+        await this.$store.dispatch(
+          "addToLibrary", {
+            'id': this.id, 'type': this.type,
+          }
+        );
+      } catch(err) {
+        this.$toast.error(err);
+        // this.$sentry.captureException(err);
+      }
     },
 		addToPlaylist: function (name, items) {
       // TODO
@@ -238,29 +259,40 @@ export default {
         "items": items,
       });
     },
+    changeRating (e) {
+      console.log(e);
+      // TODO: Change rating via api
+    },
     async pauseTrack () {
       await this.$store.dispatch("pause");
       this.isPlaying = false;
     },
     async favoriteItem () {
-      await favoriteTrack(this.appleMusicId);
+      await favoriteTrack(this.id);
     },
     async login () {
       await this.$auth.loginWith('auth0');
     },
-    playTrack: async function () {
-      if (this.nowPlayingItem) {
-        if (this.type == 'song') {
-          await this.$store.dispatch("setQueue", { 'song': this.id });
-        }
-        if (this.type == 'playlist') {
-          await this.$store.dispatch("setQueue", { 'playlist': this.id });
-        }
-        if (this.type == 'album') {
-          await this.$store.dispatch("setQueue", { 'album': this.id });
-        }
+    async playTrack () {
+      if (this.type == 'song') {
+        await this.$store.dispatch(
+          "setQueue", { 'song': this.id }
+        );
+      }
+      if (this.type == 'playlist') {
+        await this.$store.dispatch(
+          "setQueue", { 'playlist': this.id }
+        );
+      }
+      if (this.type == 'album') {
+        await this.$store.dispatch(
+          "setQueue", { 'album': this.id }
+        );
       }
       await this.$store.dispatch("play");
+      if (!this.$store.state.isAuthorized) {
+        this.$toast.show('Sign into Apple Music for full track access.');
+      }
       this.isPlaying = true;
     },
   },
@@ -314,6 +346,7 @@ export default {
   cursor: pointer;
 }
 .albumCover {
+  border: 1px solid var(--primary-black-light);
   width: 100%;
   overflow: visible !important;
   height: auto;

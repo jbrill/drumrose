@@ -1,27 +1,28 @@
 <template>
   <div>
     <v-row
-			class="fill-height"
+      class="fill-height"
       align="center"
       justify="center"
-		>
-			<v-btn
+    >
+      <v-btn
         text
         color="#ccc"
-				:to="'/people/' + user.username"
+        :to="'/people/' + user.username"
       >
-			  {{ user.username }}
+        {{ user.username }}
       </v-btn>
       <v-rating
-				v-model="rating"
-				background-color="white"
-				color="var(--primary-purple)"
-				dense
-				half-increments
-				hover
-				x-small
-				size="18"
-			/>
+        v-model="rating"
+        background-color="white"
+        color="var(--primary-purple)"
+        @input="addRating($event, rating.id)"
+        dense
+        half-increments
+        read-only
+        x-small
+        size="18"
+      />
     </v-row>
   </div>
 </template>
@@ -29,6 +30,11 @@
 <script>
 export default {
   name: 'PostHeader',
+  data () {
+    return {
+      rating: 0.5,
+    };
+  },
   props: {
     'user': {
       type: Object, 
@@ -42,10 +48,6 @@ export default {
       type: String,
       default: '',
     },
-    'rating': {
-      type: String,
-      default: '.5',
-    },
   },
   created: function () {
     console.log(this.user);
@@ -53,6 +55,12 @@ export default {
     console.log(this.type);
     console.log(this.rating);
   },
+  methods: {
+    addRating (value, id) {
+      console.log(value);
+      console.log(id);
+    }
+  }
 };
 </script>
 

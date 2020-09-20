@@ -1,5 +1,5 @@
 {
-  "name": "Drumrose",
+  "name": "DRUMROSE",
   "version": "1.0.0",
   "description": "Music streaming for the new world.",
   "author": "Drumrose",
@@ -20,6 +20,7 @@
     "@nuxtjs/auth": "^4.9.1",
     "@nuxtjs/axios": "^5.11.0",
     "@nuxtjs/sentry": "^4.3.4",
+    "@nuxtjs/toast": "^3.3.1",
     "axios": "^0.19.2",
     "core-js": "^2.6.11",
     "eventemitter3": "^4.0.4",

@@ -45,10 +45,9 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex';
+import { mapState } from 'vuex';
 import CarouselSection from '~/components/CarouselSection';
 import LoadingCircle from '~/components/LoadingCircle';
-import RegisterBanner from '~/components/RegisterBanner';
 
 import { getFavorites, getTrackReviews } from '~/api/api';
 
@@ -57,7 +56,6 @@ export default {
   components: {
     CarouselSection,
     LoadingCircle,
-    RegisterBanner,
   },
   async asyncData ({ store, $auth }) {
     if (store.auth && store.auth.loggedIn) {
@@ -73,7 +71,8 @@ export default {
       };
     }
     const reviewsResponse = await getTrackReviews(
-      $auth.getToken('auth0')
+      
+      
     );
     const reviewTrackList = await Promise.all(
       reviewsResponse.data.track_reviews.map( async review => {

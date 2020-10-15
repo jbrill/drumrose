@@ -25,7 +25,7 @@ class FavoriteTracksList(APIView):
     Description:
         API View for Favorited Tracks
     Routes:
-        GET /favorites/
+        GET /favorites/tracks/
             Gets a list of favorited tracks
     """
 

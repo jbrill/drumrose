@@ -38,10 +38,14 @@
       fixed
       app
     >
-      <v-app-bar-nav-icon @click="drawer=!drawer" />
+      <v-app-bar-nav-icon
+        class="menu-navigation"
+        color="#ccc"
+        @click="drawer=!drawer"
+      />
       <v-toolbar-title style="padding-left: 25px">
         <nuxt-link to="/">
-          <span>DRUMROSE</span>
+          <span class="drumrose-title">DRUMROSE</span>
         </nuxt-link>
       </v-toolbar-title>
       <v-spacer />
@@ -181,5 +185,16 @@ export default {
 }
 >>>.needs-apple-auth {
   margin-top: 50px !important;
+}
+.drumrose-title {
+  color: #ccc;
+  font-size: 1rem;
+  font-family: 'Drumrose', monospace !important;
+}
+.drumrose-title:hover, .drumrose-title:focus {
+  color: white;
+}
+.menu-navigation:hover, .menu-navigation:focus {
+  color: white;
 }
 </style>

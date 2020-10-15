@@ -6,7 +6,7 @@ Reivews Route Definitions
 from itertools import chain
 from operator import attrgetter
 
-from api.models.core import AlbumReview, PlaylistReview, TrackReview
+from api.models.core import AlbumReview, PlaylistReview, Song, TrackReview, UserProfile
 from api.reviews.serializers import (
     AlbumReviewSerializer,
     PlaylistReviewSerializer,
@@ -15,10 +15,68 @@ from api.reviews.serializers import (
 )
 from django.core.paginator import Paginator
 from django.http import JsonResponse
-from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework import exceptions, permissions, status
+from rest_framework.authentication import BaseAuthentication
+from rest_framework.permissions import (
+    SAFE_METHODS,
+    BasePermission,
+    IsAuthenticated,
+    IsAuthenticatedOrReadOnly,
+)
 from rest_framework.views import APIView
 from rest_framework_auth0.authentication import Auth0JSONWebTokenAuthentication
+
+
+class ReadOnly(BaseAuthentication):
+    def authenticate(self, request):
+        if request.method in SAFE_METHODS:
+            return None, None
+
+
+class ReviewsList(APIView):
+    """
+    Gets all reviews
+    """
+
+    authentication_classes = [Auth0JSONWebTokenAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def get(self, request):
+        """
+        Get favorites from followers
+        """
+        reviewed_playlists = PlaylistReview.objects.all()
+        reviewed_tracks = TrackReview.objects.all()
+        reviewed_albums = AlbumReview.objects.all()
+
+        # merge favorites
+        sorted_reviews = sorted(
+            chain(reviewed_playlists, reviewed_tracks, reviewed_albums),
+            key=attrgetter("created_date"),
+            reverse=True,
+        )
+        query = Paginator(sorted_reviews, 10)
+        page = query.page(1)
+        reviews = page.object_list
+        serializer = ReviewSerializer(reviews, many=True)
+        return JsonResponse({"reviews": serializer.data})
+
+    def post(self, request):
+        """
+        Create new review
+        """
+        print(request.data)
+        print(request.user.id)
+        user = UserProfile.objects.get(auth0_user_id=request.user)
+        song, _ = Song.objects.get_or_create(apple_music_id=request.data.get("id"))
+        track_review = TrackReview(
+            user=user,
+            track=song,
+            review=request.data.get("review", None),
+            rating=request.data.get("rating", None),
+        )
+        serializer = TrackReviewSerializer(track_review)
+        return JsonResponse({"review": serializer.data})
 
 
 class TrackReviewList(APIView):
@@ -30,8 +88,8 @@ class TrackReviewList(APIView):
             Gets a list of track reviews
     """
 
-    authentication_classes = []
-    permission_classes = []
+    authentication_classes = [Auth0JSONWebTokenAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get(self, request):
         """
@@ -40,7 +98,9 @@ class TrackReviewList(APIView):
         reviews = TrackReview.objects.all()
 
         serializer = TrackReviewSerializer(reviews, many=True)
-        return JsonResponse({"track_reviews": serializer.data})
+        return JsonResponse(
+            {"track_reviews": serializer.data}, safe=False, status=status.HTTP_200_OK
+        )
 
     def post(self, request):
         """
@@ -79,8 +139,8 @@ class AlbumReviewList(APIView):
             Creates a new reviewed album
     """
 
-    authentication_classes = []
-    permission_classes = []
+    authentication_classes = [Auth0JSONWebTokenAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get(self, request):
         """
@@ -125,41 +185,7 @@ class PlaylistReviewList(APIView):
         """
         Post favorited playlist
         """
-
         return
-
-
-class ReviewsList(APIView):
-    """
-    Description:
-        API View for Reviews
-    Routes:
-        GET /reviews/
-            Gets a list of followers' favorites
-    """
-
-    authentication_classes = []
-    permission_classes = []
-
-    def get(self, request):
-        """
-        Get favorites from followers
-        """
-        reviewed_playlists = PlaylistReview.objects.all()
-        reviewed_tracks = TrackReview.objects.all()
-        reviewed_albums = AlbumReview.objects.all()
-
-        # merge favorites
-        sorted_reviews = sorted(
-            chain(reviewed_playlists, reviewed_tracks, reviewed_albums),
-            key=attrgetter("created_date"),
-            reverse=True,
-        )
-        query = Paginator(sorted_reviews, 10)
-        page = query.page(1)
-        reviews = page.object_list
-        serializer = ReviewSerializer(reviews, many=True)
-        return JsonResponse(serializer.data, safe=False)
 
 
 class RecentReviewsList(APIView):
@@ -171,8 +197,8 @@ class RecentReviewsList(APIView):
             Gets a list of recent reviews
     """
 
-    authentication_classes = []
-    permission_classes = []
+    authentication_classes = [Auth0JSONWebTokenAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get(self, request):
         """

@@ -17,8 +17,10 @@ from api.users.serializers import UserProfileSerializer
 from django.core.paginator import Paginator
 from django.http import JsonResponse
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework_auth0.authentication import Auth0JSONWebTokenAuthentication
 
 
 class UserList(APIView):
@@ -32,8 +34,8 @@ class UserList(APIView):
             Creates a new user
     """
 
-    authentication_classes = []
-    permission_classes = []
+    authentication_classes = [Auth0JSONWebTokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
         """
@@ -68,9 +70,7 @@ class UserList(APIView):
             )
         if serializer.is_valid():
             serializer.save()
-            return JsonResponse(
-                serializer.data, status=status.HTTP_201_CREATED, safe=False
-            )
+            return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
         return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -84,8 +84,8 @@ class PopularUserList(APIView):
             Creates a new user
     """
 
-    authentication_classes = []
-    permission_classes = []
+    authentication_classes = [Auth0JSONWebTokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
         """
@@ -107,6 +107,9 @@ class UserDetail(APIView):
         DELETE /users/:user_handle
             Deletes a user
     """
+
+    authentication_classes = [Auth0JSONWebTokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, user_handle):
         """
@@ -161,6 +164,9 @@ class FollowersList(APIView):
             Creates a new follower for that user
     """
 
+    authentication_classes = [Auth0JSONWebTokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
         """
         Description:
@@ -195,6 +201,9 @@ class UserFavoritesList(APIView):
         GET /users/<user_handle>/favorites/
             Gets a list of favorites of a user
     """
+
+    authentication_classes = [Auth0JSONWebTokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, user_handle):
         """

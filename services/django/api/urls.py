@@ -15,10 +15,21 @@ from django.urls import path
 urlpatterns = [
     path("", api_routes.HealthRoute.as_view(), name="HealthCheck"),
     path("favorites/", favorite_routes.FavoritesList.as_view(), name="FavoritesList"),
+    path("reviews/", review_routes.ReviewsList.as_view(), name="ReviewsList"),
     path(
         "reviews/tracks/",
         review_routes.TrackReviewList.as_view(),
-        name="TrackReviewsList",
+        name="TrackReviewList",
+    ),
+    path(
+        "reviews/albums/",
+        review_routes.AlbumReviewList.as_view(),
+        name="AlbumReviewList",
+    ),
+    path(
+        "reviews/playlists/",
+        review_routes.PlaylistReviewList.as_view(),
+        name="PlaylistReviewList",
     ),
     path(
         "<user_id>/favorites/",

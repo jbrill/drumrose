@@ -19,6 +19,27 @@ class UserProfileSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("A user with this email already exists.")
         return value
 
+    def validate_username(self, value):
+        """
+        Validate uniqueness constraints
+        """
+        if UserProfile.objects.filter(username=value).count():
+            raise serializers.ValidationError(
+                "A user with this username already exists."
+            )
+        return value
+
+    def validate_auth0_user_id(self, value):
+        """
+        Validate uniqueness constraints
+        """
+        if UserProfile.objects.filter(auth0_user_id=value).count():
+            raise serializers.ValidationError(
+                "A user with this auth0 user id already exists."
+            )
+        return value
+
     def create(self, validated_data):
+        print(validated_data)
         user = UserProfile.objects.create(**validated_data)
         return user

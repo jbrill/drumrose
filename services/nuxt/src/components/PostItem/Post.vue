@@ -5,6 +5,7 @@
       :user="post.user"
       :date="post.date"
       :type="post.postType"
+      :rating="post.rating"
     />
     <Album
       v-if="post.type == 'albums'"
@@ -15,9 +16,9 @@
     />
     <Track
       v-if="post.type == 'songs'"
+      :id="post.id"
       is-playable
       is-actionable
-      :id="post.id"
     />
     <Playlist
       v-if="post.type == 'playlists'"

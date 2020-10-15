@@ -176,11 +176,7 @@
 import { mapState } from 'vuex';
 import {
   favoriteTrack,
-  favoriteAlbum,
-  favoritePlaylist,
-  postTrackReview,
-  postAlbumReview,
-  postPlaylistReview
+  postReview,
 } from '~/api/api';
 
 export default {
@@ -261,6 +257,12 @@ export default {
     },
     changeRating (e) {
       console.log(e);
+      const data = {
+        'rating': e,
+        'type': this.type,
+        'id': this.id,
+      }
+      postReview(this.$auth.getToken('auth0'), data);
       // TODO: Change rating via api
     },
     async pauseTrack () {
@@ -268,7 +270,13 @@ export default {
       this.isPlaying = false;
     },
     async favoriteItem () {
-      await favoriteTrack(this.id);
+      if (this.type == 'song') {
+        try {
+          await favoriteTrack(this.id);
+        } catch (err) {
+          this.$toast.error(err.message);
+        }
+      }
     },
     async login () {
       await this.$auth.loginWith('auth0');

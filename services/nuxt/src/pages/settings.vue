@@ -24,10 +24,6 @@
       prepend-inner-icon="mdi-earth"
       solo
     />
-    <v-divider />
-    <v-btn large>
-      Connect Apple Music
-    </v-btn>
     <v-divider v-if="auth.loggedIn" />
     <span v-if="auth.loggedIn">Account options</span>
     <v-btn
@@ -41,7 +37,7 @@
       v-model="resetPasswordDialog"
       width="500"
     >
-      <v-card>
+      <v-card >
         <v-card-title class="headline">
           Confirm your password reset
         </v-card-title>
@@ -156,5 +152,8 @@ export default {
 <style scoped>
 >>>.v-label {
   margin: 0;
+}
+.settings-contain * {
+  padding-top: 1rem;
 }
 </style>

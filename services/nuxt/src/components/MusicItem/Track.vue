@@ -183,7 +183,6 @@ export default {
 .artistName {
   font-size: 0.8rem;
   margin-bottom: 0;
-  font-weight: 600;
   padding-top: 5px;
   white-space: nowrap;
   overflow: hidden;
@@ -193,6 +192,7 @@ export default {
 .songName {
   color: white;
   font-size: 0.75rem;
+  font-weight: 600;
   margin-bottom: 0;
   white-space: nowrap;
   overflow: hidden;

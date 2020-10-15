@@ -1,3 +1,9 @@
+@font-face {
+  font-family: "Drumrose";
+  src: local("Drumrose"),
+   url(./fonts/Bespoke-CbKbZZfMqZ.ttf) format("truetype");
+}
+
 :root {
   --primary-red: #9c0235;
   --primary-red--dark: #86002d;

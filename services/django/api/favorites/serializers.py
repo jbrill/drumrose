@@ -41,7 +41,6 @@ class FavoritedTrackSerializer(serializers.ModelSerializer):
         """
         Return favorite type
         """
-
         return "track"
 
     def validate(self, data):
@@ -71,7 +70,6 @@ class FavoritedTrackSerializer(serializers.ModelSerializer):
 
     @transaction.atomic
     def create(self, validated_data):
-        print(validated_data)
         song = Song.objects.get_or_create(
             name=validated_data.get("name"),
             apple_music_id=validated_data.get("apple_music_id"),
@@ -79,7 +77,7 @@ class FavoritedTrackSerializer(serializers.ModelSerializer):
         user = UserProfile.objects.get(
             auth0_user_id=validated_data.get("auth0_user_id")
         )
-        return FavoritedTrack.objects.get_or_create(user=user, song=song)
+        return FavoritedTrack.objects.create(user=user, song=song)
 
 
 class FavoritedAlbumSerializer(serializers.ModelSerializer):
@@ -103,7 +101,6 @@ class FavoritedAlbumSerializer(serializers.ModelSerializer):
         """
         Return favorite type
         """
-
         return "album"
 
     def to_internal_value(self, data):
@@ -129,7 +126,7 @@ class FavoritedAlbumSerializer(serializers.ModelSerializer):
         user = UserProfile.objects.get(
             auth0_user_id=validated_data.get("auth0_user_id")
         )
-        return FavoritedTrack.objects.get_or_create(user=user, album=album)
+        return FavoritedTrack.objects.create(user=user, album=album)
 
 
 class FavoritedPlaylistSerializer(serializers.ModelSerializer):

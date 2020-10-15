@@ -1,5 +1,10 @@
 <template>
-  <div v-if="playbackTime" style="z-index: 10" class="audioPlayer">
+  <v-system-bar
+    v-if="playbackTime"
+    height="50vh"
+    style="z-index: 10"
+    class="audioPlayer"
+  >
     <div class="musicControls">
       <v-btn
         ref="musicPrev"
@@ -42,7 +47,7 @@
         v-if="$store.state.repeatMode === 1"
         icon
         small
-        color="var(--primary-red)"
+        color="var(--primary-red) !important"
         @click="repeatTrack"
       >
         <v-icon x-small>
@@ -53,7 +58,7 @@
         v-else-if="$store.state.repeatMode === 2"
         icon
         small
-        color="var(--primary-red)"
+        color="var(--primary-red) !important"
         @click="repeatTrack"
       >
         <v-icon x-small>
@@ -73,8 +78,13 @@
     </div>
     <PostTimeline />
     <VolumeSlider />
+    <v-spacer />
     <Queue />
-  </div>
+    
+  
+    <!-- <v-icon>mdi-window-minimize</v-icon> -->
+    <!-- <v-icon>mdi-window-maximize</v-icon> -->
+  </v-system-bar>
 </template>
 
 <script>
@@ -210,10 +220,15 @@ export default {
   padding: 1rem;
 }
 >>>.v-icon {
-  opacity: 0.8;
   font-size: 1rem;
 }
 >>>.v-icon:hover, >>>.v-icon:focus {
   opacity: 1;
+}
+.v-system-bar .v-icon {
+  margin-right: 0 !important;
+}
+.theme--dark.v-system-bar .v-icon:hover, .theme--dark.v-system-bar .v-icon:focus {
+  color: white;
 }
 </style>

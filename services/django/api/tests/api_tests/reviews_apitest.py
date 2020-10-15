@@ -1,20 +1,25 @@
 import json
 
-from api.favorites.serializers import (
-    FavoritedAlbumSerializer,
-    FavoritedPlaylistSerializer,
-    FavoritedTrackSerializer,
-)
-from api.favorites.views import FavoritesList, FavoriteTracksList
-from api.models.core import FavoritedAlbum, FavoritedPlaylist, FavoritedTrack
+from api.models.core import AlbumReview, PlaylistReview, TrackReview
 from api.models.factories import (
     AlbumFactory,
-    FavoritedAlbumFactory,
-    FavoritedPlaylistFactory,
-    FavoritedTrackFactory,
+    AlbumReviewFactory,
     PlaylistFactory,
+    PlaylistReviewFactory,
     SongFactory,
+    TrackReviewFactory,
     UserProfileFactory,
+)
+from api.reviews.serializers import (
+    AlbumReviewSerializer,
+    PlaylistReviewSerializer,
+    TrackReviewSerializer,
+)
+from api.reviews.views import (
+    AlbumReviewList,
+    PlaylistReviewList,
+    ReviewsList,
+    TrackReviewList,
 )
 from api.tests.api_tests.util import ACCESS_TOKEN, get_test_token
 from django.test import TestCase
@@ -23,7 +28,7 @@ from rest_framework import status
 from rest_framework.test import APIClient
 
 
-class FavoritesTest(TestCase):
+class ReviewsTest(TestCase):
     """
     Test cases for favorites views
     """
@@ -46,99 +51,96 @@ class FavoritesTest(TestCase):
         self.album = AlbumFactory.create()
         self.playlist = PlaylistFactory.create()
 
-        self.favorited_track = FavoritedTrackFactory.create(
-            user=self.user, song=self.song
-        )
-        self.favorited_album = FavoritedAlbumFactory.create(
+        self.reviewed_track = TrackReviewFactory.create(user=self.user, track=self.song)
+        self.reviewed_album = AlbumReviewFactory.create(
             user=self.user, album=self.album
         )
-        self.favorited_playlist = FavoritedPlaylistFactory.create(
+        self.reviewed_playlist = PlaylistReviewFactory.create(
             user=self.user, playlist=self.playlist
         )
 
-    def test_get_all_favorites(self):
+    def test_get_all_reviews(self):
         response = self.client.get(
-            reverse("FavoritesList"),
+            reverse("ReviewsList"),
             content_type="application/json",
             data={},
             HTTP_AUTHORIZATION="Bearer " + self.token,
         )
-        favorited_response = json.loads(response.content)
-        favorited_track = FavoritedTrack.objects.get(id=self.favorited_track.id)
-        serializer = FavoritedTrackSerializer(favorited_track)
+        reviews_response = json.loads(response.content)
+        reviewed_track = TrackReview.objects.get(id=self.reviewed_track.id)
+        serializer = TrackReviewSerializer(reviewed_track)
         self.assertEqual(
-            favorited_response[0]["user"]["username"],
+            reviews_response["reviews"][0]["user"]["username"],
             serializer.data["user"].get("username"),
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_get_all_track_favorites(self):
+    def test_get_all_track_reviews(self):
         response = self.client.get(
-            reverse("FavoriteTracksList"),
+            reverse("TrackReviewList"),
             content_type="application/json",
             data={},
             HTTP_AUTHORIZATION="Bearer " + self.token,
         )
-        favorited_track = FavoritedTrack.objects.get(id=self.favorited_track.id)
-        serializer = FavoritedTrackSerializer(favorited_track)
-        favorited_track_response = json.loads(response.content)
+        reviewed_track = TrackReview.objects.get(id=self.reviewed_track.id)
+        serializer = TrackReviewSerializer(reviewed_track)
+        reviewed_track_response = json.loads(response.content)
+        print(reviewed_track_response)
         self.assertEqual(
-            favorited_track_response[0]["user"]["username"],
+            reviewed_track_response["track_reviews"][0]["user"]["username"],
             serializer.data["user"].get("username"),
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_get_all_album_favorites(self):
+    def test_get_all_album_reviews(self):
         response = self.client.get(
-            reverse("FavoriteAlbumsList"),
+            reverse("AlbumReviewList"),
             content_type="application/json",
             data={},
             HTTP_AUTHORIZATION="Bearer " + self.token,
         )
-        favorited_album = FavoritedAlbum.objects.get(id=self.favorited_album.id)
-        serializer = FavoritedAlbumSerializer(favorited_album)
-        favorited_album_response = response.json()
+        reviewed_album = AlbumReview.objects.get(id=self.reviewed_album.id)
+        serializer = AlbumReviewSerializer(reviewed_album)
+        reviewed_album_response = response.json()
 
         self.assertEqual(
-            favorited_album_response[0]["user"]["username"],
+            reviewed_album_response["album_reviews"][0]["user"]["username"],
             serializer.data["user"].get("username"),
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_get_all_playlist_favorites(self):
+    def test_get_all_playlist_reviews(self):
         response = self.client.get(
-            reverse("FavoritePlaylistsList"),
+            reverse("PlaylistReviewList"),
             content_type="application/json",
             data={},
             HTTP_AUTHORIZATION="Bearer " + self.token,
         )
-        favorited_playlist = FavoritedPlaylist.objects.get(
-            id=self.favorited_playlist.id
-        )
-        serializer = FavoritedPlaylistSerializer(favorited_playlist)
-        favorited_playlist_response = response.json()
+        reviewed_playlist = PlaylistReview.objects.get(id=self.reviewed_playlist.id)
+        serializer = PlaylistReviewSerializer(reviewed_playlist)
+        reviewed_playlist_response = response.json()
         self.assertEqual(
-            favorited_playlist_response[0]["user"]["username"],
+            reviewed_playlist_response["playlist_reviews"][0]["user"]["username"],
             serializer.data["user"].get("username"),
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_create_invalid_favorited_track_duplicate(self):
+    def test_create_invalid_reviewed_track_duplicate(self):
         response = self.client.post(
-            reverse("FavoriteTracksList"),
+            reverse("TrackReviewList"),
             content_type="application/json",
             data=json.dumps(
                 {
-                    "apple_music_id": self.favorited_track.song.apple_music_id,
+                    "apple_music_id": self.reviewed_track.track.apple_music_id,
                     "name": "test",
                 }
             ),
             HTTP_AUTHORIZATION="Bearer " + self.token,
         )
 
-        favorited_track_response = json.loads(response.content)
+        reviewed_track_response = json.loads(response.content)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
-            favorited_track_response.get("non_field_errors")[0],
+            reviewed_track_response.get("non_field_errors")[0],
             "Favorited Track Already Exists",
         )

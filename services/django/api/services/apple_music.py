@@ -12,5 +12,9 @@ def get_track_info(apple_music_id):
         },
         verify=False,
     )
-    print(response.json())
-    return response.json()["data"][0]["attributes"]
+    try:
+        attributes = response.json()["data"][0]["attributes"]
+    except KeyError as e:
+        print(e)
+        attributes = None
+    return attributes

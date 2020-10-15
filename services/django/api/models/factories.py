@@ -5,11 +5,13 @@ Factories
 import factory
 from api.models.core import (
     Album,
+    AlbumReview,
     Artist,
     FavoritedAlbum,
     FavoritedPlaylist,
     FavoritedTrack,
     Playlist,
+    PlaylistReview,
     Song,
     TrackReview,
     UserProfile,
@@ -20,7 +22,7 @@ from faker import Faker
 fake = Faker()
 
 
-class ArtistFactory(factory.DjangoModelFactory):
+class ArtistFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Artist
 
@@ -28,7 +30,7 @@ class ArtistFactory(factory.DjangoModelFactory):
     page_id = factory.Sequence(lambda n: "page %03d" % n)
 
 
-class SongFactory(factory.DjangoModelFactory):
+class SongFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Song
 
@@ -36,22 +38,21 @@ class SongFactory(factory.DjangoModelFactory):
     name = fuzzy.FuzzyText()
 
 
-class AlbumFactory(factory.DjangoModelFactory):
+class AlbumFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Album
 
     apple_music_id = fuzzy.FuzzyInteger(1469577142, 1469597142)
-    page_id = factory.Sequence(lambda n: "page %03d" % n)
+    name = fuzzy.FuzzyText()
 
 
-class PlaylistFactory(factory.DjangoModelFactory):
+class PlaylistFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Playlist
 
     apple_music_id = fuzzy.FuzzyInteger(1469577142, 1469597142)
     caption = fuzzy.FuzzyText()
-    page_id = factory.Sequence(lambda n: "page %03d" % n)
-    title = fuzzy.FuzzyText()
+    name = fuzzy.FuzzyText()
 
     @factory.post_generation
     def tracks(self, create, extracted):
@@ -65,7 +66,7 @@ class PlaylistFactory(factory.DjangoModelFactory):
                 self.tracks.add(track)
 
 
-class UserProfileFactory(factory.DjangoModelFactory):
+class UserProfileFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = UserProfile
 
@@ -96,7 +97,7 @@ class UserProfileFactory(factory.DjangoModelFactory):
                 self.blocked_users.add(blocked_user)
 
 
-class FavoritedTrackFactory(factory.DjangoModelFactory):
+class FavoritedTrackFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = FavoritedTrack
 
@@ -104,7 +105,7 @@ class FavoritedTrackFactory(factory.DjangoModelFactory):
     song = factory.SubFactory("api.models.factories.SongFactory")
 
 
-class FavoritedAlbumFactory(factory.DjangoModelFactory):
+class FavoritedAlbumFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = FavoritedAlbum
 
@@ -112,7 +113,7 @@ class FavoritedAlbumFactory(factory.DjangoModelFactory):
     album = factory.SubFactory("api.models.factories.AlbumFactory")
 
 
-class FavoritedPlaylistFactory(factory.DjangoModelFactory):
+class FavoritedPlaylistFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = FavoritedPlaylist
 
@@ -120,11 +121,33 @@ class FavoritedPlaylistFactory(factory.DjangoModelFactory):
     playlist = factory.SubFactory("api.models.factories.PlaylistFactory")
 
 
-class TrackReviewFactory(factory.DjangoModelFactory):
+class TrackReviewFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = TrackReview
-        django_get_or_create = ("user", "track")
 
     user = factory.SubFactory("api.models.factories.UserProfileFactory")
     track = factory.SubFactory("api.models.factories.SongFactory")
     review = fuzzy.FuzzyText()
+    rating = "0.5"
+
+
+class AlbumReviewFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = AlbumReview
+        django_get_or_create = ("user", "album")
+
+    user = factory.SubFactory("api.models.factories.UserProfileFactory")
+    album = factory.SubFactory("api.models.factories.AlbumFactory")
+    review = fuzzy.FuzzyText()
+    rating = "0.5"
+
+
+class PlaylistReviewFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = PlaylistReview
+        django_get_or_create = ("user", "playlist")
+
+    user = factory.SubFactory("api.models.factories.UserProfileFactory")
+    playlist = factory.SubFactory("api.models.factories.PlaylistFactory")
+    review = fuzzy.FuzzyText()
+    rating = "0.5"

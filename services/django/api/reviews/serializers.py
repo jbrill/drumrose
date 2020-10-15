@@ -3,10 +3,11 @@ Module contains serializers for favorites
 """
 
 from api.albums.serializers import AlbumSerializer
-from api.models.core import AlbumReview, PlaylistReview, TrackReview
+from api.models.core import AlbumReview, PlaylistReview, Song, TrackReview, UserProfile
 from api.playlists.serializers import PlaylistSerializer
 from api.songs.serializers import SongSerializer
 from api.users.serializers import UserProfileSerializer
+from django.db import transaction
 from rest_framework import serializers
 
 
@@ -72,8 +73,8 @@ class ReviewSerializer(serializers.ModelSerializer):
             serializer = TrackReviewSerializer
         elif model == AlbumReview:
             serializer = AlbumReviewSerializer
-        else:
-            serializer = TrackReviewSerializer
+        elif model == PlaylistReview:
+            serializer = PlaylistReviewSerializer
         return serializer
 
     def to_representation(self, instance):

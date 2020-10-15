@@ -16,10 +16,9 @@
         v-model="rating"
         background-color="white"
         color="var(--primary-purple)"
-        @input="addRating($event, rating.id)"
         dense
         half-increments
-        read-only
+        readonly
         x-small
         size="18"
       />
@@ -30,11 +29,6 @@
 <script>
 export default {
   name: 'PostHeader',
-  data () {
-    return {
-      rating: 0.5,
-    };
-  },
   props: {
     'user': {
       type: Object, 
@@ -48,12 +42,21 @@ export default {
       type: String,
       default: '',
     },
+    'rating': {
+      type: String,
+      default: '',
+    },
+    'review': {
+      type: String,
+      default: '',
+    },
   },
   created: function () {
     console.log(this.user);
     console.log(this.date);
     console.log(this.type);
     console.log(this.rating);
+    console.log(this.review)
   },
   methods: {
     addRating (value, id) {

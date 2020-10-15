@@ -11,21 +11,30 @@
       hide-selected
       hide-no-data
       dense
+      color="var(--primary-yellow)"
       item-text="attributes.name"
       item-value="attributes.name"
       no-data-text="No data found"
-      placeholder="Search Drumrose"
-      prepend-inner-icon="mdi-database-search"
+      placeholder=" Search"
+      prepend-inner-icon="mdi-magnify"
       outlined
+      width="15rem"
       return-object
-      width="100%"
     >
+      <template v-slot:no-data>
+        <v-list-item>
+          <v-list-item-title>
+            Search for your favorite
+            <strong>music</strong>
+          </v-list-item-title>
+        </v-list-item>
+      </template>
       <v-btn
         v-if="search"
         slot="prepend-item"
-        width="100%"
         text
         nuxt
+        width="100%"
         :to="'/search/' + search"
         class="search-button"
         color="var(--primary-yellow)"
@@ -109,53 +118,55 @@ export default {
         this.entries = [];
         return;
       }
-      // this.entries = [
-      //   {
-      //     header: 'Tracks',
-      //   },
-      //   {
-      //     divider: true,
-      //   },
-      //   {
-      //     header: 'Artists',
-      //   },
-      //   {
-      //     divider: true,
-      //   },
-      //   {
-      //     header: 'Albums',
-      //   },
-      // ];
+      console.log(val)
+
       this.isLoading = true;
       this.$store.dispatch('getHints', val).then(res => {
         this.isLoading = false;
-        this.entries = [
-          {
+        console.log(res.results);
+        this.entries = [];
+        if ('songs' in res.results && 'data' in res.results.songs) {
+          this.entries.push({
             header: 'Tracks',
-          },
-        ].concat(
-          res.results.songs.data
-        ).concat([
-          {
-            divider: true,
-          },
-          {
+          });
+          res.results.songs.data.forEach( song => {
+            this.entries.push(song);
+          });
+            
+          this.entries.push({
+              divider: true,
+          });
+        }
+        if ('artists' in res.results && 'data' in res.results.artists) {
+          this.entries.push({
             header: 'Artists',
-          },
-        ]).concat(
-          res.results.artists.data
-        ).concat([
-          {
-            divider: true,
-          },
-          {
+          });
+          res.results.artists.data.forEach( artist => {
+            this.entries.push(artist);
+          });
+            
+          this.entries.push({
+              divider: true,
+          });
+        }
+        if ('albums' in res.results && 'data' in res.results.albums) {
+          this.entries.push({
             header: 'Albums',
-          },
-        ]).concat(
-          res.results.albums.data
-        );
-      });
-      this.isLoading = false;
+          });
+          res.results.albums.data.forEach( album => {
+            this.entries.push(album);
+          });
+            
+          this.entries.push({
+              divider: true,
+          });
+        }
+        console.log(this.entries);
+      }).catch(err => {
+        console.log(err);
+      })
+      .finally(() => (this.isLoading = false));
+      
     },
     selectedSearch (newVal, oldVal) {
       this.isLoading = false;
@@ -188,4 +199,7 @@ export default {
 </script>
 
 <style scoped>
+>>>.v-list-item {
+  max-width: 20rem !important;
+}
 </style>

@@ -108,7 +108,6 @@ class Song(BaseModel):
     apple_music_id = models.CharField(
         max_length=200, null=True, blank=True, unique=True
     )
-    page_id = models.CharField(max_length=100, null=True, blank=True, unique=True)
 
     objects = SongManager()
 
@@ -126,7 +125,7 @@ class Album(BaseModel):
     Model for an album
     """
 
-    page_id = models.CharField(max_length=100, null=True, blank=True, unique=True)
+    name = models.CharField(max_length=100, null=True, blank=True)
     apple_music_id = models.CharField(
         max_length=200, null=True, blank=True, unique=True
     )
@@ -148,9 +147,8 @@ class Playlist(BaseModel):
     """
 
     tracks = models.ManyToManyField("Song")
-    title = models.CharField(max_length=64)
+    name = models.CharField(max_length=64)
     caption = models.CharField(max_length=200)
-    page_id = models.CharField(max_length=100, null=True, blank=True, unique=True)
     apple_music_id = models.CharField(
         max_length=200, null=True, blank=True, unique=True
     )

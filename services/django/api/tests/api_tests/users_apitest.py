@@ -5,15 +5,13 @@ import json
 
 from api.models.core import UserProfile
 from api.models.factories import UserProfileFactory
-from api.tests.api_tests.util import get_test_token
+from api.tests.api_tests.util import ACCESS_TOKEN, get_test_token
 from api.users.serializers import UserProfileSerializer
 from api.users.views import UserList
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
-from rest_framework.test import APIRequestFactory
-
-factory = APIRequestFactory()
+from rest_framework.test import APIClient
 
 
 class UserListTest(TestCase):
@@ -25,7 +23,12 @@ class UserListTest(TestCase):
         """
         Creates models on setup
         """
-        self.token = json.loads(get_test_token())["access_token"]
+        # self.token = json.loads(
+        #     get_test_token()
+        # )["access_token"]
+        self.token = ACCESS_TOKEN
+        self.client = APIClient()
+
         test_username = "test_username"
         test_auth0_user_id = "ApqgC9UHWyDV0Qb6rv3cby0gP47u5ZmO@clients"
 
@@ -34,15 +37,13 @@ class UserListTest(TestCase):
         )
 
     def test_get_all_users(self):
-        view = UserList.as_view()
-        request = factory.get(
+        response = self.client.get(
             reverse("UserList"),
             content_type="application/json",
             data={},
             HTTP_AUTHORIZATION="Bearer " + self.token,
         )
-        response = view(request)
-        print(response)
+
         user_list_response = json.loads(response.content)
         user = UserProfile.objects.get(id=self.user.id)
         serializer = UserProfileSerializer(user)
@@ -55,8 +56,7 @@ class UserListTest(TestCase):
         """
         Attempt to create a user that with an fields that already exist
         """
-        view = UserList.as_view()
-        request = factory.post(
+        response = self.client.post(
             reverse("UserList"),
             content_type="application/json",
             data={
@@ -66,9 +66,9 @@ class UserListTest(TestCase):
             },
             HTTP_AUTHORIZATION="Bearer " + self.token,
         )
-        response = view(request)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        request = factory.post(
+
+        response = self.client.post(
             reverse("UserList"),
             content_type="application/json",
             data={
@@ -78,9 +78,9 @@ class UserListTest(TestCase):
             },
             HTTP_AUTHORIZATION="Bearer " + self.token,
         )
-        response = view(request)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        request = factory.post(
+
+        response = self.client.post(
             reverse("UserList"),
             content_type="application/json",
             data={
@@ -90,66 +90,62 @@ class UserListTest(TestCase):
             },
             HTTP_AUTHORIZATION="Bearer " + self.token,
         )
-        response = view(request)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_create_user(self):
         """
         Create a user
         """
-        view = UserList.as_view()
-
-        request = factory.post(
+        response = self.client.post(
             reverse("UserList"),
             content_type="application/json",
-            data={
-                "email": "unique_email@email.com",
-                "username": "test_username_2",
-                "id": "12345",
-            },
+            data=json.dumps(
+                {
+                    "email": "unique_email@email.com",
+                    "username": "test_username_2",
+                    "id": "12345",
+                }
+            ),
             HTTP_AUTHORIZATION="Bearer " + self.token,
         )
-        response = view(request)
-        print(response)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_create_invalid_user_missing_field(self):
         """
         Attempt to create a user with missing request data
         """
-        view = UserList.as_view()
-
         # missing 'id'
-        request = factory.post(
+        response = self.client.post(
             reverse("UserList"),
             content_type="application/json",
-            data={
-                "email": self.user.email,
-                "username": "test_username_2",
-                "id": "test",
-            },
+            data=json.dumps(
+                {"email": "unique_email_2@gmail.com", "username": "test_username_2"}
+            ),
             HTTP_AUTHORIZATION="Bearer " + self.token,
         )
-        response = view(request)
-        print(response)
         self.assertEqual(response.status_code, status.HTTP_422_UNPROCESSABLE_ENTITY)
 
         # missing 'username'
-        request = factory.post(
+        response = self.client.post(
             reverse("UserList"),
             content_type="application/json",
-            data={"email": "unique_email", "id": "test_auth0_user_id"},
+            data=json.dumps(
+                {"email": "unique_email_2@gmail.com", "id": "test_auth0_user_id"}
+            ),
             HTTP_AUTHORIZATION="Bearer " + self.token,
         )
-        response = view(request)
         self.assertEqual(response.status_code, status.HTTP_422_UNPROCESSABLE_ENTITY)
 
-        # missing 'email'
-        request = factory.post(
+        response = self.client.post(
             reverse("UserList"),
             content_type="application/json",
-            data={"email": "unique_email", "username": "unique_username"},
+            data=json.dumps(
+                {
+                    "email": "unique_email_2@gmail.com",
+                    "username": "unique_username",
+                    "id": "test_auth0_user_id",
+                }
+            ),
             HTTP_AUTHORIZATION="Bearer " + self.token,
         )
-        response = view(request)
-        self.assertEqual(response.status_code, status.HTTP_422_UNPROCESSABLE_ENTITY)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)

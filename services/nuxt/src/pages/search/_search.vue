@@ -12,7 +12,7 @@ export default {
     loading: true,
   }),
   async mounted () {
-    console.log(this.$route.params.search)
+    console.log(this.$route.params.search);
     this.search = this.$route.params.search;
     this.$store.dispatch('getHints', this.search).then(res => {
 			this.isLoading = false;

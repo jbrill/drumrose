@@ -4,50 +4,56 @@
       v-if="!loading && trackInfo"
       class="track-contain"
     >
-			<v-container>
-				<v-row>
-					<v-col cols="12" sm="8">
+      <v-container>
+        <v-row>
+          <v-col cols="12" sm="8">
             <v-layout>
               <v-flex justify-space-between>
-								<div>
-								<v-row>
-									<v-btn fab medium color="var(--primary-purple"><v-icon>mdi-play</v-icon></v-btn>
-                  <v-flex>
-									<h2
-										class="headline"
-									>
-										{{ trackInfo.attributes.name }}
-									</h2>
-									<nuxt-link :to="'/people/' + trackInfo.relationships.curator.data[0].id">
-										<p>{{ trackInfo.relationships.curator.data }}</p>
-									</nuxt-link></v-flex>
-                </v-row>
-                <v-row>
-                </v-row>
-                <v-row>
-                </v-row>
-                <v-divider />
-                <v-row>
-                  <v-chip
-                    nuxt
-                    label
-                    small
-                    :to="'/genres/' + genre.replace(' ', '-').toLowerCase()"
-                    v-for="genre in trackInfo.attributes.genreNames"
-                  >
-                    #{{ genre }}
-                  </v-chip>
-                </v-row>
-								</div>
+                <div>
+                  <v-row>
+                    <v-btn fab medium color="var(--primary-purple">
+                      <v-icon>mdi-play</v-icon>
+                    </v-btn>
+                    <v-flex>
+                      <h2
+                        class="headline"
+                      >
+                        {{ trackInfo.attributes.name }}
+                      </h2>
+                      <nuxt-link
+                        :to="'/people/' + 
+                          trackInfo.relationships.curator.data[0].id"
+                      >
+                        <p>{{ trackInfo.relationships.curator.data }}</p>
+                      </nuxt-link>
+                    </v-flex>
+                  </v-row>
+                  <v-row />
+                  <v-row />
+                  <v-divider />
+                  <v-row>
+                    <v-chip
+                      v-for="
+                        (genre, genreIdx) in trackInfo.attributes.genreNames
+                      "
+                      :key="'genre-' + genreIdx"
+                      :to="'/genres/' + genre.replace(' ', '-').toLowerCase()"
+                      nuxt
+                      label
+                      small
+                    >
+                      #{{ genre }}
+                    </v-chip>
+                  </v-row>
+                </div>
               </v-flex>
             </v-layout>
-            
-					</v-col>
-					<v-col cols="12" sm="3">
-						<v-img height="auto" :src="appleImage"></v-img>
-					</v-col>
-				</v-row>
-			</v-container>
+          </v-col>
+          <v-col cols="12" sm="3">
+            <v-img height="auto" :src="appleImage" />
+          </v-col>
+        </v-row>
+      </v-container>
     </div>
     <v-divider />
     <v-btn small tile dark @click="favoriteTrack">
@@ -74,7 +80,7 @@
 </template>
 
 <script>
-import { getTrackDetail, postFavorite } from '~/api/api';
+import { postFavorite } from '~/api/api';
 
 
 export default {
@@ -82,6 +88,15 @@ export default {
     trackInfo: null,
     loading: true,
   }),
+  computed: {
+    appleImage () {
+      return this.trackInfo.attributes.artwork.url.replace(
+        '{w}', '2500'
+      ).replace(
+        '{h}', '2500'
+      );
+    },
+  },
   async mounted () {
     try {
       const resp = await this.$store.getters.fetch(
@@ -105,15 +120,6 @@ export default {
       } catch (err) {
         console.error(err);
       }
-    },
-  },
-  computed: {
-    appleImage () {
-      return this.trackInfo.attributes.artwork.url.replace(
-        '{w}', '2500'
-      ).replace(
-        '{h}', '2500'
-      );
     },
   },
 };

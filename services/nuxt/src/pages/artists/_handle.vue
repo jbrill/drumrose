@@ -10,8 +10,8 @@
     <h6>Albums</h6>
     <Album
       v-for="(album, idx) in artistData.relationships.albums.data"       
-      :key="`album-${idx}`"
       :id="album.id"
+      :key="`album-${idx}`"
       :attributes="attributeData[idx]"
       is-playable
       is-actionable
@@ -38,14 +38,14 @@ export default {
 			`/v1/catalog/us/artists/${handle}`
 		);
     this.artistData = resp.data[0];
-    this.artistData.relationships.albums.data.forEach( async (album) => {
+    this.artistData.relationships.albums.data.forEach( async album => {
       const attributeResp = await this.$store.getters.fetch(
         `/v1/catalog/us/albums/${album.id}`
       );
       this.attributeData.push(attributeResp.data[0].attributes);
     });
-    console.log(this.artistData)
-    console.log(this.attributeData)
+    console.log(this.artistData);
+    console.log(this.attributeData);
     console.log(resp);
     this.loading = false;
   },

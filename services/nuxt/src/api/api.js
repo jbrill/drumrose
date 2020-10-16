@@ -144,7 +144,7 @@ export const postFavorite = async (bearerToken, data) => {
       {
         headers: {
           Authorization: `${bearerToken}`,
-        }
+        },
       }
     );
     return response;
@@ -167,7 +167,7 @@ export const postReview = async (bearerToken, data) => {
       {
         headers: {
           Authorization: `${bearerToken}`,
-        }
+        },
       }
     );
     return response;
@@ -177,7 +177,7 @@ export const postReview = async (bearerToken, data) => {
       data: [],
     };
   }
-}
+};
 
 /* 
  * Fetches a list of favorite tracks

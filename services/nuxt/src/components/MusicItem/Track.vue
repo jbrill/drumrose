@@ -27,7 +27,11 @@
           class="songName"
         >{{ trackObject.attributes.name }}</span>
       </nuxt-link>
-      <nuxt-link :to="'/artists/' + trackObject.relationships.artists.data[0].id" class="artistName">
+      <nuxt-link
+        :to="'/artists/' + 
+          trackObject.relationships.artists.data[0].id"
+        class="artistName"
+      >
         <span
           ref="curatorName"
           class="artistName"
@@ -41,7 +45,7 @@
 import { mapState } from 'vuex';
 import Artwork from '~/components/MusicItem/Artwork';
 
-import { favoriteTrack, getTrackDetail } from '~/api/api';
+import { favoriteTrack } from '~/api/api';
 
 
 export default {
@@ -60,28 +64,6 @@ export default {
     isPlayable: {
       type: Boolean,
       default: false,
-    },
-  },
-  data () {
-    return {
-      loading: true,
-      playlistDialog: false,
-      artistName: '',
-      artworkUrl: '',
-      name: '',
-      trackObject: {},
-    };
-  },
-  computed: {
-    ...mapState(['nowPlayingItem', 'playbackState', 'queue']),
-    appleImage () {
-      console.log("this.trackObject")
-      console.log(this.trackObject)
-      return this.trackObject.attributes.artwork.url.replace(
-        '{w}', '250'
-      ).replace(
-        '{h}', '250'
-      );
     },
   },
   async asyncData ({ store }) {
@@ -103,6 +85,28 @@ export default {
       console.error(err);
     }
   },
+  data () {
+    return {
+      loading: true,
+      playlistDialog: false,
+      artistName: '',
+      artworkUrl: '',
+      name: '',
+      trackObject: {},
+    };
+  },
+  computed: {
+    ...mapState(['nowPlayingItem', 'playbackState', 'queue']),
+    appleImage () {
+      console.log("this.trackObject");
+      console.log(this.trackObject);
+      return this.trackObject.attributes.artwork.url.replace(
+        '{w}', '250'
+      ).replace(
+        '{h}', '250'
+      );
+    },
+  },
   async mounted () {
     try {
       const resp = await this.$store.getters.fetch(
@@ -115,6 +119,9 @@ export default {
       this.loading = false;
       console.error(err);
     }
+  },
+  created () {
+    console.log(this.trackObject);
   },
   methods: {
     pauseTrack: async function (event) {
@@ -131,9 +138,6 @@ export default {
         this.$store.dispatch("play");
       });
     },
-  },
-  created() {
-    console.log(this.trackObject)
   },
 };
 </script>

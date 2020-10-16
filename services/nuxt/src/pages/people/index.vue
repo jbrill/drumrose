@@ -11,11 +11,11 @@
           {{ item }}
           {{ item.length }}
           <v-list-item
-            nuxt
             :key="item.username"
+            nuxt
             :to="'/people/' + item.username"
           >
-            <template v-slot:default="{ active, toggle }">
+            <template v-slot:default="{ active }">
               <v-list-item-content>
                 <v-list-item-title
                   v-text="item.username"

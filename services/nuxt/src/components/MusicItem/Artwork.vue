@@ -261,7 +261,7 @@ export default {
         'rating': e,
         'type': this.type,
         'id': this.id,
-      }
+      };
       postReview(this.$auth.getToken('auth0'), data);
       // TODO: Change rating via api
     },

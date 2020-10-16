@@ -72,7 +72,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex';
+import { mapState } from 'vuex';
 import CarouselSection from '~/components/CarouselSection';
 import LoadingCircle from '~/components/LoadingCircle';
 

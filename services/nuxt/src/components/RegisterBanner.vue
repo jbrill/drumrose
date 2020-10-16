@@ -25,7 +25,10 @@
         <v-card-title color="white" class="justify-center">
           {{ image.title }}
         </v-card-title>
-        <v-card-subtitle background-color="black" style="{text-align: center, padding: 5px}" class="justify-center">
+        <v-card-subtitle
+          background-color="black"
+          class="justify-center register-subtitle"
+        >
           {{ image.description }}
         </v-card-subtitle>
         <v-card-actions class="justify-center">
@@ -76,5 +79,9 @@ export default {
 }
 .register-carousel {
   border-bottom: 2px solid var(--primary-black-light);
+}
+.register-subtitle {
+  text-align: center;
+  padding: 5px;
 }
 </style>

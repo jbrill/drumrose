@@ -228,7 +228,8 @@ export default {
 .v-system-bar .v-icon {
   margin-right: 0 !important;
 }
-.theme--dark.v-system-bar .v-icon:hover, .theme--dark.v-system-bar .v-icon:focus {
+.theme--dark.v-system-bar .v-icon:hover,
+.theme--dark.v-system-bar .v-icon:focus {
   color: white;
 }
 </style>

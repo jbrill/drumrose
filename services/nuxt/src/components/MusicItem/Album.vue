@@ -41,7 +41,7 @@
 import { mapState } from 'vuex';
 import Artwork from '~/components/MusicItem/Artwork';
 
-import { getAlbumDetail, favoriteTrack } from '~/api/api';
+import { favoriteTrack } from '~/api/api';
 
 
 export default {
@@ -75,20 +75,20 @@ export default {
       name: '',
     };
   },
-  mounted () {
-    console.log(this.attributes)
-  },
   computed: {
     ...mapState(['nowPlayingItem', 'playbackState', 'queue']),
     appleImage () {
-      console.log("this.attributes")
-      console.log(this.attributes)
+      console.log("this.attributes");
+      console.log(this.attributes);
       return this.attributes.artwork.url.replace(
         '{w}', '2500'
       ).replace(
         '{h}', '2500'
       );
     },
+  },
+  mounted () {
+    console.log(this.attributes);
   },
   methods: {
     addToQueue: function () {

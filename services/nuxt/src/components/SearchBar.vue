@@ -118,7 +118,7 @@ export default {
         this.entries = [];
         return;
       }
-      console.log(val)
+      console.log(val);
 
       this.isLoading = true;
       this.$store.dispatch('getHints', val).then(res => {

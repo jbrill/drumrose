@@ -41,7 +41,10 @@
                         >
                           {{ trackInfo.attributes.name }}
                         </h2>
-                        <nuxt-link :to="'/artists/' + trackInfo.relationships.artists.data[0].id">
+                        <nuxt-link
+                          :to="'/artists/' + 
+                            trackInfo.relationships.artists.data[0].id"
+                        >
                           <p>{{ trackInfo.attributes.artistName }}</p>
                         </nuxt-link>
                       </v-flex>
@@ -50,7 +53,9 @@
                           {{ trackInfo.attributes.releaseDate }}
                         </h5>
                       </v-flex>
-                      <span>Track Number <strong>{{ trackInfo.attributes.trackNumber }}</strong> from
+                      <span>Track Number <strong>
+                        {{ trackInfo.attributes.trackNumber }}
+                      </strong> from
                         <nuxt-link
                           class="album-name"
                           style="text-decoration: underline"
@@ -146,7 +151,10 @@
                     class="display-2 font-weight-black"
                     v-text="avg"
                   />
-                  <span v-if="avg" class="display-1 font-weight-black">/ 5.0</span>
+                  <span
+                    v-if="avg"
+                    class="display-1 font-weight-black"
+                  >/ 5.0</span>
                 </div>
               </v-row>
             </v-col>

@@ -83,8 +83,8 @@ export default {
     },
   },
   created () {
-    console.log("this.trackObject")
-    console.log(this.trackObject)
+    console.log("this.trackObject");
+    console.log(this.trackObject);
     /***getTrackDetail(
       this.$auth.getToken('auth0'),
       this.trackObject.id

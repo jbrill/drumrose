@@ -56,14 +56,14 @@ export default {
     console.log(this.date);
     console.log(this.type);
     console.log(this.rating);
-    console.log(this.review)
+    console.log(this.review);
   },
   methods: {
     addRating (value, id) {
       console.log(value);
       console.log(id);
-    }
-  }
+    },
+  },
 };
 </script>
 

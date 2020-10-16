@@ -126,7 +126,7 @@ export const getters = {
       };
     } catch (err) {
       if (err == MusicKit.MKError.ACCESS_DENIED) {
-        console.log("AY")
+        console.log("AY");
       }
     }
   },
@@ -275,7 +275,7 @@ export const actions = {
       const tokenResponse = await axios.post(
         'https://teton.drumrose.io/api/apple_music_token/'
       );
-      console.log(tokenResponse)
+      console.log(tokenResponse);
       commit('setAppleMusicToken', tokenResponse.data.token);
 
       MusicKit.configure({

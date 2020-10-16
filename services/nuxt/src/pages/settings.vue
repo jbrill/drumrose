@@ -37,7 +37,7 @@
       v-model="resetPasswordDialog"
       width="500"
     >
-      <v-card >
+      <v-card>
         <v-card-title class="headline">
           Confirm your password reset
         </v-card-title>

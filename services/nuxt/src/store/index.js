@@ -113,11 +113,9 @@ export const getters = {
   async heavyRotation (state) {
     return await getApi(false).historyHeavyRotation();
   },
-
   getQueue (state) {
    return state.queue;
   },
-
   // Data fetching
   get (state) {
     try {

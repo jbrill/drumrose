@@ -28,14 +28,24 @@
           <v-icon>queue_music</v-icon>
         </v-btn>
       </template>
-      <v-list>
+      <v-list two-line>
         <v-subheader>Up Next - {{ queue.length }} Tracks</v-subheader>
-        <v-list-item
-          v-for="(track, index) in queue"
-          :key="`track-${index}`"
+        <v-list-item-group
+          v-model="selected"
+          multiple
+          active-class="pink--text"
         >
-          <QueueItem :track-object="track" />
-        </v-list-item>
+          <template v-for="(track, index) in queue">
+            <v-hover
+              :key="`track-${index}`"
+              v-slot:default="{ hover }"
+            >
+              <v-list-item>
+                <QueueItem :track-object="track" />
+              </v-list-item>
+            </v-hover>
+          </template>
+        </v-list-item-group>
       </v-list>
     </v-menu>
   </div>
@@ -51,12 +61,7 @@ export default {
     QueueItem,
   },
   data: () => ({
-    items: [
-      { title: 'Click Me' },
-      { title: 'Click Me' },
-      { title: 'Click Me' },
-      { title: 'Click Me 2' },
-    ],
+    selected: null,
   }),
   computed: {
     ...mapState(['nowPlayingItem', 'queue']),

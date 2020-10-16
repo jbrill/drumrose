@@ -1,95 +1,103 @@
 <template>
-  <div>
-    <div
-      v-if="!loading && trackInfo"
-      class="track-contain"
-    >
-      <v-container>
-        <v-row>
-          <v-col cols="12" sm="8">
-            <v-layout>
-              <v-flex justify-space-between>
-                <div>
-                  <v-row>
-                    <v-btn fab medium color="var(--primary-purple">
-                      <v-icon>mdi-play</v-icon>
-                    </v-btn>
-                    <v-flex>
-                      <h2
-                        class="headline"
-                      >
-                        {{ trackInfo.attributes.name }}
-                      </h2>
-                      <nuxt-link
-                        :to="'/artists/' + 
-                          trackInfo.relationships.artists.data[0].id"
-                      >
-                        <p>{{ trackInfo.attributes.artistName }}</p>
-                      </nuxt-link>
-                    </v-flex>
-                  </v-row>
-                  <v-row>
-                    <span>Released in <strong>
-                      {{ trackInfo.attributes.releaseDate.split('-')[0] }}
-                    </strong></span>
-                  </v-row>
-                  <v-divider />
-                  <v-row height="30%" class="fill-height">
-                    <v-chip
-                      v-for="
-                        (genre, genreIdx) in trackInfo.attributes.genreNames
-                      "
-                      :key="'genre' + genreIdx"
-                      :to="'/genres/' + genre.replace(' ', '-').toLowerCase()"
-                      nuxt
-                      label
-                      small
-                    >
-                      #{{ genre }}
-                    </v-chip>
-                  </v-row>
-                </div>
-              </v-flex>
-            </v-layout>
-          </v-col>
-          <v-col cols="12" sm="3">
-            <v-img height="auto" :src="appleImage" />
-          </v-col>
-        </v-row>
-      </v-container>
-    </div>
-    <v-divider />
-    <v-btn small tile dark @click="favoriteTrack">
-      <v-icon x-small left>
-        mdi-heart
-      </v-icon> Favorite
-    </v-btn>
-    <v-btn small tile dark>
-      <v-icon x-small left>
-        mdi-plus
-      </v-icon> Add to Queue
-    </v-btn>
-    <v-btn small tile dark>
-      <v-icon x-small left>
-        mdi-plus
-      </v-icon> Add to Playlist
-    </v-btn>
-    <v-btn small tile dark>
-      <v-icon x-small left>
-        mdi-plus
-      </v-icon> Add to Library
-    </v-btn>
-  </div>
+  <v-responsive>
+    <MusicPageHeader
+      type="albums"
+    />
+    <v-expansion-panels>
+      <v-expansion-panel>
+        <v-expansion-panel-header>
+          <v-row no-gutters>
+            <v-col cols="8">
+              Edit Review
+            </v-col>
+            <v-col
+              style="padding-top: 1rem;"
+              cols="8"
+              class="text--secondary"
+            >
+              <v-fade-transition leave-absolute>
+                <v-rating
+                  v-model="rating"
+                  background-color="white"
+                  color="var(--primary-purple)"
+                  dense
+                  half-increments
+                  hover
+                  size="16"
+                />
+              </v-fade-transition>
+            </v-col>
+          </v-row>
+        </v-expansion-panel-header>
+        <v-expansion-panel-content>
+          <v-textarea
+            counter
+            label="Create Review"
+            :rules="rules"
+            :value="value"
+            auto-grow
+            outlined
+            filled
+            rows="2"
+            row-height="20"
+          />
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+    </v-expansion-panels>
+    <v-container fluid>
+      <h5 style="color: #ccc">
+        <v-icon x-small>
+          mdi-comment
+        </v-icon>
+        102 Reviews
+      </h5>
+      <v-divider />
+    </v-container>
+  </v-responsive>
 </template>
 
 <script>
 import { postFavorite } from '~/api/api';
-
+import MusicPageHeader from '~/components/MusicPageHeader';
 
 export default {
+  components: {
+    MusicPageHeader,
+  },
   data: () => ({
     trackInfo: null,
     loading: true,
+    playing: false,
+    rating: 0.5,
+    rules: [v => v.length <= 255 || 'Max 255 characters'],
+    value: '',
+    avg: 2.5,
+    labels: [
+      '0',
+      '0.5',
+      '1',
+      '1.5',
+      '2',
+      '2.5',
+      '3',
+      '3.5',
+      '4',
+      '4.5',
+      '5',
+    ],
+    values: [
+      200,
+      675,
+      410,
+      390,
+      310,
+      460,
+      250,
+      240,
+      250,
+      240,
+      740,
+    ],
   }),
   computed: {
     appleImage () {
@@ -103,7 +111,7 @@ export default {
   async mounted () {
     try {
       const resp = await this.$store.getters.fetch(
-        `/v1/catalog/us/albums/${this.$route.params.id}`
+        `/v1/catalog/us/songs/${this.$route.params.id}`
       );
       console.log(resp);
       this.trackInfo = resp.data[0];
@@ -114,7 +122,7 @@ export default {
     }
   },
   methods: {
-    favoriteTrack: async function () {
+    async favoriteTrack () {
       try {
         await postFavorite(
           this.$auth.getToken('auth0'),
@@ -122,7 +130,19 @@ export default {
         );
       } catch (err) {
         console.error(err);
+        this.$toast.error(err.message);
       }
+    },
+    async playTrack () {
+      await this.$store.dispatch("setQueue", {
+        'song': this.trackInfo.id,
+      });
+      await this.$store.dispatch("play");
+      this.playing = true;
+    },
+    async pauseTrack () {
+      await this.$store.dispatch("pause");
+      this.playing = false;
     },
   },
 };
@@ -131,7 +151,6 @@ export default {
 <style scoped>
 .track-contain {
   display: flex;
-  padding: 2rem;
 }
 .track-info-contain {
   align-self: center;
@@ -144,5 +163,22 @@ export default {
 }
 >>>.track-name {
   margin-bottom: 0;
+}
+.album-name {
+  font-weight: bolder;
+  color: #ccc;
+}
+.buttons-contain {
+  display: flex;
+}
+.content-contain {
+  align-items: center;
+  justify-content: space-around;
+}
+.v-chip {
+  margin: 5px;
+}
+.buttons-contain > * {
+  margin: 5px;
 }
 </style>

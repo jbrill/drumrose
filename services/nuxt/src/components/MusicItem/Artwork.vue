@@ -10,6 +10,18 @@
             class="albumCover"
             :src="artworkUrl"
           >
+            <template v-slot:placeholder>
+              <v-row
+                class="fill-height ma-0"
+                align="center"
+                justify="center"
+              >
+                <v-progress-circular
+                  indeterminate
+                  color="grey lighten-5"
+                />
+              </v-row>
+            </template>
             <div
               v-if="hover"
               style="position: absolute"
@@ -23,13 +35,11 @@
                   :loading="isPlaying === true && playbackState !== 2"
                   fab
                   medium
-                  color="var(--primary-purple)"
                   @click="pauseTrack"
                   @click.native.stop.prevent
                 >
                   <v-icon
                     :class="{ 'show-btns': hover }"
-                    color="transparent"
                   >
                     mdi-pause
                   </v-icon>
@@ -40,23 +50,46 @@
                   :loading="isPlaying === true && playbackState !== 2"
                   fab
                   medium
-                  color="var(--primary-purple)"
                   @click="playTrack"
                   @click.native.stop.prevent
                 >
                   <v-icon
                     :class="{ 'show-btns': hover }"
-                    color="transparent"
                   >
                     mdi-play
                   </v-icon>
                 </v-btn>
               </v-row>
               <v-card-actions class="card-actions">
+                <v-tooltip
+                  v-if="!auth.loggedIn"
+                  top
+                >
+                  <template v-slot:activator="{ on }">
+                    <div v-on="on">
+                      <v-btn
+                        icon
+                        :disabled="!auth.loggedIn"
+                        :class="{ 'show-btns': hover }"
+                      >
+                        <v-icon
+                          small
+                          :class="{ 'show-btns': hover }"
+                          color="transparent"
+                        >
+                          mdi-heart
+                        </v-icon>
+                      </v-btn>
+                    </div>
+                  </template>
+                  <span>LOG IN TO FAVORITE</span>
+                </v-tooltip>
                 <v-btn
+                  v-else
                   icon
                   :class="{ 'show-btns': hover }"
-                  @click="auth.loggedIn ? favoriteItem() : login()"
+                  :disabled="!auth.loggedIn"
+                  @click="favoriteItem()"
                   @click.native.stop.prevent
                 >
                   <v-icon
@@ -122,7 +155,9 @@
                           @click.native.stop.prevent
                         >
                           <v-list-item-icon>
-                            <v-icon>mdi-playlist-music</v-icon>
+                            <v-icon small>
+                              mdi-playlist-music
+                            </v-icon>
                           </v-list-item-icon>
                           <v-list-item-content>
                             <v-list-item-title>
@@ -141,7 +176,31 @@
                     <v-divider />
                     <v-list-item @click.native.stop.prevent @click="addToQueue">
                       <v-list-item-icon>
-                        <v-icon>mdi-playlist-star</v-icon>
+                        <v-icon small>
+                          mdi-thumb-up
+                        </v-icon>
+                      </v-list-item-icon>
+                      <v-list-item-content>
+                        <v-list-item-title>More like this</v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                    <v-divider />
+                    <v-list-item @click.native.stop.prevent @click="addToQueue">
+                      <v-list-item-icon>
+                        <v-icon small>
+                          mdi-thumb-down
+                        </v-icon>
+                      </v-list-item-icon>
+                      <v-list-item-content>
+                        <v-list-item-title>Less like this</v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                    <v-divider />
+                    <v-list-item @click.native.stop.prevent @click="addToQueue">
+                      <v-list-item-icon>
+                        <v-icon small>
+                          mdi-playlist-star
+                        </v-icon>
                       </v-list-item-icon>
                       <v-list-item-content>
                         <v-list-item-title>Add to queue</v-list-item-title>
@@ -155,7 +214,9 @@
                       "
                     >
                       <v-list-item-icon>
-                        <v-icon>mdi-library</v-icon>
+                        <v-icon small>
+                          mdi-library
+                        </v-icon>
                       </v-list-item-icon>
                       <v-list-item-content>
                         <v-list-item-title>Add to library</v-list-item-title>
@@ -358,6 +419,7 @@ export default {
   width: 100%;
   overflow: visible !important;
   height: auto;
+  min-height: 15vh;
   border-radius: 2px;
 }
 .albumCover:hover, .albumCover:focus {

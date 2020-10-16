@@ -98,12 +98,10 @@ export default {
   computed: {
     ...mapState(['nowPlayingItem', 'playbackState', 'queue']),
     appleImage () {
-      console.log("this.trackObject");
-      console.log(this.trackObject);
       return this.trackObject.attributes.artwork.url.replace(
-        '{w}', '250'
+        '{w}', this.trackObject.attributes.artwork.width
       ).replace(
-        '{h}', '250'
+        '{h}', this.trackObject.attributes.artwork.height
       );
     },
   },

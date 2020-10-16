@@ -10,6 +10,7 @@
       v-for="(image, i) in images"
       :key="i"
       :src="require(`@/assets/img/${image.src}`)"
+      gradient="to top right, rgba(100,115,201,.23), rgba(25,32,72,.4)"
       eager
       reverse-transition="fade-transition"
       transition="fade-transition"
@@ -32,7 +33,7 @@
           {{ image.description }}
         </v-card-subtitle>
         <v-card-actions class="justify-center">
-          <v-btn large color="var(--primary-purple)" @click="login">
+          <v-btn large color="var(--primary-red)" @click="login">
             JOIN THE PARTY - IT'S FREE!
           </v-btn>
         </v-card-actions>
@@ -50,12 +51,14 @@ export default {
       trendingPlaylistGroups: [],
       images: [
         {
-          'src': "register-banner-image-0.jpg",
+          'src': "optImage.jpg",
+          'placeHolder': "blurredImage.jpg",
           'title': 'SOCIAL',
           'description': 'Share your favorite music with friends.',
         },
         {
-          'src': "register-banner-image-1.jpg",
+          'src': "optImage2.jpg",
+          'placeholder': 'blurredImage2.jpg',
           'title': 'SMART',
           'description': 'Explore with our recommendation services.',
         },

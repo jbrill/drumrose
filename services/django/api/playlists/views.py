@@ -55,7 +55,7 @@ class PlaylistDetail(APIView):
         Returns a serialized playlist
         """
         try:
-            playlist = Playlist.objects.get(id=playlist_id)
+            playlist = Playlist.objects.get(apple_music_id=playlist_id)
         except Playlist.DoesNotExist:
             return JsonResponse(
                 {"message": "Playlist does not exist."}, status=status.HTTP_409_CONFLICT
@@ -73,7 +73,14 @@ class PlaylistDetail(APIView):
         """
         Returns a 201 if successful
         """
-        return JsonResponse({})
+        playlist = Playlist.objects.create(
+            apple_music_id=request.data["apple_music_id"]
+        )
+
+        serializer = PlaylistSerializer(playlist)
+        return JsonResponse(
+            {"playlist": serializer.data}, status=status.HTTP_201_CREATED
+        )
 
     def patch(self, request, playlist_id):
         print(playlist_id)

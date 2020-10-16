@@ -15,11 +15,12 @@
       item-text="attributes.name"
       item-value="attributes.name"
       no-data-text="No data found"
-      placeholder=" Search"
+      placeholder="Search music"
       prepend-inner-icon="mdi-magnify"
       outlined
       width="15rem"
       return-object
+      @keydown.enter="searchVal"
     >
       <template v-slot:no-data>
         <v-list-item>
@@ -194,6 +195,16 @@ export default {
         '{h}', '2500'
       );
     },
+    searchVal (ev) {
+      if (ev.keyCode === 13) {
+        let newVal = ev.target.value;
+        this.isLoading = false;
+        if (!newVal) return;
+        this.$router.push({
+          path: `/search/${newVal}`,
+        });
+      }
+    }
   },
 };
 </script>

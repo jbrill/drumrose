@@ -80,9 +80,9 @@ export default {
     ...mapState(['nowPlayingItem', 'playbackState', 'queue']),
     appleImage () {
       return this.attributes.artwork.url.replace(
-        '{w}', '250'
+        '{w}', this.attributes.artwork.width
       ).replace(
-        '{h}', '250'
+        '{h}', this.attributes.artwork.height
       );
     },
   },

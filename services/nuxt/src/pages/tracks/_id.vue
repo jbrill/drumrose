@@ -1,173 +1,14 @@
 <template>
-  <div>
-    <div
-      v-if="!loading && trackInfo"
-      class="track-contain"
-    >
-      <v-badge
-        avatar
-        bordered
-        overlap
-        style="width: 100%"
-        icon="mdi-waveform"
-        color="var(--primary-purple)"
-      >
-        <v-card style="padding: 2rem;">
-          <v-row flex class="content-contain">
-            <v-col cols="12" sm="8">
-              <v-layout>
-                <v-flex justify-space-between>
-                  <v-container>
-                    <v-row style="margin-left: 0">
-                      <v-btn
-                        v-if="!playing"
-                        fab
-                        medium
-                        @click="playTrack"
-                      >
-                        <v-icon>mdi-play</v-icon>
-                      </v-btn>
-                      <v-btn
-                        v-else
-                        fab
-                        medium
-                        @click="pauseTrack"  
-                      >
-                        <v-icon>mdi-pause</v-icon>
-                      </v-btn>
-                      <v-flex style="width: 65%; margin-left: 1rem;">
-                        <h2
-                          class="headline"
-                        >
-                          {{ trackInfo.attributes.name }}
-                        </h2>
-                        <nuxt-link
-                          :to="'/artists/' + 
-                            trackInfo.relationships.artists.data[0].id"
-                        >
-                          <p>{{ trackInfo.attributes.artistName }}</p>
-                        </nuxt-link>
-                      </v-flex>
-                      <v-flex width="100%">
-                        <h5 class="overline" style="text-align: right;">
-                          {{ trackInfo.attributes.releaseDate }}
-                        </h5>
-                      </v-flex>
-                      <span>Track Number <strong>
-                        {{ trackInfo.attributes.trackNumber }}
-                      </strong> from
-                        <nuxt-link
-                          class="album-name"
-                          style="text-decoration: underline"
-                          nuxt
-                          :to="'/albums/' + 
-                            trackInfo.relationships.albums.data[0].id"
-                        >
-                          {{ trackInfo.attributes.albumName }}
-                        </nuxt-link>
-                      </span>
-                      <v-flex style="width: 100%">
-                        <v-chip
-                          v-for="
-                            (genre, genreIdx) in trackInfo.attributes.genreNames
-                          "
-                          :key="'genre-' + genreIdx"
-                          label
-                          x-small
-                        >
-                          #{{ genre }}
-                        </v-chip>
-                      </v-flex>
-                    </v-row>
-                  </v-container>
-                  <v-divider />
-                  <v-card-actions>
-                    <v-container full-width>
-                      <v-row dense style="width: 100%">
-                        <v-col>
-                          <v-btn x-small tile dark @click="favoriteTrack">
-                            <v-icon x-small left>
-                              mdi-heart
-                            </v-icon> Favorite
-                          </v-btn>
-                        </v-col>
-                        <v-col>
-                          <v-btn x-small tile dark>
-                            <v-icon x-small left>
-                              mdi-playlist-star
-                            </v-icon> Queue
-                          </v-btn>
-                        </v-col>
-                        <v-col>
-                          <v-btn x-small tile dark>
-                            <v-icon x-small left>
-                              mdi-playlist-music
-                            </v-icon> Playlist
-                          </v-btn>
-                        </v-col>
-                        <v-col>
-                          <v-btn x-small tile dark>
-                            <v-icon x-small left>
-                              mdi-library
-                            </v-icon> Library
-                          </v-btn>
-                        </v-col>
-                        <v-col>
-                          <v-btn x-small tile dark>
-                            <v-icon x-small left>
-                              mdi-share
-                            </v-icon> Share
-                          </v-btn>
-                        </v-col>
-                      </v-row>
-                    </v-container>
-                  </v-card-actions>
-                </v-flex>
-              </v-layout>
-            </v-col>
-            <v-col cols="12" sm="3">
-              <v-img
-                style="margin: 0 auto"
-                width="20vw"
-                height="auto"
-                :src="appleImage"
-              />
-              <v-spacer />
-              <v-sparkline
-                :value="values"
-                color="white"
-                line-width="3"
-                padding="16"
-                :gradient="['#f72047', '#ffd200', '#1feaea']"
-                auto-draw
-                stroke-linecap="round"
-              />
-              <v-row align="start">
-                <div class="caption grey--text text-uppercase">
-                  Average Rating
-                </div>
-                <div>
-                  <span
-                    class="display-2 font-weight-black"
-                    v-text="avg"
-                  />
-                  <span
-                    v-if="avg"
-                    class="display-1 font-weight-black"
-                  >/ 5.0</span>
-                </div>
-              </v-row>
-            </v-col>
-          </v-row>
-        </v-card>
-      </v-badge>
-    </div>
+  <v-responsive>
+    <MusicPageHeader
+      type="songs"
+    />
     <v-expansion-panels>
       <v-expansion-panel>
         <v-expansion-panel-header>
           <v-row no-gutters>
             <v-col cols="8">
-              Edit Review
+              Your Review
             </v-col>
             <v-col
               style="padding-top: 1rem;"
@@ -191,7 +32,7 @@
         <v-expansion-panel-content>
           <v-textarea
             counter
-            label="Create Review"
+            label="Add Review"
             :rules="rules"
             :value="value"
             auto-grow
@@ -212,14 +53,17 @@
       </h5>
       <v-divider />
     </v-container>
-  </div>
+  </v-responsive>
 </template>
 
 <script>
 import { postFavorite } from '~/api/api';
-
+import MusicPageHeader from '~/components/MusicPageHeader';
 
 export default {
+  components: {
+    MusicPageHeader,
+  },
   data: () => ({
     trackInfo: null,
     loading: true,

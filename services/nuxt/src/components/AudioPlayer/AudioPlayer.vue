@@ -103,6 +103,24 @@ export default {
   computed: {
     ...mapState(['queue', 'playbackState', 'playbackTime']),
   },
+  created () {
+    if (process.browser) {
+      window.addEventListener('keydown', e => {
+        console.log(e)
+        if (e.keyCode === 32 && this.playbackTime) {
+          e.preventDefault();
+          console.log(this.playbackState)
+          if (this.playbackState === 3) {
+            this.playTrack();
+          } else {
+            this.pauseTrack();
+          }
+        } else if (e.keyCode === 39 && this.playbackTime) {
+          
+        }
+      });
+    }
+  },
   methods: {
     playTrack () {
       this.$store.dispatch("play");

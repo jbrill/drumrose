@@ -83,6 +83,11 @@ export default {
   width: 25%;
   padding: 1%;
 }
+.VueCarousel-wrapper {
+  width: 25%;
+  overflow: visible !important;
+  padding: 1%;
+}
 .carousel-contain {
   padding: 2rem;
   margin: 0 auto;

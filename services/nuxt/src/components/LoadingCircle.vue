@@ -2,9 +2,7 @@
   <v-layout flex>
     <v-progress-circular
       class="progress-contain"
-      :size="35"
-      :width="3"
-      color="var(--primary-purple)"
+      color="grey lighten-5"
       indeterminate
     />
   </v-layout>

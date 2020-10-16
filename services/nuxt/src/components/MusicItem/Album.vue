@@ -6,6 +6,7 @@
       overlap
       icon="mdi-record-circle-outline"
       style="width: 100%"
+      class="grey lighten-1"
       color="var(--primary-purple)"
     >
       <Artwork
@@ -17,20 +18,20 @@
         type="album"
       />
     </v-badge>
-    <div class="textContain">
+    <div class="textContain lighten">
       <nuxt-link
         class="songName"
         :to="'/albums/' + id"
       >
         <span
           ref="songName"
-          class="songName"
+          class="subtitle-1"
         >{{ attributes.name }}</span>
       </nuxt-link>
       <nuxt-link :to="'/artists/' + attributes.curatorName" class="artistName">
         <span
           ref="curatorName"
-          class="artistName"
+          class="subtitle-2"
         >{{ attributes.artistName }}</span>
       </nuxt-link>
     </div>
@@ -78,12 +79,10 @@ export default {
   computed: {
     ...mapState(['nowPlayingItem', 'playbackState', 'queue']),
     appleImage () {
-      console.log("this.attributes");
-      console.log(this.attributes);
       return this.attributes.artwork.url.replace(
-        '{w}', '2500'
+        '{w}', this.attributes.artwork.width
       ).replace(
-        '{h}', '2500'
+        '{h}', this.attributes.artwork.height
       );
     },
   },
@@ -158,7 +157,10 @@ export default {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  opacity: 0.8;
+  color: #f2f2f2;
+}
+.artistName:hover, .artistName:focus {
+  color: white;
 }
 .songName {
   font-size: 0.75rem;
@@ -166,17 +168,11 @@ export default {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  opacity: 0.8;
+  opacity: 1;
+  color: #ccc;
 }
 .songName:hover, .songName:focus {
-  cursor: pointer;
   color: white;
-  opacity: 1;
-}
-.artistName:hover, .artistName:focus {
-  cursor: pointer;
-  color: white;
-  opacity: 1;
 }
 .textContain {
   display: flex;

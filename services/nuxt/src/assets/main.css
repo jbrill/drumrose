@@ -94,7 +94,9 @@ span, p {
   border-radius: 2px;
   color: #ccc !important;
 }
-
+.VueCarousel-wrapper {
+  overflow: visible !important;
+}
 .VueCarousel-slide {
   width: 20%;
   padding: 1%;
@@ -102,7 +104,6 @@ span, p {
 .light::-webkit-scrollbar {
   width: 15px;
 }
-
 .light::-webkit-scrollbar-track {
   background: #e6e6e6;
   border-left: 1px solid #dadada;

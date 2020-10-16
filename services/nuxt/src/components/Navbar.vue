@@ -5,6 +5,7 @@
       app
       color="#272727"
       dark
+      stateless
     >
       <v-list nav>
         <v-list-item
@@ -74,13 +75,6 @@ export default {
           title: 'Home',
           nav: '/',
           icon: 'mdi-home',
-          requiresAuth: false,
-          requiresAppleAuth: false,
-        },
-        {
-          title: 'Discover',
-          nav: '/discover',
-          icon: 'mdi-folder-music-outline',
           requiresAuth: false,
           requiresAppleAuth: false,
         },

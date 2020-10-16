@@ -6,7 +6,6 @@
         @mouseenter="isHovering = true"
         @mouseleave="isHovering = false"
       >
-        <img class="albumCover" :src="appleImage">
         <div
           v-if="isActionable"
           ref="albumOverlay"
@@ -181,13 +180,6 @@ export default {
   },
   computed: {
     ...mapState(['queue']),
-    appleImage () {
-      return this.attributes.artwork.url.replace(
-        '{w}', '250'
-      ).replace(
-        '{h}', '250'
-      );
-    },
   },
   methods: {
     pauseTrack: async function (event) {

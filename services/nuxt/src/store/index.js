@@ -100,18 +100,18 @@ export const getters = {
 	},
 
   async recommendations (state) {
-    await MusicKit.getInstance().api.recommendations();
+    return await MusicKit.getInstance().api.recommendations();
   },
   async recentlyAdded (state) {
-    await MusicKit.getInstance().api.library.collection(
+    return await MusicKit.getInstance().api.library.collection(
       'recently-added', null, {}
     );
   },
   async recentlyPlayed (state) {
-    await getApi(false).recentPlayed();
+    return await getApi(false).recentPlayed();
   },
   async heavyRotation (state) {
-    await getApi(false).historyHeavyRotation();
+    return await getApi(false).historyHeavyRotation();
   },
 
   getQueue (state) {

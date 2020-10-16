@@ -5,16 +5,11 @@ Reviews Serializers Test Module
 from api.models.factories import (
     AlbumFactory,
     AlbumReviewFactory,
-    PlaylistReviewFactory,
     SongFactory,
     TrackReviewFactory,
     UserProfileFactory,
 )
-from api.reviews.serializers import (
-    AlbumReviewSerializer,
-    PlaylistReviewSerializer,
-    TrackReviewSerializer,
-)
+from api.reviews.serializers import AlbumReviewSerializer, TrackReviewSerializer
 from django.test import TestCase
 
 

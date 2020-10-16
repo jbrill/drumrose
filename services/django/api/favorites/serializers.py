@@ -55,7 +55,7 @@ class FavoritedTrackSerializer(serializers.ModelSerializer):
         return data
 
     def to_internal_value(self, data):
-        internal_value = super(FavoritedTrackSerializer, self).to_internal_value(data)
+        internal_value = super().to_internal_value(data)
         name = data.get("name")
         apple_music_id = data.get("apple_music_id")
         auth0_user_id = self.context.get("request").user
@@ -104,7 +104,7 @@ class FavoritedAlbumSerializer(serializers.ModelSerializer):
         return "album"
 
     def to_internal_value(self, data):
-        internal_value = super(FavoritedAlbumSerializer, self).to_internal_value(data)
+        internal_value = super().to_internal_value(data)
         name = data.get("name")
         apple_music_id = data.get("apple_music_id")
         auth0_user_id = self.context.get("request").user
@@ -154,9 +154,7 @@ class FavoritedPlaylistSerializer(serializers.ModelSerializer):
         return "playlist"
 
     def to_internal_value(self, data):
-        internal_value = super(FavoritedPlaylistSerializer, self).to_internal_value(
-            data
-        )
+        internal_value = super().to_internal_value(data)
         name = data.get("name")
         apple_music_id = data.get("apple_music_id")
         auth0_user_id = self.context.get("request").user

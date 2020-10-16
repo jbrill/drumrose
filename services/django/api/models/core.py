@@ -65,7 +65,7 @@ class Auth0ManagementToken(BaseModel):
         authorized_tokens = Auth0ManagementToken.objects.all()
         authorized_tokens.update(is_authorized=False)
         self.is_authorized = True
-        super(Auth0ManagementToken, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
 
 class UserProfile(BaseModel):
@@ -96,8 +96,6 @@ class SongManager(models.Manager):
     Song Manager
     """
 
-    pass
-
 
 class Song(BaseModel):
     """
@@ -117,8 +115,6 @@ class AlbumManager(models.Manager):
     Album Manager
     """
 
-    pass
-
 
 class Album(BaseModel):
     """
@@ -137,8 +133,6 @@ class PlaylistManager(models.Manager):
     """
     Playlist Manager
     """
-
-    pass
 
 
 class Playlist(BaseModel):
@@ -160,8 +154,6 @@ class ReviewManager(models.Manager):
     """
     Review Manager
     """
-
-    pass
 
 
 class Review(BaseModel):

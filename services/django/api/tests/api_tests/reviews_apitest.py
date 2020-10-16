@@ -15,13 +15,7 @@ from api.reviews.serializers import (
     PlaylistReviewSerializer,
     TrackReviewSerializer,
 )
-from api.reviews.views import (
-    AlbumReviewList,
-    PlaylistReviewList,
-    ReviewsList,
-    TrackReviewList,
-)
-from api.tests.api_tests.util import ACCESS_TOKEN, get_test_token
+from api.tests.api_tests.util import ACCESS_TOKEN
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
@@ -30,7 +24,7 @@ from rest_framework.test import APIClient
 
 class ReviewsTest(TestCase):
     """
-    Test cases for favorites views
+    Test casest for favorites views
     """
 
     def setUp(self):

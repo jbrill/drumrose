@@ -18,10 +18,10 @@ if __name__ == "__main__":
             # pylint: disable=unused-import
             import django
         except ImportError:
+            # pylint: disable=raise-missing-from
             raise ImportError(
                 "Couldn't import Django. Are you sure it's installed and "
                 "available on your PYTHONPATH environment variable? Did you "
                 "forget to activate a virtual environment?"
             )
-        raise
     execute_from_command_line(sys.argv)

@@ -14,7 +14,6 @@ from api.models.factories import (
     SongFactory,
     UserProfileFactory,
 )
-from django.db import IntegrityError
 from django.test import TestCase
 
 

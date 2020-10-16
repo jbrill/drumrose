@@ -5,7 +5,6 @@ from api.favorites.serializers import (
     FavoritedPlaylistSerializer,
     FavoritedTrackSerializer,
 )
-from api.favorites.views import FavoritesList, FavoriteTracksList
 from api.models.core import FavoritedAlbum, FavoritedPlaylist, FavoritedTrack
 from api.models.factories import (
     AlbumFactory,
@@ -16,7 +15,7 @@ from api.models.factories import (
     SongFactory,
     UserProfileFactory,
 )
-from api.tests.api_tests.util import ACCESS_TOKEN, get_test_token
+from api.tests.api_tests.util import ACCESS_TOKEN
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status

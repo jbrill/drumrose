@@ -8,6 +8,7 @@
         <nuxt-link style="width: 100%" :to="link">
           <v-img
             class="albumCover"
+            dark
             :src="artworkUrl"
           >
             <template v-slot:placeholder>
@@ -69,8 +70,9 @@
                     <div v-on="on">
                       <v-btn
                         icon
-                        :disabled="!auth.loggedIn"
+                        disabled
                         :class="{ 'show-btns': hover }"
+                        @click.native.stop.prevent
                       >
                         <v-icon
                           small
@@ -88,7 +90,6 @@
                   v-else
                   icon
                   :class="{ 'show-btns': hover }"
-                  :disabled="!auth.loggedIn"
                   @click="favoriteItem()"
                   @click.native.stop.prevent
                 >
@@ -103,7 +104,7 @@
                 <v-menu
                   close-on-content-click
                   origin="bottom right"
-                  z-index="100"
+                  z-index="10000"
                   attach
                   top
                   left
@@ -376,6 +377,7 @@ export default {
 }
 .v-card {
   transition: opacity .4s ease-in-out;
+  border-radius: 2px;
   outline: 2px solid var(--primary-purple);
 }
 .bottom-gradient {
@@ -408,14 +410,13 @@ export default {
   align-items: center;
   justify-content: center;
   position: relative;
-  border-radius: 1px;
   box-shadow: var(--shadow-medium);
+  border-radius: 2px;
 }
 .albumContain:hover, .albumContain:focus {
   cursor: pointer;
 }
 .albumCover {
-  border: 1px solid var(--primary-black-light);
   width: 100%;
   overflow: visible !important;
   height: auto;
@@ -433,7 +434,6 @@ export default {
   background: rgb(255,255,255);
   background: linear-gradient(180deg, rgba(0,0,0,0) 41%, rgba(0,0,0,0.5) 100%);
   opacity: 0;
-  border-radius: 2px;
 }
 .albumOverlayActive {
   opacity: 1;

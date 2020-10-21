@@ -278,17 +278,29 @@ export const getAlbumDetail = async (bearerToken, appleMusicId) => {
  * Fetches detail route for a playlist
  * */
 export const getPlaylistDetail = async (bearerToken, appleMusicId) => {
-  try {
-    const response = await axios.get(
-      `https://teton.drumrose.io/api/playlists/${appleMusicId}/`,
-      {
-        headers: {
-          Authorization: `Bearer ${bearerToken}`,
-        },
-      }
-    );
-    return response;
-  } catch(err) {
-    throw new Error(err);
-  }
+  return await axios.get(
+    `https://teton.drumrose.io/api/playlists/${appleMusicId}/`,
+    {
+      headers: {
+        Authorization: `Bearer ${bearerToken}`,
+      },
+    }
+  );
 };
+
+
+/*
+ * Creates a playlist
+ * */
+export const createPlaylist = async (bearerToken, playlistData) => {
+  return await axios.get(
+    `https://teton.drumrose.io/api/playlists/${appleMusicId}/`,
+    playlistData,
+    {
+      headers: {
+        Authorization: `Bearer ${bearerToken}`,
+      },
+    },
+  );
+};
+

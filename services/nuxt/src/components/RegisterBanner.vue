@@ -23,17 +23,20 @@
         color="transparent"
         background-color="transparent"
       >
-        <v-card-title color="white" class="justify-center">
+        <v-card-title class="display-1 white--text justify-center">
           {{ image.title }}
         </v-card-title>
         <v-card-subtitle
           background-color="black"
-          class="justify-center register-subtitle"
+          class="justify-center overline white--text"
         >
           {{ image.description }}
         </v-card-subtitle>
         <v-card-actions class="justify-center">
-          <v-btn large color="var(--primary-red)" @click="login">
+          <v-btn
+            color="var(--primary-red)"
+            @click="login"
+          >
             JOIN THE PARTY - IT'S FREE!
           </v-btn>
         </v-card-actions>

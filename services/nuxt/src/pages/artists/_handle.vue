@@ -1,30 +1,31 @@
 <template>
-  <div v-if="!loading">
+  <v-container v-if="!loading">
     <h1>{{ artistData.attributes.name }}</h1>
     <v-chip
       v-for="(genre, idx) in artistData.attributes.genreNames"
       :key="`genre-${idx}`"
+      small
+      pill
     >
       #{{ genre }}
     </v-chip>
-    <h6>Albums</h6>
-    <Album
-      v-for="(album, idx) in artistData.relationships.albums.data"       
-      :id="album.id"
-      :key="`album-${idx}`"
-      :attributes="attributeData[idx]"
-      is-playable
-      is-actionable
-    />
-  </div>
+    <v-responsive>
+      <CarouselSection
+        :key="`album-${index}`"
+        title="Albums"
+        :carousel-items="attributeData"
+      />
+    </v-responsive>
+  </v-container>
 </template>
 
 <script>
 import Album from '~/components/MusicItem/Album';
+import CarouselSection from '~/components/CarouselSection';
 
 export default {
   components: {
-    Album,
+    CarouselSection,
   },
   data: () => ({
     artistData: {},
@@ -42,9 +43,11 @@ export default {
       const attributeResp = await this.$store.getters.fetch(
         `/v1/catalog/us/albums/${album.id}`
       );
-      this.attributeData.push(attributeResp.data[0].attributes);
+      this.attributeData.push(attributeResp.data[0]);
     });
+    console.log("!")
     console.log(this.artistData);
+    console.log("!!")
     console.log(this.attributeData);
     console.log(resp);
     this.loading = false;

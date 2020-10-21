@@ -11,16 +11,16 @@
     <carousel
       :touch-drag="false"
       :loop="true"
-      :mouse-drag="false"
       :pagination-enabled="false"
       :navigation-enabled="true"
-      :per-page="4"
+      :per-page="numPerCarousel"
     >
       <slide
         v-for="(carouselItem, index) in validCarouselItems"
         :key="carouselItem.id"
         data-index="index"
         :data-name="carouselItem.id"
+        :style="{ maxWidth: 100 / numPerCarousel + '%' }"
         @slideclick="handleSlideClick"
       >
         <Post
@@ -36,6 +36,25 @@
 <script>
 import { mapState } from 'vuex';
 import Post from '~/components/PostItem/Post.vue';
+
+const carouselPixelRanges = {
+  '1': {
+    'min': 1,
+    'max': 500,
+  },
+  '2': {
+    'min': 501,
+    'max': 900,
+  },
+  '3': {
+    'min': 901,
+    'max': 1300,
+  },
+  '4': {
+    'min': 1301,
+    'max': null,
+  },
+};
 
 
 export default {
@@ -56,15 +75,60 @@ export default {
       default: '',
     },
   },
+  data () {
+    return {
+      windowWidth: window.innerWidth,
+      numPerCarousel: 4,
+    };
+  },
   computed: {
     ...mapState(['auth']),
     validCarouselItems () {
+      console.log(this.carouselItems)
       return this.carouselItems.filter(
         carouselItem => this.isValid(carouselItem.type)
       );
     },
   },
-  methods: {
+  watch: {
+    windowWidth (newWidth, oldWidth) {
+      let pixelRanges = Object.keys(carouselPixelRanges);
+      const numPostsPerCarousel = pixelRanges.filter( pixelRange => {
+        return (
+          carouselPixelRanges[pixelRange]['min'] < newWidth &&
+          (
+            carouselPixelRanges[pixelRange]['max'] > newWidth ||
+            carouselPixelRanges[pixelRange]['max'] === null
+          )
+        );
+      });
+      this.numPerCarousel = parseInt(numPostsPerCarousel[0]);
+      console.log(this.numPerCarousel)
+    },
+  },
+  mounted () {
+    let pixelRanges = Object.keys(carouselPixelRanges);
+    const numPostsPerCarousel = pixelRanges.filter( pixelRange => {
+      return (
+        carouselPixelRanges[pixelRange]['min'] < this.windowWidth &&
+        (
+          carouselPixelRanges[pixelRange]['max'] > this.windowWidth ||
+          carouselPixelRanges[pixelRange]['max'] === null
+        )
+      );
+    });
+    this.numPerCarousel = parseInt(numPostsPerCarousel[0]);
+    this.$nextTick( () => {
+      window.addEventListener('resize', this.onResize);
+    });
+  },
+  beforeDestroy () { 
+    window.removeEventListener('resize', this.onResize); 
+  },
+  methods: {  
+    onResize () {
+      this.windowWidth = window.innerWidth;
+    },
     handleSlideClick (dataset) {
     },
     isValid (type) {
@@ -79,14 +143,8 @@ export default {
   display: flex;
   justify-content: space-between;
 }
-.VueCarousel-slide {
-  width: 25%;
-  padding: 1%;
-}
 .VueCarousel-wrapper {
-  width: 25%;
   overflow: visible !important;
-  padding: 1%;
 }
 .carousel-contain {
   padding: 2rem;

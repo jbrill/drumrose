@@ -15,59 +15,6 @@
         Create playlist
       </v-btn>
     </div>
-    <div>
-      <v-btn
-        text
-        nuxt
-        to="playlists/popular&time=week"
-        color="#ccc"
-        class="playlists-popular"
-      >
-        Popular playlists this week
-      </v-btn>
-      <div class="playlist-feed">
-        <Playlist
-          v-for="(playlist, index) in playlists"
-          :key="playlist.id"
-          :index="index"
-          :playlist="playlist"
-        />
-      </div>
-      <v-btn
-        text
-        nuxt
-        to="playlists/popular&time=week"
-        color="#ccc"
-        class="playlists-popular"
-      >
-        Playlists we think you'll enjoy
-      </v-btn>
-      <div class="playlist-feed">
-        <Playlist
-          v-for="(playlist, index) in playlists"
-          :key="playlist.id"
-          :index="index"
-          :playlist="playlist"
-        />
-      </div>
-      <v-btn
-        text
-        nuxt
-        to="playlists/popular&time=week"
-        color="#ccc"
-        class="playlists-popular"
-      >
-        Playlists we've created for you
-      </v-btn>
-      <div class="playlist-feed">
-        <Playlist
-          v-for="(playlist, index) in playlists"
-          :key="playlist.id"
-          :index="index"
-          :playlist="playlist"
-        />
-      </div>
-    </div>
   </div>
 </template>
 

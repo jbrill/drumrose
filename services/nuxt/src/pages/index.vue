@@ -20,7 +20,9 @@
         key="social"
         value="social"
       >
-        <LoadingCircle v-if="loading" />
+        <LoadingCircle
+          v-if="loading" 
+        />
         <v-responsive
           v-else
           class="overflow-y-auto"

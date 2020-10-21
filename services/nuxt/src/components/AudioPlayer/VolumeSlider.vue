@@ -13,7 +13,7 @@
           icon
           v-on="on"
         >
-          <v-icon color="white" class="album-overlay-more">
+          <v-icon class="album-overlay-more">
             mdi-volume-vibrate
           </v-icon>
         </v-btn>
@@ -26,7 +26,7 @@
         min="0"
         max="1"
         step="0.01"
-        color="var(--primary-red)"
+        color="var(--primary-yellow)"
         background-color="#272727"
       />
     </v-menu>

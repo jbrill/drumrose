@@ -4,7 +4,8 @@
       avatar
       bordered
       overlap
-      style="width: 100%"
+      style="width: 100%; border-radius: 5px"
+      class="grey lighten-1"
       icon="mdi-waveform"
       color="var(--primary-purple)"
     >
@@ -17,33 +18,21 @@
         type="song"
       />
     </v-badge>
-    <div class="textContain">
-      <nuxt-link
-        class="songName"
-        :to="'/tracks/' + trackObject.id"
-      >
-        <span
-          ref="songName"
-          class="songName"
-        >{{ trackObject.attributes.name }}</span>
-      </nuxt-link>
-      <nuxt-link
-        :to="'/artists/' + 
-          trackObject.relationships.artists.data[0].id"
-        class="artistName"
-      >
-        <span
-          ref="curatorName"
-          class="artistName"
-        >{{ trackObject.attributes.artistName }}</span>
-      </nuxt-link>
-    </div>
+    <MusicFooter
+      :primary-name="trackObject.attributes.name"
+      :primary-link="'/tracks/' + trackObject.id"
+      :secondary-name="trackObject.attributes.artistName"
+      :secondary-link="
+        '/artists/' + trackObject.relationships.artists.data[0].id
+      "
+    />
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
 import Artwork from '~/components/MusicItem/Artwork';
+import MusicFooter from '~/components/MusicItem/MusicFooter';
 
 import { favoriteTrack } from '~/api/api';
 
@@ -51,6 +40,7 @@ import { favoriteTrack } from '~/api/api';
 export default {
   components: {
     Artwork,
+    MusicFooter,
   },
   props: {
     id: {
@@ -66,16 +56,16 @@ export default {
       default: false,
     },
   },
-  async asyncData ({ store }) {
+  async asyncData ({ axios, store }) {
     try {
-       /***await axios.get(
+       await axios.get(
 				`https://teton.drumrose.io/api/tracks/${this.trackObject.id}/`,
 				{
 					headers: {
 						Authorization: `Bearer ${this.$auth.getToken('auth0')}`,
 					},
 				}
-			)***/
+			)
     } catch (err) {
       console.error("err.response");
       console.error(err.response);

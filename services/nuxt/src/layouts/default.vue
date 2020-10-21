@@ -83,6 +83,14 @@ export default {
   width: 80vw;
   margin: 0 auto;
   margin-top: 3vh;
+  padding-bottom: 5vh;
+}
+@media screen and (max-width: 750px) {
+  .main-contain {
+    width: 95vw;
+    margin: 0 auto;
+    margin-top: 3vh;
+  }
 }
 .feed-contain {
   height: 100%;

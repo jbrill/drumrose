@@ -5,7 +5,7 @@
       bordered
       overlap
       icon="mdi-record-circle-outline"
-      style="width: 100%"
+      style="width: 100%; border-radius: 5px"
       class="grey lighten-1"
       color="var(--primary-purple)"
     >
@@ -18,36 +18,26 @@
         type="album"
       />
     </v-badge>
-    <div class="textContain lighten">
-      <nuxt-link
-        class="songName"
-        :to="'/albums/' + id"
-      >
-        <span
-          ref="songName"
-          class="subtitle-1"
-        >{{ attributes.name }}</span>
-      </nuxt-link>
-      <nuxt-link :to="'/artists/' + attributes.curatorName" class="artistName">
-        <span
-          ref="curatorName"
-          class="subtitle-2"
-        >{{ attributes.artistName }}</span>
-      </nuxt-link>
-    </div>
+    <MusicFooter
+      :primary-name="attributes.name"
+      :primary-link="'/albums/' + id"
+      :secondary-name="attributes.artistName"
+      :secondary-link="'/artists/' + artistId"
+    />
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
 import Artwork from '~/components/MusicItem/Artwork';
-
+import MusicFooter from '~/components/MusicItem/MusicFooter';
 import { favoriteTrack } from '~/api/api';
 
 
 export default {
   components: {
     Artwork,
+    MusicFooter,
   },
   props: {
     id: {
@@ -69,11 +59,12 @@ export default {
   },
   data () {
     return {
-      isLoading: true,
+      loading: true,
       playlistDialog: false,
       artistName: '',
       artworkUrl: '',
       name: '',
+      artistId: '',
     };
   },
   computed: {
@@ -86,12 +77,22 @@ export default {
       );
     },
   },
-  mounted () {
-    console.log(this.attributes);
+  async created () {
+    try {
+      const resp = await this.$store.getters.fetch(
+        `/v1/catalog/us/albums/${this.id}`
+      );
+      console.log(resp);
+      this.artistId = resp.data[0].relationships.artists.data[0].id;
+      this.loading = false;
+    } catch (err) {
+      this.loading = false;
+      console.error(err);
+    }
   },
   methods: {
     addToQueue: function () {
-      this.$store.dispatch("setQueue", { "playlist": this.id });
+      this.$store.dispatch("setQueue", { "album": this.id });
     },
     pauseTrack: async function (event) {
       event.preventDefault();
@@ -102,7 +103,7 @@ export default {
     },
     playTrack: function (event) {
       event.preventDefault();
-      this.$store.dispatch("setQueue", { "playlist": this.id } ).then( () => {
+      this.$store.dispatch("setQueue", { "album": this.id } ).then( () => {
         this.$store.dispatch("play");
       });
     },
@@ -148,38 +149,5 @@ export default {
 }
 >>>.v-sheet {
   padding: 0;
-}
-.artistName {
-  font-size: 0.8rem;
-  margin-bottom: 0;
-  font-weight: 600;
-  padding-top: 5px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  color: #f2f2f2;
-}
-.artistName:hover, .artistName:focus {
-  color: white;
-}
-.songName {
-  font-size: 0.75rem;
-  margin-bottom: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  opacity: 1;
-  color: #ccc;
-}
-.songName:hover, .songName:focus {
-  color: white;
-}
-.textContain {
-  display: flex;
-  bottom: 0;
-  width: 100%;
-  padding-top: 0.5rem;
-  flex-direction: column;
-  color: var(--primary-black-light);
 }
 </style>

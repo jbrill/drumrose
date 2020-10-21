@@ -76,6 +76,8 @@ export default {
     ['@nuxtjs/vuetify', { /* module options */ }],
   ],
   build: {
+    analyze:true,
+    extractCSS: true,
     /*
      ** You can extend webpack config here
      */
@@ -123,11 +125,12 @@ export default {
 			dark: true,
 			themes: {
 				dark: {
-					primary: '#4caf50',
-					secondary: '#ff8c00',
-					accent: '#9c27b0',
+					primary: '#9c0235',
+					secondary: '#772ce6',
+					accent: '#f3f367',
 				},
-			},
+      },
+      rtl: true,
 		},
   },
   toast: {

@@ -50,7 +50,11 @@
         </nuxt-link>
       </v-toolbar-title>
       <v-spacer />
-      <v-btn v-if="!auth.loggedIn" color="var(--primary-purple)" @click="login">
+      <v-btn
+        v-if="!auth.loggedIn"
+        color="var(--primary-red)"
+        @click="login"
+      >
         Log In
       </v-btn>
       <v-spacer />

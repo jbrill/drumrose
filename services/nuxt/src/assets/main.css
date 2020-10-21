@@ -24,7 +24,6 @@
 }
 
 body {
-  overflow-x: hidden;
   padding: 0;
   margin: 0;
   border-top: 2px solid var(--primary-yellow);
@@ -96,10 +95,6 @@ span, p {
 }
 .VueCarousel-wrapper {
   overflow: visible !important;
-}
-.VueCarousel-slide {
-  width: 20%;
-  padding: 1%;
 }
 .light::-webkit-scrollbar {
   width: 15px;

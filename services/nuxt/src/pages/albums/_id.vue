@@ -111,7 +111,7 @@ export default {
   async mounted () {
     try {
       const resp = await this.$store.getters.fetch(
-        `/v1/catalog/us/songs/${this.$route.params.id}`
+        `/v1/catalog/us/albums/${this.$route.params.id}`
       );
       console.log(resp);
       this.trackInfo = resp.data[0];
@@ -126,7 +126,7 @@ export default {
       try {
         await postFavorite(
           this.$auth.getToken('auth0'),
-          { 'type': 'track', 'id': this.trackInfo.id }
+          { 'type': 'album', 'id': this.trackInfo.id }
         );
       } catch (err) {
         console.error(err);
@@ -135,7 +135,7 @@ export default {
     },
     async playTrack () {
       await this.$store.dispatch("setQueue", {
-        'song': this.trackInfo.id,
+        'album': this.trackInfo.id,
       });
       await this.$store.dispatch("play");
       this.playing = true;

@@ -10,7 +10,7 @@
         v-for="(musicItem, index) in musicSelections"
         :key="index"
       >
-        {{ item }}
+        {{ musicItem }}
       </v-tab>
     </v-tabs>
   
@@ -61,7 +61,6 @@
                 </v-avatar>
               </div>
             </v-card>
-            </v-flex>
           </v-col>
         </v-row>
       </v-container>
@@ -98,7 +97,7 @@ export default {
   computed: {
     ...mapState(['activeCollection']),
   },
-  async mounted ({ store }) {
+  async created () {
     // Load the collection
     this.loading = true;
     this.error = null;

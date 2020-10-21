@@ -63,6 +63,6 @@ export default {
   width: 100%;
   margin: 0 auto;
   padding: 1rem;
-  display: inline;
+  border-radius: 4px;
 }
 </style>

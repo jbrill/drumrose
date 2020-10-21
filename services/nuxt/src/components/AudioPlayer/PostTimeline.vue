@@ -3,12 +3,12 @@
     <v-slider
       v-if="playbackTime"
       v-model="playbackTime.currentPlaybackTime"
-      color="var(--primary-red)"
+      color="var(--primary-yellow)"
       track-color="#ccc"
       :max="playbackTime.currentPlaybackDuration"
       @change="changePosition"
     >
-      <template v-slot:prepend>
+      <template v-slot:prepend color="var(--primary-yellow)">
         {{ currentPlaybackTime }}
       </template>
       <template v-slot:append>
@@ -47,7 +47,7 @@ export default {
 }
 >>>.v-input__prepend-outer {
   font-size: 0.7rem;
-  color: var(--primary-red);
+  color: var(--primary-yellow);
 }
 >>>.v-input__append-outer {
   font-size: 0.7rem;
@@ -97,7 +97,7 @@ export default {
   padding: 10px;
 }
 .timeline-time-begin {
-  color: var(--primary-red);
+  color: var(--primary-yellow);
 }
 .timeline-time-end {
   color: white;
@@ -105,7 +105,7 @@ export default {
 .timeline-before-wheel {
 	position: absolute;
 	height: 100%;
-	background-color: var(--primary-red);
+	background-color: var(--primary-yellow);
   z-index: 100;
 }
 .timeline-mouse-hover {

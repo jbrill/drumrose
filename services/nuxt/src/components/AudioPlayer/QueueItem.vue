@@ -1,5 +1,11 @@
 <template>
-  <div :class="nowPlaying ? 'nowPlayingContain' : 'queueItemContain'">
+  <v-layout
+    flex
+    justify-content-space-between
+    :class="nowPlaying ? 'nowPlayingContain' : 'queueItemContain'"
+    @mouseover="isHovering = true"
+    @mouseleave="isHovering = false"
+  >
     <div v-if="trackObject" class="musicItem">
       <v-img
         :src="appleImage"
@@ -8,22 +14,27 @@
         width="30px"
         max-width="30px"
       />
-      <div class="nowPlayingItem">
+      <div v-if="artistId" class="nowPlayingItem">
+        <nuxt-link
+          v-if="artistId"
+          class="nowPlayingItemLink artistName overline"
+          :to="'/artists/' + artistId"
+        >
+          {{ trackObject.attributes.artistName }}
+        </nuxt-link>
+        <span
+          v-else
+          class="overline"
+        />
         <nuxt-link
           class="nowPlayingItemLink songName"
           :to="'/tracks/' + trackObject.id"
         >
           {{ trackObject.attributes.name }}
         </nuxt-link>
-        <nuxt-link
-          class="nowPlayingItemLink artistName"
-          :to="'/artists/'"
-        >
-          {{ trackObject.attributes.artistName }}
-        </nuxt-link>
       </div>
     </div>
-    <div class="nowPlayingActions">
+    <div v-if="isHovering || nowPlaying">
       <v-icon
         v-if="isFavorited"
         x-small
@@ -41,14 +52,18 @@
         mdi-heart
       </v-icon>
       <v-icon
-        v-if="!nowPlaying"
         class="moreButton"
         x-small
       >
         mdi-dots-horizontal
       </v-icon>
     </div>
-  </div>
+    <div v-else>
+      <span class="overline">
+        {{ formattedSeconds(trackObject.attributes.durationInMillis) }} min
+      </span>
+    </div>
+  </v-layout>
 </template>
 
 <script>
@@ -69,8 +84,9 @@ export default {
   data () {
     return {
       isFavorited: false,
-      artist_page_id: '',
+      artistId: '',
       track_page_id: '',
+      isHovering: false,
     };
   },
   computed: {
@@ -82,19 +98,17 @@ export default {
       );
     },
   },
-  created () {
-    console.log("this.trackObject");
-    console.log(this.trackObject);
-    /***getTrackDetail(
-      this.$auth.getToken('auth0'),
-      this.trackObject.id
-    ).then( (resp) => {
-      console.log(resp)
-      this.track_page_id = resp.data.track_detail.page_id;
-    }).catch( (err) => {
-      this.$sentry.captureException(err);
+  async created () {
+    try {
+      const resp = await this.$store.getters.fetch(
+        `/v1/catalog/us/songs/${this.trackObject.id}`
+      );
+      this.artistId = resp.data[0].relationships.artists.data[0].id;
+      this.loading = false;
+    } catch (err) {
+      this.loading = false;
       console.error(err);
-    });***/
+    }
   },
   methods: {
     favoriteTrack () {
@@ -108,6 +122,11 @@ export default {
         console.error(err);
         this.$sentry.captureException(err);
       });
+    },
+    formattedSeconds (milliSeconds) {
+      return MusicKit.formattedMilliseconds(
+        milliSeconds
+      ).minutes;
     },
   },
 };
@@ -158,11 +177,12 @@ export default {
 }
 .artistName {
   font-size: 0.65rem;
-  color: white;
+  color: #f2f2f2;
 }
 .songName {
-  font-size: 0.6rem;
-  color: #ccc;
+  font-size: 0.65rem;
+  color: #f2f2f2;
+  font-weight: bolder;
 }
 .nowPlayingItemLink:hover, .nowPlayingItemLink:focus {
   color: white;

@@ -5,7 +5,8 @@
       bordered
       overlap
       icon="mdi-playlist-music"
-      style="width: 100%"
+      style="width: 100%; border-radius: 5px"
+      class="grey lighten-1"
       color="var(--primary-purple)"
     >
       <Artwork
@@ -17,36 +18,29 @@
         type="playlist"
       />
     </v-badge>
-    <div class="textContain">
-      <nuxt-link
-        class="songName"
-        :to="'/playlists/' + id"
-      >
-        <span
-          ref="songName"
-          class="songName"
-        >{{ attributes.name }}</span>
-      </nuxt-link>
-      <nuxt-link :to="'/people/' + attributes.curatorName" class="artistName">
-        <span
-          ref="curatorName"
-          class="artistName"
-        >{{ attributes.curatorName }}</span>
-      </nuxt-link>
-    </div>
+    <MusicFooter
+      :primary-name="attributes.name"
+      :primary-link="'/playlists/' + id"
+      :secondary-name="attributes.curatorName"
+      :secondary-link="'/people/' + attributes.curatorName"
+    />
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
 import Artwork from '~/components/MusicItem/Artwork';
+import MusicFooter from '~/components/MusicItem/MusicFooter';
 
-import { favoriteTrack, getPlaylistDetail } from '~/api/api';
+import {
+  favoriteTrack, getPlaylistDetail, createPlaylist,
+} from '~/api/api';
 
 
 export default {
   components: {
     Artwork,
+    MusicFooter,
   },
   props: {
     id: {
@@ -86,12 +80,30 @@ export default {
       );
     },
   },
-  created () {
-    const resp = getPlaylistDetail(
-      this.$auth.getToken('auth0'),
-      this.id
-    );
-    console.log(resp);
+  async created () {
+    let playlistResponse;
+    try {
+      playlistResponse = await getPlaylistDetail(
+        this.$auth.getToken('auth0'),
+        this.id
+      );
+    } catch (err) {
+      console.log(err.response)
+      if (err.status === 409) {
+        try {
+          await createPlaylist(
+            this.$auth.getToken('auth0'),
+            {
+              'id': this.id,
+              'name': this.name,
+            }
+          )
+        } catch (err) {
+          console.error(err);
+        }
+      }
+    }
+    
   },
   methods: {
     addToQueue: function () {

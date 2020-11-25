@@ -95,7 +95,7 @@ export default {
         this.id
       );
     } catch (err) {
-      console.log(err.response)
+      console.log(err.response);
       if (err.status === 409) {
         try {
           await createPlaylist(

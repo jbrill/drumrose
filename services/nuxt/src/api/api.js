@@ -286,8 +286,8 @@ export const getPlaylistDetail = async (bearerToken, appleMusicId) => {
  * Creates a playlist
  * */
 export const createPlaylist = async (bearerToken, playlistData) => {
-  return await axios.get(
-    `https://teton.drumrose.io/api/playlists/${appleMusicId}/`,
+  return await axios.post(
+    `https://teton.drumrose.io/api/playlists/`,
     playlistData,
     {
       headers: {

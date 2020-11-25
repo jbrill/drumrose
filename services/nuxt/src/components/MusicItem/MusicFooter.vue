@@ -22,12 +22,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-import Artwork from '~/components/MusicItem/Artwork';
-
-import { favoriteTrack } from '~/api/api';
-
-
 export default {
   props: {
     primaryName: {

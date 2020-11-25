@@ -41,7 +41,11 @@ import { mapState } from 'vuex';
 import Artwork from '~/components/MusicItem/Artwork';
 import MusicFooter from '~/components/MusicItem/MusicFooter';
 
-import { favoriteTrack } from '~/api/api';
+import {
+  favoriteTrack,
+  getTrackDetail,
+  createTrack,
+} from '~/api/api';
 
 
 export default {
@@ -63,25 +67,6 @@ export default {
       default: false,
     },
   },
-  async asyncData ({ axios, store }) {
-    try {
-       await axios.get(
-				`https://teton.drumrose.io/api/tracks/${this.trackObject.id}/`,
-				{
-					headers: {
-						Authorization: `Bearer ${this.$auth.getToken('auth0')}`,
-					},
-				}
-			)
-    } catch (err) {
-      console.error("err.response");
-      console.error(err.response);
-      if (err.response == 409) {
-        console.log("409!");
-      } 
-      console.error(err);
-    }
-  },
   data () {
     return {
       loading: true,
@@ -101,6 +86,30 @@ export default {
         '{h}', this.trackObject.attributes.artwork.height
       );
     },
+  },
+  async created () {
+    try {
+      await getTrackDetail(
+        this.$auth.getToken('auth0'),
+        this.id
+      );
+    } catch (err) {
+      console.log(err.response);
+      if (err.status === 409) {
+        try {
+          await createTrack(
+            this.$auth.getToken('auth0'),
+            {
+              'id': this.id,
+              'name': this.name,
+            }
+          );
+        } catch (err) {
+          console.error(err);
+        }
+      }
+    }
+    this.loading = false;
   },
   async mounted () {
     this.loading = true;

@@ -84,7 +84,7 @@ export default {
   computed: {
     ...mapState(['auth']),
     validCarouselItems () {
-      console.log(this.carouselItems)
+      console.log(this.carouselItems);
       return this.carouselItems.filter(
         carouselItem => this.isValid(carouselItem.type)
       );
@@ -103,7 +103,7 @@ export default {
         );
       });
       this.numPerCarousel = parseInt(numPostsPerCarousel[0]);
-      console.log(this.numPerCarousel)
+      console.log(this.numPerCarousel);
     },
   },
   mounted () {

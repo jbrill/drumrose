@@ -204,7 +204,7 @@ export default {
           path: `/search/${newVal}`,
         });
       }
-    }
+    },
   },
 };
 </script>

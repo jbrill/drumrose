@@ -233,7 +233,11 @@
                                       </nuxt-link>
                                     </v-list-item-title>
                                     <v-list-item-subtitle>
-                                      {{ playlist.attributes.dateAdded.split('-')[0] }}
+                                      {{
+                                        playlist.attributes.dateAdded.split(
+                                          '-'
+                                        )[0]
+                                      }}
                                     </v-list-item-subtitle>
                                   </v-list-item-content>
                                   <v-list-item-action>
@@ -280,7 +284,9 @@
                                   </v-radio-group>
                                   <v-btn
                                     :disabled="
-                                      playlistName.length === 0 || isCreatingPlaylist || playlistName.length > 10
+                                      playlistName.length === 0 ||
+                                        isCreatingPlaylist ||
+                                        playlistName.length > 10
                                     "
                                     color="var(--primary-purple)"
                                     @click="createPlaylist"
@@ -327,7 +333,9 @@
                             </v-icon>
                           </v-list-item-icon>
                           <v-list-item-content>
-                            <v-list-item-title>Less like this</v-list-item-title>
+                            <v-list-item-title>
+                              Less like this
+                            </v-list-item-title>
                           </v-list-item-content>
                         </v-list-item>
                       </template>
@@ -374,7 +382,9 @@
                         </v-icon>
                       </v-list-item-icon>
                       <v-list-item-content>
-                        <v-list-item-title>Add to library</v-list-item-title>
+                        <v-list-item-title>
+                          Add to library
+                        </v-list-item-title>
                       </v-list-item-content>
                     </v-list-item>
                     <v-list-item
@@ -458,6 +468,7 @@ export default {
         v => (v && v.length <= 10) || 'Name must be less than 10 characters',
       ],
       privacyRadio: 'Public',
+      itemInUserLibrary: false,
     };
   },
   computed: {
@@ -469,6 +480,10 @@ export default {
         '/v1/me/library/playlists'
       );
       this.playlists = playlistResp.data;
+      let isInLibraryResponse = await this.$store.getters.fetch(
+        '/v1/me/library/search'
+      );
+      isInLibraryResponse.data;
     }
   },
   methods: {
@@ -593,7 +608,7 @@ export default {
     },
     shareLink () {
       let dummy = document.createElement('input');
-      const text = process.env.baseUrl + this.$route.path;
+      const text = process.env.baseUrl + this.link;
 
       document.body.appendChild(dummy);
       dummy.value = text;

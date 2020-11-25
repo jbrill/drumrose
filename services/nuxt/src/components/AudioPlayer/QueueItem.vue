@@ -270,6 +270,7 @@ export default {
       });
     },
     formattedSeconds (milliSeconds) {
+      // eslint-disable-next-line
       return MusicKit.formattedMilliseconds(
         milliSeconds
       ).minutes;

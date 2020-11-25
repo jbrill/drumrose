@@ -145,7 +145,7 @@ export default {
         },
       ],
       tags: [
-        'About', 'Legal', 'Contact', 'Careers'
+        'About', 'Legal', 'Contact', 'Careers',
       ],
     };
   },

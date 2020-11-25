@@ -14,13 +14,13 @@
             <v-fade-transition leave-absolute>
               <v-rating
                 v-model="rating"
-                @click.native.stop.prevent
                 background-color="white"
                 color="var(--primary-purple)"
                 dense
                 half-increments
                 hover
                 size="16"
+                @click.native.stop.prevent
               />
             </v-fade-transition>
           </v-col>

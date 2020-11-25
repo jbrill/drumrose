@@ -109,11 +109,10 @@ export default {
   },
   created () {
     if (process.browser) {
-      window.addEventListener('keydown', e => {
-        console.log(e)
+      window.addEventListener('keydown', e => { // eslint-disable-line
+        console.log(e);
         if (e.keyCode === 32 && this.playbackTime) {
           e.preventDefault();
-          console.log(this.playbackState)
           if (this.playbackState === 3) {
             this.playTrack();
           } else {

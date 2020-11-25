@@ -19,12 +19,10 @@
 </template>
 
 <script>
-import Playlist from '~/components/MusicItem/Playlist';
 import { getPlaylists } from '~/api/api.js';
 
 export default {
   components: {
-    Playlist,
   },
   async asyncData () {
     const playlists = await getPlaylists();

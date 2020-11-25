@@ -225,19 +225,6 @@ export default {
       });
     },
   },
-  methods: {
-    isActiveTab (name) {
-      switch (name) {
-        case 'Trending':
-          return true;
-        case 'Social':
-          return true;
-        case 'For You':
-          console.log(this.$store.state.isAuthorized)
-          return this.$store.state.isAuthorized;
-      }
-    },
-  },
   async mounted () {
     if (this.$store.state.isAuthorized) {
       this.loading = true;
@@ -249,6 +236,19 @@ export default {
       }
       this.loading = false;
     }
+  },
+  methods: {
+    isActiveTab (name) {
+      switch (name) {
+        case 'Trending':
+          return true;
+        case 'Social':
+          return true;
+        case 'For You':
+          console.log(this.$store.state.isAuthorized);
+          return this.$store.state.isAuthorized;
+      }
+    },
   },
 };
 </script>

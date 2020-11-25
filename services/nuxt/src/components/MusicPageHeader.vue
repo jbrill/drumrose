@@ -365,7 +365,6 @@
             >
               <v-hover
                 :key="`track-${index}`"
-                v-slot:default="{ hover }"
               >
                 <v-list-item>
                   <QueueItem :track-object="track" />
@@ -400,10 +399,13 @@
           <v-list-item-group
             v-model="selection"
           >
-            <template v-for="(track, index) in trackInfo.relationships.tracks.data">
+            <template
+              v-for="
+                (track, index) in trackInfo.relationships.tracks.data
+              "
+            >
               <v-hover
                 :key="`track-${index}`"
-                v-slot:default="{ hover }"
               >
                 <v-list-item>
                   <QueueItem :track-object="track" />
@@ -483,6 +485,7 @@ export default {
         let trackTwoDuration = 0;
 
         if (b && 'attributes' in b) {
+          // eslint-disable-next-line
           trackTwoDuration = MusicKit.formattedMilliseconds(
             b.attributes.durationInMillis
           ).minutes;
@@ -495,7 +498,7 @@ export default {
   },
   watch: {
     selection: function (idx) {
-      console.log(idx)
+      console.log(idx);
       this.selectTrack(idx);
     },
   },

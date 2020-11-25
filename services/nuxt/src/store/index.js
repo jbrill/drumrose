@@ -573,7 +573,7 @@ export const actions = {
     const resp = await MusicKit.getInstance().player.queue.prepend(
       queue
     );
-    console.log(resp)
+    console.log(resp);
   },
   async playLater (_, queue) {
     await MusicKit.getInstance().player.queue.append(queue);
@@ -626,32 +626,6 @@ export const actions = {
         "headers": apiHeaders(),
       },
     );
-    
-    // return new Promise(async (resolve, reject) => {
-    //   try {
-    //     let res = await fetch(
-    //       `https://api.music.apple.com/v1/me/ratings/${item.type}/${item.id}`,
-    //       {
-    //         method: 'PUT',
-    //         headers: apiHeaders(),
-    //         body: JSON.stringify({
-    //           type: 'rating',
-    //           attributes: {
-    //             value: rating,
-    //           },
-    //         }),
-    //       }
-    //     );
-
-    //     if (res.status === 200) {
-    //       resolve(true);
-    //     } else {
-    //       reject(MusicKit.MKError(MusicKit.MKError.SERVER_ERROR));
-    //     }
-    //   } catch (err) {
-    //     reject(err);
-    //   }
-    // });
   },
   love ({ dispatch }, item) {
     return dispatch('rate', {

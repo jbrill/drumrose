@@ -20,7 +20,6 @@
 </template>
 
 <script>
-import Album from '~/components/MusicItem/Album';
 import CarouselSection from '~/components/CarouselSection';
 
 export default {
@@ -45,11 +44,6 @@ export default {
       );
       this.attributeData.push(attributeResp.data[0]);
     });
-    console.log("!")
-    console.log(this.artistData);
-    console.log("!!")
-    console.log(this.attributeData);
-    console.log(resp);
     this.loading = false;
   },
 };

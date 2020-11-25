@@ -1,31 +1,38 @@
 <template>
-  <div v-if="!loading">
-    <v-badge
-      avatar
-      bordered
-      overlap
-      style="width: 100%; border-radius: 5px"
-      class="grey lighten-1"
-      icon="mdi-waveform"
-      color="var(--primary-purple)"
-    >
-      <Artwork
-        :id="trackObject.id"
-        :is-playable="isPlayable"
-        :is-actionable="isActionable"
-        :artwork-url="appleImage"
-        :link="'/tracks/' + trackObject.id"
-        type="song"
-      />
-    </v-badge>
-    <MusicFooter
-      :primary-name="trackObject.attributes.name"
-      :primary-link="'/tracks/' + trackObject.id"
-      :secondary-name="trackObject.attributes.artistName"
-      :secondary-link="
-        '/artists/' + trackObject.relationships.artists.data[0].id
-      "
+  <div>
+    <v-skeleton-loader
+      v-if="loading"
+      class="mx-auto"
+      type="image"
     />
+    <v-container v-else>
+      <v-badge
+        avatar
+        bordered
+        overlap
+        style="width: 100%; border-radius: 5px"
+        class="grey lighten-1"
+        icon="mdi-waveform"
+        color="var(--primary-purple)"
+      >
+        <Artwork
+          :id="trackObject.id"
+          :is-playable="isPlayable"
+          :is-actionable="isActionable"
+          :artwork-url="appleImage"
+          :link="'/tracks/' + trackObject.id"
+          type="song"
+        />
+      </v-badge>
+      <MusicFooter
+        :primary-name="trackObject.attributes.name"
+        :primary-link="'/tracks/' + trackObject.id"
+        :secondary-name="trackObject.attributes.artistName"
+        :secondary-link="
+          '/artists/' + trackObject.relationships.artists.data[0].id
+        "
+      />
+    </v-container>
   </div>
 </template>
 
@@ -96,6 +103,7 @@ export default {
     },
   },
   async mounted () {
+    this.loading = true;
     try {
       const resp = await this.$store.getters.fetch(
         `/v1/catalog/us/songs/${this.id}`
@@ -107,9 +115,6 @@ export default {
       this.loading = false;
       console.error(err);
     }
-  },
-  created () {
-    console.log(this.trackObject);
   },
   methods: {
     pauseTrack: async function (event) {

@@ -7,32 +7,51 @@
       dark
       stateless
     >
-      <v-list nav>
-        <v-list-item
-          v-for="navObject in filteredNavObjects"
-          :key="navObject.title"
-          active-class="activeListItem"
-          link
-          :to="navObject.nav"
-        >
-          <v-list-item-icon>
-            <v-icon>{{ navObject.icon }}</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>{{ navObject.title }}</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-      <template v-if="auth.loggedIn" v-slot:append>
-        <div class="pa-2">
-          <v-btn to="/profile" block>
-            Profile
-          </v-btn>
-          <v-btn block @click="signOut">
-            Logout
-          </v-btn>
-        </div>
-      </template>
+      <v-layout class="flex-column" flex justify-space-between>
+        <v-container>
+          <v-list nav>
+            <v-list-item
+              v-for="navObject in filteredNavObjects"
+              :key="navObject.title"
+              active-class="activeListItem"
+              link
+              :to="navObject.nav"
+            >
+              <v-list-item-icon>
+                <v-icon>{{ navObject.icon }}</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title>{{ navObject.title }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-container>
+        <v-container>
+          <v-flex v-if="auth.loggedIn">
+            <div class="pa-2">
+              <v-btn to="/profile" block>
+                Profile
+              </v-btn>
+              <v-btn block @click="signOut">
+                Logout
+              </v-btn>
+            </div>
+          </v-flex> 
+          <v-divider />
+          <v-chip-group
+            active-class="primary--text"
+            column
+          >
+            <v-chip
+              v-for="tag in tags"
+              :key="tag"
+              label
+            >
+              {{ tag }}
+            </v-chip>
+          </v-chip-group>
+        </v-container>
+      </v-layout>
     </v-navigation-drawer>      
     <v-app-bar 
       :class="{ 'needs-apple-auth': !isAuthorized }"
@@ -124,6 +143,9 @@ export default {
           requiresAuth: false,
           requiresAppleAuth: false,
         },
+      ],
+      tags: [
+        'About', 'Legal', 'Contact', 'Careers'
       ],
     };
   },

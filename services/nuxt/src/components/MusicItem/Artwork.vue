@@ -148,7 +148,11 @@
                         @click.native.stop.prevent
                       />
                     </v-list-item>
-                    <v-dialog v-model="dialog" scrollable max-width="300px">
+                    <v-dialog
+                      v-model="dialog"
+                      scrollable
+                      max-width="50vw"
+                    >
                       <template v-slot:activator="{ on, attrs }">
                         <v-list-item
                           v-bind="attrs"
@@ -167,17 +171,137 @@
                           </v-list-item-content>
                         </v-list-item>
                       </template>
-                      <v-card>
-                        <v-tabs>
-                          <v-tab>Add to playlist</v-tab>
-                          <v-tab>Create a playlist</v-tab>
+                      <v-card
+                        style="
+                          opacity: 1; padding: 2rem
+                        "
+                      >
+                        <v-tabs
+                          v-model="tab"
+                          color="var(--primary-yellow)"
+                          centered
+                        >
+                          <v-tabs-slider />
+                          <v-tab href="#tab-1">
+                            Add to playlist
+                          </v-tab>
+                          <v-tab href="#tab-2">
+                            Create a playlist
+                          </v-tab>
                         </v-tabs>
+                        <v-tabs-items v-model="tab">
+                          <v-tab-item key="1" value="tab-1">
+                            <v-responsive>
+                              <v-list>
+                                <v-list-item
+                                  v-for="
+                                    (playlist, playlistIdx) in playlists
+                                  "
+                                  :key="
+                                    'playlist' + playlistIdx
+                                  "
+                                >
+                                  <v-list-item-avatar>
+                                    <v-img
+                                      v-if="'artwork' in playlist.attributes"
+                                      :src="appleImage(playlist)"
+                                      dark
+                                    >
+                                      <template v-slot:placeholder>
+                                        <v-row
+                                          class="fill-height ma-0"
+                                          align="center"
+                                          justify="center"
+                                        >
+                                          <v-progress-circular
+                                            indeterminate
+                                            color="grey lighten-5"
+                                          />
+                                        </v-row>
+                                      </template>
+                                    </v-img>
+                                  </v-list-item-avatar>
+                                  <v-list-item-content>
+                                    <v-list-item-title>
+                                      <nuxt-link
+                                        :to="
+                                          '/library-playlists/' + playlist.id
+                                        "
+                                        style="color: white"
+                                      >
+                                        {{ playlist.attributes.name }}
+                                      </nuxt-link>
+                                    </v-list-item-title>
+                                    <v-list-item-subtitle>
+                                      {{ playlist.attributes.dateAdded.split('-')[0] }}
+                                    </v-list-item-subtitle>
+                                  </v-list-item-content>
+                                  <v-list-item-action>
+                                    <v-btn
+                                      :disabled="!playlist.attributes.canEdit"
+                                      x-small
+                                    >
+                                      Add to playlist
+                                    </v-btn>
+                                  </v-list-item-action>
+                                </v-list-item>
+                              </v-list>
+                            </v-responsive>
+                          </v-tab-item>
+                          <v-tab-item key="2" value="tab-2">
+                            <v-responsive>
+                              <v-container fluid>
+                                <v-form>
+                                  <v-text-field
+                                    v-model="playlistName"
+                                    :counter="10"
+                                    :rules="playlistNameRules"
+                                    label="Playlist Name"
+                                    required
+                                  />
+                                  <v-text-field
+                                    v-model="playlistDescription"
+                                    label="Playlist Description"
+                                  />
+                                  <v-radio-group v-model="privacyRadio">
+                                    <template v-slot:label>
+                                      <div>Choose Your Privacy</div>
+                                    </template>
+                                    <v-radio value="Public">
+                                      <template v-slot:label>
+                                        <div>Public</div>
+                                      </template>
+                                    </v-radio>
+                                    <v-radio value="Private">
+                                      <template v-slot:label>
+                                        <div>Private</div>
+                                      </template>
+                                    </v-radio>
+                                  </v-radio-group>
+                                  <v-btn
+                                    :disabled="
+                                      playlistName.length === 0 || isCreatingPlaylist || playlistName.length > 10
+                                    "
+                                    color="var(--primary-purple)"
+                                    @click="createPlaylist"
+                                  >
+                                    Create Playlist
+                                  </v-btn>
+                                </v-form>
+                              </v-container>
+                            </v-responsive>
+                          </v-tab-item>
+                        </v-tabs-items>
                       </v-card>
                     </v-dialog>
                     <v-divider />
-                    <v-list-item @click.native.stop.prevent @click="addToQueue">
+                    <v-list-item
+                      :disabled="!isAuthorized"
+                      @click.native.stop.prevent
+                      @click="moreLikeThis"
+                    >
                       <v-list-item-icon>
-                        <v-icon small>
+                        <v-icon small :disabled="!isAuthorized">
                           mdi-thumb-up
                         </v-icon>
                       </v-list-item-icon>
@@ -186,7 +310,34 @@
                       </v-list-item-content>
                     </v-list-item>
                     <v-divider />
-                    <v-list-item @click.native.stop.prevent @click="addToQueue">
+                    <v-tooltip
+                      v-if="!isAuthorized"
+                      top
+                    >
+                      <template v-slot:activator="{ on }">
+                        <v-list-item
+                          disabled
+                          v-on="on"
+                          @click.native.stop.prevent
+                          @click="lessLikeThis"
+                        >
+                          <v-list-item-icon>
+                            <v-icon small disabled>
+                              mdi-thumb-down
+                            </v-icon>
+                          </v-list-item-icon>
+                          <v-list-item-content>
+                            <v-list-item-title>Less like this</v-list-item-title>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </template>
+                      <span>Sign In To Apple Music</span>
+                    </v-tooltip>
+                    <v-list-item
+                      v-else
+                      @click.native.stop.prevent
+                      @click="lessLikeThis"
+                    >
                       <v-list-item-icon>
                         <v-icon small>
                           mdi-thumb-down
@@ -197,7 +348,10 @@
                       </v-list-item-content>
                     </v-list-item>
                     <v-divider />
-                    <v-list-item @click.native.stop.prevent @click="addToQueue">
+                    <v-list-item
+                      @click.native.stop.prevent
+                      @click="addToQueue"
+                    >
                       <v-list-item-icon>
                         <v-icon small>
                           mdi-playlist-star
@@ -223,6 +377,21 @@
                         <v-list-item-title>Add to library</v-list-item-title>
                       </v-list-item-content>
                     </v-list-item>
+                    <v-list-item
+                      @click.native.stop.prevent
+                      @click="
+                        shareLink()
+                      "
+                    >
+                      <v-list-item-icon>
+                        <v-icon small>
+                          mdi-share
+                        </v-icon>
+                      </v-list-item-icon>
+                      <v-list-item-content>
+                        <v-list-item-title>Share</v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
                   </v-list>
                 </v-menu>
               </v-card-actions>
@@ -238,6 +407,8 @@
 import { mapState } from 'vuex';
 import {
   favoriteTrack,
+  favoriteAlbum,
+  favoritePlaylist,
   postReview,
 } from '~/api/api';
 
@@ -263,6 +434,10 @@ export default {
       type: String,
       default: '',
     },
+    tracks: {
+      type: Array,
+      default: () => [],
+    },
     link: {
       type: String,
       default: '',
@@ -270,15 +445,40 @@ export default {
   },
   data () {
     return {
+      tab: null,
       isHovering: false,
       isPlaying: false,
+      isCreatingPlaylist: false,
       dialog: false,
+      playlists: [],
+      playlistDescription: '',
+      playlistName: '',
+      playlistNameRules: [
+        v => !!v || 'Name is required',
+        v => (v && v.length <= 10) || 'Name must be less than 10 characters',
+      ],
+      privacyRadio: 'Public',
     };
   },
   computed: {
     ...mapState(['auth', 'isAuthorized', 'nowPlayingItem', 'playbackState']),
   },
+  async created () {
+    if (this.$store.state.isAuthorized) {
+      let playlistResp = await this.$store.getters.fetch(
+        '/v1/me/library/playlists'
+      );
+      this.playlists = playlistResp.data;
+    }
+  },
   methods: {
+    appleImage (playlist) {
+      return playlist.attributes.artwork.url.replace(
+        '{w}', playlist.attributes.artwork.width || '300'
+      ).replace(
+        '{h}', playlist.attributes.artwork.height || '300'
+      );
+    },
 		async addToQueue () {
       if (this.type == 'song') {
         await this.$store.dispatch("playNext", { 'song': this.id });
@@ -298,34 +498,46 @@ export default {
             'id': this.id, 'type': this.type,
           }
         );
+        this.$toast.success("Added to library");
       } catch(err) {
+        console.error(err);
         this.$toast.error(err);
-        // this.$sentry.captureException(err);
       }
     },
-		addToPlaylist: function (name, items) {
-      // TODO
-      this.$store.dispatch("addToPlaylist", {
+		async addToPlaylist (name, items) {
+      await this.$store.dispatch("addToPlaylist", {
         "name": name,
         "items": items,
       });
     },
-    createPlaylist: function (name, items) {
-      // TODO
-      this.$store.dispatch("newPlaylist", {
-        "name": name,
-        "items": items,
-      });
+    async createPlaylist () {
+      let name = this.playlistName;
+      try {
+        await this.$store.dispatch("newPlaylist", {
+          "name": name,
+          "description": this.playlistDescription,
+          "tracks": this.tracks,
+        });
+        this.$toast.success("Created playlist");
+      } catch (err) {
+        console.error(err);
+        this.$toast.error("Failed to create playlist");
+      }
     },
-    changeRating (e) {
-      console.log(e);
+    async changeRating (e) {
       const data = {
         'rating': e,
         'type': this.type,
         'id': this.id,
       };
-      postReview(this.$auth.getToken('auth0'), data);
-      // TODO: Change rating via api
+      try {
+        await postReview(
+          this.$auth.getToken('auth0'), data
+        );
+      } catch (err) {
+        console.error(err);
+        this.$toast.error(err);
+      }
     },
     async pauseTrack () {
       await this.$store.dispatch("pause");
@@ -335,6 +547,20 @@ export default {
       if (this.type == 'song') {
         try {
           await favoriteTrack(this.id);
+        } catch (err) {
+          this.$toast.error(err.message);
+        }
+      }
+      if (this.type == 'album') {
+        try {
+          await favoriteAlbum(this.id);
+        } catch (err) {
+          this.$toast.error(err.message);
+        }
+      }
+      if (this.type == 'playlist') {
+        try {
+          await favoritePlaylist(this.id);
         } catch (err) {
           this.$toast.error(err.message);
         }
@@ -364,6 +590,43 @@ export default {
         this.$toast.show('Sign into Apple Music for full track access.');
       }
       this.isPlaying = true;
+    },
+    shareLink () {
+      let dummy = document.createElement('input');
+      const text = process.env.baseUrl + this.$route.path;
+
+      document.body.appendChild(dummy);
+      dummy.value = text;
+      dummy.select();
+      document.execCommand('copy');
+      document.body.removeChild(dummy);
+      this.$toast.success('Copied link to clipboard');
+    },
+    async moreLikeThis () {
+      try {
+        await this.$store.dispatch("love", {
+          'id': this.id, 'type': this.type,
+        });
+        this.$toast.success(
+          "More like this will be recommended."
+        );
+      } catch (err) {
+        this.$toast.error('Unable to recommend more like this.');
+        console.error(err);
+      }
+    },
+    async lessLikeThis () {
+      try {
+        await this.$store.dispatch("dislike", {
+          'id': this.id, 'type': this.type,
+        });
+        this.$toast.success(
+          "Less like this will be recommended."
+        );
+      } catch (err) {
+        this.$toast.error('Unable to recommend less like this.');
+        console.error(err);
+      }
     },
   },
 };
@@ -420,7 +683,7 @@ export default {
   width: 100%;
   overflow: visible !important;
   height: auto;
-  min-height: 15vh;
+  min-height: 18vh;
   border-radius: 2px;
 }
 .albumCover:hover, .albumCover:focus {

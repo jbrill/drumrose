@@ -1,10 +1,13 @@
 <template>
   <v-system-bar
     v-if="playbackTime"
-    height="50vh"
+    :height="height"
     style="z-index: 10"
     class="audioPlayer"
   >
+    <v-container v-if="height === '250vh'">
+      <v-flex id="p5Canvas" />
+    </v-container>
     <div class="musicControls">
       <v-btn
         ref="musicPrev"
@@ -80,10 +83,6 @@
     <VolumeSlider />
     <v-spacer />
     <Queue />
-    
-  
-    <!-- <v-icon>mdi-window-minimize</v-icon> -->
-    <!-- <v-icon>mdi-window-maximize</v-icon> -->
   </v-system-bar>
 </template>
 
@@ -100,6 +99,11 @@ export default {
     VolumeSlider,
     Queue,
   },
+  data () {
+    return {
+      height: "50vh",
+    };
+  },
   computed: {
     ...mapState(['queue', 'playbackState', 'playbackTime']),
   },
@@ -115,8 +119,6 @@ export default {
           } else {
             this.pauseTrack();
           }
-        } else if (e.keyCode === 39 && this.playbackTime) {
-          
         }
       });
     }
@@ -142,6 +144,9 @@ export default {
     },
     changeVolume () {
       console.log("VOLUME");
+    },
+    maximize () {
+      this.height = "250vh";
     },
   },
 };
@@ -250,4 +255,16 @@ export default {
 .theme--dark.v-system-bar .v-icon:focus {
   color: white;
 }
+@media screen and (prefers-reduced-motion: reduce) {
+.smooth-enter-active, .smooth-leave-active {
+  transition: none;
+}
+}
+.smooth-enter-active, .smooth-leave-active {
+  transition: opacity .5s;
+}
+.smooth-enter, .smooth-leave-to {
+  opacity: 0
+}
+
 </style>

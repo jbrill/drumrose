@@ -10,3 +10,6 @@ __pycache__/*
 # Node stuff
 *.nuxt
 node_modules/
+
+# Log stuff
+*.log

@@ -19,6 +19,7 @@
       :id="post.id"
       is-playable
       is-actionable
+      :attributes="post.attributes"
     />
     <Playlist
       v-if="post.type == 'playlists'"

@@ -22,7 +22,6 @@
           x-small
           class="queueButton"
           v-bind="attrs"
-          @click="showQueue"
           v-on="on"
         >
           <v-icon>queue_music</v-icon>
@@ -36,14 +35,9 @@
           active-class="pink--text"
         >
           <template v-for="(track, index) in queue">
-            <v-hover
-              :key="`track-${index}`"
-              v-slot:default="{ hover }"
-            >
-              <v-list-item>
-                <QueueItem :track-object="track" />
-              </v-list-item>
-            </v-hover>
+            <v-list-item :key="'track' + index">
+              <QueueItem :track-object="track" />
+            </v-list-item>
           </template>
         </v-list-item-group>
       </v-list>
@@ -70,9 +64,6 @@ export default {
     console.log(this.nowPlayingItem);
   },
   methods: {
-    showQueue () {
-      console.log("queueueue");
-    },
   },
 };
 

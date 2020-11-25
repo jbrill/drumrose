@@ -1,0 +1,63 @@
+<template>
+  <v-expansion-panels>
+    <v-expansion-panel>
+      <v-expansion-panel-header>
+        <v-row no-gutters>
+          <v-col cols="8">
+            Your Review
+          </v-col>
+          <v-col
+            style="padding-top: 1rem;"
+            cols="8"
+            class="text--secondary"
+          >
+            <v-fade-transition leave-absolute>
+              <v-rating
+                v-model="rating"
+                @click.native.stop.prevent
+                background-color="white"
+                color="var(--primary-purple)"
+                dense
+                half-increments
+                hover
+                size="16"
+              />
+            </v-fade-transition>
+          </v-col>
+        </v-row>
+      </v-expansion-panel-header>
+      <v-expansion-panel-content>
+        <v-textarea
+          v-model="textValue"
+          counter
+          label="Add Review"
+          :rules="rules"
+          auto-grow
+          outlined
+          filled
+          rows="2"
+          row-height="20"
+        />
+        <v-btn
+          :disabled="rating === 0 && textValue.length === 0"
+          color="var(--primary-purple)"
+        >
+          Add Review
+        </v-btn>
+      </v-expansion-panel-content>
+    </v-expansion-panel>
+  </v-expansion-panels>
+</template>
+
+<script>
+export default {
+  data: () => ({
+    rating: 0,
+    rules: [v => v.length <= 255 || 'Max 255 characters'],
+    textValue: '',
+  }),
+};
+</script>
+
+<style scoped>
+</style>

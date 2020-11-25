@@ -1,6 +1,12 @@
 <template>
   <div>
+    <v-skeleton-loader
+      v-if="loading"
+      class="mx-auto"
+      type="image"
+    />
     <v-badge
+      v-else
       avatar
       bordered
       overlap
@@ -15,6 +21,7 @@
         :is-actionable="isActionable"
         :artwork-url="appleImage"
         :link="'/playlists/' + id"
+        :tracks="tracks"
         type="playlist"
       />
     </v-badge>
@@ -62,11 +69,12 @@ export default {
   },
   data () {
     return {
-      isLoading: true,
+      loading: true,
       playlistDialog: false,
       artistName: '',
       artworkUrl: '',
       name: '',
+      tracks: [],
       isFavorited: false,
     };
   },
@@ -81,9 +89,8 @@ export default {
     },
   },
   async created () {
-    let playlistResponse;
     try {
-      playlistResponse = await getPlaylistDetail(
+      await getPlaylistDetail(
         this.$auth.getToken('auth0'),
         this.id
       );
@@ -97,13 +104,24 @@ export default {
               'id': this.id,
               'name': this.name,
             }
-          )
+          );
         } catch (err) {
           console.error(err);
         }
       }
     }
-    
+    this.loading = false;
+  },
+  async mounted () {
+    try {
+      const resp = await this.$store.getters.fetch(
+        `/v1/catalog/us/playlists/${this.id}`
+      );
+      console.log(resp);
+      this.tracks = resp.data[0].relationships.tracks.data;
+    } catch (err) {
+      console.error(err);
+    }
   },
   methods: {
     addToQueue: function () {

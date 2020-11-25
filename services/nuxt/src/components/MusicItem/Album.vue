@@ -1,29 +1,37 @@
 <template>
   <div>
-    <v-badge
-      avatar
-      bordered
-      overlap
-      icon="mdi-record-circle-outline"
-      style="width: 100%; border-radius: 5px"
-      class="grey lighten-1"
-      color="var(--primary-purple)"
-    >
-      <Artwork
-        :id="id"
-        :is-playable="isPlayable"
-        :is-actionable="isActionable"
-        :artwork-url="appleImage"
-        :link="'/albums/' + id"
-        type="album"
-      />
-    </v-badge>
-    <MusicFooter
-      :primary-name="attributes.name"
-      :primary-link="'/albums/' + id"
-      :secondary-name="attributes.artistName"
-      :secondary-link="'/artists/' + artistId"
+    <v-skeleton-loader
+      v-if="loading"
+      class="mx-auto"
+      type="image"
     />
+    <v-container v-else>
+      <v-badge
+        avatar
+        bordered
+        overlap
+        icon="mdi-record-circle-outline"
+        style="width: 100%; border-radius: 5px"
+        class="grey lighten-1"
+        color="var(--primary-purple)"
+      >
+        <Artwork
+          :id="id"
+          :is-playable="isPlayable"
+          :is-actionable="isActionable"
+          :artwork-url="appleImage"
+          :tracks="tracks"
+          :link="'/albums/' + id"
+          type="album"
+        />
+      </v-badge>
+      <MusicFooter
+        :primary-name="attributes.name"
+        :primary-link="'/albums/' + id"
+        :secondary-name="attributes.artistName"
+        :secondary-link="'/artists/' + artistId"
+      />
+    </v-container>
   </div>
 </template>
 
@@ -47,6 +55,10 @@ export default {
     attributes: {
       type: Object,
       default: () => {},
+    },
+    tracks: {
+      type: Array,
+      default: () => [],
     },
     isActionable: {
       type: Boolean,
@@ -77,12 +89,12 @@ export default {
       );
     },
   },
-  async created () {
+  async mounted () {
+    this.loading = true;
     try {
       const resp = await this.$store.getters.fetch(
         `/v1/catalog/us/albums/${this.id}`
       );
-      console.log(resp);
       this.artistId = resp.data[0].relationships.artists.data[0].id;
       this.loading = false;
     } catch (err) {

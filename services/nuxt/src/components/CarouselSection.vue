@@ -48,10 +48,10 @@ const carouselPixelRanges = {
   },
   '3': {
     'min': 901,
-    'max': 1300,
+    'max': 1600,
   },
   '4': {
-    'min': 1301,
+    'min': 1601,
     'max': null,
   },
 };

@@ -11,13 +11,42 @@
           <v-layout>
             <v-flex justify-space-between>
               <v-container>
-                <v-row flex style="justify-content: space-between; align-items: flex-start; margin-left: 0">
+                <v-row
+                  flex
+                  style="
+                    justify-content: space-between;
+                    align-items: flex-start;
+                    margin-left: 0
+                  "
+                >
                   <v-layout align-center justify-left>
-                    <v-btn v-if="!playing" fab medium @click="playTrack">
-                      <v-icon>mdi-play</v-icon>
+                    <v-btn
+                      v-if="
+                        playing === true && playbackState === 2
+                      "
+                      :loading="
+                        playing === true && playbackState !== 2
+                      "
+                      fab
+                      medium
+                      @click="pauseTrack"
+                      @click.native.stop.prevent
+                    >
+                      <v-icon>
+                        mdi-pause
+                      </v-icon>
                     </v-btn>
-                    <v-btn v-else fab medium @click="pauseTrack">
-                      <v-icon>mdi-pause</v-icon>
+                    <v-btn
+                      v-else
+                      :loading="playing === true && playbackState !== 2"
+                      fab
+                      medium
+                      @click="playTrack"
+                      @click.native.stop.prevent
+                    >
+                      <v-icon>
+                        mdi-play
+                      </v-icon>
                     </v-btn>
                     <v-flex class="music-title-contain">
                       <h2 class="headline">
@@ -76,7 +105,11 @@
                   v-else-if="type === 'playlists'"
                   class="type-contain"
                 >
-                  <span class="overline">{{ trackInfo.attributes.playlistType }} Playlist  |  </span>
+                  <span
+                    class="overline"
+                  >
+                    {{ trackInfo.attributes.playlistType }} Playlist  |  
+                  </span>
                   <h5
                     class="overline"
                     style="text-align: right;"
@@ -108,7 +141,7 @@
                 <v-container full-width>
                   <v-row dense style="width: 100%">
                     <v-col>
-                      <v-btn x-small tile dark @click="favoriteTrack">
+                      <v-btn x-small tile dark @click="moreLikeThis">
                         <v-icon x-small left>
                           mdi-thumb-up
                         </v-icon>
@@ -116,7 +149,7 @@
                       </v-btn>
                     </v-col>
                     <v-col>
-                      <v-btn x-small tile dark @click="favoriteTrack">
+                      <v-btn x-small tile dark @click="lessLikeThis">
                         <v-icon x-small left>
                           mdi-thumb-down
                         </v-icon>
@@ -156,7 +189,12 @@
                       </v-btn>
                     </v-col>
                     <v-col>
-                      <v-btn @click="shareLink" x-small tile dark>
+                      <v-btn
+                        x-small
+                        tile
+                        dark
+                        @click="shareLink"
+                      >
                         <v-icon x-small left>
                           mdi-share
                         </v-icon>
@@ -217,6 +255,15 @@
                   </v-chip>
                 </v-flex>
               </v-row>
+              <v-row
+                v-if="'editorialNotes' in trackInfo.attributes"
+              >
+                <v-flex style="padding-top: 2vh">
+                  <p class="caption">
+                    {{ trackInfo.attributes.editorialNotes.short }}
+                  </p>
+                </v-flex>
+              </v-row>
             </v-flex>
           </v-layout>
         </v-col>
@@ -230,6 +277,7 @@
             color="var(--primary-purple)"
           >
             <v-img
+              v-if="'artwork' in trackInfo.attributes"
               style="margin: 0 auto"
               width="100%"
               height="auto"
@@ -240,9 +288,14 @@
           <v-spacer />
           <v-flex>
             <v-layout justify-space-between>
-              <span class="overline"><strong>RATINGS</strong></span>
-              <span class="overline">433 Total</span>
-              <span class="overline"><strong>Average</strong> 4.5</span>
+              <v-flex>
+                <span class="overline"><strong>RATINGS</strong></span>
+                <span class="overline">433 Total</span>
+              </v-flex>
+              <v-flex>
+                <span class="overline"><strong>Average</strong></span>
+                <span class="overline">4.5 / 5.0</span>
+              </v-flex>
             </v-layout>
           </v-flex>
           <v-divider />
@@ -291,7 +344,9 @@
               <v-subheader
                 v-if="trackInfo.relationships.tracks.data.length === 1"
                 class="overline"
-              >{{ trackInfo.relationships.tracks.data.length }} Track</v-subheader>
+              >
+                {{ trackInfo.relationships.tracks.data.length }} Track
+              </v-subheader>
               <v-subheader v-else class="overline">
                 {{ trackInfo.relationships.tracks.data.length }} Tracks
               </v-subheader>
@@ -303,7 +358,11 @@
           <v-list-item-group
             v-model="selection"
           >
-            <template v-for="(track, index) in trackInfo.relationships.tracks.data">
+            <template
+              v-for="
+                (track, index) in trackInfo.relationships.tracks.data
+              "
+            >
               <v-hover
                 :key="`track-${index}`"
                 v-slot:default="{ hover }"
@@ -316,14 +375,20 @@
           </v-list-item-group>
         </v-list>
       </v-row>
-      <v-row v-else-if="type === 'playlists'">
+      <v-row
+        v-else-if="
+          type === 'playlists'
+        "
+      >
         <v-list class="track-list" two-line>
           <v-row>
             <v-layout flex>
               <v-subheader
                 v-if="trackInfo.relationships.tracks.data.length === 1"
                 class="overline"
-              >{{ trackInfo.relationships.tracks.data.length }} Track</v-subheader>
+              >
+                {{ trackInfo.relationships.tracks.data.length }} Track
+              </v-subheader>
               <v-subheader v-else class="overline">
                 {{ trackInfo.relationships.tracks.data.length }} Tracks
               </v-subheader>
@@ -412,7 +477,7 @@ export default {
         '{h}', '2500'
       );
     },
-    ...mapState(['queue']),
+    ...mapState(['queue', 'playbackState']),
     totalDuration () {
       return this.trackInfo.relationships.tracks.data.reduce( function (a, b) {
         let trackTwoDuration = 0;
@@ -451,6 +516,12 @@ export default {
       } else if (this.type === 'playlists') {
         const resp = await this.$store.getters.fetch(
           `/v1/catalog/us/playlists/${this.$route.params.id}`
+        );
+        console.log(resp);
+        this.trackInfo = resp.data[0];
+      } else if (this.type === 'library-playlists') {
+        const resp = await this.$store.getters.fetch(
+          `/v1/me/library/playlists/${this.$route.params.id}`
         );
         console.log(resp);
         this.trackInfo = resp.data[0];
@@ -498,6 +569,11 @@ export default {
           'playlist': this.trackInfo.id,
         });
       }
+      else if (this.type === 'library-playlists') {
+        await this.$store.dispatch("setQueue", {
+          'library-playlist': this.trackInfo.id,
+        });
+      }
       try {
         await this.$store.dispatch("play");
       } catch (err) {
@@ -511,15 +587,39 @@ export default {
       this.playing = false;
     },
     shareLink () {
-      let dummy = document.createElement('input'),
-      text = this.$route.path;
+      let dummy = document.createElement('input');
+      const text = process.env.baseUrl + this.$route.path;
 
       document.body.appendChild(dummy);
       dummy.value = text;
       dummy.select();
       document.execCommand('copy');
       document.body.removeChild(dummy);
-      this.$toast.success('Copied link to clipboard')
+      this.$toast.success('Copied link to clipboard');
+    },
+    moreLikeThis () {
+      try {
+        this.$store.dispatch("love", {
+          'id': this.trackInfo.id, 'type': this.type,
+        });
+        this.$toast.success(
+          "More like this will be recommended."
+        );
+      } catch (err) {
+        console.error(err);
+      }
+    },
+    lessLikeThis () {
+      try {
+        this.$store.dispatch("dislike", {
+          'id': this.trackInfo.id, 'type': this.type,
+        });
+        this.$toast.success(
+          "Less like this will be recommended."
+        );
+      } catch (err) {
+        console.error(err);
+      }
     },
   },
 };

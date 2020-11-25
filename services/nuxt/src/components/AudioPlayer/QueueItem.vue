@@ -4,7 +4,7 @@
     justify-content-space-between
     :class="nowPlaying ? 'nowPlayingContain' : 'queueItemContain'"
     @mouseover="isHovering = true"
-    @mouseleave="isHovering = false"
+    @mouseleave="checkMenuHover"
   >
     <div v-if="trackObject" class="musicItem">
       <v-img
@@ -48,15 +48,144 @@
         class="favoriteButton"
         x-small
         @click="favoriteTrack"
+        @click.stop.prevent
       >
         mdi-heart
       </v-icon>
-      <v-icon
-        class="moreButton"
-        x-small
+      <v-menu
+        v-model="moreModel"
+        left
+        top
+        dark
+        :close-on-content-click="false"
+        offset-y
+        max-height="50vh"
+        width="45vw"
+        nudge-top="25vh"
+        transition="slide-y-reverse-transition"
       >
-        mdi-dots-horizontal
-      </v-icon>
+        <template v-slot:activator="{ on, attrs }">
+          <v-icon
+            class="moreButton"
+            x-small
+            v-bind="attrs"
+            @click="showMore"
+            v-on="on"
+          >
+            mdi-dots-horizontal
+          </v-icon>
+        </template>
+        <v-list dense>
+          <v-list-item 
+            :style="{
+              'justify-content':'center'
+            }"
+          >
+            <v-rating
+              background-color="white"
+              color="var(--primary-purple)"
+              dense
+              half-increments
+              hover
+              size="18"
+              @input="changeRating"
+              @click.native.stop.prevent
+            />
+          </v-list-item>
+          <v-dialog v-model="dialog" scrollable max-width="300px">
+            <template v-slot:activator="{ on, attrs }">
+              <v-list-item
+                v-bind="attrs"
+                v-on="on"
+                @click.native.stop.prevent
+              >
+                <v-list-item-icon>
+                  <v-icon small>
+                    mdi-playlist-music
+                  </v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title>
+                    Add to playlist
+                  </v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </template>
+            <v-card>
+              <v-tabs>
+                <v-tab>Add to playlist</v-tab>
+                <v-tab>Create a playlist</v-tab>
+              </v-tabs>
+            </v-card>
+          </v-dialog>
+          <v-divider />
+          <v-list-item>
+            <v-list-item-icon>
+              <v-icon small>
+                mdi-thumb-up
+              </v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>More like this</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-divider />
+          <v-list-item>
+            <v-list-item-icon>
+              <v-icon small>
+                mdi-thumb-down
+              </v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>Less like this</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-divider />
+          <v-list-item @click.native.stop.prevent @click="addToQueue">
+            <v-list-item-icon>
+              <v-icon small>
+                mdi-playlist-star
+              </v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>Add to queue</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-divider />
+          <v-list-item
+            v-if="!inLibrary"
+            @click.native.stop.prevent
+            @click="
+              addToLibrary()
+            "
+          >
+            <v-list-item-icon>
+              <v-icon small>
+                mdi-library
+              </v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>Add to library</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item
+            v-else
+            @click.native.stop.prevent
+            @click="
+              addToLibrary()
+            "
+          >
+            <v-list-item-icon>
+              <v-icon small>
+                mdi-library
+              </v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>Remove from library</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </div>
     <div v-else>
       <span class="overline">
@@ -87,6 +216,9 @@ export default {
       artistId: '',
       track_page_id: '',
       isHovering: false,
+      moreModel: false,
+      dialog: false,
+      inLibrary: false,
     };
   },
   computed: {
@@ -120,6 +252,20 @@ export default {
         this.isFavorited = true;
       }).catch ( err => {
         console.error(err);
+        this.$toast.error(err);
+        this.$sentry.captureException(err);
+      });
+    },
+    addToLibrary () {
+      this.$store.dispatch(
+        "addToLibrary",
+        { 'type': this.trackObject.type, 'id': this.trackObject.id }
+      ).then( () => {
+        // set favorite
+        this.inLibrary = true;
+      }).catch ( err => {
+        console.error(err);
+        this.$toast.error(err);
         this.$sentry.captureException(err);
       });
     },
@@ -127,6 +273,55 @@ export default {
       return MusicKit.formattedMilliseconds(
         milliSeconds
       ).minutes;
+    },
+    changeRating () {
+      console.log("CHANGE RATING");
+    },
+    showMore () {
+      this.moreModel = true;
+    },
+    checkMenuHover () {
+      if (this.moreModel) {
+        return;
+      }
+      this.isHovering = false;
+    },
+    async addToQueue () {
+      try {
+         if (this.trackObject.type == 'songs') {
+          await this.$store.dispatch(
+            "playNext",
+            {
+              'song': this.trackObject.id,
+            }
+          );
+        }
+        if (this.trackObject.type == 'playlists') {
+          await this.$store.dispatch(
+            "playNext",
+            {
+              'playlist': this.trackObject.id,
+            }
+          );
+        }
+        if (this.trackObject.type == 'albums') {
+          await this.$store.dispatch(
+            "playNext",
+            {
+              'album': this.trackObject.id,
+            }
+          );
+        }
+        this.$toast.show(
+          `Added ${this.trackObject.type} to queue`
+        );
+      } catch (err) {
+        console.error(err);
+        this.$toast.error(
+          `Unable to add ${this.trackObject.type} to queue`
+        );
+      }
+     
     },
   },
 };

@@ -3,47 +3,7 @@
     <MusicPageHeader
       type="songs"
     />
-    <v-expansion-panels>
-      <v-expansion-panel>
-        <v-expansion-panel-header>
-          <v-row no-gutters>
-            <v-col cols="8">
-              Your Review
-            </v-col>
-            <v-col
-              style="padding-top: 1rem;"
-              cols="8"
-              class="text--secondary"
-            >
-              <v-fade-transition leave-absolute>
-                <v-rating
-                  v-model="rating"
-                  background-color="white"
-                  color="var(--primary-purple)"
-                  dense
-                  half-increments
-                  hover
-                  size="16"
-                />
-              </v-fade-transition>
-            </v-col>
-          </v-row>
-        </v-expansion-panel-header>
-        <v-expansion-panel-content>
-          <v-textarea
-            counter
-            label="Add Review"
-            :rules="rules"
-            :value="value"
-            auto-grow
-            outlined
-            filled
-            rows="2"
-            row-height="20"
-          />
-        </v-expansion-panel-content>
-      </v-expansion-panel>
-    </v-expansion-panels>
+    <MusicPageRating />
     <v-container fluid>
       <h5 style="color: #ccc">
         <v-icon x-small>
@@ -59,18 +19,17 @@
 <script>
 import { postFavorite } from '~/api/api';
 import MusicPageHeader from '~/components/MusicPageHeader';
+import MusicPageRating from '~/components/MusicPageRating';
 
 export default {
   components: {
     MusicPageHeader,
+    MusicPageRating,
   },
   data: () => ({
     trackInfo: null,
     loading: true,
     playing: false,
-    rating: 0.5,
-    rules: [v => v.length <= 255 || 'Max 255 characters'],
-    value: '',
     avg: 2.5,
     labels: [
       '0',

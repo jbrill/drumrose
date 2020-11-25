@@ -7,11 +7,11 @@
       color="white"
     >
       <v-tab
-        v-for="(tabOption, index) in tabs"
+        v-for="(tabOption, index) in activeTabs"
         :key="index"
-        :href="'#' + tabOption.replace(/\s/g, '').toLowerCase()"
+        :href="'#' + tabOption.link"
       >
-        {{ tabOption }}
+        {{ tabOption.name }}
       </v-tab>
     </v-tabs>
     
@@ -65,12 +65,25 @@
           v-else
           class="overflow-y-auto"
         >
-          <CarouselSection
+          <v-lazy
             v-for="(personalRecommendation, index) in recommendations"
             :key="`recommendation-${index}`"
-            :title="personalRecommendation.attributes.title.stringForDisplay"
-            :carousel-items="personalRecommendation.relationships.contents.data"
-          />
+            v-model="isActive"
+            :options="{
+              threshold: .5
+            }"
+            min-height="200"
+            transition="fade-transition"
+          >
+            <CarouselSection
+              :title="
+                personalRecommendation.attributes.title.stringForDisplay
+              "
+              :carousel-items="
+                personalRecommendation.relationships.contents.data
+              "
+            />
+          </v-lazy>
         </v-responsive>
       </v-tab-item>
       <v-tab-item
@@ -122,8 +135,9 @@ export default {
   async fetch () {
     this.loading = true;
     try {
+      let storefront = `${this.$store.state.storefront}` || 'us';
       const trendingResponse = await this.$store.getters.fetch(
-        `/v1/catalog/${this.$store.state.storefront}/` +
+        `/v1/catalog/${storefront}/` +
         `charts?types=playlists,songs,albums`
       );
       this.trendingAlbumGroups = trendingResponse.results.albums;
@@ -140,7 +154,6 @@ export default {
         this.$toast.error(err.message);
       }
     }
-    console.log(this.recommendations);
     this.loading = false;
   },
   async asyncData ({ store, $auth }) {
@@ -178,8 +191,22 @@ export default {
   data () {
     return {
       tab: 'Social',
-      tabs: ['Social', 'Trending', 'For you'],
+      tabs: [
+        {
+          'name': 'Social',
+          'link': 'social',
+        },
+        {
+          'name': 'Trending',
+          'link': 'trending',
+        },
+        {
+          'name': 'For You',
+          'link': 'foryou',
+        },
+      ],
       loading: false,
+      isActive: false,
       favorites: [],
       reviews: [],
       recentReviews: [],
@@ -188,21 +215,28 @@ export default {
       trendingAlbumGroups: [],
       trendingSongGroups: [],
       trendingPlaylistGroups: [],
-      slides: [
-        {
-          'title': 'Social',
-          'description': 'Share music with your friends.',
-        },
-        {
-          'title': 'Smart',
-          'description': 'Find new music with state ' +
-                         'of the art recommendation systems.',
-        },
-      ],
     };
   },
   computed: {
     ...mapState(['isAuthorized', 'auth']),
+    activeTabs () {
+      return this.tabs.filter( tab => {
+        return this.isActiveTab(tab.name);
+      });
+    },
+  },
+  methods: {
+    isActiveTab (name) {
+      switch (name) {
+        case 'Trending':
+          return true;
+        case 'Social':
+          return true;
+        case 'For You':
+          console.log(this.$store.state.isAuthorized)
+          return this.$store.state.isAuthorized;
+      }
+    },
   },
   async mounted () {
     if (this.$store.state.isAuthorized) {

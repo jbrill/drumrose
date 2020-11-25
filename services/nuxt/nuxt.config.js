@@ -3,6 +3,9 @@ export default {
    ** Router config
    */
   srcDir: 'src/',
+  env: {
+    baseUrl: process.env.DOMAIN_HOST || 'http://localhost:3000'
+  },
   /*
    ** Headers of the page
    */

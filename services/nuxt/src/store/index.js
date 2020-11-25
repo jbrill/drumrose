@@ -124,7 +124,7 @@ export const getters = {
       };
     } catch (err) {
       if (err == MusicKit.MKError.ACCESS_DENIED) {
-        console.log("AY");
+        return new Error();
       }
     }
   },
@@ -570,7 +570,10 @@ export const actions = {
     await MusicKit.getInstance().player.seekToTime(time);
   },
   async playNext (_, queue) {
-    await MusicKit.getInstance().player.queue.prepend(queue);
+    const resp = await MusicKit.getInstance().player.queue.prepend(
+      queue
+    );
+    console.log(resp)
   },
   async playLater (_, queue) {
     await MusicKit.getInstance().player.queue.append(queue);
@@ -595,7 +598,7 @@ export const actions = {
   },
 
   // Ratings
-  rate (_, { item, rating }) {
+  async rate (_, { item, rating }) {
     let types = {
       song: 'songs',
       playlist: 'playlists',
@@ -606,37 +609,49 @@ export const actions = {
       'library-albums': 'library-albums',
       'library-stations': 'library-stations',
     };
+    let type = item.type;
 
-    if (!(item.type in types)) {
-      return;
+    if (item.type in types) {
+      type = types[item.type];
     }
+    return await axios.put(
+      `https://api.music.apple.com/v1/me/ratings/${type}/${item.id}`,
+      JSON.stringify({
+        type: 'rating',
+        attributes: {
+          value: rating,
+        },
+      }),
+      {
+        "headers": apiHeaders(),
+      },
+    );
+    
+    // return new Promise(async (resolve, reject) => {
+    //   try {
+    //     let res = await fetch(
+    //       `https://api.music.apple.com/v1/me/ratings/${item.type}/${item.id}`,
+    //       {
+    //         method: 'PUT',
+    //         headers: apiHeaders(),
+    //         body: JSON.stringify({
+    //           type: 'rating',
+    //           attributes: {
+    //             value: rating,
+    //           },
+    //         }),
+    //       }
+    //     );
 
-    return new Promise(async (resolve, reject) => {
-      try {
-        let res = await fetch(
-          `https://api.music.apple.com/v1/me/ratings/
-          ${types[item.type]}/${item.id}`,
-          {
-            method: 'PUT',
-            headers: apiHeaders(),
-            body: JSON.stringify({
-              type: 'rating',
-              attributes: {
-                value: rating,
-              },
-            }),
-          }
-        );
-
-        if (res.status === 200) {
-          resolve(true);
-        } else {
-          reject(MusicKit.MKError(MusicKit.MKError.SERVER_ERROR));
-        }
-      } catch (err) {
-        reject(err);
-      }
-    });
+    //     if (res.status === 200) {
+    //       resolve(true);
+    //     } else {
+    //       reject(MusicKit.MKError(MusicKit.MKError.SERVER_ERROR));
+    //     }
+    //   } catch (err) {
+    //     reject(err);
+    //   }
+    // });
   },
   love ({ dispatch }, item) {
     return dispatch('rate', {
@@ -652,23 +667,14 @@ export const actions = {
   },
 
   // Library
-  addToLibrary (_, { type, id }) {
-    return new Promise(async (resolve, reject) => {
-      try {
-        await fetch(
-          `https://api.music.apple.com/v1/me/library/?ids[${type}s]=${id}`,
-          {
-            method: 'POST',
-            headers: apiHeaders(),
-            body: {},
-          }
-        );
-
-        resolve(true);
-      } catch (err) {
-        reject(err);
-      }
-    });
+  async addToLibrary (_, { type, id }) {
+    return await axios.post(
+      `https://api.music.apple.com/v1/me/library/?ids[${type}s]=${id}`,
+      JSON.stringify({}),
+      {
+        "headers": apiHeaders(),
+      },
+    );
   },
 
   addToPlaylist (_, { playlistId, items }, { sentry }) {
@@ -702,48 +708,31 @@ export const actions = {
     });
   },
 
-  newPlaylist (_, { name, items = [] }, { $sentry }) {
-    return new Promise(async (resolve, reject) => {
-      try {
-        let res = await fetch(
-          `https://api.music.apple.com/v1/me/library/playlists`,
-          {
-            method: 'POST',
-            headers: apiHeaders(),
-            body: JSON.stringify({
-              attributes: {
-                name: name,
-              },
-              relationships: {
-                tracks: {
-                  data: items,
-                },
-              },
-            }),
-          }
-        );
-
-        if (res.status === 201) {
-          // Invalid local cache
-          let api = getApi(true);
-          api.clearCacheItems();
-
-          // Return successful
-          resolve(true);
-        } else {
-          reject(MusicKit.MKError(MusicKit.MKError.SERVER_ERROR));
-        }
-      } catch (err) {
-        reject(err);
-      }
-    });
+  async newPlaylist (_, { name, description, tracks = [] }) {
+    return await axios.post(
+      `https://api.music.apple.com/v1/me/library/playlists`,
+      JSON.stringify({
+        attributes: {
+          name: name,
+          description: description,
+        },
+        relationships: {
+          tracks: {
+            data: tracks,
+          },
+        },
+      }),
+      {
+        "headers": apiHeaders(),
+      },
+    );
 	},
   
   async getHints (_, searchInput) {
      const getHints = {
        method: "GET",
        url: `https://api.music.apple.com/v1/catalog/us/search?term=` + 
-            `${searchInput}&limit=5&types=` +
+            `${searchInput}&types=` +
             `songs,artists,albums,playlists,`,
        headers: apiHeaders(),
      };

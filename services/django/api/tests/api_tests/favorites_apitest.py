@@ -15,7 +15,7 @@ from api.models.factories import (
     SongFactory,
     UserProfileFactory,
 )
-from api.tests.api_tests.util import ACCESS_TOKEN
+from api.tests.api_tests.util import ACCESS_TOKEN, get_test_token
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
@@ -31,8 +31,7 @@ class FavoritesTest(TestCase):
         """
         Creates models on setup
         """
-        # self.token = json.loads(get_test_token())["access_token"]
-        self.token = ACCESS_TOKEN
+        self.token = get_test_token()
         self.cleint = APIClient()
 
         test_username = "test_username"
@@ -55,22 +54,6 @@ class FavoritesTest(TestCase):
             user=self.user, playlist=self.playlist
         )
 
-    def test_get_all_favorites(self):
-        response = self.client.get(
-            reverse("FavoritesList"),
-            content_type="application/json",
-            data={},
-            HTTP_AUTHORIZATION="Bearer " + self.token,
-        )
-        favorited_response = json.loads(response.content)
-        favorited_track = FavoritedTrack.objects.get(id=self.favorited_track.id)
-        serializer = FavoritedTrackSerializer(favorited_track)
-        self.assertEqual(
-            favorited_response[0]["user"]["username"],
-            serializer.data["user"].get("username"),
-        )
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
     def test_get_all_track_favorites(self):
         response = self.client.get(
             reverse("FavoriteTracksList"),
@@ -82,8 +65,8 @@ class FavoritesTest(TestCase):
         serializer = FavoritedTrackSerializer(favorited_track)
         favorited_track_response = json.loads(response.content)
         self.assertEqual(
-            favorited_track_response[0]["user"]["username"],
-            serializer.data["user"].get("username"),
+            favorited_track_response["favorited_tracks"][0]["user_id"],
+            serializer.data["user"].get("id"),
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -96,11 +79,11 @@ class FavoritesTest(TestCase):
         )
         favorited_album = FavoritedAlbum.objects.get(id=self.favorited_album.id)
         serializer = FavoritedAlbumSerializer(favorited_album)
-        favorited_album_response = response.json()
+        favorited_album_response = json.loads(response.content)
 
         self.assertEqual(
-            favorited_album_response[0]["user"]["username"],
-            serializer.data["user"].get("username"),
+            favorited_album_response["favorited_albums"][0]["user_id"],
+            serializer.data["user"].get("id"),
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -115,10 +98,10 @@ class FavoritesTest(TestCase):
             id=self.favorited_playlist.id
         )
         serializer = FavoritedPlaylistSerializer(favorited_playlist)
-        favorited_playlist_response = response.json()
+        favorited_playlist_response = json.loads(response.content)
         self.assertEqual(
-            favorited_playlist_response[0]["user"]["username"],
-            serializer.data["user"].get("username"),
+            favorited_playlist_response["favorited_playlists"][0]["user_id"],
+            serializer.data["user"].get("id"),
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 

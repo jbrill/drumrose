@@ -11,7 +11,6 @@
     </v-chip>
     <v-responsive>
       <CarouselSection
-        :key="`album-${index}`"
         title="Albums"
         :carousel-items="attributeData"
       />

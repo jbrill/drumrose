@@ -8,6 +8,8 @@ from api.playlists.serializers import PlaylistSerializer
 from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.views import APIView
+from rest_framework_auth0.authentication import Auth0JSONWebTokenAuthentication
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 
 
 class PlaylistList(APIView):
@@ -21,17 +23,33 @@ class PlaylistList(APIView):
             - Creates a new playlist
     """
 
+    authentication_classes = [Auth0JSONWebTokenAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
     def get(self, request):
         """
         Returns a list of playlists
         """
-        return
+        playlists = Playlist.objects.all()
+
+        return JsonResponse(
+            {"playlists": list(playlists.values())}, status=status.HTTP_200_OK
+        )
 
     def post(self, request):
         """
         Returns a 201 if successful
         """
-        return
+        serializer = PlaylistSerializer(
+            data={"apple_music_id": request.data["id"], "name": request.data["name"]}
+        )
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(
+                serializer.data, status=status.HTTP_201_CREATED, safe=False
+            )
+        print(serializer.errors)
+        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class PlaylistDetail(APIView):
@@ -47,8 +65,8 @@ class PlaylistDetail(APIView):
             - Deletes a post
     """
 
-    authentication_classes = []
-    permission_classes = []
+    authentication_classes = [Auth0JSONWebTokenAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get(self, request, playlist_id):
         """
@@ -61,26 +79,13 @@ class PlaylistDetail(APIView):
                 {"message": "Playlist does not exist."}, status=status.HTTP_409_CONFLICT
             )
         is_favorited = FavoritedPlaylist.objects.filter(
-            user=request.user, playlist=playlist
+            user=request.user.id, playlist=playlist
         ).exists()
 
         serializer = PlaylistSerializer(
             playlist, context={"is_favorited": is_favorited}
         )
         return JsonResponse({"playlist": serializer.data})
-
-    def post(self, request):
-        """
-        Returns a 201 if successful
-        """
-        playlist = Playlist.objects.create(
-            apple_music_id=request.data["apple_music_id"]
-        )
-
-        serializer = PlaylistSerializer(playlist)
-        return JsonResponse(
-            {"playlist": serializer.data}, status=status.HTTP_201_CREATED
-        )
 
     def patch(self, request, playlist_id):
         print(playlist_id)

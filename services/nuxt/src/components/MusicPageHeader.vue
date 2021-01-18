@@ -1,9 +1,13 @@
 <template>
   <v-responsive
-    v-if="!loading && trackInfo"
     class="track-contain"
   >
+    <v-skeleton-loader
+      v-if="loading || !trackInfo"
+      class="mx-auto"
+    />
     <v-card
+      v-else
       style="padding: 2rem;"
     >
       <v-row flex class="content-contain">
@@ -157,7 +161,7 @@
                       </v-btn>
                     </v-col>
                     <v-col>
-                      <v-btn x-small tile dark @click="favoriteTrack">
+                      <v-btn :disabled="!auth.loggedIn" x-small tile dark @click="favoriteTrack">
                         <v-icon x-small left>
                           mdi-heart
                         </v-icon>
@@ -479,7 +483,7 @@ export default {
         '{h}', '2500'
       );
     },
-    ...mapState(['queue', 'playbackState']),
+    ...mapState(['queue', 'playbackState', 'auth']),
     totalDuration () {
       return this.trackInfo.relationships.tracks.data.reduce( function (a, b) {
         let trackTwoDuration = 0;
@@ -498,7 +502,6 @@ export default {
   },
   watch: {
     selection: function (idx) {
-      console.log(idx);
       this.selectTrack(idx);
     },
   },
@@ -508,25 +511,21 @@ export default {
         const resp = await this.$store.getters.fetch(
           `/v1/catalog/us/songs/${this.$route.params.id}`
         );
-        console.log(resp);
         this.trackInfo = resp.data[0];
       } else if (this.type === 'albums') {
         const resp = await this.$store.getters.fetch(
           `/v1/catalog/us/albums/${this.$route.params.id}`
         );
-        console.log(resp);
         this.trackInfo = resp.data[0];
       } else if (this.type === 'playlists') {
         const resp = await this.$store.getters.fetch(
           `/v1/catalog/us/playlists/${this.$route.params.id}`
         );
-        console.log(resp);
         this.trackInfo = resp.data[0];
       } else if (this.type === 'library-playlists') {
         const resp = await this.$store.getters.fetch(
           `/v1/me/library/playlists/${this.$route.params.id}`
         );
-        console.log(resp);
         this.trackInfo = resp.data[0];
       }
       

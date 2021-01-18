@@ -31,13 +31,15 @@
         <v-subheader>Up Next - {{ queue.length }} Tracks</v-subheader>
         <v-list-item-group
           v-model="selected"
-          multiple
-          active-class="pink--text"
         >
           <template v-for="(track, index) in queue">
-            <v-list-item :key="'track' + index">
-              <QueueItem :track-object="track" />
-            </v-list-item>
+            <v-hover
+              :key="`track-${index}`"
+            >
+              <v-list-item>
+                <QueueItem :track-object="track" />
+              </v-list-item>
+            </v-hover>
           </template>
         </v-list-item-group>
       </v-list>
@@ -60,10 +62,25 @@ export default {
   computed: {
     ...mapState(['nowPlayingItem', 'queue']),
   },
+  watch: {
+    selected: function (idx) {
+      this.selectTrack(idx);
+    },
+  },
   created () {
     console.log(this.nowPlayingItem);
   },
   methods: {
+    async selectTrack (trackIdx) {
+      try {
+          await this.$store.dispatch("setQueue", {
+            'song': this.queue[trackIdx].id,
+          });
+          this.$store.dispatch("play");
+        } catch (err) {
+          console.error(err);
+        }
+    },
   },
 };
 

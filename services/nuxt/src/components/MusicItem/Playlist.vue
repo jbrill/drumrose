@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-skeleton-loader
-      v-if="loading"
+      v-if="loading || !attributes"
       class="mx-auto"
       type="image"
     />
@@ -19,10 +19,11 @@
         :id="id"
         :is-playable="isPlayable"
         :is-actionable="isActionable"
-        :artwork-url="appleImage"
+        :artwork-url="appleImage()"
         :link="'/playlists/' + id"
         :tracks="tracks"
         type="playlist"
+        :name="attributes.name"
       />
     </v-badge>
     <MusicFooter
@@ -54,10 +55,6 @@ export default {
       type: String,
       default: '',
     },
-    attributes: {
-      type: Object,
-      default: () => {},
-    },
     isActionable: {
       type: Boolean,
       default: false,
@@ -73,44 +70,38 @@ export default {
       playlistDialog: false,
       artistName: '',
       artworkUrl: '',
+      attributes: false,
       name: '',
       tracks: [],
       isFavorited: false,
     };
   },
   computed: {
-    ...mapState(['nowPlayingItem', 'playbackState', 'queue']),
-    appleImage () {
-      return this.attributes.artwork.url.replace(
-        '{w}', this.attributes.artwork.width
-      ).replace(
-        '{h}', this.attributes.artwork.height
-      );
-    },
+    ...mapState(['auth', 'nowPlayingItem', 'playbackState', 'queue']),
   },
   async created () {
-    try {
-      await getPlaylistDetail(
-        this.$auth.getToken('auth0'),
-        this.id
-      );
-    } catch (err) {
-      console.log(err.response);
-      if (err.status === 409) {
-        try {
-          await createPlaylist(
-            this.$auth.getToken('auth0'),
-            {
-              'id': this.id,
-              'name': this.name,
-            }
-          );
-        } catch (err) {
-          console.error(err);
+    if (this.$auth.loggedIn) {
+      try {
+        await getPlaylistDetail(
+          this.$auth.getToken('auth0'),
+          this.id
+        );
+      } catch (err) {
+        if (err.response.status === 409) {
+          try {
+            await createPlaylist(
+              this.$auth.getToken('auth0'),
+              {
+                'id': this.id,
+                'name': this.name,
+              }
+            );
+          } catch (err) {
+            console.error(err);
+          }
         }
       }
     }
-    this.loading = false;
   },
   async mounted () {
     try {
@@ -118,14 +109,21 @@ export default {
         `/v1/catalog/us/playlists/${this.id}`
       );
       console.log(resp);
+      this.attributes = resp.data[0].attributes;
       this.tracks = resp.data[0].relationships.tracks.data;
+      this.loading = false;
     } catch (err) {
       console.error(err);
+      this.loading = false;
     }
   },
   methods: {
     addToQueue: function () {
-      this.$store.dispatch("setQueue", { "playlist": this.id });
+      this.$store.dispatch(
+        "setQueue", {
+          "playlist": this.id,
+        }
+      );
     },
     pauseTrack: async function (event) {
       event.preventDefault();
@@ -139,6 +137,14 @@ export default {
       this.$store.dispatch("setQueue", { "playlist": this.id } ).then( () => {
         this.$store.dispatch("play");
       });
+    },
+    appleImage () {
+      console.log(this.attributes)
+      return this.attributes.artwork.url.replace(
+        '{w}', this.attributes.artwork.width
+      ).replace(
+        '{h}', this.attributes.artwork.height
+      );
     },
   },
 };

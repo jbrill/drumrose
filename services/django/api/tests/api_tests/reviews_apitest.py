@@ -15,7 +15,7 @@ from api.reviews.serializers import (
     PlaylistReviewSerializer,
     TrackReviewSerializer,
 )
-from api.tests.api_tests.util import ACCESS_TOKEN
+from api.tests.api_tests.util import ACCESS_TOKEN, get_test_token
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
@@ -31,8 +31,7 @@ class ReviewsTest(TestCase):
         """
         Creates models on setup
         """
-        # self.token = json.loads(get_test_token())["access_token"]
-        self.token = ACCESS_TOKEN
+        self.token = get_test_token()
         self.cleint = APIClient()
 
         test_username = "test_username"
@@ -53,36 +52,18 @@ class ReviewsTest(TestCase):
             user=self.user, playlist=self.playlist
         )
 
-    def test_get_all_reviews(self):
-        response = self.client.get(
-            reverse("ReviewsList"),
-            content_type="application/json",
-            data={},
-            HTTP_AUTHORIZATION="Bearer " + self.token,
-        )
-        reviews_response = json.loads(response.content)
-        reviewed_track = TrackReview.objects.get(id=self.reviewed_track.id)
-        serializer = TrackReviewSerializer(reviewed_track)
-        self.assertEqual(
-            reviews_response["reviews"][0]["user"]["username"],
-            serializer.data["user"].get("username"),
-        )
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
     def test_get_all_track_reviews(self):
         response = self.client.get(
             reverse("TrackReviewList"),
             content_type="application/json",
-            data={},
             HTTP_AUTHORIZATION="Bearer " + self.token,
         )
         reviewed_track = TrackReview.objects.get(id=self.reviewed_track.id)
         serializer = TrackReviewSerializer(reviewed_track)
         reviewed_track_response = json.loads(response.content)
-        print(reviewed_track_response)
         self.assertEqual(
-            reviewed_track_response["track_reviews"][0]["user"]["username"],
-            serializer.data["user"].get("username"),
+            reviewed_track_response["track_reviews"][0]["user_id"],
+            serializer.data["user"].get("id"),
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -98,8 +79,8 @@ class ReviewsTest(TestCase):
         reviewed_album_response = response.json()
 
         self.assertEqual(
-            reviewed_album_response["album_reviews"][0]["user"]["username"],
-            serializer.data["user"].get("username"),
+            reviewed_album_response["album_reviews"][0]["user_id"],
+            serializer.data["user"].get("id"),
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -114,12 +95,12 @@ class ReviewsTest(TestCase):
         serializer = PlaylistReviewSerializer(reviewed_playlist)
         reviewed_playlist_response = response.json()
         self.assertEqual(
-            reviewed_playlist_response["playlist_reviews"][0]["user"]["username"],
-            serializer.data["user"].get("username"),
+            reviewed_playlist_response["playlist_reviews"][0]["user_id"],
+            serializer.data["user"].get("id"),
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_create_invalid_reviewed_track_duplicate(self):
+    def test_create_invalid_reviewed_track_missing_field(self):
         response = self.client.post(
             reverse("TrackReviewList"),
             content_type="application/json",
@@ -132,9 +113,4 @@ class ReviewsTest(TestCase):
             HTTP_AUTHORIZATION="Bearer " + self.token,
         )
 
-        reviewed_track_response = json.loads(response.content)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(
-            reviewed_track_response.get("non_field_errors")[0],
-            "Favorited Track Already Exists",
-        )
+        self.assertEqual(response.status_code, status.HTTP_422_UNPROCESSABLE_ENTITY)

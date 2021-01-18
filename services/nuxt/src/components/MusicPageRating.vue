@@ -39,8 +39,9 @@
           row-height="20"
         />
         <v-btn
-          :disabled="rating === 0 && textValue.length === 0"
+          :disabled="!auth.loggedIn || (rating === 0 && textValue.length === 0)"
           color="var(--primary-purple)"
+          @click="submitReview"
         >
           Add Review
         </v-btn>
@@ -50,12 +51,27 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+import { postReview } from '~/api/api';
+
 export default {
   data: () => ({
     rating: 0,
     rules: [v => v.length <= 255 || 'Max 255 characters'],
     textValue: '',
   }),
+  computed: {
+    ...mapState(['auth', 'isAuthorized']),
+  },
+  methods: {
+    async submitReview () {
+      console.log(this.$auth.getToken('auth0'))
+      await postReview(
+        this.$auth.getToken('auth0'),
+        { 'type': 'album', 'review': 'test', 'rating': 0.0 }
+      );
+    },
+  },
 };
 </script>
 

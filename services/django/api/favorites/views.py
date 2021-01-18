@@ -11,7 +11,15 @@ from api.favorites.serializers import (
     FavoritedSerializer,
     FavoritedTrackSerializer,
 )
-from api.models.core import FavoritedAlbum, FavoritedPlaylist, FavoritedTrack
+from api.models.core import (
+    FavoritedAlbum,
+    FavoritedPlaylist,
+    FavoritedTrack,
+    UserProfile,
+    Song,
+    Playlist,
+    Album,
+)
 from django.core.paginator import Paginator
 from django.http import JsonResponse
 from rest_framework import status
@@ -36,22 +44,26 @@ class FavoriteTracksList(APIView):
         """
         Get favorited tracks
         """
-        favorited_tracks = FavoritedTrack.objects.all()
+        favorites = FavoritedTrack.objects.all()
 
-        serializer = FavoritedTrackSerializer(favorited_tracks, many=True)
-        return JsonResponse(serializer.data, safe=False)
+        return JsonResponse(
+            {"favorited_tracks": list(favorites.values())}, status=status.HTTP_200_OK
+        )
 
     def post(self, request):
         """
         Create favorited track
         """
+        user = UserProfile.objects.get(
+            auth0_user_id=str(request.user).replace(".", "|")
+        )
+        song = Song.objects.get(apple_music_id=request.data["apple_music_id"])
         try:
             serializer = FavoritedTrackSerializer(
                 data={
-                    "apple_music_id": request.data["apple_music_id"],
-                    "name": request.data["name"],
-                },
-                context={"request": request},
+                    "apple_music_id": song.apple_music_id,
+                    "auth0_user_id": user.auth0_user_id,
+                }
             )
         except KeyError:
             return JsonResponse(
@@ -84,20 +96,25 @@ class FavoriteAlbumList(APIView):
         """
         Get favorited albums
         """
-        favorited_albums = FavoritedAlbum.objects.all()
+        favorites = FavoritedAlbum.objects.all()
 
-        serializer = FavoritedAlbumSerializer(favorited_albums, many=True)
-        return JsonResponse(serializer.data, safe=False)
+        return JsonResponse(
+            {"favorited_albums": list(favorites.values())}, status=status.HTTP_200_OK
+        )
 
     def post(self, request):
         """
         Create favorited album
         """
         try:
+            user = UserProfile.objects.get(
+                auth0_user_id=str(request.user).replace(".", "|")
+            )
+            album = Album.objects.get(apple_music_id=request.data["apple_music_id"])
             serializer = FavoritedAlbumSerializer(
                 data={
-                    "apple_music_id": request.data["apple_music_id"],
-                    "name": request.data["name"],
+                    "apple_music_id": album.apple_music_id,
+                    "auth0_user_id": user.auth0_user_id,
                 },
                 context={"request": request},
             )
@@ -132,17 +149,40 @@ class FavoritePlaylistList(APIView):
         """
         Get favorited playlists
         """
-        favorited_playlists = FavoritedPlaylist.objects.all()
+        favorites = FavoritedPlaylist.objects.all()
 
-        serializer = FavoritedPlaylistSerializer(favorited_playlists, many=True)
-        return JsonResponse(serializer.data, safe=False)
+        return JsonResponse(
+            {"favorited_playlists": list(favorites.values())}, status=status.HTTP_200_OK
+        )
 
     def post(self, request):
         """
         Post favorited playlist
         """
-
-        return
+        try:
+            user = UserProfile.objects.get(
+                auth0_user_id=str(request.user).replace(".", "|")
+            )
+            playlist = Playlist.objects.get(
+                apple_music_id=request.data["apple_music_id"]
+            )
+            serializer = FavoritedPlaylistSerializer(
+                data={
+                    "apple_music_id": playlist.apple_music_id,
+                    "auth0_user_id": user.auth0_user_id,
+                }
+            )
+        except KeyError:
+            return JsonResponse(
+                {"message": "Missing data required for serialization."},
+                status=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            )
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(
+                serializer.data, status=status.HTTP_201_CREATED, safe=False
+            )
+        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class FollowersFavoritesList(APIView):

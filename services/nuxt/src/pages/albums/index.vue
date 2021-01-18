@@ -1,22 +1,56 @@
 <template>
-  <div class="profileContain">
-    <img
-      class="profileAvatar"
-      src="https://avatars1.githubusercontent.com/u/\
-        1837026?s=400&u=95442a7c7332e8d25cd4eafeae3753ce593dc441&v=4"
+  <v-container>
+    <v-row
+      v-for="
+        rowIdx in Math.floor(albums.length / 3)
+      "
+      :key="rowIdx"
+      no-gutters
     >
-    <p class="profileName">
-      Jason Brill
-    </p>
-    <div class="postsContain">
-      POSTS GO HERE...
-    </div>
-  </div>
+      <v-col
+        v-for="n in 3"
+        :key="n"
+        cols="12"
+        sm="4"
+      >
+        <v-card
+          v-if="(((rowIdx - 1) * 3) + n) <= (albums.length - 1)"
+        >
+          <Album
+            :id="albums[((rowIdx - 1) * 3) + n].apple_music_id"
+            is-playable
+            is-actionable
+          />
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
+import { getAlbums } from '~/api/api.js';
+import Album from '~/components/MusicItem/Album.vue';
+
 export default {
+  components: {
+    Album,
+  },
+  async asyncData () {
+    const albums = await getAlbums();
+    return {
+      "albums": albums.data['albums'],
+    };
+  },
 };
 </script>
 
-<style scoped></style>
+<style>
+.playlists-contain {
+  text-align: center;
+  padding-top: 3rem;
+}
+.playlist-feed {
+  display: grid;
+  row-gap: 1rem;
+}
+</style>

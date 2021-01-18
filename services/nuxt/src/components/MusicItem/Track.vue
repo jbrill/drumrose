@@ -1,11 +1,14 @@
 <template>
   <div>
     <v-skeleton-loader
-      v-if="loading"
+      v-if="loading || !trackObject || !('attributes' in trackObject)"
       class="mx-auto"
       type="image"
     />
-    <v-container v-else>
+    <v-container
+      v-else
+      class="post-container"
+    >
       <v-badge
         avatar
         bordered
@@ -19,15 +22,17 @@
           :id="trackObject.id"
           :is-playable="isPlayable"
           :is-actionable="isActionable"
-          :artwork-url="appleImage"
+          :artwork-url="appleImage()"
           :link="'/tracks/' + trackObject.id"
           type="song"
+          :name="attributes.name"
+          :is-favorited="isFavorited"
         />
       </v-badge>
       <MusicFooter
-        :primary-name="trackObject.attributes.name"
+        :primary-name="attributes.name"
         :primary-link="'/tracks/' + trackObject.id"
-        :secondary-name="trackObject.attributes.artistName"
+        :secondary-name="attributes.artistName"
         :secondary-link="
           '/artists/' + trackObject.relationships.artists.data[0].id
         "
@@ -75,49 +80,46 @@ export default {
       artworkUrl: '',
       name: '',
       trackObject: {},
+      attributes: {},
+      isFavorited: false,
     };
   },
   computed: {
-    ...mapState(['nowPlayingItem', 'playbackState', 'queue']),
-    appleImage () {
-      return this.trackObject.attributes.artwork.url.replace(
-        '{w}', this.trackObject.attributes.artwork.width
-      ).replace(
-        '{h}', this.trackObject.attributes.artwork.height
-      );
-    },
+    ...mapState(['nowPlayingItem', 'playbackState', 'queue', 'auth']),
   },
   async created () {
-    try {
-      await getTrackDetail(
-        this.$auth.getToken('auth0'),
-        this.id
-      );
-    } catch (err) {
-      console.log(err.response);
-      if (err.status === 409) {
-        try {
-          await createTrack(
-            this.$auth.getToken('auth0'),
-            {
-              'id': this.id,
-              'name': this.name,
-            }
-          );
-        } catch (err) {
-          console.error(err);
+    if (this.$auth.loggedIn) {
+      try {
+        const trackResponse = await getTrackDetail(
+          this.$auth.getToken('auth0'),
+          this.id
+        );
+        console.log("trackResponse")
+        console.log(trackResponse)
+        this.isFavorited = trackResponse.data.track.favorited;
+      } catch (err) {
+        if (err.response.status === 409) {
+          try {
+            await createTrack(
+              this.$auth.getToken('auth0'),
+              {
+                'id': this.id,
+                'name': this.name,
+              }
+            );
+          } catch (err) {
+            console.error(err);
+          }
         }
       }
     }
-    this.loading = false;
   },
   async mounted () {
-    this.loading = true;
     try {
       const resp = await this.$store.getters.fetch(
         `/v1/catalog/us/songs/${this.id}`
       );
-      console.log(resp);
+      this.attributes = resp.data[0].attributes;
       this.trackObject = resp.data[0];
       this.loading = false;
     } catch (err) {
@@ -139,6 +141,13 @@ export default {
       this.$store.dispatch("setQueue", { "song": this.id } ).then( () => {
         this.$store.dispatch("play");
       });
+    },
+    appleImage () {
+      return this.attributes.artwork.url.replace(
+        '{w}', this.attributes.artwork.width
+      ).replace(
+        '{h}', this.attributes.artwork.height
+      );
     },
   },
 };
@@ -214,6 +223,9 @@ export default {
   cursor: pointer;
   color: white;
   opacity: 1;
+}
+.container {
+  padding: 0 !important;
 }
 .textContain {
   display: flex;

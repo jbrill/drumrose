@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-skeleton-loader
-      v-if="loading"
+      v-if="loading || !attributes"
       class="mx-auto"
       type="image"
     />
@@ -19,10 +19,11 @@
           :id="id"
           :is-playable="isPlayable"
           :is-actionable="isActionable"
-          :artwork-url="appleImage"
+          :artwork-url="appleImage()"
           :tracks="tracks"
           :link="'/albums/' + id"
           type="album"
+          :name="attributes.name"
         />
       </v-badge>
       <MusicFooter
@@ -39,7 +40,11 @@
 import { mapState } from 'vuex';
 import Artwork from '~/components/MusicItem/Artwork';
 import MusicFooter from '~/components/MusicItem/MusicFooter';
-import { favoriteTrack } from '~/api/api';
+import {
+  favoriteTrack,
+  getAlbumDetail,
+  createAlbum,
+} from '~/api/api';
 
 
 export default {
@@ -51,10 +56,6 @@ export default {
     id: {
       type: String,
       default: '',
-    },
-    attributes: {
-      type: Object,
-      default: () => {},
     },
     tracks: {
       type: Array,
@@ -77,17 +78,35 @@ export default {
       artworkUrl: '',
       name: '',
       artistId: '',
+      attributes: false,
     };
   },
   computed: {
     ...mapState(['nowPlayingItem', 'playbackState', 'queue']),
-    appleImage () {
-      return this.attributes.artwork.url.replace(
-        '{w}', this.attributes.artwork.width
-      ).replace(
-        '{h}', this.attributes.artwork.height
-      );
-    },
+  },
+  async created () {
+    if (this.$auth.loggedIn) {
+      try {
+        await getAlbumDetail(
+          this.$auth.getToken('auth0'),
+          this.id
+        );
+      } catch (err) {
+        if (err.response.status === 409) {
+          try {
+            await createAlbum(
+              this.$auth.getToken('auth0'),
+              {
+                'id': this.id,
+                'name': this.name,
+              }
+            );
+          } catch (err) {
+            console.error(err);
+          }
+        }
+      }
+    }
   },
   async mounted () {
     this.loading = true;
@@ -95,6 +114,7 @@ export default {
       const resp = await this.$store.getters.fetch(
         `/v1/catalog/us/albums/${this.id}`
       );
+      this.attributes = resp.data[0].attributes;
       this.artistId = resp.data[0].relationships.artists.data[0].id;
       this.loading = false;
     } catch (err) {
@@ -118,6 +138,14 @@ export default {
       this.$store.dispatch("setQueue", { "album": this.id } ).then( () => {
         this.$store.dispatch("play");
       });
+    },
+    appleImage () {
+      console.log(this.attributes)
+      return this.attributes.artwork.url.replace(
+        '{w}', this.attributes.artwork.width
+      ).replace(
+        '{h}', this.attributes.artwork.height
+      );
     },
   },
 };

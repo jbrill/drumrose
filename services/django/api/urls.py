@@ -14,8 +14,6 @@ from django.urls import path
 
 urlpatterns = [
     path("", api_routes.HealthRoute.as_view(), name="HealthCheck"),
-    path("favorites/", favorite_routes.FavoritesList.as_view(), name="FavoritesList"),
-    path("reviews/", review_routes.ReviewsList.as_view(), name="ReviewsList"),
     path(
         "reviews/tracks/",
         review_routes.TrackReviewList.as_view(),
@@ -58,12 +56,10 @@ urlpatterns = [
         name="PlaylistDetail",
     ),
     path("tracks/", song_routes.SongList.as_view(), name="SongList"),
-    path(
-        "tracks/<apple_music_id>/", song_routes.SongDetail.as_view(), name="SongDetail"
-    ),
+    path("tracks/<track_id>/", song_routes.SongDetail.as_view(), name="SongDetail"),
     path("artists/", artist_routes.ArtistRoute.as_view(), name="ArtistsRoute"),
     path("albums/", album_routes.AlbumRoute.as_view(), name="AlbumsRoute"),
-    path("albums/<album_id>", album_routes.AlbumDetail.as_view(), name="AlbumDetail"),
+    path("albums/<album_id>/", album_routes.AlbumDetail.as_view(), name="AlbumDetail"),
     path("users/", user_routes.UserList.as_view(), name="UserList"),
     path("users/<user_handle>/", user_routes.UserDetail.as_view(), name="UserDetail"),
     path(

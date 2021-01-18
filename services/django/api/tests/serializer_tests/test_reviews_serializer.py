@@ -50,7 +50,6 @@ class ReviewSerializersTests(TestCase):
             user=self.user, track=self.track, review=None, rating="0.5"
         )
         serialized_track_review = TrackReviewSerializer(reviewed_track, many=False)
-        print(serialized_track_review)
         self.assertEqual(
             serialized_track_review["track"]["apple_music_id"].value,
             self.track.apple_music_id,

@@ -40,6 +40,5 @@ class UserProfileSerializer(serializers.ModelSerializer):
         return value
 
     def create(self, validated_data):
-        print(validated_data)
         user = UserProfile.objects.create(**validated_data)
         return user

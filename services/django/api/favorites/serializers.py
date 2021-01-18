@@ -26,7 +26,6 @@ class FavoritedTrackSerializer(serializers.ModelSerializer):
     """
 
     song = SongSerializer(read_only=True)
-    favorite_type = serializers.SerializerMethodField()
     user = UserProfileSerializer(read_only=True)
 
     class Meta:
@@ -36,12 +35,6 @@ class FavoritedTrackSerializer(serializers.ModelSerializer):
 
         model = FavoritedTrack
         fields = "__all__"
-
-    def get_favorite_type(self, _):
-        """
-        Return favorite type
-        """
-        return "track"
 
     def validate(self, data):
         """
@@ -56,28 +49,19 @@ class FavoritedTrackSerializer(serializers.ModelSerializer):
 
     def to_internal_value(self, data):
         internal_value = super().to_internal_value(data)
-        name = data.get("name")
         apple_music_id = data.get("apple_music_id")
-        auth0_user_id = self.context.get("request").user
+        auth0_user_id = data.get("auth0_user_id")
         internal_value.update(
-            {
-                "name": name,
-                "apple_music_id": apple_music_id,
-                "auth0_user_id": auth0_user_id,
-            }
+            {"apple_music_id": apple_music_id, "auth0_user_id": auth0_user_id}
         )
         return internal_value
 
-    @transaction.atomic
     def create(self, validated_data):
-        song = Song.objects.get_or_create(
-            name=validated_data.get("name"),
-            apple_music_id=validated_data.get("apple_music_id"),
-        )
         user = UserProfile.objects.get(
             auth0_user_id=validated_data.get("auth0_user_id")
         )
-        return FavoritedTrack.objects.create(user=user, song=song)
+        song = Song.objects.get(apple_music_id=validated_data.get("apple_music_id"))
+        return FavoritedAlbum.objects.create(user=user, song=song)
 
 
 class FavoritedAlbumSerializer(serializers.ModelSerializer):
@@ -85,9 +69,8 @@ class FavoritedAlbumSerializer(serializers.ModelSerializer):
     Serializer for favorites
     """
 
-    user = UserProfileSerializer(read_only=True)
     album = AlbumSerializer(read_only=True)
-    favorite_type = serializers.SerializerMethodField()
+    user = UserProfileSerializer(read_only=True)
 
     class Meta:
         """
@@ -95,38 +78,34 @@ class FavoritedAlbumSerializer(serializers.ModelSerializer):
         """
 
         model = FavoritedAlbum
-        fields = ("user", "album", "favorite_type")
+        fields = "__all__"
 
-    def get_favorite_type(self, _):
+    def validate(self, data):
         """
-        Return favorite type
+        Check if favorited_track already exists
         """
-        return "album"
+        if FavoritedAlbum.objects.filter(
+            user__auth0_user_id=data.get("auth0_user_id"),
+            album__apple_music_id=data.get("apple_music_id"),
+        ).count():
+            raise serializers.ValidationError("Favorited Track Already Exists")
+        return data
 
     def to_internal_value(self, data):
         internal_value = super().to_internal_value(data)
-        name = data.get("name")
         apple_music_id = data.get("apple_music_id")
-        auth0_user_id = self.context.get("request").user
+        auth0_user_id = data.get("auth0_user_id")
         internal_value.update(
-            {
-                "name": name,
-                "apple_music_id": apple_music_id,
-                "auth0_user_id": auth0_user_id,
-            }
+            {"apple_music_id": apple_music_id, "auth0_user_id": auth0_user_id}
         )
         return internal_value
 
-    @transaction.atomic
     def create(self, validated_data):
-        album = Album.objects.get_or_create(
-            name=validated_data.get("name"),
-            apple_music_id=validated_data.get("apple_music_id"),
-        )
         user = UserProfile.objects.get(
             auth0_user_id=validated_data.get("auth0_user_id")
         )
-        return FavoritedTrack.objects.create(user=user, album=album)
+        album = Album.objects.get(apple_music_id=validated_data.get("apple_music_id"))
+        return FavoritedAlbum.objects.create(user=user, album=album)
 
 
 class FavoritedPlaylistSerializer(serializers.ModelSerializer):

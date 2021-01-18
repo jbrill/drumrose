@@ -20,28 +20,6 @@ export const getTrackReviews = async bearerToken => {
   }
 };
 
-/*
- * Fetches reviews
- * */
-export const getReviews = async bearerToken => {
-  try {
-    const response = await axios.get(
-      `https://teton.drumrose.io/api/reviews/`,
-      {
-        headers: {
-          Authorization: `${bearerToken}`,
-        },
-      }
-    );
-    return response;
-  } catch(err) {
-    console.error(err);
-    return {
-      data: [],
-    };
-  }
-};
-
 
 /*
  * Fetches followers
@@ -114,44 +92,6 @@ export const getUserList = async bearerToken => {
 /* 
  * Fetches a list of favorites. Can consist of albums, tracks, or playlists
  * */
-export const getFavorites = async bearerToken => {
-  try {
-    const response = await axios.get(
-      'https://teton.drumrose.io/api/favorites/',
-      {
-        headers: {
-          Authorization: `${bearerToken}`,
-        },
-      }
-    );
-    return response;
-  } catch (err) {
-    console.error(err);
-    return {
-      data: [],
-    };
-  }
-};
-
-/* 
- * Fetches a list of favorites. Can consist of albums, tracks, or playlists
- * */
-export const postFavorite = async (bearerToken, data) => {
-  const response = await axios.post(
-    'https://teton.drumrose.io/api/favorites/',
-    data,
-    {
-      headers: {
-        Authorization: `${bearerToken}`,
-      },
-    }
-  );
-  return response;
-};
-
-/* 
- * Fetches a list of favorites. Can consist of albums, tracks, or playlists
- * */
 export const postReview = async (bearerToken, data) => {
   try {
     const response = await axios.post(
@@ -181,7 +121,7 @@ export const getFavoritedTracks = async bearerToken => {
       'https://teton.drumrose.io/api/favorites/tracks/',
       {
         headers: {
-          Authorization: `Bearer ${bearerToken}`,
+          Authorization: `${bearerToken}`,
         },
       }
     );
@@ -194,6 +134,9 @@ export const getFavoritedTracks = async bearerToken => {
   }
 };
 
+/*
+ * Fetches all playlists
+ * */
 export const getPlaylists = async bearerToken => {
   try {
     const response = await axios.get(
@@ -210,25 +153,77 @@ export const getPlaylists = async bearerToken => {
 };
 
 /*
- * Posts a favorited track
+ * Fetches all albums
  * */
-export const favoriteTrack = async (bearerToken, appleMusicId) => {
+export const getAlbums = async () => {
+  return await axios.get(
+    `https://teton.drumrose.io/api/albums/`,
+  );
+};
+
+/*
+ * Fetches all tracks
+ * */
+export const getTracks = async bearerToken => {
   try {
-    const response = await axios.post(
-      `https://teton.drumrose.io/api/tracks/${appleMusicId}/`,
-      {
-        headers: {
-          Authorization: `Bearer ${bearerToken}`,
-        },
-      }
+    const response = await axios.get(
+      `https://teton.drumrose.io/api/tracks/`,
     );
     return response;
-  } catch(err) {
+  } catch (err) {
     console.error(err);
     return {
       data: [],
     };
   }
+};
+
+
+/*
+ * Posts a favorited track
+ * */
+export const favoriteTrack = async (bearerToken, trackData) => {
+  return await axios.post(
+    `https://teton.drumrose.io/api/favorites/tracks/`,
+    trackData,
+    {
+      headers: {
+        Authorization: `${bearerToken}`,
+      },
+    }
+  );
+};
+
+
+/*
+ * Posts a favorited track
+ * */
+export const favoriteAlbum = async (bearerToken, albumData) => {
+  return await axios.post(
+    `https://teton.drumrose.io/api/favorites/albums/`,
+    albumData,
+    {
+      headers: {
+        Authorization: `${bearerToken}`,
+      },
+    }
+  );
+};
+
+
+/*
+ * Posts a favorited track
+ * */
+export const favoritePlaylist = async (bearerToken, playlistData) => {
+  return await axios.post(
+    `https://teton.drumrose.io/api/favorites/playlists/`,
+    playlistData,
+    {
+      headers: {
+        Authorization: `${bearerToken}`,
+      },
+    }
+  );
 };
 
 
@@ -240,7 +235,7 @@ export const getTrackDetail = async (bearerToken, appleMusicId) => {
     `https://teton.drumrose.io/api/tracks/${appleMusicId}/`,
     {
       headers: {
-        Authorization: `Bearer ${bearerToken}`,
+        Authorization: `${bearerToken}`,
       },
     }
   );
@@ -251,19 +246,14 @@ export const getTrackDetail = async (bearerToken, appleMusicId) => {
  * Fetches detail route for an album
  * */
 export const getAlbumDetail = async (bearerToken, appleMusicId) => {
-  try {
-    const response = await axios.get(
-      `https://teton.drumrose.io/api/albums/${appleMusicId}/`,
-      {
-        headers: {
-          Authorization: `Bearer ${bearerToken}`,
-        },
-      }
-    );
-    return response;
-  } catch(err) {
-    throw new Error(err);
-  }
+  return await axios.get(
+    `https://teton.drumrose.io/api/albums/${appleMusicId}/`,
+    {
+      headers: {
+        Authorization: `${bearerToken}`,
+      },
+    }
+  );
 };
 
 
@@ -275,7 +265,7 @@ export const getPlaylistDetail = async (bearerToken, appleMusicId) => {
     `https://teton.drumrose.io/api/playlists/${appleMusicId}/`,
     {
       headers: {
-        Authorization: `Bearer ${bearerToken}`,
+        Authorization: `${bearerToken}`,
       },
     }
   );
@@ -291,9 +281,40 @@ export const createPlaylist = async (bearerToken, playlistData) => {
     playlistData,
     {
       headers: {
-        Authorization: `Bearer ${bearerToken}`,
+        Authorization: `${bearerToken}`,
       },
     },
   );
 };
 
+
+/*
+ * Creates an album
+ * */
+export const createAlbum = async (bearerToken, albumData) => {
+  return await axios.post(
+    `https://teton.drumrose.io/api/albums/`,
+    albumData,
+    {
+      headers: {
+        Authorization: `${bearerToken}`,
+      },
+    },
+  );
+};
+
+/*
+ * Creates a track
+ * */
+export const createTrack = async (bearerToken, trackData) => {
+  console.log(bearerToken)
+  return await axios.post(
+    `https://teton.drumrose.io/api/tracks/`,
+    trackData,
+    {
+      headers: {
+        Authorization: `${bearerToken}`,
+      },
+    },
+  );
+};

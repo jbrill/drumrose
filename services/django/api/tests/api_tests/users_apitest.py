@@ -5,7 +5,7 @@ import json
 
 from api.models.core import UserProfile
 from api.models.factories import UserProfileFactory
-from api.tests.api_tests.util import ACCESS_TOKEN
+from api.tests.api_tests.util import ACCESS_TOKEN, get_test_token
 from api.users.serializers import UserProfileSerializer
 from django.test import TestCase
 from django.urls import reverse
@@ -22,10 +22,8 @@ class UserListTest(TestCase):
         """
         Creates models on setup
         """
-        # self.token = json.loads(
-        #     get_test_token()
-        # )["access_token"]
-        self.token = ACCESS_TOKEN
+        self.token = get_test_token()
+        # self.token = ACCESS_TOKEN
         self.client = APIClient()
 
         test_username = "test_username"

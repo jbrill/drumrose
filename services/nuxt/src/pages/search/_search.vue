@@ -3,7 +3,7 @@
     <v-responsive v-if="!loading">
       <v-row>
         <v-select
-          v-model="value"
+          v-model="selectedItems"
           :items="items"
           style="margin: 2rem"
           attach
@@ -16,8 +16,20 @@
         <v-subheader>
           {{ search }} - {{ searchNum }} Results
         </v-subheader>
-        <span v-if="searchResults.songs.length" class="overline">Tracks</span>
-        <v-list-item-group v-if="searchResults.songs.length">
+        <span
+          v-if="
+            selectedItems.includes('Tracks') && searchResults.songs.length
+          "
+          class="overline"
+        >
+          Tracks
+        </span>
+        <v-list-item-group
+          v-if="
+            selectedItems.includes('Tracks') && searchResults.songs.length
+          "
+          v-model="selectedSearch"
+        >
           <template
             v-for="
               (song, songIdx) in searchResults.songs
@@ -48,8 +60,18 @@
             </v-hover>
           </template>
         </v-list-item-group>
-        <span v-if="searchResults.albums.length" class="overline">Albums</span>
-        <v-list-item-group v-if="searchResults.albums.length">
+        <span
+          v-if="
+            selectedItems.includes('Albums') && searchResults.albums.length
+          "
+          class="overline"
+        >Albums</span>
+        <v-list-item-group
+          v-if="
+            selectedItems.includes('Albums') && searchResults.albums.length
+          "
+          v-model="selectedSearch"
+        >
           <template
             v-for="
               (album, albumIdx) in searchResults.albums
@@ -80,12 +102,19 @@
           </template>
         </v-list-item-group>
         <span
-          v-if="searchResults.playlists.length"
+          v-if="
+            selectedItems.includes('Artists') && searchResults.playlists.length
+          "
           class="overline"
         >
           Playlists
         </span>
-        <v-list-item-group v-if="searchResults.playlists.length">
+        <v-list-item-group
+          v-if="
+            selectedItems.includes('Artists') && searchResults.playlists.length
+          "
+          v-model="selectedSearch"
+        >
           <template
             v-for="
               (playlist, playlistIdx) in searchResults.playlists
@@ -118,13 +147,15 @@
           </template>
         </v-list-item-group>
         <span
-          v-if="searchResults.artists.length"
+          v-if="
+            selectedItems.includes('Artists') && searchResults.artists.length"
           class="overline"
         >Artists</span>
         <v-list-item-group
           v-if="
-            searchResults.artists.length
+            selectedItems.includes('Artists') && searchResults.artists.length
           "
+          v-model="selectedSearch"
         >
           <template
             v-for="
@@ -171,10 +202,12 @@ export default {
     },
     loading: true,
     items: ['Tracks', 'Playlists', 'Albums', 'Artists'],
-    value: ['Tracks', 'Playlists', 'Albums', 'Artists'],
+    selectedItems: ['Tracks', 'Playlists', 'Albums', 'Artists'],
+    selectedSearch: null,
   }),
   computed: {
     searchNum () {
+      console.log(this.selectedItems)
       let total = 0;
       if ('songs' in this.searchResults) {
         total += this.searchResults.songs.length;
@@ -189,6 +222,11 @@ export default {
         total += this.searchResults.albums.length;
       }
       return total;
+    },
+  },
+  watch: {
+    selectedSearch: function (idx) {
+      this.selectTrack(idx);
     },
   },
   async mounted () {
@@ -211,8 +249,18 @@ export default {
     this.loading = false;
   },
   methods: {
+    async selectTrack (trackIdx) {
+      console.log(trackIdx)
+      try {
+          await this.$store.dispatch("setQueue", {
+            'song': this.trackInfo.relationships.tracks.data[trackIdx].id,
+          });
+          this.$store.dispatch("play");
+        } catch (err) {
+          console.error(err);
+        }
+    },
     appleImage (trackObject) {
-      console.log(trackObject);
       return trackObject.attributes.artwork.url.replace(
         '{w}', '250'
       ).replace(

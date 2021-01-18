@@ -9,6 +9,8 @@ from api.models.core import Album, FavoritedAlbum
 from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.views import APIView
+from rest_framework_auth0.authentication import Auth0JSONWebTokenAuthentication
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 
 
 class AlbumRoute(APIView):
@@ -18,24 +20,31 @@ class AlbumRoute(APIView):
         POST: Creates an album
     """
 
+    authentication_classes = [Auth0JSONWebTokenAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
     def get(self, request):
         """
-        GET for  Artist
+        GET for album
         """
         albums = Album.objects.all()
-        serializer = AlbumSerializer(albums, many=True)
-        return JsonResponse({"albums": serializer.data})
+        return JsonResponse(
+            {"albums": list(albums.values())}, status=status.HTTP_200_OK
+        )
 
     def post(self, request):
         """
         POST for  Artist
         """
-        artist_data = json.loads(request.body.decode("utf-8"))
-        test_album = Album.objects.create(
-            name=artist_data["name"], artwork_url=artist_data["url"]
+        serializer = AlbumSerializer(
+            data={"apple_music_id": request.data["id"], "name": request.data["name"]}
         )
-        serializer = AlbumSerializer(test_album)
-        return JsonResponse(serializer.data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(
+                serializer.data, status=status.HTTP_201_CREATED, safe=False
+            )
+        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class AlbumDetail(APIView):
@@ -51,40 +60,36 @@ class AlbumDetail(APIView):
             - Deletes a album
     """
 
-    authentication_classes = []
-    permission_classes = []
+    authentication_classes = [Auth0JSONWebTokenAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
-    def get(self, request, apple_music_id):
+    def get(self, request, album_id):
+        """
+        Album Detail View
+        """
         try:
-            album = Album.objects.get(apple_music_id=apple_music_id)
+            album = Album.objects.get(apple_music_id=album_id)
         except Album.DoesNotExist:
             return JsonResponse(
-                {"message": "Song does not exist."}, status=status.HTTP_409_CONFLICT
+                {"message": "Album does not exist."}, status=status.HTTP_409_CONFLICT
             )
-
-        print(album.page_id)
-        is_favorited = False
-
-        # HACK: checks if 'logged in' by checking request username
-        if request.user.username:
-            is_favorited = FavoritedAlbum.objects.filter(
-                user=request.user, album=album
-            ).exists()
+        is_favorited = FavoritedAlbum.objects.filter(
+            user=request.user.id, album=album
+        ).exists()
 
         serializer = AlbumSerializer(album, context={"is_favorited": is_favorited})
+        return JsonResponse(serializer.data)
 
-        return JsonResponse({"track": serializer.data})
-
-    def patch(self, request, post_id):
+    def patch(self, request, album_id):
         """
         Update an album
         """
-        print(post_id)
+        print(album_id)
         return JsonResponse({})
 
-    def delete(self, request, post_id):
+    def delete(self, request, album_id):
         """
         Delete an album
         """
-        print(post_id)
+        print(album_id)
         return JsonResponse({})

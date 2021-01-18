@@ -12,21 +12,18 @@
       :id="post.id"
       is-playable
       is-actionable
-      :attributes="post.attributes"
     />
     <Track
       v-if="post.type == 'songs'"
       :id="post.id"
       is-playable
       is-actionable
-      :attributes="post.attributes"
     />
     <Playlist
       v-if="post.type == 'playlists'"
       :id="post.id"
       is-playable
       is-actionable
-      :attributes="post.attributes"
     />
   </div>
 </template>

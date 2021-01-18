@@ -21,5 +21,4 @@ def get_test_token():
         data=json.dumps(payload),
         headers=headers,
     )
-    print(data.content)
-    return data
+    return data.json()["access_token"]

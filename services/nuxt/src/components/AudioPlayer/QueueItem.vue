@@ -153,7 +153,7 @@
           </v-list-item>
           <v-divider />
           <v-list-item
-            v-if="!inLibrary"
+            v-if="!inLibrary && isAuthorized"
             @click.native.stop.prevent
             @click="
               addToLibrary()
@@ -196,6 +196,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import { postFavorite } from '~/api/api';
 
 
@@ -229,6 +230,7 @@ export default {
         '{h}', '250'
       );
     },
+    ...mapState(['auth', 'isAuthorized', 'nowPlayingItem', 'playbackState']),
   },
   async created () {
     try {
@@ -241,6 +243,22 @@ export default {
       this.loading = false;
       console.error(err);
     }
+    const librarySearchResp = await this.$store.dispatch(
+      "searchLibrary",
+      {
+        'type': this.trackObject.type,
+        'searchInput': this.trackObject.attributes.name,
+      }
+    ).then( () => {
+      // set favorite
+      this.inLibrary = true;
+    }).catch ( err => {
+      console.error(err);
+      this.$sentry.captureException(err);
+    });
+  },
+  async mounted () {
+    
   },
   methods: {
     favoriteTrack () {
@@ -259,7 +277,10 @@ export default {
     addToLibrary () {
       this.$store.dispatch(
         "addToLibrary",
-        { 'type': this.trackObject.type, 'id': this.trackObject.id }
+        {
+          'type': this.trackObject.type,
+          'id': this.trackObject.id,
+        }
       ).then( () => {
         // set favorite
         this.inLibrary = true;

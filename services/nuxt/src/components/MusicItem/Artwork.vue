@@ -1,5 +1,5 @@
 <template>
-  <div width="100%" class="artworkContain">
+  <div style="width: 100%" class="artworkContain">
     <v-hover v-slot:default="{ hover }" class="albumContain">
       <v-card
         :elevation="hover ? 12 : 2"
@@ -84,10 +84,10 @@
                       </v-btn>
                     </div>
                   </template>
-                  <span>LOG IN TO FAVORITE</span>
+                  <span>Log In To Favorite</span>
                 </v-tooltip>
                 <v-btn
-                  v-else
+                  v-else-if="!isFavorited"
                   icon
                   :class="{ 'show-btns': hover }"
                   @click="favoriteItem()"
@@ -97,6 +97,19 @@
                     small
                     :class="{ 'show-btns': hover }"
                     color="transparent"
+                  >
+                    mdi-heart
+                  </v-icon>
+                </v-btn>
+                <v-btn
+                  v-else
+                  icon
+                  @click="favoriteItem()"
+                  @click.native.stop.prevent
+                >
+                  <v-icon
+                    small
+                    color="red"
                   >
                     mdi-heart
                   </v-icon>
@@ -422,6 +435,7 @@ import {
   postReview,
 } from '~/api/api';
 
+
 export default {
   props: {
     id: {
@@ -440,6 +454,10 @@ export default {
       type: String,
       default: '',
     },
+    name: {
+      type: String,
+      default: '',
+    },
     type: {
       type: String,
       default: '',
@@ -451,6 +469,10 @@ export default {
     link: {
       type: String,
       default: '',
+    },
+    isFavorited: {
+      type: Boolean,
+      default: false,
     },
   },
   data () {
@@ -476,14 +498,22 @@ export default {
   },
   async created () {
     if (this.$store.state.isAuthorized) {
-      let playlistResp = await this.$store.getters.fetch(
-        '/v1/me/library/playlists'
-      );
-      this.playlists = playlistResp.data;
-      let isInLibraryResponse = await this.$store.getters.fetch(
-        '/v1/me/library/search'
-      );
-      isInLibraryResponse.data;
+      try {
+        let playlistResp = await this.$store.getters.fetch(
+         '/v1/me/library/playlists'
+        );
+        this.playlists = playlistResp.data;
+        // const librarySearchResp = await this.$store.dispatch(
+        //   "searchLibrary",
+        //   {
+        //     'type': this.type,
+        //     'searchInput': this.name,
+        //   }
+        // );
+      } catch (err) {
+        console.error(err);
+      }
+      
     }
   },
   methods: {
@@ -561,23 +591,38 @@ export default {
     async favoriteItem () {
       if (this.type == 'song') {
         try {
-          await favoriteTrack(this.id);
+          await favoriteTrack(
+            this.$auth.getToken('auth0'),
+            {
+              "apple_music_id": this.id,
+            },
+          );
         } catch (err) {
-          this.$toast.error(err.message);
+          console.error(err);
         }
       }
       if (this.type == 'album') {
         try {
-          await favoriteAlbum(this.id);
+          await favoriteAlbum(
+            this.$auth.getToken('auth0'),
+            {
+              "apple_music_id": this.id,
+            },
+          );        
         } catch (err) {
-          this.$toast.error(err.message);
+          console.error(err);
         }
       }
       if (this.type == 'playlist') {
         try {
-          await favoritePlaylist(this.id);
+          await favoritePlaylist(
+            this.$auth.getToken('auth0'),
+            {
+              "apple_music_id": this.id,
+            },
+          );        
         } catch (err) {
-          this.$toast.error(err.message);
+          console.error(err);
         }
       }
     },

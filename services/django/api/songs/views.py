@@ -11,6 +11,8 @@ from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework_auth0.authentication import Auth0JSONWebTokenAuthentication
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 
 
 class SongList(APIView):
@@ -24,32 +26,32 @@ class SongList(APIView):
             - Creates a new song
     """
 
+    authentication_classes = [Auth0JSONWebTokenAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
     def get(self, request):
         """
-        Get all tracks
+        Returns a list of songs
         """
-        print(request)
-        songs = Song.objects.all()
+        tracks = Song.objects.all()
 
-        serializer = SongSerializer(songs, many=True)
-        return Response(serializer.data)
-
-    def post(self, request):
-        """
-        Create new user
-        """
-        print(request)
-        print(request.body.decode("utf-8"))
-        request_body = json.loads(request.body.decode("utf-8"))
-        print(type(request_body))
-        print(request_body["name"])
-        # print(request_body["handle"])
-        new_song = Song.objects.create_song(
-            name=request_body["name"], apple_music_id=request_body["apple_music_id"]
+        return JsonResponse(
+            {"tracks": list(tracks.values())}, status=status.HTTP_200_OK
         )
 
-        serializer = SongSerializer(new_song)
-        return Response(serializer.data)
+    def post(self, request):
+        """t
+        Returns a 201 if successful
+        """
+        serializer = SongSerializer(
+            data={"apple_music_id": request.data["id"], "name": request.data["name"]}
+        )
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(
+                serializer.data, status=status.HTTP_201_CREATED, safe=False
+            )
+        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class SongDetail(APIView):
@@ -65,42 +67,27 @@ class SongDetail(APIView):
             - Deletes a post
     """
 
-    authentication_classes = []
-    permission_classes = []
+    authentication_classes = [Auth0JSONWebTokenAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
-    def get(self, request, apple_music_id):
+    def get(self, request, track_id):
+        """
+        Returns a serialized track
+        """
         try:
-            song = Song.objects.get(apple_music_id=apple_music_id)
+            song = Song.objects.get(apple_music_id=track_id)
         except Song.DoesNotExist:
             return JsonResponse(
-                {"message": "Song does not exist."}, status=status.HTTP_409_CONFLICT
+                {"message": "Track does not exist."}, status=status.HTTP_409_CONFLICT
             )
 
-        print(song.page_id)
-        is_favorited = False
-
-        # HACK: checks if 'logged in' by checking request username
-        if request.user.username:
-            is_favorited = FavoritedTrack.objects.filter(
-                user=request.user, song=song
-            ).exists()
-
-        serializer = SongSerializer(song, context={"is_favorited": is_favorited})
-
+        serializer = SongSerializer(song, context={"request": request})
         return JsonResponse({"track": serializer.data})
 
-    def patch(self, request, post_id):
-        print(request)
-        post = UserProfile.objects.get(handle=post_id)
+    def patch(self, request, playlist_id):
+        print(playlist_id)
+        return JsonResponse({})
 
-        # TODO: Update user
-
-        serializer = UserProfileSerializer(post)
-        return Response(serializer.data)
-
-    def delete(self, request, post_id):
-        print(request)
-        post = UserProfile.objects.get(handle=post_id).delete()
-
-        serializer = UserProfileSerializer(post)
-        return Response(serializer.data)
+    def delete(self, request, playlist_id):
+        print(playlist_id)
+        return JsonResponse({})

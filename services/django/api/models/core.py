@@ -140,9 +140,9 @@ class Playlist(BaseModel):
     Model for a playlist
     """
 
-    tracks = models.ManyToManyField("Song")
-    name = models.CharField(max_length=64)
-    caption = models.CharField(max_length=200)
+    tracks = models.ManyToManyField("Song", blank=True)
+    name = models.CharField(max_length=64, blank=True, null=True)
+    caption = models.CharField(max_length=200, null=True, blank=True)
     apple_music_id = models.CharField(
         max_length=200, null=True, blank=True, unique=True
     )

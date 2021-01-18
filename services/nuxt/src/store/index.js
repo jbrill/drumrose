@@ -148,7 +148,7 @@ export const getters = {
 			};
 		}
   },
-  fetch (state, { $sentry }) {
+  fetch (state) {
     return path => {
       return fetch(
         `https://api.music.apple.com${path}`,
@@ -159,7 +159,6 @@ export const getters = {
         return r.json();
       }).catch( err => {
         console.error(err);
-        $sentry.captureException(err);
       });
     };
   },
@@ -642,8 +641,22 @@ export const actions = {
 
   // Library
   async addToLibrary (_, { type, id }) {
+    let parsedType = type;
+    let types = {
+      song: 'songs',
+      playlist: 'playlists',
+      album: 'albums',
+      station: 'stations',
+      'library-songs': 'library-songs',
+      'library-playlists': 'library-playlists',
+      'library-albums': 'library-albums',
+      'library-stations': 'library-stations',
+    };
+    if (type in types) {
+      parsedType = types[type];
+    }
     return await axios.post(
-      `https://api.music.apple.com/v1/me/library/?ids[${type}s]=${id}`,
+      `https://api.music.apple.com/v1/me/library/?ids[${parsedType}]=${id}`,
       JSON.stringify({}),
       {
         "headers": apiHeaders(),
@@ -712,6 +725,35 @@ export const actions = {
      };
      const { data } = await axios(getHints);
      return data;
+  },
+
+  async searchLibrary (_, { type, searchInput }) {
+    console.log("HERE...")
+    let parsedType = type;
+    let types = {
+      'songs': 'library-songs',
+      'playlists': 'library-playlists',
+      'albums': 'library-albums',
+      'stations': 'library-stations',
+      'song': 'library-songs',
+      'playlist': 'library-playlists',
+      'album': 'library-albums',
+      'station': 'library-stations',
+    };
+    if (type in types) {
+      parsedType = types[type];
+    }
+    console.log(searchInput)
+    console.log('parsedType')
+    console.log(parsedType)
+
+    return await axios.get(
+      `https://api.music.apple.com/v1/me/library/search?term=` +
+      `${searchInput}&types=${parsedType}`,
+      {
+        "headers": apiHeaders(),
+      },
+    );
   },
 };
 

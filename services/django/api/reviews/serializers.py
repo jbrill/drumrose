@@ -59,30 +59,3 @@ class PlaylistReviewSerializer(serializers.ModelSerializer):
 
         model = PlaylistReview
         fields = "__all__"
-
-
-class ReviewSerializer(serializers.ModelSerializer):
-    """
-    Serializer for reviews
-    """
-
-    @classmethod
-    def get_serializer(cls, model):
-        if model == TrackReview:
-            serializer = TrackReviewSerializer
-        elif model == AlbumReview:
-            serializer = AlbumReviewSerializer
-        elif model == PlaylistReview:
-            serializer = PlaylistReviewSerializer
-        return serializer
-
-    def to_representation(self, instance):
-        serializer = self.get_serializer(instance.__class__)
-        return serializer(instance, context=self.context).data
-
-    class Meta:
-        """
-        Serializer Meta Definition
-        """
-
-        fields = "__all__"

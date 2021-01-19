@@ -15,6 +15,7 @@
       >
         <v-card
           v-if="(((rowIdx - 1) * 3) + n) <= (tracks.length - 1)"
+          style="padding: 5%"
         >
           <Track
             :id="tracks[((rowIdx - 1) * 3) + n].apple_music_id"

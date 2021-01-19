@@ -2,6 +2,8 @@
   <v-responsive>
     <MusicPageHeader
       type="playlists"
+      avg="average"
+      :rating-values="ratingValues"
     />
     <MusicPageRating />
     <v-container fluid>
@@ -17,7 +19,7 @@
 </template>
 
 <script>
-import { postFavorite } from '~/api/api';
+import { postFavorite, getPlaylistDetail } from '~/api/api';
 import MusicPageHeader from '~/components/MusicPageHeader';
 import MusicPageRating from '~/components/MusicPageRating';
 
@@ -30,36 +32,8 @@ export default {
     trackInfo: null,
     loading: true,
     playing: false,
-    rating: 0.5,
-    rules: [v => v.length <= 255 || 'Max 255 characters'],
-    value: '',
-    avg: 2.5,
-    labels: [
-      '0',
-      '0.5',
-      '1',
-      '1.5',
-      '2',
-      '2.5',
-      '3',
-      '3.5',
-      '4',
-      '4.5',
-      '5',
-    ],
-    values: [
-      200,
-      675,
-      410,
-      390,
-      310,
-      460,
-      250,
-      240,
-      250,
-      240,
-      740,
-    ],
+    average: 0.0,
+    ratingValues: [],
   }),
   computed: {
     appleImage () {
@@ -69,6 +43,22 @@ export default {
         '{h}', '2500'
       );
     },
+  },
+  async created () {
+    try {
+      const resp = await getPlaylistDetail(
+        this.$auth.getToken('auth0'),
+        this.$route.params.id
+      );
+      this.average = resp.data.playlist.review_summary.total_reviews > 0 ? resp.data.track.review_summary.average_review : 0.0;
+      for (let ratingKey in resp.data.playlist.review_summary.totals_per_rating) {
+        this.ratingValues.push(
+          resp.data.playlist.review_summary.totals_per_rating[ratingKey]
+        );
+      }
+    } catch (err) {
+      console.error(err);
+    }
   },
   async mounted () {
     try {

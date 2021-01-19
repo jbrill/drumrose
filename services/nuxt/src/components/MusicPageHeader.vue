@@ -145,23 +145,34 @@
                 <v-container full-width>
                   <v-row dense style="width: 100%">
                     <v-col>
-                      <v-btn x-small tile dark @click="moreLikeThis">
-                        <v-icon x-small left>
-                          mdi-thumb-up
-                        </v-icon>
-                        More Like This
-                      </v-btn>
-                    </v-col>
-                    <v-col>
-                      <v-btn x-small tile dark @click="lessLikeThis">
-                        <v-icon x-small left>
-                          mdi-thumb-down
-                        </v-icon>
-                        Less Like This
-                      </v-btn>
-                    </v-col>
-                    <v-col>
-                      <v-btn :disabled="!auth.loggedIn" x-small tile dark @click="favoriteTrack">
+                      <v-tooltip
+                        v-if="!auth.loggedIn"
+                        top
+                      >
+                        <template v-slot:activator="{ on }">
+                          <div v-on="on">
+                            <v-btn
+                              x-small
+                              tile
+                              disabled
+                              dark
+                            >
+                              <v-icon x-small left>
+                                mdi-heart
+                              </v-icon>
+                              Favorite
+                            </v-btn>
+                          </div>
+                        </template>
+                        <span>Log In To Favorite</span>
+                      </v-tooltip>
+                      <v-btn
+                        v-else
+                        x-small
+                        tile
+                        dark
+                        @click="postFavorite"
+                      >
                         <v-icon x-small left>
                           mdi-heart
                         </v-icon>
@@ -169,15 +180,28 @@
                       </v-btn>
                     </v-col>
                     <v-col>
-                      <v-btn x-small tile dark>
-                        <v-icon x-small left>
-                          mdi-playlist-star
-                        </v-icon>
-                        Add to Queue
-                      </v-btn>
-                    </v-col>
-                    <v-col>
-                      <v-btn x-small tile dark>
+                      <v-tooltip
+                        v-if="!auth.loggedIn"
+                        top
+                      >
+                        <template v-slot:activator="{ on }">
+                          <div v-on="on">
+                            <v-btn
+                              x-small
+                              tile
+                              disabled
+                              dark
+                            >
+                              <v-icon x-small left>
+                                mdi-playlist-music
+                              </v-icon>
+                              Add to Playlist
+                            </v-btn>
+                          </div>
+                        </template>
+                        <span>Log In To Add To Playlist</span>
+                      </v-tooltip>
+                      <v-btn v-else x-small tile dark>
                         <v-icon x-small left>
                           mdi-playlist-music
                         </v-icon>
@@ -185,11 +209,45 @@
                       </v-btn>
                     </v-col>
                     <v-col>
-                      <v-btn x-small tile dark>
+                      <v-tooltip
+                        v-if="!auth.loggedIn"
+                        top
+                      >
+                        <template v-slot:activator="{ on }">
+                          <div v-on="on">
+                            <v-btn
+                              x-small
+                              tile
+                              disabled
+                              dark
+                            >
+                              <v-icon x-small left>
+                                mdi-pencil
+                              </v-icon>
+                              Write a Review
+                            </v-btn>
+                          </div>
+                        </template>
+                        <span>Log In To Write a Review</span>
+                      </v-tooltip>
+                      <v-btn v-else x-small tile dark>
                         <v-icon x-small left>
-                          mdi-library
+                          mdi-pencil
                         </v-icon>
-                        Add to Library
+                        Write a Review
+                      </v-btn>
+                    </v-col>
+                    <v-col>
+                      <v-btn
+                        x-small
+                        tile
+                        dark
+                        @click="addToQueue"
+                      >
+                        <v-icon x-small left>
+                          mdi-playlist-star
+                        </v-icon>
+                        Add to Queue
                       </v-btn>
                     </v-col>
                     <v-col>
@@ -294,37 +352,18 @@
             <v-layout justify-space-between>
               <v-flex>
                 <span class="overline"><strong>RATINGS</strong></span>
-                <span class="overline">433 Total</span>
+                <span class="overline">{{ totalRatings }} Total</span>
               </v-flex>
               <v-flex>
                 <span class="overline"><strong>Average</strong></span>
-                <span class="overline">4.5 / 5.0</span>
+                <span class="overline">{{ avg }} / 5.0</span>
               </v-flex>
             </v-layout>
           </v-flex>
           <v-divider />
           <v-flex width="100%">
-            <v-layout justify-space-between>
-              <v-rating
-                dense
-                readonly
-                color="var(--primary-purple)"
-                :value="0.5"
-                length="1"
-                half-increments
-                x-small
-              />
-              <v-rating
-                dense
-                readonly
-                color="var(--primary-purple)"
-                :value="5"
-                length="5"
-                x-small
-              />
-            </v-layout>
             <v-sparkline
-              :value="values"
+              :value="ratingValues"
               color="white"
               line-width="3"
               padding="16"
@@ -338,6 +377,10 @@
               auto-draw
               type="bar"
             />
+            <v-layout justify-space-between>
+              <span class="overline">0.0</span>
+              <span class="overline">5.0</span>
+            </v-layout>
           </v-flex>
         </v-col>
       </v-row>
@@ -425,7 +468,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import { postFavorite } from '~/api/api';
+import { favoriteAlbum, favoriteTrack, favoritePlaylist } from '~/api/api';
 import QueueItem from '~/components/AudioPlayer/QueueItem';
 
 export default {
@@ -437,6 +480,14 @@ export default {
       type: String,
       default: '',
     },
+    avg: {
+      type: Number,
+      default: 0.0,
+    },
+    ratingValues: {
+      type: Array,
+      default: () => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    },
   },
   data: () => ({
     trackInfo: null,
@@ -447,7 +498,6 @@ export default {
     selection: null,
     lockSelection: false,
     value: '',
-    avg: 2.5,
     labels: [
       '0',
       '0.5',
@@ -461,19 +511,6 @@ export default {
       '4.5',
       '5',
     ],
-    values: [
-      200,
-      675,
-      410,
-      390,
-      310,
-      460,
-      250,
-      240,
-      250,
-      240,
-      740,
-    ],
   }),
   computed: {
     appleImage () {
@@ -482,6 +519,9 @@ export default {
       ).replace(
         '{h}', '2500'
       );
+    },
+    totalRatings () {
+      return this.ratingValues.reduce((a, b) => a + b, 0)
     },
     ...mapState(['queue', 'playbackState', 'auth']),
     totalDuration () {
@@ -536,6 +576,20 @@ export default {
     }
   },
   methods: {
+    async addToQueue () {
+      if (this.type == 'songs') {
+        await this.$store.dispatch("playNext", { 'song': this.id });
+        this.$toast.show(`Added track to queue`);
+      }
+      if (this.type == 'playlists') {
+        await this.$store.dispatch("playNext", { 'playlist': this.id });
+        this.$toast.show(`Added playlist to queue`);
+      }
+      if (this.type == 'albums') {
+        await this.$store.dispatch("playNext", { 'album': this.id });
+        this.$toast.show(`Added album to queue`);
+      }
+    },
     async selectTrack (trackIdx) {
       try {
           await this.$store.dispatch("setQueue", {
@@ -546,12 +600,24 @@ export default {
           console.error(err);
         }
     },
-    async favoriteTrack () {
+    async postFavorite () {
       try {
-        await postFavorite(
-          this.$auth.getToken('auth0'),
-          { 'type': 'track', 'id': this.trackInfo.id }
-        );
+        if (this.type === 'songs') {
+          await favoriteTrack(
+            this.$auth.getToken('auth0'),
+            { 'id': this.trackInfo.id }
+          );
+        } else if (this.type === 'albums') {
+          await favoriteAlbum(
+            this.$auth.getToken('auth0'),
+            { 'id': this.trackInfo.id }
+          );
+        } else if (this.type === 'playlists') {
+          await favoritePlaylist(
+            this.$auth.getToken('auth0'),
+            { 'id': this.trackInfo.id }
+          );
+        }
       } catch (err) {
         console.error(err);
         this.$toast.error(err.message);

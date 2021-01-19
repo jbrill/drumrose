@@ -57,4 +57,4 @@ class ReviewSerializersTests(TestCase):
         self.assertEqual(
             serialized_track_review["user"]["username"].value, self.user.username
         )
-        self.assertEqual(serialized_track_review["rating"].value, "0.5")
+        self.assertEqual(serialized_track_review["rating"].value, 0.5)

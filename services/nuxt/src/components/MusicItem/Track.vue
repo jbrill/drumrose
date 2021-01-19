@@ -94,8 +94,6 @@ export default {
           this.$auth.getToken('auth0'),
           this.id
         );
-        console.log("trackResponse")
-        console.log(trackResponse)
         this.isFavorited = trackResponse.data.track.favorited;
       } catch (err) {
         if (err.response.status === 409) {

@@ -2,6 +2,8 @@
   <v-responsive>
     <MusicPageHeader
       type="songs"
+      :avg="average"
+      :rating-values="ratingValues"
     />
     <MusicPageRating />
     <v-container fluid>
@@ -17,7 +19,9 @@
 </template>
 
 <script>
-import { postFavorite } from '~/api/api';
+import {
+  postFavorite, getTrackDetail, createTrack,
+} from '~/api/api';
 import MusicPageHeader from '~/components/MusicPageHeader';
 import MusicPageRating from '~/components/MusicPageRating';
 
@@ -30,33 +34,8 @@ export default {
     trackInfo: null,
     loading: true,
     playing: false,
-    avg: 2.5,
-    labels: [
-      '0',
-      '0.5',
-      '1',
-      '1.5',
-      '2',
-      '2.5',
-      '3',
-      '3.5',
-      '4',
-      '4.5',
-      '5',
-    ],
-    values: [
-      200,
-      675,
-      410,
-      390,
-      310,
-      460,
-      250,
-      240,
-      250,
-      240,
-      740,
-    ],
+    average: null,
+    ratingValues: [],
   }),
   computed: {
     appleImage () {
@@ -66,6 +45,35 @@ export default {
         '{h}', '2500'
       );
     },
+  },
+  async created () {
+    try {
+      const resp = await getTrackDetail(
+        this.$auth.getToken('auth0'),
+        this.$route.params.id
+      );
+      this.average = resp.data.track.review_summary.total_reviews > 0 ? resp.data.track.review_summary.average_review : 0.0;
+      for (let ratingKey in resp.data.track.review_summary.totals_per_rating) {
+        this.ratingValues.push(
+          resp.data.track.review_summary.totals_per_rating[ratingKey]
+        );
+      }
+    } catch (err) {
+      if (err.response.status === 409) {
+        try {
+          await createTrack(
+            this.$auth.getToken('auth0'),
+            {
+              'id': this.$route.params.id,
+            }
+          );
+          this.average = 0.0;
+        } catch (err) {
+          console.error(err);
+        }
+      }
+      console.error(err);
+    }
   },
   async mounted () {
     try {

@@ -104,7 +104,7 @@
                 <v-btn
                   v-else
                   icon
-                  @click="favoriteItem()"
+                  @click="unFavoriteItem()"
                   @click.native.stop.prevent
                 >
                   <v-icon
@@ -114,309 +114,7 @@
                     mdi-heart
                   </v-icon>
                 </v-btn>
-                <v-menu
-                  close-on-content-click
-                  origin="bottom right"
-                  z-index="10000"
-                  attach
-                  top
-                  left
-                  dark
-                  two-line
-                  max-width="25rem"
-                  transition="scale-transition"
-                >
-                  <template v-slot:activator="{ on }">
-                    <v-btn
-                      icon
-                      dark
-                      :class="{ 'show-btns': hover }"
-                      @click.native.stop.prevent
-                      v-on="on"
-                    >
-                      <v-icon
-                        small
-                        color="transparent"
-                        :class="{ 'show-btns': hover }"
-                        class="album-overlay-more"
-                      >
-                        mdi-dots-horizontal
-                      </v-icon>
-                    </v-btn>
-                  </template>
-                  <v-list dense>
-                    <v-list-item 
-                      :style="{
-                        'justify-content':'center'
-                      }"
-                    >
-                      <v-rating
-                        background-color="white"
-                        color="var(--primary-purple)"
-                        dense
-                        half-increments
-                        hover
-                        size="18"
-                        @input="changeRating"
-                        @click.native.stop.prevent
-                      />
-                    </v-list-item>
-                    <v-dialog
-                      v-model="dialog"
-                      scrollable
-                      max-width="50vw"
-                    >
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-list-item
-                          v-bind="attrs"
-                          v-on="on"
-                          @click.native.stop.prevent
-                        >
-                          <v-list-item-icon>
-                            <v-icon small>
-                              mdi-playlist-music
-                            </v-icon>
-                          </v-list-item-icon>
-                          <v-list-item-content>
-                            <v-list-item-title>
-                              Add to playlist
-                            </v-list-item-title>
-                          </v-list-item-content>
-                        </v-list-item>
-                      </template>
-                      <v-card
-                        style="
-                          opacity: 1; padding: 2rem
-                        "
-                      >
-                        <v-tabs
-                          v-model="tab"
-                          color="var(--primary-yellow)"
-                          centered
-                        >
-                          <v-tabs-slider />
-                          <v-tab href="#tab-1">
-                            Add to playlist
-                          </v-tab>
-                          <v-tab href="#tab-2">
-                            Create a playlist
-                          </v-tab>
-                        </v-tabs>
-                        <v-tabs-items v-model="tab">
-                          <v-tab-item key="1" value="tab-1">
-                            <v-responsive>
-                              <v-list>
-                                <v-list-item
-                                  v-for="
-                                    (playlist, playlistIdx) in playlists
-                                  "
-                                  :key="
-                                    'playlist' + playlistIdx
-                                  "
-                                >
-                                  <v-list-item-avatar>
-                                    <v-img
-                                      v-if="'artwork' in playlist.attributes"
-                                      :src="appleImage(playlist)"
-                                      dark
-                                    >
-                                      <template v-slot:placeholder>
-                                        <v-row
-                                          class="fill-height ma-0"
-                                          align="center"
-                                          justify="center"
-                                        >
-                                          <v-progress-circular
-                                            indeterminate
-                                            color="grey lighten-5"
-                                          />
-                                        </v-row>
-                                      </template>
-                                    </v-img>
-                                  </v-list-item-avatar>
-                                  <v-list-item-content>
-                                    <v-list-item-title>
-                                      <nuxt-link
-                                        :to="
-                                          '/library-playlists/' + playlist.id
-                                        "
-                                        style="color: white"
-                                      >
-                                        {{ playlist.attributes.name }}
-                                      </nuxt-link>
-                                    </v-list-item-title>
-                                    <v-list-item-subtitle>
-                                      {{
-                                        playlist.attributes.dateAdded.split(
-                                          '-'
-                                        )[0]
-                                      }}
-                                    </v-list-item-subtitle>
-                                  </v-list-item-content>
-                                  <v-list-item-action>
-                                    <v-btn
-                                      :disabled="!playlist.attributes.canEdit"
-                                      x-small
-                                    >
-                                      Add to playlist
-                                    </v-btn>
-                                  </v-list-item-action>
-                                </v-list-item>
-                              </v-list>
-                            </v-responsive>
-                          </v-tab-item>
-                          <v-tab-item key="2" value="tab-2">
-                            <v-responsive>
-                              <v-container fluid>
-                                <v-form>
-                                  <v-text-field
-                                    v-model="playlistName"
-                                    :counter="10"
-                                    :rules="playlistNameRules"
-                                    label="Playlist Name"
-                                    required
-                                  />
-                                  <v-text-field
-                                    v-model="playlistDescription"
-                                    label="Playlist Description"
-                                  />
-                                  <v-radio-group v-model="privacyRadio">
-                                    <template v-slot:label>
-                                      <div>Choose Your Privacy</div>
-                                    </template>
-                                    <v-radio value="Public">
-                                      <template v-slot:label>
-                                        <div>Public</div>
-                                      </template>
-                                    </v-radio>
-                                    <v-radio value="Private">
-                                      <template v-slot:label>
-                                        <div>Private</div>
-                                      </template>
-                                    </v-radio>
-                                  </v-radio-group>
-                                  <v-btn
-                                    :disabled="
-                                      playlistName.length === 0 ||
-                                        isCreatingPlaylist ||
-                                        playlistName.length > 10
-                                    "
-                                    color="var(--primary-purple)"
-                                    @click="createPlaylist"
-                                  >
-                                    Create Playlist
-                                  </v-btn>
-                                </v-form>
-                              </v-container>
-                            </v-responsive>
-                          </v-tab-item>
-                        </v-tabs-items>
-                      </v-card>
-                    </v-dialog>
-                    <v-divider />
-                    <v-list-item
-                      :disabled="!isAuthorized"
-                      @click.native.stop.prevent
-                      @click="moreLikeThis"
-                    >
-                      <v-list-item-icon>
-                        <v-icon small :disabled="!isAuthorized">
-                          mdi-thumb-up
-                        </v-icon>
-                      </v-list-item-icon>
-                      <v-list-item-content>
-                        <v-list-item-title>More like this</v-list-item-title>
-                      </v-list-item-content>
-                    </v-list-item>
-                    <v-divider />
-                    <v-tooltip
-                      v-if="!isAuthorized"
-                      top
-                    >
-                      <template v-slot:activator="{ on }">
-                        <v-list-item
-                          disabled
-                          v-on="on"
-                          @click.native.stop.prevent
-                          @click="lessLikeThis"
-                        >
-                          <v-list-item-icon>
-                            <v-icon small disabled>
-                              mdi-thumb-down
-                            </v-icon>
-                          </v-list-item-icon>
-                          <v-list-item-content>
-                            <v-list-item-title>
-                              Less like this
-                            </v-list-item-title>
-                          </v-list-item-content>
-                        </v-list-item>
-                      </template>
-                      <span>Sign In To Apple Music</span>
-                    </v-tooltip>
-                    <v-list-item
-                      v-else
-                      @click.native.stop.prevent
-                      @click="lessLikeThis"
-                    >
-                      <v-list-item-icon>
-                        <v-icon small>
-                          mdi-thumb-down
-                        </v-icon>
-                      </v-list-item-icon>
-                      <v-list-item-content>
-                        <v-list-item-title>Less like this</v-list-item-title>
-                      </v-list-item-content>
-                    </v-list-item>
-                    <v-divider />
-                    <v-list-item
-                      @click.native.stop.prevent
-                      @click="addToQueue"
-                    >
-                      <v-list-item-icon>
-                        <v-icon small>
-                          mdi-playlist-star
-                        </v-icon>
-                      </v-list-item-icon>
-                      <v-list-item-content>
-                        <v-list-item-title>Add to queue</v-list-item-title>
-                      </v-list-item-content>
-                    </v-list-item>
-                    <v-divider />
-                    <v-list-item
-                      @click.native.stop.prevent
-                      @click="
-                        addToLibrary()
-                      "
-                    >
-                      <v-list-item-icon>
-                        <v-icon small>
-                          mdi-library
-                        </v-icon>
-                      </v-list-item-icon>
-                      <v-list-item-content>
-                        <v-list-item-title>
-                          Add to library
-                        </v-list-item-title>
-                      </v-list-item-content>
-                    </v-list-item>
-                    <v-list-item
-                      @click.native.stop.prevent
-                      @click="
-                        shareLink()
-                      "
-                    >
-                      <v-list-item-icon>
-                        <v-icon small>
-                          mdi-share
-                        </v-icon>
-                      </v-list-item-icon>
-                      <v-list-item-content>
-                        <v-list-item-title>Share</v-list-item-title>
-                      </v-list-item-content>
-                    </v-list-item>
-                  </v-list>
-                </v-menu>
+                <ActionMenu />
               </v-card-actions>
             </v-container>
           </v-img>
@@ -428,15 +126,21 @@
 
 <script>
 import { mapState } from 'vuex';
+import ActionMenu from '~/components/MusicItem/ActionMenu.vue';
 import {
   favoriteTrack,
   favoriteAlbum,
   favoritePlaylist,
-  postReview,
+  reviewTrack,
+  reviewAlbum,
+  reviewPlaylist,
 } from '~/api/api';
 
 
 export default {
+  components: {
+    ActionMenu,
+  },
   props: {
     id: {
       type: String,
@@ -536,19 +240,6 @@ export default {
       }
       this.$toast.show(`Added ${this.type} to queue`);
     },
-		async addToLibrary () {
-      try {
-        await this.$store.dispatch(
-          "addToLibrary", {
-            'id': this.id, 'type': this.type,
-          }
-        );
-        this.$toast.success("Added to library");
-      } catch(err) {
-        console.error(err);
-        this.$toast.error(err);
-      }
-    },
 		async addToPlaylist (name, items) {
       await this.$store.dispatch("addToPlaylist", {
         "name": name,
@@ -570,15 +261,26 @@ export default {
       }
     },
     async changeRating (e) {
+      console.log("HI")
       const data = {
         'rating': e,
-        'type': this.type,
-        'id': this.id,
+        'apple_music_id': this.id,
       };
+      console.log(this.type)
       try {
-        await postReview(
-          this.$auth.getToken('auth0'), data
-        );
+        if (this.type === 'song') {
+          await reviewTrack(
+            this.$auth.getToken('auth0'), this.id, data
+          );
+        } else if (this.type === 'album') {
+          await reviewAlbum(
+            this.$auth.getToken('auth0'), this.id, data
+          );
+        } else if (this.type === 'playlist') {
+          await reviewPlaylist(
+            this.$auth.getToken('auth0'), this.id, data
+          );
+        }
       } catch (err) {
         console.error(err);
         this.$toast.error(err);
@@ -597,6 +299,7 @@ export default {
               "apple_music_id": this.id,
             },
           );
+          this.isFavorited = true;
         } catch (err) {
           console.error(err);
         }
@@ -608,7 +311,8 @@ export default {
             {
               "apple_music_id": this.id,
             },
-          );        
+          );
+          this.isFavorited = true;
         } catch (err) {
           console.error(err);
         }
@@ -620,7 +324,49 @@ export default {
             {
               "apple_music_id": this.id,
             },
-          );        
+          );
+          this.isFavorited = true;
+        } catch (err) {
+          console.error(err);
+        }
+      }
+    },
+    async unFavoriteItem () {
+      if (this.type == 'song') {
+        try {
+          await favoriteTrack(
+            this.$auth.getToken('auth0'),
+            {
+              "apple_music_id": this.id,
+            },
+          );
+          this.isFavorited = true;
+        } catch (err) {
+          console.error(err);
+        }
+      }
+      if (this.type == 'album') {
+        try {
+          await favoriteAlbum(
+            this.$auth.getToken('auth0'),
+            {
+              "apple_music_id": this.id,
+            },
+          );
+          this.isFavorited = true;
+        } catch (err) {
+          console.error(err);
+        }
+      }
+      if (this.type == 'playlist') {
+        try {
+          await favoritePlaylist(
+            this.$auth.getToken('auth0'),
+            {
+              "apple_music_id": this.id,
+            },
+          );
+          this.isFavorited = true;
         } catch (err) {
           console.error(err);
         }
@@ -661,32 +407,6 @@ export default {
       document.execCommand('copy');
       document.body.removeChild(dummy);
       this.$toast.success('Copied link to clipboard');
-    },
-    async moreLikeThis () {
-      try {
-        await this.$store.dispatch("love", {
-          'id': this.id, 'type': this.type,
-        });
-        this.$toast.success(
-          "More like this will be recommended."
-        );
-      } catch (err) {
-        this.$toast.error('Unable to recommend more like this.');
-        console.error(err);
-      }
-    },
-    async lessLikeThis () {
-      try {
-        await this.$store.dispatch("dislike", {
-          'id': this.id, 'type': this.type,
-        });
-        this.$toast.success(
-          "Less like this will be recommended."
-        );
-      } catch (err) {
-        this.$toast.error('Unable to recommend less like this.');
-        console.error(err);
-      }
     },
   },
 };

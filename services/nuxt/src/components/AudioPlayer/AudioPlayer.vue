@@ -87,7 +87,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import PostTimeline from "~/components/AudioPlayer/PostTimeline";
 import Queue from "~/components/AudioPlayer/Queue";
 import VolumeSlider from "~/components/AudioPlayer/VolumeSlider";
@@ -106,6 +106,9 @@ export default {
   },
   computed: {
     ...mapState(['queue', 'playbackState', 'playbackTime']),
+    ...mapGetters({
+        stateQueue: 'getQueue',
+    }),
   },
   created () {
     if (process.browser) {

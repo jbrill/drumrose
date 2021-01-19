@@ -30,6 +30,7 @@
       >
         <v-card
           v-if="(((rowIdx - 1) * 3) + n) <= (playlists.length - 1)"
+          style="padding: 5%"
         >
           <Playlist
             :id="playlists[((rowIdx - 1) * 3) + n].apple_music_id"

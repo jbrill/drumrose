@@ -61,7 +61,7 @@ class FavoritedTrackSerializer(serializers.ModelSerializer):
             auth0_user_id=validated_data.get("auth0_user_id")
         )
         song = Song.objects.get(apple_music_id=validated_data.get("apple_music_id"))
-        return FavoritedAlbum.objects.create(user=user, song=song)
+        return FavoritedTrack.objects.create(user=user, song=song)
 
 
 class FavoritedAlbumSerializer(serializers.ModelSerializer):
@@ -113,9 +113,8 @@ class FavoritedPlaylistSerializer(serializers.ModelSerializer):
     Serializer for favorites
     """
 
-    user = UserProfileSerializer()
+    user = UserProfileSerializer(read_only=True)
     playlist = PlaylistSerializer(read_only=True)
-    favorite_type = serializers.SerializerMethodField()
 
     class Meta:
         """
@@ -125,61 +124,31 @@ class FavoritedPlaylistSerializer(serializers.ModelSerializer):
         model = FavoritedPlaylist
         fields = "__all__"
 
-    def get_favorite_type(self, _):
+    def validate(self, data):
         """
-        Return favorite type
+        Check if favorited_track already exists
         """
-
-        return "playlist"
+        if FavoritedPlaylist.objects.filter(
+            user__auth0_user_id=data.get("auth0_user_id"),
+            playlist__apple_music_id=data.get("apple_music_id"),
+        ).count():
+            raise serializers.ValidationError("Favorited Playlist Already Exists")
+        return data
 
     def to_internal_value(self, data):
         internal_value = super().to_internal_value(data)
-        name = data.get("name")
         apple_music_id = data.get("apple_music_id")
-        auth0_user_id = self.context.get("request").user
+        auth0_user_id = data.get("auth0_user_id")
         internal_value.update(
-            {
-                "name": name,
-                "apple_music_id": apple_music_id,
-                "auth0_user_id": auth0_user_id,
-            }
+            {"apple_music_id": apple_music_id, "auth0_user_id": auth0_user_id}
         )
         return internal_value
 
-    @transaction.atomic
     def create(self, validated_data):
-        playlist = Playlist.objects.get_or_create(
-            name=validated_data.get("name"),
-            apple_music_id=validated_data.get("apple_music_id"),
+        playlist = Playlist.objects.get(
+            apple_music_id=validated_data.get("apple_music_id")
         )
         user = UserProfile.objects.get(
             auth0_user_id=validated_data.get("auth0_user_id")
         )
-        return FavoritedPlaylist.objects.get_or_create(user=user, playlist=playlist)
-
-
-class FavoritedSerializer(serializers.ModelSerializer):
-    """
-    Serializer for favorites
-    """
-
-    @classmethod
-    def get_serializer(cls, model):
-        if model == FavoritedPlaylist:
-            serializer = FavoritedPlaylistSerializer
-        elif model == FavoritedTrack:
-            serializer = FavoritedTrackSerializer
-        else:
-            serializer = FavoritedAlbumSerializer
-        return serializer
-
-    def to_representation(self, instance):
-        serializer = self.get_serializer(instance.__class__)
-        return serializer(instance, context=self.context).data
-
-    class Meta:
-        """
-        Serializer Meta Definition
-        """
-
-        fields = "__all__"
+        return FavoritedPlaylist.objects.create(user=user, playlist=playlist)

@@ -15,8 +15,8 @@ class AlbumReviewSerializer(serializers.ModelSerializer):
     Serializer for album reviews
     """
 
-    user = UserProfileSerializer()
-    album = AlbumSerializer()
+    user = UserProfileSerializer(read_only=True)
+    album = AlbumSerializer(read_only=True)
 
     class Meta:
         """
@@ -32,8 +32,8 @@ class TrackReviewSerializer(serializers.ModelSerializer):
     Serializer for track reviews
     """
 
-    user = UserProfileSerializer()
-    track = SongSerializer()
+    user = UserProfileSerializer(read_only=True)
+    track = SongSerializer(read_only=True)
 
     class Meta:
         """
@@ -49,8 +49,8 @@ class PlaylistReviewSerializer(serializers.ModelSerializer):
     Serializer for playlist reviews
     """
 
-    user = UserProfileSerializer()
-    playlist = PlaylistSerializer()
+    user = UserProfileSerializer(read_only=True)
+    playlist = PlaylistSerializer(read_only=True)
 
     class Meta:
         """

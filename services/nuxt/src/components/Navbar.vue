@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-navigation-drawer
+    <!-- <v-navigation-drawer
       v-model="drawer"
       app
       color="#272727"
@@ -52,32 +52,113 @@
           </v-chip-group>
         </v-container>
       </v-layout>
-    </v-navigation-drawer>      
+    </v-navigation-drawer>       -->
     <v-app-bar 
       :class="{ 'needs-apple-auth': !isAuthorized }"
       fixed
+      style="padding: 4px"
       app
     >
-      <v-app-bar-nav-icon
+      <!-- <v-app-bar-nav-icon
         class="menu-navigation"
         color="#ccc"
         @click="drawer=!drawer"
-      />
-      <v-toolbar-title style="padding-left: 25px">
+      /> -->
+      <v-toolbar-title>
         <nuxt-link to="/">
           <span class="drumrose-title">DRUMROSE</span>
         </nuxt-link>
       </v-toolbar-title>
       <v-spacer />
+      <v-btn-group>
+        <v-btn
+          nuxt
+          to="/"
+          text
+          plain
+          large
+          class="font-weight-bold"
+        >
+          Home
+        </v-btn>
+        <v-btn
+          nuxt
+          to="/tracks"
+          text
+          plain
+          large
+          class="font-weight-bold"
+        >
+          Music
+        </v-btn>
+        <v-btn
+          nuxt
+          to="/playlists"
+          text
+          plain
+          large
+          class="font-weight-bold"
+        >
+          Playlists
+        </v-btn>
+        <v-btn
+          nuxt
+          to="/people"
+          text
+          plain
+          large
+          class="font-weight-bold"
+        >
+          People
+        </v-btn>
+      </v-btn-group>
+      <v-spacer />
+      
+      <SearchBar style="margin: 5px" />
       <v-btn
         v-if="!auth.loggedIn"
-        color="var(--primary-red)"
+        class="font-weight-bold"
+        style="margin: 5px"
+        raised
         @click="login"
       >
         Log In
       </v-btn>
-      <v-spacer />
-      <SearchBar />
+      <v-btn
+        v-if="!auth.loggedIn"
+        class="font-weight-bold"
+        style="margin: 5px"
+        color="var(--primary-red)"
+        raised
+        @click="login"
+      >
+        Sign Up
+      </v-btn>
+      <v-menu
+        dark
+        offset-y
+        transition="slide-y-transition"
+      >
+        <template v-slot:activator="{ on }">
+          <v-btn
+            icon
+            small
+            v-bind="attrs"
+            v-on="on"
+          >
+            <v-icon>
+              mdi-dots-horizontal
+            </v-icon>
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item nuxt to="/settings">
+            <v-list-item-title>
+              Settings
+            </v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </v-app-bar> 
   </div>
 </template>
@@ -126,13 +207,6 @@ export default {
           title: 'People',
           nav: '/people',
           icon: 'mdi-account',
-          requiresAuth: false,
-          requiresAppleAuth: false,
-        },
-        {
-          title: 'Library',
-          nav: '/library',
-          icon: 'mdi-library',
           requiresAuth: false,
           requiresAppleAuth: false,
         },

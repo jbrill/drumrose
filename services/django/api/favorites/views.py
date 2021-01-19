@@ -8,7 +8,6 @@ from operator import attrgetter
 from api.favorites.serializers import (
     FavoritedAlbumSerializer,
     FavoritedPlaylistSerializer,
-    FavoritedSerializer,
     FavoritedTrackSerializer,
 )
 from api.models.core import (
@@ -75,6 +74,7 @@ class FavoriteTracksList(APIView):
             return JsonResponse(
                 serializer.data, status=status.HTTP_201_CREATED, safe=False
             )
+        print(serializer.errors)
         return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -110,10 +110,9 @@ class FavoriteAlbumList(APIView):
             user = UserProfile.objects.get(
                 auth0_user_id=str(request.user).replace(".", "|")
             )
-            album = Album.objects.get(apple_music_id=request.data["apple_music_id"])
             serializer = FavoritedAlbumSerializer(
                 data={
-                    "apple_music_id": album.apple_music_id,
+                    "apple_music_id": request.data["apple_music_id"],
                     "auth0_user_id": user.auth0_user_id,
                 },
                 context={"request": request},
@@ -201,51 +200,4 @@ class FollowersFavoritesList(APIView):
         """
         Get favorites from followers
         """
-        favorited_playlists = FavoritedPlaylist.objects.all()
-        favorited_tracks = FavoritedTrack.objects.all()
-        favorited_albums = FavoritedAlbum.objects.all()
-
-        # merge favorites
-        sorted_favorites = sorted(
-            chain(favorited_playlists, favorited_tracks, favorited_albums),
-            key=attrgetter("created_date"),
-            reverse=True,
-        )
-        query = Paginator(sorted_favorites, 10)
-        page = query.page(1)
-        favorites = page.object_list
-        serializer = FavoritedSerializer(favorites, many=True)
-        return JsonResponse(serializer.data, safe=False)
-
-
-class FavoritesList(APIView):
-    """
-    Description:
-        API View for Favorites
-    Routes:
-        GET /favorites/
-            Gets a list of favorites
-    """
-
-    authentication_classes = [Auth0JSONWebTokenAuthentication]
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request):
-        """
-        Get favorites
-        """
-        favorited_playlists = FavoritedPlaylist.objects.all()
-        favorited_tracks = FavoritedTrack.objects.all()
-        favorited_albums = FavoritedAlbum.objects.all()
-
-        # merge favorites
-        sorted_favorites = sorted(
-            chain(favorited_playlists, favorited_tracks, favorited_albums),
-            key=attrgetter("created_date"),
-            reverse=True,
-        )
-        query = Paginator(sorted_favorites, 10)
-        page = query.page(1)
-        favorites = page.object_list
-        serializer = FavoritedSerializer(favorites, many=True)
-        return JsonResponse(serializer.data, safe=False)
+        pass

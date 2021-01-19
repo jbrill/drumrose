@@ -128,7 +128,7 @@ class TrackReviewFactory(factory.django.DjangoModelFactory):
     user = factory.SubFactory("api.models.factories.UserProfileFactory")
     track = factory.SubFactory("api.models.factories.SongFactory")
     review = fuzzy.FuzzyText()
-    rating = "0.5"
+    rating = 0.5
 
 
 class AlbumReviewFactory(factory.django.DjangoModelFactory):
@@ -139,7 +139,7 @@ class AlbumReviewFactory(factory.django.DjangoModelFactory):
     user = factory.SubFactory("api.models.factories.UserProfileFactory")
     album = factory.SubFactory("api.models.factories.AlbumFactory")
     review = fuzzy.FuzzyText()
-    rating = "0.5"
+    rating = 0.5
 
 
 class PlaylistReviewFactory(factory.django.DjangoModelFactory):
@@ -150,4 +150,4 @@ class PlaylistReviewFactory(factory.django.DjangoModelFactory):
     user = factory.SubFactory("api.models.factories.UserProfileFactory")
     playlist = factory.SubFactory("api.models.factories.PlaylistFactory")
     review = fuzzy.FuzzyText()
-    rating = "0.5"
+    rating = 0.5

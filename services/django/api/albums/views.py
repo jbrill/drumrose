@@ -36,9 +36,7 @@ class AlbumRoute(APIView):
         """
         POST for  Artist
         """
-        serializer = AlbumSerializer(
-            data={"apple_music_id": request.data["id"], "name": request.data["name"]}
-        )
+        serializer = AlbumSerializer(data={"apple_music_id": request.data["id"]})
         if serializer.is_valid():
             serializer.save()
             return JsonResponse(
@@ -73,12 +71,9 @@ class AlbumDetail(APIView):
             return JsonResponse(
                 {"message": "Album does not exist."}, status=status.HTTP_409_CONFLICT
             )
-        is_favorited = FavoritedAlbum.objects.filter(
-            user=request.user.id, album=album
-        ).exists()
 
-        serializer = AlbumSerializer(album, context={"is_favorited": is_favorited})
-        return JsonResponse(serializer.data)
+        serializer = AlbumSerializer(album, context={"request": request})
+        return JsonResponse({"album": serializer.data})
 
     def patch(self, request, album_id):
         """

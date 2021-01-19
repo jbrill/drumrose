@@ -7,24 +7,23 @@
       <v-list-item-group
         multiple
       >
-        <template v-for="(item, index) in users">
-          {{ item }}
-          {{ item.length }}
+
           <v-list-item
+
+          v-for="(item, index) in users"
             :key="item.username"
-            nuxt
-            :to="'/people/' + item.username"
           >
-            <template v-slot:default="{ active }">
               <v-list-item-content>
                 <v-list-item-title
                   v-text="item.username"
+                  nuxt
+                  :to="'/people/' + item.username"
                 />
                 <v-list-item-subtitle
                   class="text--primary"
                   v-text="item.username"
                 />
-                <v-list-item-subtitle
+                <v-list-item-subtitle 
                   v-text="item.username"
                 />
               </v-list-item-content>
@@ -47,14 +46,12 @@
                   star
                 </v-icon>
               </v-list-item-action>
-            </template>
           </v-list-item>
 
           <v-divider
             v-if="index + 1 < users.length"
             :key="index"
           />
-        </template>
       </v-list-item-group>
     </v-list>
   </div>

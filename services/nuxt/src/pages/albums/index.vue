@@ -15,6 +15,7 @@
       >
         <v-card
           v-if="(((rowIdx - 1) * 3) + n) <= (albums.length - 1)"
+          style="padding: 5%"
         >
           <Album
             :id="albums[((rowIdx - 1) * 3) + n].apple_music_id"

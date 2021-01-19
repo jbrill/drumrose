@@ -24,6 +24,7 @@
         :tracks="tracks"
         type="playlist"
         :name="attributes.name"
+        :is-favorited="isFavorited"
       />
     </v-badge>
     <MusicFooter
@@ -82,10 +83,11 @@ export default {
   async created () {
     if (this.$auth.loggedIn) {
       try {
-        await getPlaylistDetail(
+        const playlistResponse = await getPlaylistDetail(
           this.$auth.getToken('auth0'),
           this.id
         );
+        this.isFavorited = playlistResponse.data.playlist.favorited;
       } catch (err) {
         if (err.response.status === 409) {
           try {
@@ -108,7 +110,6 @@ export default {
       const resp = await this.$store.getters.fetch(
         `/v1/catalog/us/playlists/${this.id}`
       );
-      console.log(resp);
       this.attributes = resp.data[0].attributes;
       this.tracks = resp.data[0].relationships.tracks.data;
       this.loading = false;

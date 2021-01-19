@@ -78,13 +78,8 @@ class PlaylistDetail(APIView):
             return JsonResponse(
                 {"message": "Playlist does not exist."}, status=status.HTTP_409_CONFLICT
             )
-        is_favorited = FavoritedPlaylist.objects.filter(
-            user=request.user.id, playlist=playlist
-        ).exists()
 
-        serializer = PlaylistSerializer(
-            playlist, context={"is_favorited": is_favorited}
-        )
+        serializer = PlaylistSerializer(playlist, context={"request": request})
         return JsonResponse({"playlist": serializer.data})
 
     def patch(self, request, playlist_id):

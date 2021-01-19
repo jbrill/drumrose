@@ -58,11 +58,13 @@ class TrackReviewList(APIView):
         Create track review
         """
         try:
+            if "review" not in request.data and "rating" not in request.data:
+                raise KeyError
             serializer = TrackReviewSerializer(
                 data={
                     "apple_music_id": request.data["apple_music_id"],
-                    "name": request.data["name"],
-                    "review": request.data["review"],
+                    "review": request.data.get("review"),
+                    "rating": request.data.get("rating"),
                 },
                 context={"request": request},
             )
@@ -108,10 +110,13 @@ class AlbumReviewList(APIView):
         Create favorited album
         """
         try:
+            if "review" not in request.data and "rating" not in request.data:
+                raise KeyError
             serializer = AlbumReviewSerializer(
                 data={
                     "apple_music_id": request.data["apple_music_id"],
-                    "name": request.data["name"],
+                    "review": request.data.get("review"),
+                    "rating": request.data.get("rating"),
                 },
                 context={"request": request},
             )
@@ -125,6 +130,7 @@ class AlbumReviewList(APIView):
             return JsonResponse(
                 serializer.data, status=status.HTTP_201_CREATED, safe=False
             )
+        print(serializer.errors)
         return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -157,10 +163,13 @@ class PlaylistReviewList(APIView):
         Post favorited playlist
         """
         try:
+            if "review" not in request.data and "rating" not in request.data:
+                raise KeyError
             serializer = PlaylistReviewSerializer(
                 data={
                     "apple_music_id": request.data["apple_music_id"],
-                    "name": request.data["name"],
+                    "review": request.data.get("review"),
+                    "rating": request.data.get("rating"),
                 },
                 context={"request": request},
             )

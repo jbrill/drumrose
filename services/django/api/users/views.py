@@ -6,7 +6,6 @@ import json
 from itertools import chain
 from operator import attrgetter
 
-from api.favorites.serializers import FavoritedSerializer
 from api.models.core import (
     FavoritedAlbum,
     FavoritedPlaylist,
@@ -17,7 +16,7 @@ from api.users.serializers import UserProfileSerializer
 from django.core.paginator import Paginator
 from django.http import JsonResponse
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_auth0.authentication import Auth0JSONWebTokenAuthentication
@@ -35,7 +34,7 @@ class UserList(APIView):
     """
 
     authentication_classes = [Auth0JSONWebTokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get(self, request):
         """
@@ -211,19 +210,4 @@ class UserFavoritesList(APIView):
         """
         Get favorites by user's handle
         """
-        user = UserProfile.get(username=user_handle)
-        favorited_playlists = FavoritedPlaylist.objects.filter(user=user)
-        favorited_tracks = FavoritedTrack.objects.filter(user=user)
-        favorited_albums = FavoritedAlbum.objects.filter(user=user)
-
-        # merge favorites
-        sorted_favorites = sorted(
-            chain(favorited_playlists, favorited_tracks, favorited_albums),
-            key=attrgetter("created_date"),
-            reverse=True,
-        )
-        query = Paginator(sorted_favorites, 10)
-        page = query.page(1)
-        favorites = page.object_list
-        serializer = FavoritedSerializer(favorites, many=True)
-        return JsonResponse(serializer.data, safe=False)
+        pass

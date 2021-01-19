@@ -569,10 +569,9 @@ export const actions = {
     await MusicKit.getInstance().player.seekToTime(time);
   },
   async playNext (_, queue) {
-    const resp = await MusicKit.getInstance().player.queue.prepend(
+    await MusicKit.getInstance().player.queue.prepend(
       queue
     );
-    console.log(resp);
   },
   async playLater (_, queue) {
     await MusicKit.getInstance().player.queue.append(queue);

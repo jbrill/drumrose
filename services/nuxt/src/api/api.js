@@ -90,26 +90,49 @@ export const getUserList = async bearerToken => {
 };
 
 /* 
- * Fetches a list of favorites. Can consist of albums, tracks, or playlists
+ * Post track review
  * */
-export const postReview = async (bearerToken, data) => {
-  try {
-    const response = await axios.post(
-      'https://teton.drumrose.io/api/reviews/',
-      data,
-      {
-        headers: {
-          Authorization: `${bearerToken}`,
-        },
-      }
-    );
-    return response;
-  } catch (err) {
-    console.error(err);
-    return {
-      data: [],
-    };
-  }
+export const reviewTrack = async (bearerToken, id, data) => {
+  return await axios.post(
+    `https://teton.drumrose.io/api/reviews/tracks`,
+    data,
+    {
+      headers: {
+        Authorization: `${bearerToken}`,
+      },
+    }
+  );
+};
+
+/* 
+ * Post album review
+ * */
+export const reviewAlbum = async (bearerToken, id, data) => {
+  return await axios.post(
+    `https://teton.drumrose.io/api/reviews/albums/`,
+    data,
+    {
+      headers: {
+        Authorization: `${bearerToken}`,
+      },
+    }
+  );
+};
+
+
+/* 
+ * Post album review
+ * */
+export const reviewPlaylist = async (bearerToken, id, data) => {
+  return await axios.post(
+    `https://teton.drumrose.io/api/reviews/playlists/`,
+    data,
+    {
+      headers: {
+        Authorization: `${bearerToken}`,
+      },
+    }
+  );
 };
 
 /* 

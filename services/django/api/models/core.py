@@ -165,7 +165,7 @@ class Review(BaseModel):
         UserProfile, blank=True, null=True, on_delete=models.CASCADE
     )
     review = models.TextField(blank=True, null=True)
-    rating = models.TextField(blank=True, null=True)
+    rating = models.FloatField(blank=True, null=True)
 
     class Meta:
         """

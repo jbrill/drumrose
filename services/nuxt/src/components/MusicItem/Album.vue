@@ -24,6 +24,7 @@
           :link="'/albums/' + id"
           type="album"
           :name="attributes.name"
+          :is-favorited="isFavorited"
         />
       </v-badge>
       <MusicFooter
@@ -79,6 +80,7 @@ export default {
       name: '',
       artistId: '',
       attributes: false,
+      isFavorited: false,
     };
   },
   computed: {
@@ -87,10 +89,13 @@ export default {
   async created () {
     if (this.$auth.loggedIn) {
       try {
-        await getAlbumDetail(
+        const albumResponse = await getAlbumDetail(
           this.$auth.getToken('auth0'),
           this.id
         );
+        console.log("albumResponse")
+        console.log(albumResponse)
+        this.isFavorited = albumResponse.data.album.favorited;
       } catch (err) {
         if (err.response.status === 409) {
           try {
@@ -135,7 +140,11 @@ export default {
     },
     playTrack: function (event) {
       event.preventDefault();
-      this.$store.dispatch("setQueue", { "album": this.id } ).then( () => {
+      this.$store.dispatch(
+        "setQueue", {
+          "album": this.id
+          }
+      ).then( () => {
         this.$store.dispatch("play");
       });
     },

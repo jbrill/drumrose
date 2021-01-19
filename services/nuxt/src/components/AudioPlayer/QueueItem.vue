@@ -243,19 +243,19 @@ export default {
       this.loading = false;
       console.error(err);
     }
-    const librarySearchResp = await this.$store.dispatch(
-      "searchLibrary",
-      {
-        'type': this.trackObject.type,
-        'searchInput': this.trackObject.attributes.name,
-      }
-    ).then( () => {
-      // set favorite
-      this.inLibrary = true;
-    }).catch ( err => {
-      console.error(err);
-      this.$sentry.captureException(err);
-    });
+    // const librarySearchResp = await this.$store.dispatch(
+    //   "searchLibrary",
+    //   {
+    //     'type': this.trackObject.type,
+    //     'searchInput': this.trackObject.attributes.name,
+    // //   }
+    // ).then( () => {
+    //   // set favorite
+    //   this.inLibrary = true;
+    // }).catch ( err => {
+    //   console.error(err);
+    //   this.$sentry.captureException(err);
+    // });
   },
   async mounted () {
     

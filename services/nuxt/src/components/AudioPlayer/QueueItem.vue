@@ -52,140 +52,7 @@
       >
         mdi-heart
       </v-icon>
-      <v-menu
-        v-model="moreModel"
-        left
-        top
-        dark
-        :close-on-content-click="false"
-        offset-y
-        max-height="50vh"
-        width="45vw"
-        nudge-top="25vh"
-        transition="slide-y-reverse-transition"
-      >
-        <template v-slot:activator="{ on, attrs }">
-          <v-icon
-            class="moreButton"
-            x-small
-            v-bind="attrs"
-            @click="showMore"
-            v-on="on"
-          >
-            mdi-dots-horizontal
-          </v-icon>
-        </template>
-        <v-list dense>
-          <v-list-item 
-            :style="{
-              'justify-content':'center'
-            }"
-          >
-            <v-rating
-              background-color="white"
-              color="var(--primary-purple)"
-              dense
-              half-increments
-              hover
-              size="18"
-              @input="changeRating"
-              @click.native.stop.prevent
-            />
-          </v-list-item>
-          <v-dialog v-model="dialog" scrollable max-width="300px">
-            <template v-slot:activator="{ on, attrs }">
-              <v-list-item
-                v-bind="attrs"
-                v-on="on"
-                @click.native.stop.prevent
-              >
-                <v-list-item-icon>
-                  <v-icon small>
-                    mdi-playlist-music
-                  </v-icon>
-                </v-list-item-icon>
-                <v-list-item-content>
-                  <v-list-item-title>
-                    Add to playlist
-                  </v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-            </template>
-            <v-card>
-              <v-tabs>
-                <v-tab>Add to playlist</v-tab>
-                <v-tab>Create a playlist</v-tab>
-              </v-tabs>
-            </v-card>
-          </v-dialog>
-          <v-divider />
-          <v-list-item>
-            <v-list-item-icon>
-              <v-icon small>
-                mdi-thumb-up
-              </v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title>More like this</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-          <v-divider />
-          <v-list-item>
-            <v-list-item-icon>
-              <v-icon small>
-                mdi-thumb-down
-              </v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title>Less like this</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-          <v-divider />
-          <v-list-item @click.native.stop.prevent @click="addToQueue">
-            <v-list-item-icon>
-              <v-icon small>
-                mdi-playlist-star
-              </v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title>Add to queue</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-          <v-divider />
-          <v-list-item
-            v-if="!inLibrary && isAuthorized"
-            @click.native.stop.prevent
-            @click="
-              addToLibrary()
-            "
-          >
-            <v-list-item-icon>
-              <v-icon small>
-                mdi-library
-              </v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title>Add to library</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item
-            v-else
-            @click.native.stop.prevent
-            @click="
-              addToLibrary()
-            "
-          >
-            <v-list-item-icon>
-              <v-icon small>
-                mdi-library
-              </v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title>Remove from library</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
-      </v-menu>
+      <ActionMenu />
     </div>
     <div v-else>
       <span class="overline">
@@ -198,9 +65,12 @@
 <script>
 import { mapState } from 'vuex';
 import { postFavorite } from '~/api/api';
-
+import ActionMenu from '~/components/MusicItem/ActionMenu.vue';
 
 export default {
+  components: {
+    ActionMenu,
+  },
   props: {
     'trackObject': {
       type: Object,

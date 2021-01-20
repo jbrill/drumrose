@@ -15,42 +15,60 @@
         Create playlist
       </v-btn>
     </div>
-    <v-row
-      v-for="
-        rowIdx in Math.floor(playlists.length / 3)
-      "
-      :key="rowIdx"
-      no-gutters
+    <v-responsive
+      class="overflow-y-auto"
     >
-      <v-col
-        v-for="n in 3"
-        :key="n"
-        cols="12"
-        sm="4"
+      <v-lazy
+        v-for="
+          rowIdx in Math.floor(playlists.length / 3)
+        "
+        :key="rowIdx"
+        :options="{
+          threshold: .5
+        }"
+        min-height="200"
+        transition="fade-transition"
       >
-        <v-card
-          v-if="(((rowIdx - 1) * 3) + n) <= (playlists.length - 1)"
-          style="padding: 5%"
+        <v-row
+          no-gutters
         >
-          <Playlist
-            :id="playlists[((rowIdx - 1) * 3) + n].apple_music_id"
-            is-playable
-            is-actionable
-          />
-        </v-card>
-      </v-col>
-    </v-row>
+          <v-col
+            v-for="n in 3"
+            :key="n"
+            cols="12"
+            sm="4"
+          >
+            <v-card
+              v-if="(((rowIdx - 1) * 3) + n) <= (playlists.length - 1)"
+              style="
+                padding: 5%;
+                background-color: transparent;
+              "
+              flat
+            >
+              <Playlist
+                :id="playlists[((rowIdx - 1) * 3) + n].apple_music_id"
+                is-playable
+                is-actionable
+              />
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-lazy>
+    </v-responsive>
   </div>
 </template>
 
 <script>
 import { getPlaylists } from '~/api/api.js';
 import Playlist from '~/components/MusicItem/Playlist.vue';
+import LoadingCircle from '~/components/LoadingCircle.vue';
 
 
 export default {
   components: {
     Playlist,
+    LoadingCircle,
   },
   async asyncData () {
     const playlists = await getPlaylists();

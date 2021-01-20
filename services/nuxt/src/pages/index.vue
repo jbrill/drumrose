@@ -27,33 +27,75 @@
           v-else
           class="overflow-y-auto"
         >
-          <CarouselSection
-            v-if="auth.loggedIn"
-            title="Listen with Friends"
-            :carousel-items="favorites"
-          />
-          <v-divider v-if="auth.loggedIn" />
-          <CarouselSection
-            title="Popular Reviews"
-            :carousel-items="reviews"
-          />
-          <v-divider />
-          <CarouselSection
-            title="Just Rated"
-            :carousel-items="recentReviews"
-          />
-          <v-divider />
-          <CarouselSection
-            v-if="auth.loggedIn"
-            title="Fresh Reviews From Friends"
-            :carousel-items="reviews"
-          />
-          <v-divider v-if="listeningHistory && listeningHistory.length" />
-          <CarouselSection
-            v-if="listeningHistory && listeningHistory.length"
-            title="Listening History"
-            :carousel-items="listeningHistory"
-          />
+          <v-lazy
+            :options="{
+              threshold: .5
+            }"
+            min-height="200"
+            transition="fade-transition"
+          >
+            <CarouselSection
+              v-if="auth.loggedIn"
+              title="Listen with Friends"
+              :carousel-items="favorites"
+            />
+          </v-lazy>
+          <v-lazy
+            :options="{
+              threshold: .5
+            }" 
+            min-height="200"
+            transition="fade-transition"
+          >
+            <v-divider />
+            <CarouselSection
+              title="Popular Reviews"
+              :carousel-items="reviews"
+            />
+          </v-lazy>
+          <v-lazy
+            :options="{
+              threshold: .5
+            }"
+            min-height="200"
+            transition="fade-transition"
+          >
+            <v-divider />
+            <CarouselSection
+              title="Just Rated"
+              :carousel-items="recentReviews"
+            />
+          </v-lazy>
+          <v-lazy
+            :options="{
+              threshold: .5
+            }"
+            min-height="200"
+            transition="fade-transition"
+          >
+            <v-divider />
+            <CarouselSection
+              v-if="auth.loggedIn"
+              title="Fresh Reviews From Friends"
+              :carousel-items="reviews"
+            />
+          </v-lazy>
+          <v-lazy
+            :options="
+              {
+                threshold: .5
+              }
+            "
+            min-height="200"
+            transition="fade-transition"
+          >
+            <v-divider v-if="listeningHistory && listeningHistory.length" />
+            <CarouselSection
+              v-if="listeningHistory && listeningHistory.length"
+              title="Listening History"
+              :carousel-items="listeningHistory"
+            />
+          </v-lazy>
         </v-responsive>
       </v-tab-item>
       <v-tab-item
@@ -245,7 +287,6 @@ export default {
         case 'Social':
           return true;
         case 'For You':
-          console.log(this.$store.state.isAuthorized);
           return this.$store.state.isAuthorized;
       }
     },

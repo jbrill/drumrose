@@ -15,13 +15,11 @@
       <v-btn
         icon
         dark
-        :class="{ 'show-btns': hover }"
         @click.native.stop.prevent
         v-on="on"
       >
         <v-icon
           small
-          :class="{ 'show-btns': hover }"
           class="album-overlay-more"
         >
           mdi-dots-horizontal
@@ -39,7 +37,6 @@
           v-if="auth.loggedIn"
           background-color="white"
           color="var(--primary-purple)"
-          :class="{ 'show-btns': hover }"
           dense
           half-increments
           hover
@@ -528,97 +525,8 @@ export default {
 </script>
 
 <style scoped>
-@media screen and (prefers-reduced-motion: reduce) {
-.v-card {
-  transition: none;
-}
-}
-.v-card {
-  transition: opacity .4s ease-in-out;
-  border-radius: 2px;
-  outline: 2px solid var(--primary-purple);
-}
-.bottom-gradient {
-  height: 100%;
-  width: 100%;
-  background-image: linear-gradient(
-    to top, rgba(0, 0, 0, 0.8) 0%, transparent 72px
-  );
-}
-.v-card:not(.on-hover) {
-  opacity: 0.8;
-  outline: none;
-}
-.card-actions {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-}
-.not-show-btns {
-  display: none;
-}
 .show-btns {
   color: rgba(255, 255, 255, 1) !important;
   display: flex;
-}
-.albumContain {
-  z-index: 0;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  box-shadow: var(--shadow-medium);
-  border-radius: 2px;
-}
-.albumContain:hover, .albumContain:focus {
-  cursor: pointer;
-}
-.albumCover {
-  width: 100%;
-  overflow: visible !important;
-  height: auto;
-  min-height: 18vh;
-  border-radius: 2px;
-}
-.albumCover:hover, .albumCover:focus {
-  cursor: pointer;
-  box-shadow: var(--shadow-heavy);
-}
-.albumOverlay {
-  width:100%;
-  height:100%;
-  position:absolute;
-  background: rgb(255,255,255);
-  background: linear-gradient(180deg, rgba(0,0,0,0) 41%, rgba(0,0,0,0.5) 100%);
-  opacity: 0;
-}
-.albumOverlayActive {
-  opacity: 1;
-  border: 2px solid var(--primary-yellow);
-}
-.album-overlay-actions-contain {
-  position: absolute;
-  width: 100%;
-  bottom: 0;
-  right: 0;
-  display: flex;
-}
-.album-overlay-more {
-  opacity: 1;
-  align-self: flex-end;
-}
-.album-overlay-favorite {
-  opacity: 1;
-  align-self: flex-start;
-}
-.album-overlay:hover, .album-overlay:focus {
-  opacity:1;
-}
-.audioFavorite {
-  padding-right: 1rem;
-}
-.audioMore {
-  float: left;
 }
 </style>

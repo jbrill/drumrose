@@ -33,6 +33,38 @@
         </transition>
       </v-content>
     </v-app>
+    <v-footer
+      padless
+      dark
+    >
+      <v-card
+        flat
+        tile
+        width="100%"
+        class="red lighten-1 text-center"
+      >
+        <v-card-text>
+          <v-btn
+            v-for="(icon, idx) in icons"
+            :key="icon"
+            class="mx-4"
+            color="var(--primary-red)"
+            icon
+          >
+            <v-icon size="24px">
+              {{ icon }}
+            </v-icon>
+          </v-btn>
+        </v-card-text>
+
+        <v-divider />
+
+        <v-card-text class="white--text">
+          <strong>&copy; Drumrose, Inc.</strong>
+          Made with love in New York City. Music data from <a style="color: var(--primary-red)" href="https://developer.apple.com/documentation/applemusicapi/" target="_blank">Apple Music API</a>.
+        </v-card-text>
+      </v-card>
+    </v-footer>
   </div>
 </template>
 
@@ -49,6 +81,13 @@ export default {
     AudioPlayer,
     RegisterBanner,
   },
+  data: () => ({
+    icons: [
+      'mdi-twitter',
+      'mdi-facebook',
+      'mdi-instagram',
+    ],
+  }),
   computed: {
     ...mapState(['auth', 'isAuthorized', 'nowPlayingItem']),
     items () {

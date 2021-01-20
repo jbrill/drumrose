@@ -70,50 +70,47 @@
         </nuxt-link>
       </v-toolbar-title>
       <v-spacer />
-      <v-btn-group>
-        <v-btn
-          nuxt
-          to="/"
-          text
-          plain
-          large
-          class="font-weight-bold"
-        >
-          Home
-        </v-btn>
-        <v-btn
-          nuxt
-          to="/tracks"
-          text
-          plain
-          large
-          class="font-weight-bold"
-        >
-          Music
-        </v-btn>
-        <v-btn
-          nuxt
-          to="/playlists"
-          text
-          plain
-          large
-          class="font-weight-bold"
-        >
-          Playlists
-        </v-btn>
-        <v-btn
-          nuxt
-          to="/people"
-          text
-          plain
-          large
-          class="font-weight-bold"
-        >
-          People
-        </v-btn>
-      </v-btn-group>
+      <v-btn
+        nuxt
+        to="/"
+        text
+        plain
+        large
+        class="font-weight-bold"
+      >
+        Home
+      </v-btn>
+      <v-btn
+        nuxt
+        to="/music"
+        text
+        plain
+        large
+        class="font-weight-bold"
+      >
+        Music
+      </v-btn>
+      <v-btn
+        nuxt
+        to="/playlists"
+        text
+        plain
+        large
+        class="font-weight-bold"
+      >
+        Playlists
+      </v-btn>
+      <v-btn
+        nuxt
+        to="/people"
+        text
+        plain
+        large
+        class="font-weight-bold"
+      >
+        People
+      </v-btn>
       <v-spacer />
-      
       <SearchBar style="margin: 5px" />
       <v-btn
         v-if="!auth.loggedIn"
@@ -139,7 +136,7 @@
         offset-y
         transition="slide-y-transition"
       >
-        <template v-slot:activator="{ on }">
+        <template v-slot:activator="{ on, attrs }">
           <v-btn
             icon
             small
@@ -151,10 +148,25 @@
             </v-icon>
           </v-btn>
         </template>
-        <v-list>
+        <v-list dense>
+          <v-list-item nuxt to="/about">
+            <v-list-item-title>
+              About us
+            </v-list-item-title>
+          </v-list-item>
+          <v-list-item nuxt to="/contact">
+            <v-list-item-title>
+              Contact
+            </v-list-item-title>
+          </v-list-item>
           <v-list-item nuxt to="/settings">
             <v-list-item-title>
               Settings
+            </v-list-item-title>
+          </v-list-item>
+          <v-list-item v-if="auth.loggedIn" href @click="signOut">
+            <v-list-item-title>
+              Sign Out
             </v-list-item-title>
           </v-list-item>
         </v-list>
@@ -245,7 +257,6 @@ export default {
       if (process.client) {
         const AUTH0_DOMAIN = 'drumrose.auth0.com';
         const AUTH0_CLIENT_ID = 'nA1RUMeTG88LVxGeEJc9Xu4PhWPHQRTg';
-        console.log(AUTH0_DOMAIN);
         window.location.href = `https://${AUTH0_DOMAIN}/v2/` +
                                `logout?returnTo=` +
                                `https%3A%2F%2Fteton.drumrose.io` +

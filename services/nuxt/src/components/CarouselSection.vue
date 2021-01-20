@@ -1,9 +1,9 @@
 <template>
   <div class="carousel-contain">
     <div class="top-button-contain">
-      <v-btn x-small text dark>
+      <p class="font-weight-bold overline">
         {{ title }}
-      </v-btn>
+      </p>
       <v-btn v-if="moreLink" x-small dark>
         More
       </v-btn>

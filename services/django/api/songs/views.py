@@ -33,14 +33,14 @@ class SongList(APIView):
         """
         Returns a list of songs
         """
-        tracks = Song.objects.all()
+        tracks = Song.objects.all().order_by("?")
 
         return JsonResponse(
             {"tracks": list(tracks.values())}, status=status.HTTP_200_OK
         )
 
     def post(self, request):
-        """t
+        """
         Returns a 201 if successful
         """
         serializer = SongSerializer(data={"apple_music_id": request.data["id"]})

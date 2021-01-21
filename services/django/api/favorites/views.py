@@ -53,18 +53,14 @@ class FavoriteTracksList(APIView):
         """
         Create favorited track
         """
-        user = UserProfile.objects.get(
-            auth0_user_id=str(request.user).replace(".", "|")
-        )
-        song = Song.objects.get(apple_music_id=request.data["apple_music_id"])
         try:
             serializer = FavoritedTrackSerializer(
                 data={
-                    "apple_music_id": song.apple_music_id,
-                    "auth0_user_id": user.auth0_user_id,
+                    "apple_music_id": request.data.get("apple_music_id"),
+                    "auth0_user_id": str(request.user).split("auth0.")[1],
                 }
             )
-        except KeyError:
+        except (KeyError, IndexError):
             return JsonResponse(
                 {"message": "Missing data required for serialization."},
                 status=status.HTTP_422_UNPROCESSABLE_ENTITY,
@@ -107,17 +103,13 @@ class FavoriteAlbumList(APIView):
         Create favorited album
         """
         try:
-            user = UserProfile.objects.get(
-                auth0_user_id=str(request.user).replace(".", "|")
-            )
             serializer = FavoritedAlbumSerializer(
                 data={
-                    "apple_music_id": request.data["apple_music_id"],
-                    "auth0_user_id": user.auth0_user_id,
-                },
-                context={"request": request},
+                    "apple_music_id": request.data.get("apple_music_id"),
+                    "auth0_user_id": str(request.user).split("auth0.")[1],
+                }
             )
-        except KeyError:
+        except (KeyError, IndexError):
             return JsonResponse(
                 {"message": "Missing data required for serialization."},
                 status=status.HTTP_422_UNPROCESSABLE_ENTITY,
@@ -159,19 +151,13 @@ class FavoritePlaylistList(APIView):
         Post favorited playlist
         """
         try:
-            user = UserProfile.objects.get(
-                auth0_user_id=str(request.user).replace(".", "|")
-            )
-            playlist = Playlist.objects.get(
-                apple_music_id=request.data["apple_music_id"]
-            )
             serializer = FavoritedPlaylistSerializer(
                 data={
-                    "apple_music_id": playlist.apple_music_id,
-                    "auth0_user_id": user.auth0_user_id,
+                    "apple_music_id": request.data.get("apple_music_id"),
+                    "auth0_user_id": str(request.user).split("auth0.")[1],
                 }
             )
-        except KeyError:
+        except (KeyError, IndexError):
             return JsonResponse(
                 {"message": "Missing data required for serialization."},
                 status=status.HTTP_422_UNPROCESSABLE_ENTITY,
@@ -181,6 +167,7 @@ class FavoritePlaylistList(APIView):
             return JsonResponse(
                 serializer.data, status=status.HTTP_201_CREATED, safe=False
             )
+        print(serializer.errors)
         return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

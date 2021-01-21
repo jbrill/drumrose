@@ -2,7 +2,7 @@
   <div id="app">
     <v-app class="app">
       <Navbar />
-      <v-app-bar
+      <!--<v-app-bar
         v-if="!isAuthorized"
         color="#f0f0f0"
         sticky
@@ -22,7 +22,7 @@
           </v-btn> 
           to Apple Music to gain full access to tracks and sync your library.
         </span>
-      </v-app-bar>
+      </v-app-bar>-->
       <v-content class="content-contain">
         <RegisterBanner v-if="!auth.loggedIn" />
         <v-container class="main-contain">
@@ -50,9 +50,11 @@
             class="mx-4"
             color="var(--primary-red)"
             icon
+            :href="icon.link"
+            target="_blank"
           >
             <v-icon size="24px">
-              {{ icon }}
+              {{ icon.icon }}
             </v-icon>
           </v-btn>
         </v-card-text>
@@ -93,9 +95,18 @@ export default {
   },
   data: () => ({
     icons: [
-      'mdi-twitter',
-      'mdi-facebook',
-      'mdi-instagram',
+      {
+        'icon': 'mdi-twitter',
+        'link': 'https://twitter.com/getdrumrose',
+      },
+      {
+        'icon': 'mdi-facebook',
+        'link': 'https://twitter.com/getdrumrose',
+      },
+      {
+        'icon': 'mdi-instagram',
+        'link': 'https://instagram.com/getdrumrose',
+      },
     ],
   }),
   computed: {

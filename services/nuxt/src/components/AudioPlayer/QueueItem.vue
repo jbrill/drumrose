@@ -39,7 +39,7 @@
         v-if="isFavorited"
         x-small
         color="red"
-        @click="favoriteTrack"
+        @click="unFavoriteTrack"
       >
         mdi-heart
       </v-icon>
@@ -64,7 +64,9 @@
 
 <script>
 import { mapState } from 'vuex';
-import { postFavorite } from '~/api/api';
+import {
+  getTrackDetail, favoriteTrack,
+} from '~/api/api';
 import ActionMenu from '~/components/MusicItem/ActionMenu.vue';
 
 export default {
@@ -100,7 +102,9 @@ export default {
         '{h}', '250'
       );
     },
-    ...mapState(['auth', 'isAuthorized', 'nowPlayingItem', 'playbackState']),
+    ...mapState([
+      'auth', 'isAuthorized', 'nowPlayingItem', 'playbackState'
+    ]),
   },
   async created () {
     try {
@@ -113,6 +117,18 @@ export default {
       this.loading = false;
       console.error(err);
     }
+    try {
+      const resp = await getTrackDetail(
+        this.$auth.getToken('auth0'),
+        this.trackObject.id,
+      );
+      console.log('resp')
+      console.log(resp)
+      this.isFavorited = resp.data.track.favorited;
+    } catch (e) {
+      console.error(e)
+    }
+    
     // const librarySearchResp = await this.$store.dispatch(
     //   "searchLibrary",
     //   {
@@ -131,18 +147,35 @@ export default {
     
   },
   methods: {
-    favoriteTrack () {
-      postFavorite(
-        this.$auth.getToken('auth0'),
-        { 'type': this.trackObject.type, 'id': this.trackObject.id }
-      ).then( () => {
-        // set favorite
-        this.isFavorited = true;
-      }).catch ( err => {
+    async favoriteTrack () {
+      try {
+        if (this.trackObject.type === 'song') {
+          await favoriteTrack(
+            this.$auth.getToken('auth0'),
+            {
+              'apple_music_id': this.trackObject.id,
+            },
+          );
+          this.isFavorited = true;
+        }
+      } catch (err) {
         console.error(err);
-        this.$toast.error(err);
         this.$sentry.captureException(err);
-      });
+      }
+    },
+    async unFavoriteTrack () {
+      try {
+        if (this.trackObject.type === 'song') {
+          await favoriteTrack(
+            this.$auth.getToken('auth0'),
+            { 'id': this.trackObject.id }
+          );
+          this.isFavorited = true;
+        }
+      } catch (err) {
+        console.error(err);
+        this.$sentry.captureException(err);
+      }
     },
     addToLibrary () {
       this.$store.dispatch(

@@ -27,75 +27,35 @@
           v-else
           class="overflow-y-auto"
         >
-          <v-lazy
-            :options="{
-              threshold: .5
-            }"
-            min-height="200"
-            transition="fade-transition"
-          >
+          <v-row no-gutters>
             <CarouselSection
               v-if="auth.loggedIn"
               title="Listen with Friends"
               :carousel-items="favorites"
             />
-          </v-lazy>
-          <v-lazy
-            :options="{
-              threshold: .5
-            }" 
-            min-height="200"
-            transition="fade-transition"
-          >
-            <v-divider />
-            <CarouselSection
-              title="Popular Reviews"
-              :carousel-items="reviews"
-            />
-          </v-lazy>
-          <v-lazy
-            :options="{
-              threshold: .5
-            }"
-            min-height="200"
-            transition="fade-transition"
-          >
-            <v-divider />
-            <CarouselSection
-              title="Just Rated"
-              :carousel-items="recentReviews"
-            />
-          </v-lazy>
-          <v-lazy
-            :options="{
-              threshold: .5
-            }"
-            min-height="200"
-            transition="fade-transition"
-          >
-            <v-divider />
-            <CarouselSection
-              v-if="auth.loggedIn"
-              title="Fresh Reviews From Friends"
-              :carousel-items="reviews"
-            />
-          </v-lazy>
-          <v-lazy
-            :options="
-              {
-                threshold: .5
-              }
-            "
-            min-height="200"
-            transition="fade-transition"
-          >
-            <v-divider v-if="listeningHistory && listeningHistory.length" />
-            <CarouselSection
-              v-if="listeningHistory && listeningHistory.length"
-              title="Listening History"
-              :carousel-items="listeningHistory"
-            />
-          </v-lazy>
+          </v-row>
+          <v-divider />
+          <CarouselSection
+            title="Popular Reviews"
+            :carousel-items="reviews"
+          />
+          <v-divider />
+          <CarouselSection
+            title="Just Rated"
+            :carousel-items="recentReviews"
+          />
+          <v-divider />
+          <CarouselSection
+            v-if="auth.loggedIn"
+            title="Fresh Reviews From Friends"
+            :carousel-items="reviews"
+          />
+          <v-divider v-if="listeningHistory && listeningHistory.length" />
+          <CarouselSection
+            v-if="listeningHistory && listeningHistory.length"
+            title="Listening History"
+            :carousel-items="listeningHistory"
+          />
         </v-responsive>
       </v-tab-item>
       <v-tab-item
@@ -245,6 +205,11 @@ export default {
         {
           'name': 'For You',
           'link': 'foryou',
+        },
+      ],
+      socialCarousels: [
+        {
+
         },
       ],
       loading: false,

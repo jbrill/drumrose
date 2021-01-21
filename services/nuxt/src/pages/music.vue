@@ -68,8 +68,8 @@
         </v-responsive>
       </v-tab-item>
       <v-tab-item
-        key="album"
-        value="album"
+        key="albums"
+        value="albums"
       >
         <LoadingCircle v-if="loading" />
         <v-responsive
@@ -79,7 +79,7 @@
         >
           <v-lazy
             v-for="
-              rowIdx in Math.floor(tracks.length / 3)
+              rowIdx in Math.floor(albums.length / 3)
             "
             :key="rowIdx"
             :options="{
@@ -98,15 +98,15 @@
                 sm="4"
               >
                 <v-card
-                  v-if="(((rowIdx - 1) * 3) + n) <= (tracks.length - 1)"
+                  v-if="(((rowIdx - 1) * 3) + n) <= (albums.length - 1)"
                   style="
                     padding: 5%;
                     background-color: transparent;
                   "
                   flat
                 >
-                  <Track
-                    :id="tracks[((rowIdx - 1) * 3) + n].apple_music_id"
+                  <Album
+                    :id="albums[((rowIdx - 1) * 3) + n].apple_music_id"
                     is-playable
                     is-actionable
                   />
@@ -121,20 +121,25 @@
 </template>
 
 <script>
-import { getTracks } from '~/api/api.js';
+import { getTracks, getAlbums } from '~/api/api.js';
 import Track from '~/components/MusicItem/Track.vue';
+import Album from '~/components/MusicItem/Album.vue';
 import LoadingCircle from '~/components/LoadingCircle';
 
 
 export default {
   components: {
     Track,
+    Album,
     LoadingCircle,
   },
   async asyncData () {
     const tracks = await getTracks();
+    const albums = await getAlbums();
+
     return {
       "tracks": tracks.data['tracks'],
+      "albums": albums.data['albums'],
     };
   },
   data () {

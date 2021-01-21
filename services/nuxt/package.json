@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "dev": "HOST=0.0.0.0 PORT=3000 nuxt --max-old-space-size=8192",
-    "build": "nuxt --max-old-space-size=8192",
+    "build": "nuxt start --max-old-space-size=8192",
     "start": "nuxt start --max-old-space-size=8192",
     "generate": "nuxt generate",
     "cypress:open": "cypress open",

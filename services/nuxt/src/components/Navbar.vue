@@ -54,7 +54,6 @@
       </v-layout>
     </v-navigation-drawer>       -->
     <v-app-bar 
-      :class="{ 'needs-apple-auth': !isAuthorized }"
       fixed
       style="padding: 4px"
       app

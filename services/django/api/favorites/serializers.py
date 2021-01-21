@@ -60,7 +60,9 @@ class FavoritedTrackSerializer(serializers.ModelSerializer):
         user = UserProfile.objects.get(
             auth0_user_id=validated_data.get("auth0_user_id")
         )
-        song = Song.objects.get(apple_music_id=validated_data.get("apple_music_id"))
+        song, _ = Song.objects.get_or_create(
+            apple_music_id=validated_data.get("apple_music_id")
+        )
         return FavoritedTrack.objects.create(user=user, song=song)
 
 
@@ -104,7 +106,9 @@ class FavoritedAlbumSerializer(serializers.ModelSerializer):
         user = UserProfile.objects.get(
             auth0_user_id=validated_data.get("auth0_user_id")
         )
-        album = Album.objects.get(apple_music_id=validated_data.get("apple_music_id"))
+        album, _ = Album.objects.get_or_create(
+            apple_music_id=validated_data.get("apple_music_id")
+        )
         return FavoritedAlbum.objects.create(user=user, album=album)
 
 
@@ -145,10 +149,10 @@ class FavoritedPlaylistSerializer(serializers.ModelSerializer):
         return internal_value
 
     def create(self, validated_data):
-        playlist = Playlist.objects.get(
-            apple_music_id=validated_data.get("apple_music_id")
-        )
         user = UserProfile.objects.get(
             auth0_user_id=validated_data.get("auth0_user_id")
+        )
+        playlist, _ = Playlist.objects.get_or_create(
+            apple_music_id=validated_data.get("apple_music_id")
         )
         return FavoritedPlaylist.objects.create(user=user, playlist=playlist)

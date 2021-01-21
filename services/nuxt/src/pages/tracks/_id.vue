@@ -5,7 +5,6 @@
       :avg="average"
       :rating-values="ratingValues"
     />
-    <MusicPageRating />
     <v-container fluid>
       <h5 style="color: #ccc">
         <v-icon x-small>
@@ -23,12 +22,11 @@ import {
   postFavorite, getTrackDetail, createTrack,
 } from '~/api/api';
 import MusicPageHeader from '~/components/MusicPageHeader';
-import MusicPageRating from '~/components/MusicPageRating';
+
 
 export default {
   components: {
     MusicPageHeader,
-    MusicPageRating,
   },
   data: () => ({
     trackInfo: null,

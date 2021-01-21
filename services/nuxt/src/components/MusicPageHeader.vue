@@ -344,44 +344,74 @@
               width="100%"
               height="auto"
               :src="appleImage"
-            />
+            >
+              <template v-slot:placeholder>
+                <v-row
+                  class="fill-height ma-0"
+                  align="center"
+                  justify="center"
+                >
+                  <v-progress-circular
+                    indeterminate
+                    color="grey lighten-5"
+                  />
+                </v-row>
+              </template>
+            </v-img>
           </v-badge>
-          
+          <v-layout
+            justify-center
+          >
+            <v-fade-transition leave-absolute>
+              <v-rating
+                v-model="rating"
+                background-color="white"
+                color="var(--primary-purple)"
+                dense
+                half-increments
+                hover
+                size="24"
+                @click.native.stop.prevent
+              />
+            </v-fade-transition>
+          </v-layout>
           <v-spacer />
-          <v-flex>
-            <v-layout justify-space-between>
-              <v-flex>
-                <span class="overline"><strong>RATINGS</strong></span>
-                <span class="overline">{{ totalRatings }} Total</span>
-              </v-flex>
-              <v-flex>
-                <span class="overline"><strong>Average</strong></span>
-                <span class="overline">{{ avg }} / 5.0</span>
-              </v-flex>
-            </v-layout>
-          </v-flex>
-          <v-divider />
-          <v-flex width="100%">
-            <v-sparkline
-              :value="ratingValues"
-              color="white"
-              line-width="3"
-              padding="16"
-              :gradient="
-                [
-                  'var(--primary-purple)',
-                  'var(--primary-yellow)',
-                  'var(--primary-red)'
-                ]
-              "
-              auto-draw
-              type="bar"
-            />
-            <v-layout justify-space-between>
-              <span class="overline">0.0</span>
-              <span class="overline">5.0</span>
-            </v-layout>
-          </v-flex>
+          <v-container v-if="totalRatings > 0">
+            <v-flex>
+              <v-layout justify-space-between>
+                <v-flex>
+                  <span class="overline"><strong>RATINGS</strong></span>
+                  <span class="overline">{{ totalRatings }} Total</span>
+                </v-flex>
+                <v-flex>
+                  <span class="overline"><strong>Average</strong></span>
+                  <span class="overline">{{ avg }} / 5.0</span>
+                </v-flex>
+              </v-layout>
+            </v-flex>
+            <v-divider />
+            <v-flex width="100%">
+              <v-sparkline
+                :value="ratingValues"
+                color="white"
+                line-width="3"
+                padding="16"
+                :gradient="
+                  [
+                    'var(--primary-purple)',
+                    'var(--primary-yellow)',
+                    'var(--primary-red)'
+                  ]
+                "
+                auto-draw
+                type="bar"
+              />
+              <v-layout justify-space-between>
+                <span class="overline">0.0</span>
+                <span class="overline">5.0</span>
+              </v-layout>
+            </v-flex>
+          </v-container>
         </v-col>
       </v-row>
       <v-row v-if="type === 'albums'">

@@ -27,7 +27,7 @@ class AlbumRoute(APIView):
         """
         GET for album
         """
-        albums = Album.objects.all()
+        albums = Album.objects.all().order_by("?")
         return JsonResponse(
             {"albums": list(albums.values())}, status=status.HTTP_200_OK
         )

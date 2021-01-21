@@ -103,7 +103,7 @@ export default {
       );
     },
     ...mapState([
-      'auth', 'isAuthorized', 'nowPlayingItem', 'playbackState'
+      'auth', 'isAuthorized', 'nowPlayingItem', 'playbackState',
     ]),
   },
   async created () {
@@ -122,11 +122,11 @@ export default {
         this.$auth.getToken('auth0'),
         this.trackObject.id,
       );
-      console.log('resp')
-      console.log(resp)
+      console.log('resp');
+      console.log(resp);
       this.isFavorited = resp.data.track.favorited;
     } catch (e) {
-      console.error(e)
+      console.error(e);
     }
     
     // const librarySearchResp = await this.$store.dispatch(

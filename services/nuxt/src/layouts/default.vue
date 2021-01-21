@@ -45,7 +45,7 @@
       >
         <v-card-text>
           <v-btn
-            v-for="(icon, idx) in icons"
+            v-for="(icon) in icons"
             :key="icon"
             class="mx-4"
             color="var(--primary-red)"
@@ -61,7 +61,17 @@
 
         <v-card-text class="white--text">
           <strong>&copy; Drumrose, Inc.</strong>
-          Made with love in New York City. Music data from <a style="color: var(--primary-red)" href="https://developer.apple.com/documentation/applemusicapi/" target="_blank">Apple Music API</a>.
+          Made with love in New York City. 
+          Music data from
+          <a
+            style="color: var(--primary-red)"
+            href="
+              https://developer.apple.com/documentation/applemusicapi/
+            "
+            target="_blank"
+          >
+            Apple Music API
+          </a>.
         </v-card-text>
       </v-card>
     </v-footer>

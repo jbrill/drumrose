@@ -521,7 +521,7 @@ export default {
       );
     },
     totalRatings () {
-      return this.ratingValues.reduce((a, b) => a + b, 0)
+      return this.ratingValues.reduce((a, b) => a + b, 0);
     },
     ...mapState(['queue', 'playbackState', 'auth']),
     totalDuration () {

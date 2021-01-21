@@ -207,7 +207,7 @@ export default {
   }),
   computed: {
     searchNum () {
-      console.log(this.selectedItems)
+      console.log(this.selectedItems);
       let total = 0;
       if ('songs' in this.searchResults) {
         total += this.searchResults.songs.length;
@@ -250,7 +250,7 @@ export default {
   },
   methods: {
     async selectTrack (trackIdx) {
-      console.log(trackIdx)
+      console.log(trackIdx);
       try {
           await this.$store.dispatch("setQueue", {
             'song': this.trackInfo.relationships.tracks.data[trackIdx].id,

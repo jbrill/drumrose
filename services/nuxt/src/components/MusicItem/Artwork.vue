@@ -261,12 +261,12 @@ export default {
       }
     },
     async changeRating (e) {
-      console.log("HI")
+      console.log("HI");
       const data = {
         'rating': e,
         'apple_music_id': this.id,
       };
-      console.log(this.type)
+      console.log(this.type);
       try {
         if (this.type === 'song') {
           await reviewTrack(

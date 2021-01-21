@@ -43,9 +43,7 @@ class SongList(APIView):
         """t
         Returns a 201 if successful
         """
-        serializer = SongSerializer(
-            data={"apple_music_id": request.data["id"], "name": request.data["name"]}
-        )
+        serializer = SongSerializer(data={"apple_music_id": request.data["id"]})
         if serializer.is_valid():
             serializer.save()
             return JsonResponse(

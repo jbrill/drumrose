@@ -52,7 +52,8 @@ export default {
         this.$auth.getToken('auth0'),
         this.$route.params.id
       );
-      this.average = resp.data.track.review_summary.total_reviews > 0 ? resp.data.track.review_summary.average_review : 0.0;
+      this.average = resp.data.track.review_summary.total_reviews > 0 ? 
+        resp.data.track.review_summary.average_review : 0.0;
       for (let ratingKey in resp.data.track.review_summary.totals_per_rating) {
         this.ratingValues.push(
           resp.data.track.review_summary.totals_per_rating[ratingKey]

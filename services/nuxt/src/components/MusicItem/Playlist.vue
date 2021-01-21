@@ -140,7 +140,7 @@ export default {
       });
     },
     appleImage () {
-      console.log(this.attributes)
+      console.log(this.attributes);
       return this.attributes.artwork.url.replace(
         '{w}', this.attributes.artwork.width
       ).replace(

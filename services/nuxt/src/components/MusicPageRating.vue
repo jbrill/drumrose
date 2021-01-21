@@ -65,7 +65,7 @@ export default {
   },
   methods: {
     async submitReview () {
-      console.log(this.$auth.getToken('auth0'))
+      console.log(this.$auth.getToken('auth0'));
       await postReview(
         this.$auth.getToken('auth0'),
         { 'type': 'album', 'review': 'test', 'rating': 0.0 }

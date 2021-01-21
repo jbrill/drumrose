@@ -330,7 +330,7 @@ export const createAlbum = async (bearerToken, albumData) => {
  * Creates a track
  * */
 export const createTrack = async (bearerToken, trackData) => {
-  console.log(bearerToken)
+  console.log(bearerToken);
   return await axios.post(
     `https://teton.drumrose.io/api/tracks/`,
     trackData,

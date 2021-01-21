@@ -727,7 +727,7 @@ export const actions = {
   },
 
   async searchLibrary (_, { type, searchInput }) {
-    console.log("HERE...")
+    console.log("HERE...");
     let parsedType = type;
     let types = {
       'songs': 'library-songs',
@@ -742,9 +742,9 @@ export const actions = {
     if (type in types) {
       parsedType = types[type];
     }
-    console.log(searchInput)
-    console.log('parsedType')
-    console.log(parsedType)
+    console.log(searchInput);
+    console.log('parsedType');
+    console.log(parsedType);
 
     return await axios.get(
       `https://api.music.apple.com/v1/me/library/search?term=` +

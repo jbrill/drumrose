@@ -93,8 +93,8 @@ export default {
           this.$auth.getToken('auth0'),
           this.id
         );
-        console.log("albumResponse")
-        console.log(albumResponse)
+        console.log("albumResponse");
+        console.log(albumResponse);
         this.isFavorited = albumResponse.data.album.favorited;
       } catch (err) {
         if (err.response.status === 409) {
@@ -142,14 +142,14 @@ export default {
       event.preventDefault();
       this.$store.dispatch(
         "setQueue", {
-          "album": this.id
+          "album": this.id,
           }
       ).then( () => {
         this.$store.dispatch("play");
       });
     },
     appleImage () {
-      console.log(this.attributes)
+      console.log(this.attributes);
       return this.attributes.artwork.url.replace(
         '{w}', this.attributes.artwork.width
       ).replace(

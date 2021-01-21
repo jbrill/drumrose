@@ -62,13 +62,11 @@
 <script>
 import { getPlaylists } from '~/api/api.js';
 import Playlist from '~/components/MusicItem/Playlist.vue';
-import LoadingCircle from '~/components/LoadingCircle.vue';
 
 
 export default {
   components: {
     Playlist,
-    LoadingCircle,
   },
   async asyncData () {
     const playlists = await getPlaylists();

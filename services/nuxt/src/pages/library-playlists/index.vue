@@ -27,7 +27,7 @@ export default {
   async asyncData () {
     const playlists = await getPlaylists();
     return {
-      "playlists": playlists.data
+      "playlists": playlists.data,
     };
   },
 };

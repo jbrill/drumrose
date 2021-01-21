@@ -155,7 +155,11 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 
-CORS_ORIGIN_WHITELIST = ("http://nuxt-server:3000",)
+CORS_ORIGIN_WHITELIST = (
+    "http://nuxt-server:3000",
+    "https://drumrose.com",
+    "https://drumrose.vercel.app",
+)
 
 LOGGING = {
     "version": 1,

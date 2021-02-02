@@ -47,11 +47,14 @@
         <v-btn
           v-else
           block
+          color="var(--primary-purple)"
           raised
+          width="2rem"
+          secondary
           @click="$auth.loginWith('auth0')"
           @click.native.stop.prevent
         >
-          Log In
+          Log In to Rate
         </v-btn>
       </v-list-item>
       <v-dialog
@@ -528,5 +531,8 @@ export default {
 .show-btns {
   color: rgba(255, 255, 255, 1) !important;
   display: flex;
+}
+.v-btn__content {
+  width: 100%; white-space: normal;
 }
 </style>

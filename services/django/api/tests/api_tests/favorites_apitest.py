@@ -15,7 +15,7 @@ from api.models.factories import (
     SongFactory,
     UserProfileFactory,
 )
-from api.tests.api_tests.util import ACCESS_TOKEN, get_test_token
+from api.tests.api_tests.util import get_test_token
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status

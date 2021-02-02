@@ -1,34 +1,19 @@
 """
-Reivews Route Definitions
+Reivews Views
 """
 
-# pylint: disable=W0612,W0613
-from itertools import chain
-from operator import attrgetter
-from django.core.serializers import serialize
-from api.models.core import (
-    AlbumReview,
-    PlaylistReview,
-    Song,
-    TrackReview,
-    UserProfile,
-    Album,
-)
-from rest_framework.response import Response
-from django.core import serializers
+from api.models.core import AlbumReview, TrackReview
 
 from api.reviews.serializers import (
     AlbumReviewSerializer,
     PlaylistReviewSerializer,
     TrackReviewSerializer,
 )
-from django.core.paginator import Paginator
 from django.http import JsonResponse
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.views import APIView
 from rest_framework_auth0.authentication import Auth0JSONWebTokenAuthentication
-from rest_framework.renderers import JSONRenderer
 
 
 class TrackReviewList(APIView):
@@ -146,7 +131,7 @@ class PlaylistReviewList(APIView):
     """
 
     authentication_classes = [Auth0JSONWebTokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get(self, request):
         """

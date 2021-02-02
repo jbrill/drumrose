@@ -64,7 +64,7 @@
         <v-card-text class="white--text">
           <strong>&copy; Drumrose, Inc.</strong>
           Made with love in New York City. 
-          Music data from
+          Music data thanks to
           <a
             style="color: var(--primary-red)"
             href="
@@ -72,7 +72,7 @@
             "
             target="_blank"
           >
-            Apple Music API
+            <strong>Apple Music API</strong>
           </a>.
         </v-card-text>
       </v-card>

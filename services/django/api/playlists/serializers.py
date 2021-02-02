@@ -48,6 +48,7 @@ class PlaylistSerializer(serializers.ModelSerializer):
             playlist__apple_music_id=obj.apple_music_id,
         ).exists()
 
+    # pylint: disable=W0221
     def validate(self, data):
         """
         Check if favorited_track already exists

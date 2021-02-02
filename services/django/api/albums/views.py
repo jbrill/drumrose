@@ -1,16 +1,14 @@
 """
-Album route module
+Album Views
 """
 
-import json
-
 from api.albums.serializers import AlbumSerializer
-from api.models.core import Album, FavoritedAlbum
+from api.models.core import Album
 from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework_auth0.authentication import Auth0JSONWebTokenAuthentication
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 
 class AlbumRoute(APIView):

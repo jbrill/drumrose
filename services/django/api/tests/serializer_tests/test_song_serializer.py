@@ -5,7 +5,6 @@ Song Serializer Test Module
 from api.models.factories import SongFactory, TrackReviewFactory
 from api.songs.serializers import SongSerializer
 from django.test import TestCase
-from rest_framework.test import APIRequestFactory
 
 
 class SongSerializerTest(TestCase):

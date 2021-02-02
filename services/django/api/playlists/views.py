@@ -3,13 +3,13 @@ Playlist Route Definition
 """
 # pylint: disable=W0612,W0613
 
-from api.models.core import FavoritedPlaylist, Playlist
+from api.models.core import Playlist
 from api.playlists.serializers import PlaylistSerializer
 from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework_auth0.authentication import Auth0JSONWebTokenAuthentication
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 
 class PlaylistList(APIView):

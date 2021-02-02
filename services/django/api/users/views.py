@@ -3,17 +3,9 @@ User Route Module
 """
 
 import json
-from itertools import chain
-from operator import attrgetter
 
-from api.models.core import (
-    FavoritedAlbum,
-    FavoritedPlaylist,
-    FavoritedTrack,
-    UserProfile,
-)
+from api.models.core import UserProfile
 from api.users.serializers import UserProfileSerializer
-from django.core.paginator import Paginator
 from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
@@ -209,4 +201,5 @@ class UserFavoritesList(APIView):
         """
         Get favorites by user's handle
         """
-        pass
+        print(user_handle)
+        return Response()

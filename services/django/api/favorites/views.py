@@ -1,25 +1,12 @@
 """
 Favorites Route Definitions
 """
-# pylint: disable=W0612,W0613
-from itertools import chain
-from operator import attrgetter
-
 from api.favorites.serializers import (
     FavoritedAlbumSerializer,
     FavoritedPlaylistSerializer,
     FavoritedTrackSerializer,
 )
-from api.models.core import (
-    FavoritedAlbum,
-    FavoritedPlaylist,
-    FavoritedTrack,
-    UserProfile,
-    Song,
-    Playlist,
-    Album,
-)
-from django.core.paginator import Paginator
+from api.models.core import FavoritedAlbum, FavoritedPlaylist, FavoritedTrack
 from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
@@ -187,4 +174,4 @@ class FollowersFavoritesList(APIView):
         """
         Get favorites from followers
         """
-        pass
+        return

@@ -5,7 +5,7 @@ import json
 
 from api.models.core import UserProfile
 from api.models.factories import UserProfileFactory
-from api.tests.api_tests.util import ACCESS_TOKEN, get_test_token
+from api.tests.api_tests.util import get_test_token
 from api.users.serializers import UserProfileSerializer
 from django.test import TestCase
 from django.urls import reverse

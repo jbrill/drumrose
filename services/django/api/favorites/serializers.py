@@ -16,7 +16,6 @@ from api.models.core import (
 from api.playlists.serializers import PlaylistSerializer
 from api.songs.serializers import SongSerializer
 from api.users.serializers import UserProfileSerializer
-from django.db import transaction
 from rest_framework import serializers
 
 

@@ -1,5 +1,4 @@
 from api.models.core import FavoritedTrack, Song, TrackReview
-from api.services.apple_music import get_track_info
 from rest_framework import serializers
 from django.db.models import Avg
 
@@ -40,8 +39,6 @@ class SongSerializer(serializers.ModelSerializer):
     def get_favorited(self, obj):
         if "request" not in self.context:
             return False
-        # if "user" not in self.context.get("request"):
-        #     return False
         try:
             auth0_user_id = str(self.context.get("request").user).split(".")[1]
         except IndexError:
@@ -50,10 +47,12 @@ class SongSerializer(serializers.ModelSerializer):
             user__auth0_user_id=auth0_user_id, song__apple_music_id=obj.apple_music_id
         ).exists()
 
+    # pylint: disable=W0221
     def validate(self, data):
         """
         Check if favorited_track already exists
         """
+        # TODO: Check if you can get song with apple music api
         if Song.objects.filter(apple_music_id=data.get("apple_music_id")).count():
             raise serializers.ValidationError("Song Already Exists")
         return data

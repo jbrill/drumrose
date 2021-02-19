@@ -138,19 +138,28 @@ export default {
   },
   toast: {
     position: 'top-right',
+    singleton: true,
+    type: 'info',
+    action : {
+      text : 'Close',
+      onClick : (e, toastObject) => {
+          toastObject.goAway(0);
+      },
+    },
     register: [ // Register custom toasts
       {
-        name: 'my-error',
-        message: 'Oops...Something went wrong',
-        options: {
-          type: 'error',
-        },
-      },
-      {
         name: 'apple_login',
+        position: 'bottom',
         message: 'Sign into Apple Music for full track access',
         options: {
           type: 'info',
+          fullWidth: true,
+          action : {
+            text : 'Connect Account',
+            onClick : (e, toastObject) => {
+                toastObject.goAway(0);
+            },
+          },
         },
       },
     ],

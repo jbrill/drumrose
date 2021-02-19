@@ -83,13 +83,14 @@ class FavoritedAlbumSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         """
-        Check if favorited_track already exists
+        Check if favorited album already exists
         """
         if FavoritedAlbum.objects.filter(
             user__auth0_user_id=data.get("auth0_user_id"),
             album__apple_music_id=data.get("apple_music_id"),
         ).count():
-            raise serializers.ValidationError("Favorited Track Already Exists")
+            print(data)
+            raise serializers.ValidationError("Favorited Album Already Exists")
         return data
 
     def to_internal_value(self, data):

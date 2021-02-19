@@ -32,7 +32,7 @@ class AlbumRoute(APIView):
 
     def post(self, request):
         """
-        POST for  Artist
+        Create an artist
         """
         serializer = AlbumSerializer(data={"apple_music_id": request.data["id"]})
         if serializer.is_valid():

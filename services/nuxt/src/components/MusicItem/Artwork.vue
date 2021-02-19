@@ -114,7 +114,9 @@
                     mdi-heart
                   </v-icon>
                 </v-btn>
-                <ActionMenu />
+                <ActionMenu
+                  :type="type"
+                />
               </v-card-actions>
             </v-container>
           </v-img>
@@ -134,6 +136,9 @@ import {
   reviewTrack,
   reviewAlbum,
   reviewPlaylist,
+  unFavoriteTrack,
+  unFavoritePlaylist,
+  unFavoriteAlbum,
 } from '~/api/api';
 
 
@@ -261,12 +266,10 @@ export default {
       }
     },
     async changeRating (e) {
-      console.log("HI");
       const data = {
         'rating': e,
         'apple_music_id': this.id,
       };
-      console.log(this.type);
       try {
         if (this.type === 'song') {
           await reviewTrack(
@@ -300,8 +303,10 @@ export default {
             },
           );
           this.isFavorited = true;
+          this.$toast.info('Favorited track');
         } catch (err) {
           console.error(err);
+          this.$toast.error('Unable to favorite track');
         }
       }
       if (this.type == 'album') {
@@ -313,8 +318,10 @@ export default {
             },
           );
           this.isFavorited = true;
+          this.$toast.info('Favorited album');
         } catch (err) {
           console.error(err);
+          this.$toast.error('Unable to favorite album');
         }
       }
       if (this.type == 'playlist') {
@@ -325,33 +332,31 @@ export default {
               "apple_music_id": this.id,
             },
           );
+          this.$toast.info('Favorited playlist');
           this.isFavorited = true;
         } catch (err) {
           console.error(err);
+          this.$toast.error('Unable to favorite playlist');
         }
       }
     },
     async unFavoriteItem () {
       if (this.type == 'song') {
         try {
-          await favoriteTrack(
+          await unFavoriteTrack(
             this.$auth.getToken('auth0'),
-            {
-              "apple_music_id": this.id,
-            },
+            this.id,
           );
-          this.isFavorited = true;
+          this.isFavorited = false;
         } catch (err) {
           console.error(err);
         }
       }
       if (this.type == 'album') {
         try {
-          await favoriteAlbum(
+          await unFavoriteAlbum(
             this.$auth.getToken('auth0'),
-            {
-              "apple_music_id": this.id,
-            },
+            this.id,
           );
           this.isFavorited = true;
         } catch (err) {
@@ -360,11 +365,9 @@ export default {
       }
       if (this.type == 'playlist') {
         try {
-          await favoritePlaylist(
+          await unFavoritePlaylist(
             this.$auth.getToken('auth0'),
-            {
-              "apple_music_id": this.id,
-            },
+            this.id,
           );
           this.isFavorited = true;
         } catch (err) {
@@ -391,9 +394,13 @@ export default {
           "setQueue", { 'album': this.id }
         );
       }
-      await this.$store.dispatch("play");
+      try {
+        await this.$store.dispatch("play");
+      } catch (err) {
+        this.$toast.error('Unable to play');
+      }
       if (!this.$store.state.isAuthorized) {
-        this.$toast.show('Sign into Apple Music for full track access.');
+        this.$toast.global.apple_login();
       }
       this.isPlaying = true;
     },

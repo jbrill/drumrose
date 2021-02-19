@@ -37,6 +37,7 @@
         :to="'/search/' + search"
         class="search-button"
         color="var(--primary-yellow)"
+        block
       >
         Search for '{{ search }}'
       </v-btn>	

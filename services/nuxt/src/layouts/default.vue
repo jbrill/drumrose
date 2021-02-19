@@ -45,8 +45,8 @@
       >
         <v-card-text>
           <v-btn
-            v-for="(icon) in icons"
-            :key="icon"
+            v-for="(icon, iconIdx) in icons"
+            :key="'icon-' + iconIdx"
             class="mx-4"
             color="var(--primary-red)"
             icon

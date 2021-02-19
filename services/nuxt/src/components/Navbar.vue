@@ -131,23 +131,37 @@
         Sign Up
       </v-btn>
       <v-menu
+        open-on-hover
         dark
         offset-y
         transition="slide-y-transition"
       >
         <template v-slot:activator="{ on, attrs }">
           <v-btn
-            icon
             small
             v-bind="attrs"
             v-on="on"
           >
+            <v-avatar
+              v-if="auth.loggedIn"
+              size="26"
+              color="var(--primary-purple)"
+            >
+              <v-icon dark>
+                mdi-account-circle
+              </v-icon>
+            </v-avatar>
             <v-icon>
               mdi-dots-horizontal
             </v-icon>
           </v-btn>
         </template>
         <v-list dense>
+          <v-list-item v-if="auth.loggedIn" nuxt to="/profile">
+            <v-list-item-title>
+              Profile
+            </v-list-item-title>
+          </v-list-item>
           <v-list-item nuxt to="/about">
             <v-list-item-title>
               About us

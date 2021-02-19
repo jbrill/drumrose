@@ -5,9 +5,6 @@
     style="z-index: 10"
     class="audioPlayer"
   >
-    <v-container v-if="height === '250vh'">
-      <v-flex id="p5Canvas" />
-    </v-container>
     <div class="musicControls">
       <v-btn
         ref="musicPrev"
@@ -110,10 +107,19 @@ export default {
         stateQueue: 'getQueue',
     }),
   },
+  watch: {
+    async playbackState (oldPlaybackState, newPlaybackState) {
+      // Our fancy notification (2).
+      if (newPlaybackState === 6) {
+        await this.$store.dispatch("play");
+      }
+      console.log(`We had ${oldPlaybackState} fruits, aw!`)
+      console.log(`We have ${newPlaybackState} fruits now, yay!`)
+    }
+  },
   created () {
     if (process.browser) {
       window.addEventListener('keydown', e => { // eslint-disable-line
-        console.log(e);
         if (e.keyCode === 32 && this.playbackTime) {
           e.preventDefault();
           if (this.playbackState === 3) {

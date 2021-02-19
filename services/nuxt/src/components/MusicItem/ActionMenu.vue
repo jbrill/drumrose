@@ -7,7 +7,6 @@
     top
     left
     dark
-    two-line
     max-width="25rem"
     transition="scale-transition"
   >
@@ -27,10 +26,10 @@
       </v-btn>
     </template>
     <v-list dense>
-      <v-list-item 
+      <v-list-item
         :style="{
-          'padding': '2px',
-          'justify-content':'center'
+          'justify-content':'center',
+          'height': '1rem'
         }"
       >
         <v-rating
@@ -58,7 +57,94 @@
         </v-btn>
       </v-list-item>
       <v-dialog
-        v-model="dialog"
+        v-model="reviewDialog"
+        scrollable
+        max-width="50vw"
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <v-list-item
+            v-bind="attrs"
+            v-on="on"
+            @click.native.stop.prevent
+            @click="writeReview"
+          >
+            <v-list-item-icon>
+              <v-icon small>
+                mdi-pencil
+              </v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>Write a Review</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </template>
+        <v-card
+          style="
+            opacity: 1; padding: 2rem
+          "
+        >
+          <v-tabs
+            v-model="tab"
+            color="var(--primary-yellow)"
+            centered
+          >
+            <v-tabs-slider />
+            <v-tab href="#tab-1">
+              Write Review
+            </v-tab>
+          </v-tabs>
+          <v-tabs-items v-model="reviewTab">
+            <v-tab-item key="1" value="tab-1">
+              <v-responsive>
+                <v-container fluid>
+                  <v-form>
+                    <v-text-field
+                      v-model="reviewTitle"
+                      :counter="10"
+                      :rules="playlistNameRules"
+                      label="Playlist Name"
+                      required
+                    />
+                    <v-text-field
+                      v-model="playlistDescription"
+                      label="Playlist Description"
+                    />
+                    <v-radio-group v-model="privacyRadio">
+                      <template v-slot:label>
+                        <div>Choose Your Privacy</div>
+                      </template>
+                      <v-radio value="Public">
+                        <template v-slot:label>
+                          <div>Public</div>
+                        </template>
+                      </v-radio>
+                      <v-radio value="Private">
+                        <template v-slot:label>
+                          <div>Private</div>
+                        </template>
+                      </v-radio>
+                    </v-radio-group>
+                    <v-btn
+                      :disabled="
+                        playlistName.length === 0 ||
+                          isCreatingPlaylist ||
+                          playlistName.length > 10
+                      "
+                      color="var(--primary-purple)"
+                      @click="createPlaylist"
+                    >
+                      Create Playlist
+                    </v-btn>
+                  </v-form>
+                </v-container>
+              </v-responsive>
+            </v-tab-item>
+          </v-tabs-items>
+        </v-card>
+      </v-dialog>
+      <v-divider />
+      <v-dialog
+        v-model="playlistDialog"
         scrollable
         max-width="50vw"
       >
@@ -176,21 +262,6 @@
                       v-model="playlistDescription"
                       label="Playlist Description"
                     />
-                    <v-radio-group v-model="privacyRadio">
-                      <template v-slot:label>
-                        <div>Choose Your Privacy</div>
-                      </template>
-                      <v-radio value="Public">
-                        <template v-slot:label>
-                          <div>Public</div>
-                        </template>
-                      </v-radio>
-                      <v-radio value="Private">
-                        <template v-slot:label>
-                          <div>Private</div>
-                        </template>
-                      </v-radio>
-                    </v-radio-group>
                     <v-btn
                       :disabled="
                         playlistName.length === 0 ||
@@ -246,9 +317,6 @@
 <script>
 import { mapState } from 'vuex';
 import {
-  favoriteTrack,
-  favoriteAlbum,
-  favoritePlaylist,
   reviewTrack,
   reviewAlbum,
   reviewPlaylist,
@@ -297,10 +365,13 @@ export default {
   data () {
     return {
       tab: null,
+      reviewTab: null,
       isHovering: false,
       isPlaying: false,
       isCreatingPlaylist: false,
-      dialog: false,
+      reviewDialog: false,
+      reviewTitle: '',
+      playlistDialog: false,
       playlists: [],
       playlistDescription: '',
       playlistName: '',
@@ -369,31 +440,29 @@ export default {
           "description": this.playlistDescription,
           "tracks": this.tracks,
         });
-        this.$toast.success("Created playlist");
+        this.$toast.success('Created playlist');
       } catch (err) {
         console.error(err);
-        this.$toast.error("Failed to create playlist");
+        this.$toast.error('Failed to create playlist');
       }
     },
     async changeRating (e) {
-      console.log("HI");
       const data = {
         'rating': e,
         'apple_music_id': this.id,
       };
-      console.log(this.type);
       try {
         if (this.type === 'song') {
           await reviewTrack(
-            this.$auth.getToken('auth0'), this.id, data
+            this.$auth.getToken('auth0'), data
           );
         } else if (this.type === 'album') {
           await reviewAlbum(
-            this.$auth.getToken('auth0'), this.id, data
+            this.$auth.getToken('auth0'), data
           );
         } else if (this.type === 'playlist') {
           await reviewPlaylist(
-            this.$auth.getToken('auth0'), this.id, data
+            this.$auth.getToken('auth0'), data
           );
         }
       } catch (err) {
@@ -404,88 +473,6 @@ export default {
     async pauseTrack () {
       await this.$store.dispatch("pause");
       this.isPlaying = false;
-    },
-    async favoriteItem () {
-      if (this.type == 'song') {
-        try {
-          await favoriteTrack(
-            this.$auth.getToken('auth0'),
-            {
-              "apple_music_id": this.id,
-            },
-          );
-          this.isFavorited = true;
-        } catch (err) {
-          console.error(err);
-        }
-      }
-      if (this.type == 'album') {
-        try {
-          await favoriteAlbum(
-            this.$auth.getToken('auth0'),
-            {
-              "apple_music_id": this.id,
-            },
-          );
-          this.isFavorited = true;
-        } catch (err) {
-          console.error(err);
-        }
-      }
-      if (this.type == 'playlist') {
-        try {
-          await favoritePlaylist(
-            this.$auth.getToken('auth0'),
-            {
-              "apple_music_id": this.id,
-            },
-          );
-          this.isFavorited = true;
-        } catch (err) {
-          console.error(err);
-        }
-      }
-    },
-    async unFavoriteItem () {
-      if (this.type == 'song') {
-        try {
-          await favoriteTrack(
-            this.$auth.getToken('auth0'),
-            {
-              "apple_music_id": this.id,
-            },
-          );
-          this.isFavorited = true;
-        } catch (err) {
-          console.error(err);
-        }
-      }
-      if (this.type == 'album') {
-        try {
-          await favoriteAlbum(
-            this.$auth.getToken('auth0'),
-            {
-              "apple_music_id": this.id,
-            },
-          );
-          this.isFavorited = true;
-        } catch (err) {
-          console.error(err);
-        }
-      }
-      if (this.type == 'playlist') {
-        try {
-          await favoritePlaylist(
-            this.$auth.getToken('auth0'),
-            {
-              "apple_music_id": this.id,
-            },
-          );
-          this.isFavorited = true;
-        } catch (err) {
-          console.error(err);
-        }
-      }
     },
     async login () {
       await this.$auth.loginWith('auth0');
@@ -512,6 +499,9 @@ export default {
       }
       this.isPlaying = true;
     },
+    async writeReview () {
+      
+    },
     shareLink () {
       let dummy = document.createElement('input');
       const text = process.env.baseUrl + this.link;
@@ -521,7 +511,9 @@ export default {
       dummy.select();
       document.execCommand('copy');
       document.body.removeChild(dummy);
-      this.$toast.success('Copied link to clipboard');
+      this.$toast.info('Copied link to clipboard', {
+        closeButton: true,
+      });
     },
   },
 };
@@ -532,7 +524,11 @@ export default {
   color: rgba(255, 255, 255, 1) !important;
   display: flex;
 }
-.v-btn__content {
+
+/* .v-btn__content {
   width: 100%; white-space: normal;
+} */
+>>.v-list-item--dense {
+  min-height: 0;
 }
 </style>

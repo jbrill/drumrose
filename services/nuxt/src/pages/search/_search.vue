@@ -28,7 +28,7 @@
           v-if="
             selectedItems.includes('Tracks') && searchResults.songs.length
           "
-          v-model="selectedSearch"
+          v-model="selectedTrack"
         >
           <template
             v-for="
@@ -70,7 +70,7 @@
           v-if="
             selectedItems.includes('Albums') && searchResults.albums.length
           "
-          v-model="selectedSearch"
+          v-model="selectedAlbum"
         >
           <template
             v-for="
@@ -103,7 +103,7 @@
         </v-list-item-group>
         <span
           v-if="
-            selectedItems.includes('Artists') && searchResults.playlists.length
+            selectedItems.includes('Playlists') && searchResults.playlists.length
           "
           class="overline"
         >
@@ -111,9 +111,9 @@
         </span>
         <v-list-item-group
           v-if="
-            selectedItems.includes('Artists') && searchResults.playlists.length
+            selectedItems.includes('Playlists') && searchResults.playlists.length
           "
-          v-model="selectedSearch"
+          v-model="selectedPlaylist"
         >
           <template
             v-for="
@@ -155,7 +155,6 @@
           v-if="
             selectedItems.includes('Artists') && searchResults.artists.length
           "
-          v-model="selectedSearch"
         >
           <template
             v-for="
@@ -204,6 +203,10 @@ export default {
     items: ['Tracks', 'Playlists', 'Albums', 'Artists'],
     selectedItems: ['Tracks', 'Playlists', 'Albums', 'Artists'],
     selectedSearch: null,
+    selectedTrack: null,
+    selectedArtist: null,
+    selectedPlaylist: null,
+    selectedAlbum: null,
   }),
   computed: {
     searchNum () {
@@ -225,8 +228,29 @@ export default {
     },
   },
   watch: {
-    selectedSearch: function (idx) {
+    selectedTrack: function (idx) {
+      this.selectedArtist = null;
+      this.selectedAlbum = null;
+      this.selectedPlaylist = null;
       this.selectTrack(idx);
+    },
+    selectedAlbum: function (idx) {
+      this.selectedArtist = null;
+      this.selectedTrack = null;
+      this.selectedPlaylist = null;
+      this.selectAlbum(idx);
+    },
+    selectedArtist: function (idx) {
+      this.selectedTrack = null;
+      this.selectedAlbum = null;
+      this.selectedPlaylist = null;
+      this.selectArtist(idx);
+    },
+    selectedPlaylist: function (idx) {
+      this.selectedArtist = null;
+      this.selectedAlbum = null;
+      this.selectedTrack = null;
+      this.selectPlaylist(idx);
     },
   },
   async mounted () {
@@ -245,15 +269,43 @@ export default {
         this.searchResults["playlists"] = res.results.playlists.data;
       }
     });
-    console.log(this.searchResults);
     this.loading = false;
   },
   methods: {
     async selectTrack (trackIdx) {
-      console.log(trackIdx);
       try {
           await this.$store.dispatch("setQueue", {
-            'song': this.trackInfo.relationships.tracks.data[trackIdx].id,
+            'song': this.searchResults.songs[trackIdx].id,
+          });
+          this.$store.dispatch("play");
+        } catch (err) {
+          console.error(err);
+        }
+    },
+    async selectAlbum (trackIdx) {
+      try {
+          await this.$store.dispatch("setQueue", {
+            'album': this.searchResults.albums[trackIdx].id,
+          });
+          this.$store.dispatch("play");
+        } catch (err) {
+          console.error(err);
+        }
+    },
+    async selectPlaylist (trackIdx) {
+      try {
+          await this.$store.dispatch("setQueue", {
+            'playlist': this.searchResults.playlists[trackIdx].id,
+          });
+          this.$store.dispatch("play");
+        } catch (err) {
+          console.error(err);
+        }
+    },
+    async selectArtist (trackIdx) {
+      try {
+          await this.$store.dispatch("setQueue", {
+            'artist': this.searchResults.artists[trackIdx].id,
           });
           this.$store.dispatch("play");
         } catch (err) {

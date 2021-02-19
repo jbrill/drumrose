@@ -93,8 +93,6 @@ export default {
           this.$auth.getToken('auth0'),
           this.id
         );
-        console.log("albumResponse");
-        console.log(albumResponse);
         this.isFavorited = albumResponse.data.album.favorited;
       } catch (err) {
         if (err.response.status === 409) {
@@ -120,7 +118,9 @@ export default {
         `/v1/catalog/us/albums/${this.id}`
       );
       this.attributes = resp.data[0].attributes;
-      this.artistId = resp.data[0].relationships.artists.data[0].id;
+      if (resp.data[0].relationships.artists.length > 0) {
+        this.artistId = resp.data[0].relationships.artists.data[0].id;
+      }
       this.loading = false;
     } catch (err) {
       this.loading = false;
@@ -149,7 +149,6 @@ export default {
       });
     },
     appleImage () {
-      console.log(this.attributes);
       return this.attributes.artwork.url.replace(
         '{w}', this.attributes.artwork.width
       ).replace(

@@ -69,9 +69,14 @@ export default {
     Playlist,
   },
   async asyncData () {
-    const playlists = await getPlaylists();
+    const playlistResponse = await getPlaylists();
+
+    let playlistData = playlistResponse.data['playlists'].filter( playlist => {
+      return playlist.apple_music_id != null && !playlist.apple_music_id.includes('-');
+    });
+
     return {
-      "playlists": playlists.data['playlists'],
+      "playlists": playlistData,
     };
   },
 };

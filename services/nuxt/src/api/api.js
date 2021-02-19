@@ -92,9 +92,9 @@ export const getUserList = async bearerToken => {
 /* 
  * Post track review
  * */
-export const reviewTrack = async (bearerToken, id, data) => {
+export const reviewTrack = async (bearerToken, data) => {
   return await axios.post(
-    `https://teton.drumrose.io/api/reviews/tracks`,
+    `https://teton.drumrose.io/api/reviews/tracks/`,
     data,
     {
       headers: {
@@ -107,7 +107,7 @@ export const reviewTrack = async (bearerToken, id, data) => {
 /* 
  * Post album review
  * */
-export const reviewAlbum = async (bearerToken, id, data) => {
+export const reviewAlbum = async (bearerToken, data) => {
   return await axios.post(
     `https://teton.drumrose.io/api/reviews/albums/`,
     data,
@@ -123,7 +123,7 @@ export const reviewAlbum = async (bearerToken, id, data) => {
 /* 
  * Post album review
  * */
-export const reviewPlaylist = async (bearerToken, id, data) => {
+export const reviewPlaylist = async (bearerToken, data) => {
   return await axios.post(
     `https://teton.drumrose.io/api/reviews/playlists/`,
     data,
@@ -209,6 +209,50 @@ export const favoriteTrack = async (bearerToken, trackData) => {
   return await axios.post(
     `https://teton.drumrose.io/api/favorites/tracks/`,
     trackData,
+    {
+      headers: {
+        Authorization: `${bearerToken}`,
+      },
+    }
+  );
+};
+
+
+/*
+ * Deletes a favorited track
+ * */
+export const unFavoriteTrack = async (bearerToken, trackId) => {
+  return await axios.delete(
+    `https://teton.drumrose.io/api/favorites/tracks/${trackId}/`,
+    {
+      headers: {
+        Authorization: `${bearerToken}`,
+      },
+    }
+  );
+};
+
+/*
+ * Deletes a favorited album
+ * */
+export const unFavoriteAlbum = async (bearerToken, albumId) => {
+  return await axios.delete(
+    `https://teton.drumrose.io/api/favorites/albums/${albumId}/`,
+    {
+      headers: {
+        Authorization: `${bearerToken}`,
+      },
+    }
+  );
+};
+
+
+/*
+ * Deletes a favorited playlist
+ * */
+export const unFavoritePlaylist = async (bearerToken, playlistId) => {
+  return await axios.delete(
+    `https://teton.drumrose.io/api/favorites/playlists/${playlistId}/`,
     {
       headers: {
         Authorization: `${bearerToken}`,
@@ -330,7 +374,6 @@ export const createAlbum = async (bearerToken, albumData) => {
  * Creates a track
  * */
 export const createTrack = async (bearerToken, trackData) => {
-  console.log(bearerToken);
   return await axios.post(
     `https://teton.drumrose.io/api/tracks/`,
     trackData,

@@ -34,26 +34,54 @@
         </nuxt-link>
       </div>
     </div>
-    <div v-if="isHovering || nowPlaying">
-      <v-icon
-        v-if="isFavorited"
-        x-small
-        color="red"
-        @click="unFavoriteTrack"
-      >
-        mdi-heart
-      </v-icon>
-      <v-icon
-        v-else
-        class="favoriteButton"
-        x-small
-        @click="favoriteTrack"
-        @click.stop.prevent
-      >
-        mdi-heart
-      </v-icon>
+    <v-row
+      v-if="isHovering || nowPlaying"
+      justify="end"  
+    >
+      <v-btn icon>
+        <v-icon
+          v-if="isFavorited"
+          x-small
+          color="red"
+          @click="unFavoriteTrack"
+        >
+          mdi-heart
+        </v-icon>
+        <v-icon
+          v-else-if="auth.loggedIn"
+          x-small
+          @click="favoriteTrack"
+          @click.stop.prevent
+        >
+          mdi-heart
+        </v-icon>
+        <v-tooltip
+          v-else
+          top
+        >
+          <template v-slot:activator="{ on }">
+            <div v-on="on">
+              <v-btn
+                icon
+                disabled
+                :class="{ 'show-btns': hover }"
+                @click.native.stop.prevent
+              >
+                <v-icon
+                  small
+                  :class="{ 'show-btns': hover }"
+                  color="transparent"
+                >
+                  mdi-heart
+                </v-icon>
+              </v-btn>
+            </div>
+          </template>
+          <span>Log In To Favorite</span>
+        </v-tooltip>
+      </v-btn>
       <ActionMenu />
-    </div>
+    </v-row>
     <div v-else>
       <span class="overline">
         {{ formattedSeconds(trackObject.attributes.durationInMillis) }} min
@@ -126,7 +154,7 @@ export default {
       console.log(resp);
       this.isFavorited = resp.data.track.favorited;
     } catch (e) {
-      console.error(e);
+      console.log(e)
     }
     
     // const librarySearchResp = await this.$store.dispatch(
@@ -149,7 +177,7 @@ export default {
   methods: {
     async favoriteTrack () {
       try {
-        if (this.trackObject.type === 'song') {
+        if (this.trackObject.type === 'songs') {
           await favoriteTrack(
             this.$auth.getToken('auth0'),
             {
@@ -158,6 +186,7 @@ export default {
           );
           this.isFavorited = true;
         }
+        this.$toast.info('Favorited track');
       } catch (err) {
         console.error(err);
         this.$sentry.captureException(err);
@@ -168,7 +197,9 @@ export default {
         if (this.trackObject.type === 'song') {
           await favoriteTrack(
             this.$auth.getToken('auth0'),
-            { 'id': this.trackObject.id }
+            {
+              'id': this.trackObject.id,
+            }
           );
           this.isFavorited = true;
         }

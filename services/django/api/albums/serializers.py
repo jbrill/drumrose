@@ -46,7 +46,12 @@ class AlbumSerializer(serializers.ModelSerializer):
     def get_favorited(self, obj):
         if "request" not in self.context:
             return False
-        auth0_user_id = str(self.context.get("request").user).replace(".", "|")
+        try:
+            auth0_user_id = str(self.context.get("request").user).split(".")[1]
+        except IndexError:
+            return False
+        print(auth0_user_id)
+        print(obj.apple_music_id)
         return FavoritedAlbum.objects.filter(
             user__auth0_user_id=auth0_user_id, album__apple_music_id=obj.apple_music_id
         ).exists()

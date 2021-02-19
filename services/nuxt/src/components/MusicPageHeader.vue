@@ -167,6 +167,18 @@
                         <span>Log In To Favorite</span>
                       </v-tooltip>
                       <v-btn
+                        v-else-if="didFavorite"
+                        x-small
+                        tile
+                        color="var(--primary-red)"
+                        @click="postFavorite"
+                      >
+                        <v-icon x-small color="red" left>
+                          mdi-heart
+                        </v-icon>
+                        Favorite
+                      </v-btn>
+                      <v-btn
                         v-else
                         x-small
                         tile
@@ -330,47 +342,56 @@
           </v-layout>
         </v-col>
         <v-col cols="12" sm="3">
-          <v-badge
-            avatar
-            bordered
-            overlap
-            style="width: 100%"
-            icon="mdi-waveform"
-            color="var(--primary-purple)"
-          >
-            <v-img
-              v-if="'artwork' in trackInfo.attributes"
-              style="margin: 0 auto"
-              width="100%"
-              height="auto"
-              :src="appleImage"
+          <v-card class="rounded-0" elevation="12">
+            <v-badge
+              avatar
+              bordered
+              overlap
+              style="width: 100%"
+              icon="mdi-waveform"
+              color="var(--primary-purple)"
             >
-              <template v-slot:placeholder>
-                <v-row
-                  class="fill-height ma-0"
-                  align="center"
-                  justify="center"
-                >
-                  <v-progress-circular
-                    indeterminate
-                    color="grey lighten-5"
-                  />
-                </v-row>
-              </template>
-            </v-img>
-          </v-badge>
+              <v-img
+                v-if="'artwork' in trackInfo.attributes"
+                style="margin: 0 auto"
+                width="100%"
+                height="auto"
+                :src="appleImage"
+                gradient="to top right, rgba(100,115,201,.33), rgba(25,32,72,.7)"
+              >
+                <template v-slot:placeholder>
+                  <v-row
+                    class="fill-height ma-0"
+                    align="center"
+                    justify="center"
+                  >
+                    <v-progress-circular
+                      indeterminate
+                      color="grey lighten-5"
+                    />
+                  </v-row>
+                </template>
+              </v-img>
+            </v-badge>
+          </v-card>
           <v-layout
             justify-center
           >
             <v-fade-transition leave-absolute>
               <v-rating
                 v-model="rating"
+                empty-icon="mdi-star-outline"
+                full-icon="mdi-star"
+                half-icon="mdi-star-half-full"
                 background-color="white"
-                color="var(--primary-purple)"
+                color="var(--primary-red)"
+                style="padding-top: 2rem"
                 dense
+                :readonly="!auth.loggedIn"
                 half-increments
                 hover
                 size="24"
+                @input="changeRating($event)"
                 @click.native.stop.prevent
               />
             </v-fade-transition>
@@ -414,6 +435,15 @@
           </v-container>
         </v-col>
       </v-row>
+    </v-card>
+    <v-skeleton-loader
+      v-if="loading || !trackInfo"
+      class="mx-auto"
+    />
+    <v-card
+      v-else
+      style="padding: 2rem; margin-top: 2rem"
+    >
       <v-row v-if="type === 'albums'">
         <v-list class="track-list" two-line>
           <v-row>
@@ -498,7 +528,10 @@
 
 <script>
 import { mapState } from 'vuex';
-import { favoriteAlbum, favoriteTrack, favoritePlaylist } from '~/api/api';
+import {
+  favoriteAlbum, favoriteTrack, favoritePlaylist,
+  reviewTrack, reviewAlbum, reviewPlaylist,
+} from '~/api/api';
 import QueueItem from '~/components/AudioPlayer/QueueItem';
 
 export default {
@@ -518,12 +551,16 @@ export default {
       type: Array,
       default: () => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     },
+    didFavorite: {
+      type: Boolean,
+      default: false,
+    },
   },
   data: () => ({
     trackInfo: null,
     loading: true,
     playing: false,
-    rating: 0.5,
+    rating: 0.0,
     rules: [v => v.length <= 255 || 'Max 255 characters'],
     selection: null,
     lockSelection: false,
@@ -633,24 +670,75 @@ export default {
     async postFavorite () {
       try {
         if (this.type === 'songs') {
-          await favoriteTrack(
-            this.$auth.getToken('auth0'),
-            { 'id': this.trackInfo.id }
-          );
+          try {
+            await favoriteTrack(
+              this.$auth.getToken('auth0'),
+              {
+                'type': 'song', 'apple_music_id': this.trackInfo.id,
+              }
+            );
+            this.$toast.show('Favorited track');
+          } catch (err) {
+            console.error(err);
+            this.$toast.error(err.message);
+          }
         } else if (this.type === 'albums') {
-          await favoriteAlbum(
-            this.$auth.getToken('auth0'),
-            { 'id': this.trackInfo.id }
-          );
+          try {
+            await favoriteAlbum(
+              this.$auth.getToken('auth0'),
+              {
+                'type': 'album', 'apple_music_id': this.trackInfo.id,
+              }
+            );
+            this.$toast.success('Favorited album');
+          } catch (err) {
+            console.error(err);
+            this.$toast.error(err.message);
+          }
         } else if (this.type === 'playlists') {
-          await favoritePlaylist(
-            this.$auth.getToken('auth0'),
-            { 'id': this.trackInfo.id }
-          );
+          try {
+            await favoritePlaylist(
+              this.$auth.getToken('auth0'),
+              {
+                'type': 'playlist', 'apple_music_id': this.trackInfo.id,
+              }
+            );
+            this.$toast.success('Favorited playlist');
+          } catch (err) {
+            console.error(err);
+            this.$toast.error(err.message);
+          }
         }
       } catch (err) {
         console.error(err);
         this.$toast.error(err.message);
+      }
+    },
+    async changeRating (e) {
+      const data = {
+        'rating': e,
+        'apple_music_id': this.trackInfo.id,
+      };
+      try {
+        if (this.type === 'songs') {
+          await reviewTrack(
+            this.$auth.getToken('auth0'), data
+          );
+        } else if (this.type === 'albums') {
+          await reviewAlbum(
+            this.$auth.getToken('auth0'), data
+          );
+        } else if (
+          this.type === 'playlists' || this.type === 'library-playlists'
+        ) {
+          await reviewPlaylist(
+            this.$auth.getToken('auth0'), data
+          );
+        }
+        this.$toast.info(`Rated ${this.trackInfo.attributes.name} ${e} stars`)
+      } catch (err) {
+        console.error(err);
+        this.$toast.error(err);
       }
     },
     async playTrack () {

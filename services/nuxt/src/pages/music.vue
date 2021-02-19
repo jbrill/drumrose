@@ -134,12 +134,20 @@ export default {
     LoadingCircle,
   },
   async asyncData () {
-    const tracks = await getTracks();
-    const albums = await getAlbums();
+    const trackResponse = await getTracks();
+    const albumResponse = await getAlbums();
+
+    let trackData = trackResponse.data['tracks'].filter( track => {
+      return track.apple_music_id != null && !track.apple_music_id.includes('-');
+    });
+    let albumData = albumResponse.data['albums'].filter( album => {
+      // parsing to make sure it's clean
+      return album.apple_music_id != null && !album.apple_music_id.includes('-');
+    });
 
     return {
-      "tracks": tracks.data['tracks'],
-      "albums": albums.data['albums'],
+      "tracks": trackData,
+      "albums": albumData,
     };
   },
   data () {

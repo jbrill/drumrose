@@ -30,14 +30,14 @@ urlpatterns = [
         name="PlaylistReviewList",
     ),
     path(
-        "<user_id>/favorites/",
-        user_routes.UserFavoritesList.as_view(),
-        name="UserFavoritesList",
-    ),
-    path(
         "favorites/tracks/",
         favorite_routes.FavoriteTracksList.as_view(),
         name="FavoriteTracksList",
+    ),
+    path(
+        "favorites/tracks/<track_id>/",
+        favorite_routes.FavoriteTrackDetail.as_view(),
+        name="FavoriteTrackDetail",
     ),
     path(
         "favorites/albums/",

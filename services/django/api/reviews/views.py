@@ -47,7 +47,7 @@ class TrackReviewList(APIView):
                 raise KeyError
             serializer = TrackReviewSerializer(
                 data={
-                    "apple_music_id": request.data["apple_music_id"],
+                    "auth0_user_id": str(request.user).split("auth0.")[1],
                     "review": request.data.get("review"),
                     "rating": request.data.get("rating"),
                 },
@@ -63,6 +63,7 @@ class TrackReviewList(APIView):
             return JsonResponse(
                 serializer.data, status=status.HTTP_201_CREATED, safe=False
             )
+        print(serializer.errors)
         return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -100,10 +101,10 @@ class AlbumReviewList(APIView):
             serializer = AlbumReviewSerializer(
                 data={
                     "apple_music_id": request.data["apple_music_id"],
+                    "auth0_user_id": str(request.user).split("auth0.")[1],
                     "review": request.data.get("review"),
                     "rating": request.data.get("rating"),
-                },
-                context={"request": request},
+                }
             )
         except KeyError:
             return JsonResponse(

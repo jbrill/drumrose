@@ -1,9 +1,15 @@
 <template>
   <v-responsive>
     <MusicPageHeader
+      v-if="!loading"
       type="playlists"
       avg="average"
       :rating-values="ratingValues"
+    />
+    <v-skeleton-loader
+      v-else
+      class="mx-auto"
+      type="paragraph"
     />
     <v-container fluid>
       <h5 style="color: #ccc">
@@ -32,6 +38,7 @@ export default {
     playing: false,
     average: 0.0,
     ratingValues: [],
+    didFavorite: false,
   }),
   computed: {
     appleImage () {
@@ -44,6 +51,7 @@ export default {
   },
   async created () {
     try {
+      this.loading = true;
       const resp = await getPlaylistDetail(
         this.$auth.getToken('auth0'),
         this.$route.params.id
@@ -57,7 +65,10 @@ export default {
           resp.data.playlist.review_summary.totals_per_rating[ratingKey]
         );
       }
+      this.didFavorite = resp.data.plaaylist.favorited;
+      this.loading = false;
     } catch (err) {
+      this.loading = false;
       console.error(err);
     }
   },

@@ -1,56 +1,52 @@
 <template>
   <div class="profileContain">
     <p style="text-align: center">
-      Find friends passionate about music
+      Artists, fans, lovers — find passionate music afficianados!
     </p>
     <v-list two-line>
-      <v-list-item-group
-        multiple
+      <v-list-item
+        v-for="(user) in users"
+        :key="user.username"
       >
-        <v-list-item
-          v-for="(item) in users"
-          :key="item.username"
-        >
-          <v-list-item-content>
-            <v-list-item-title
-              nuxt
-              :to="'/people/' + item.username"
-              v-text="item.username"
-            />
-            <v-list-item-subtitle
-              class="text--primary"
-              v-text="item.username"
-            />
-            <v-list-item-subtitle 
-              v-text="item.username"
-            />
-          </v-list-item-content>
-
-          <v-list-item-action>
-            <v-list-item-action-text
-              v-text="item.username"
-            />
-            <v-icon
-              v-if="!active"
-              color="grey lighten-1"
+        <v-list-item-content>
+          <v-list-item-title>
+            <a
+              :href="'/people/' + user.username"
+              style="color: var(--primary-yellow)"
             >
-              star_border
-            </v-icon>
+              {{ user.username }}
+            </a>
+          </v-list-item-title>
+          <v-list-item-subtitle class="text--primary">
+            {{ user.followers.length }} Followers
+          </v-list-item-subtitle>
+        </v-list-item-content>
 
-            <v-icon
-              v-else
-              color="yellow"
-            >
-              star
-            </v-icon>
-          </v-list-item-action>
-        </v-list-item>
+        <v-list-item-action>
+          <v-list-item-action-text>
+            Member since 2009
+          </v-list-item-action-text>
+          <v-icon
+            v-if="!active"
+            color="grey lighten-1"
+            @click="followPerson"
+          >
+            person_add_alt_1
+          </v-icon>
 
-        <v-divider
-          v-if="index + 1 < users.length"
-          :key="index"
-        />
-      </v-list-item-group>
+          <v-icon
+            v-else
+            color="yellow"
+          >
+            star
+          </v-icon>
+        </v-list-item-action>
+      </v-list-item>
+
+      <v-divider
+        v-if="index + 1 < users.length"
+        :key="index"
+      />
     </v-list>
   </div>
 </template>
@@ -61,10 +57,16 @@ import { getUserList } from '~/api/api';
 export default {
   async asyncData ({ store, $auth }) {
     const usersResponse = await getUserList();
+    console.log(usersResponse)
     return {
       "users": usersResponse.data.users,
     };
   },
+  methods: {
+    followPerson () {
+      console.log("SHOULD FOLLOW");
+    },
+  }
 };
 </script>
 

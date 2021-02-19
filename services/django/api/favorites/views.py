@@ -43,7 +43,7 @@ class FavoriteTracksList(APIView):
         try:
             serializer = FavoritedTrackSerializer(
                 data={
-                    "apple_music_id": request.data.get("apple_music_id"),
+                    "apple_music_id": request.data["apple_music_id"],
                     "auth0_user_id": str(request.user).split("auth0.")[1],
                 }
             )
@@ -59,6 +59,30 @@ class FavoriteTracksList(APIView):
             )
         print(serializer.errors)
         return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class FavoriteTrackDetail(APIView):
+    """
+    Description:
+        API View for Favorited Track Detail
+    Routes:
+        GET /favorites/track/<track_id>
+            Gets a detailed track response
+    """
+
+    authentication_classes = [Auth0JSONWebTokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, track_id):
+        try:
+            favorited_track = FavoritedTrack.objects.get(
+                song__apple_music_id=track_id,
+                user__auth0_user_id=str(request.user).split("auth0.")[1],
+            )
+        except FavoritedTrack.DoesNotExist:
+            return JsonResponse(status=status.HTTP_400_BAD_REQUEST)
+        favorited_track.delete()
+        return JsonResponse({}, status=status.HTTP_200_OK)
 
 
 class FavoriteAlbumList(APIView):
@@ -92,7 +116,7 @@ class FavoriteAlbumList(APIView):
         try:
             serializer = FavoritedAlbumSerializer(
                 data={
-                    "apple_music_id": request.data.get("apple_music_id"),
+                    "apple_music_id": request.data["apple_music_id"],
                     "auth0_user_id": str(request.user).split("auth0.")[1],
                 }
             )
@@ -106,6 +130,7 @@ class FavoriteAlbumList(APIView):
             return JsonResponse(
                 serializer.data, status=status.HTTP_201_CREATED, safe=False
             )
+        print(serializer.errors)
         return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -156,22 +181,3 @@ class FavoritePlaylistList(APIView):
             )
         print(serializer.errors)
         return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class FollowersFavoritesList(APIView):
-    """
-    Description:
-        API View for Followers' Favorites
-    Routes:
-        GET /favorites/
-            Gets a list of followers' favorites
-    """
-
-    authentication_classes = [Auth0JSONWebTokenAuthentication]
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request):
-        """
-        Get favorites from followers
-        """
-        return

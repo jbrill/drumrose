@@ -1,16 +1,23 @@
 <template>
   <v-responsive>
     <MusicPageHeader
+      v-if="!loading"
       type="songs"
       :avg="average"
       :rating-values="ratingValues"
+      :did-favorite="didFavorite"
+    />
+    <v-skeleton-loader
+      v-else
+      class="mx-auto"
+      type="paragraph"
     />
     <v-container fluid>
       <h5 style="color: #ccc">
         <v-icon x-small>
           mdi-comment  
         </v-icon>
-        102 Reviews
+        {{ numReviews }} Reviews
       </h5>
       <v-divider />
     </v-container>
@@ -33,7 +40,9 @@ export default {
     loading: true,
     playing: false,
     average: null,
+    didFavorite: false,
     ratingValues: [],
+    numReviews: 0,
   }),
   computed: {
     appleImage () {
@@ -46,6 +55,7 @@ export default {
   },
   async created () {
     try {
+      this.loading = true;
       const resp = await getTrackDetail(
         this.$auth.getToken('auth0'),
         this.$route.params.id
@@ -57,6 +67,9 @@ export default {
           resp.data.track.review_summary.totals_per_rating[ratingKey]
         );
       }
+      this.loading = false;
+      this.didFavorite = resp.data.track.favorited;
+      console.log(resp.data.track)
     } catch (err) {
       if (err.response.status === 409) {
         try {
@@ -71,6 +84,7 @@ export default {
           console.error(err);
         }
       }
+      this.loading = false;
       console.error(err);
     }
   },

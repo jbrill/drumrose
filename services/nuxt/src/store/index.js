@@ -272,7 +272,6 @@ export const actions = {
       const tokenResponse = await axios.post(
         'https://teton.drumrose.io/api/apple_music_token/'
       );
-      console.log(tokenResponse);
       commit('setAppleMusicToken', tokenResponse.data.token);
 
       MusicKit.configure({

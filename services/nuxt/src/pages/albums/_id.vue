@@ -1,16 +1,23 @@
 <template>
   <v-responsive>
     <MusicPageHeader
+      v-if="!loading"
       type="albums"
       :avg="average"
       :rating-values="ratingValues"
+      :did-favorite="didFavorite"
+    />
+    <v-skeleton-loader
+      v-else
+      class="mx-auto"
+      type="paragraph"
     />
     <v-container fluid>
       <h5 style="color: #ccc">
         <v-icon x-small>
           mdi-comment
         </v-icon>
-        102 Reviews
+        {{ numReviews }} Reviews
       </h5>
       <v-divider />
     </v-container>
@@ -18,7 +25,7 @@
 </template>
 
 <script>
-import { postFavorite, getAlbumDetail } from '~/api/api';
+import { getAlbumDetail, createAlbum } from '~/api/api';
 import MusicPageHeader from '~/components/MusicPageHeader';
 
 
@@ -32,6 +39,8 @@ export default {
     playing: false,
     average: 0.0,
     ratingValues: [],
+    numReviews: 0,
+    didFavorite: false,
   }),
   computed: {
     appleImage () {
@@ -44,9 +53,10 @@ export default {
   },
   async created () {
     try {
+      this.loading = true;
       const resp = await getAlbumDetail(
         this.$auth.getToken('auth0'),
-        this.$route.params.id
+        this.$route.params.id,
       );
       this.average = resp.data.album.review_summary.total_reviews > 0 ?
         resp.data.track.review_summary.average_review : 0.0;
@@ -55,7 +65,23 @@ export default {
           resp.data.album.review_summary.totals_per_rating[ratingKey]
         );
       }
+      this.didFavorite = resp.data.album.favorited;
+      this.loading = false;
     } catch (err) {
+      if (err.response.status === 409) {
+        try {
+          await createAlbum(
+            this.$auth.getToken('auth0'),
+            {
+              'id': this.$route.params.id,
+            }
+          );
+          this.average = 0.0;
+        } catch (err) {
+          console.error(err);
+        }
+      }
+      this.loading = false;
       console.error(err);
     }
   },
@@ -73,17 +99,6 @@ export default {
     }
   },
   methods: {
-    async favoriteTrack () {
-      try {
-        await postFavorite(
-          this.$auth.getToken('auth0'),
-          { 'type': 'album', 'id': this.trackInfo.id }
-        );
-      } catch (err) {
-        console.error(err);
-        this.$toast.error(err.message);
-      }
-    },
     async playTrack () {
       await this.$store.dispatch("setQueue", {
         'album': this.trackInfo.id,

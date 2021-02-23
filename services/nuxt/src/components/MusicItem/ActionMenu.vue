@@ -34,14 +34,13 @@
       >
         <v-rating
           v-if="auth.loggedIn"
+          v-model="reviewRating"
           background-color="white"
           color="var(--primary-purple)"
           dense
           half-increments
           hover
           size="18"
-          @input="changeRating($event)"
-          @click.native.stop.prevent
         />
         <v-btn
           v-else
@@ -89,51 +88,41 @@
             centered
           >
             <v-tabs-slider />
-            <v-tab href="#tab-1">
+            <v-tab href="#review-tab-1">
               Write Review
             </v-tab>
           </v-tabs>
           <v-tabs-items v-model="reviewTab">
-            <v-tab-item key="1" value="tab-1">
+            <v-tab-item key="1" value="review-tab-1">
               <v-responsive>
                 <v-container fluid>
                   <v-form>
-                    <v-text-field
-                      v-model="reviewTitle"
-                      :counter="10"
-                      :rules="playlistNameRules"
-                      label="Playlist Name"
-                      required
+                    <v-textarea
+                      v-model="reviewDescription"
+                      :rules="reviewDescriptionRules"
+                      label="Add a review"
                     />
-                    <v-text-field
-                      v-model="playlistDescription"
-                      label="Playlist Description"
-                    />
-                    <v-radio-group v-model="privacyRadio">
-                      <template v-slot:label>
-                        <div>Choose Your Privacy</div>
-                      </template>
-                      <v-radio value="Public">
-                        <template v-slot:label>
-                          <div>Public</div>
-                        </template>
-                      </v-radio>
-                      <v-radio value="Private">
-                        <template v-slot:label>
-                          <div>Private</div>
-                        </template>
-                      </v-radio>
-                    </v-radio-group>
+                    <!-- <v-rating
+                      v-if="auth.loggedIn"
+                      background-color="white"
+                      color="var(--primary-purple)"
+                      dense
+                      half-increments
+                      hover
+                      size="18"
+                      @input="changeRating($event)"
+                      @click.native.stop.prevent
+                    /> -->
                     <v-btn
                       :disabled="
-                        playlistName.length === 0 ||
-                          isCreatingPlaylist ||
-                          playlistName.length > 10
+                        reviewDescription.length === 0 ||
+                          isCreatingReview ||
+                          reviewDescription.length > 255
                       "
                       color="var(--primary-purple)"
                       @click="createPlaylist"
                     >
-                      Create Playlist
+                      Create Review
                     </v-btn>
                   </v-form>
                 </v-container>
@@ -365,12 +354,18 @@ export default {
   data () {
     return {
       tab: null,
-      reviewTab: null,
+      reviewTab: 'review-tab-1',
       isHovering: false,
       isPlaying: false,
       isCreatingPlaylist: false,
+      isCreatingReview: false,
       reviewDialog: false,
-      reviewTitle: '',
+      reviewDescription: '',
+      reviewDescriptionRules: [
+        v => !!v || 'Review is required',
+        v => (v && v.length <= 255) || 'Review must be less than 255 characters',
+      ],
+      reviewRating: null,
       playlistDialog: false,
       playlists: [],
       playlistDescription: '',

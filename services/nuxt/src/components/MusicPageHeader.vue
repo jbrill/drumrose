@@ -5,6 +5,7 @@
     <v-skeleton-loader
       v-if="loading || !trackInfo"
       class="mx-auto"
+      type="card"
     />
     <v-card
       v-else
@@ -342,7 +343,7 @@
           </v-layout>
         </v-col>
         <v-col cols="12" sm="3">
-          <v-card class="rounded-0" elevation="12">
+          <v-card dark class="rounded-0" elevation="12">
             <v-badge
               avatar
               bordered
@@ -357,7 +358,7 @@
                 width="100%"
                 height="auto"
                 :src="appleImage"
-                gradient="to top right, rgba(100,115,201,.33), rgba(25,32,72,.7)"
+                gradient="to top right, rgba(100,115,201,.0), rgba(25,32,72,.34)"
               >
                 <template v-slot:placeholder>
                   <v-row
@@ -441,7 +442,7 @@
       class="mx-auto"
     />
     <v-card
-      v-else
+      v-else-if="type === 'albums' || type === 'playlists'"
       style="padding: 2rem; margin-top: 2rem"
     >
       <v-row v-if="type === 'albums'">

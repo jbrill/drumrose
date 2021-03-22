@@ -8,12 +8,26 @@
   >
     <div v-if="trackObject" class="musicItem">
       <v-img
-        :src="appleImage"
-        class="audio-player-artwork"
-        height="30px"
+        style="margin: 0 auto"
         width="30px"
+        height="30px"
         max-width="30px"
-      />
+        :src="appleImage"
+        gradient="to top right, rgba(100,115,201,.0), rgba(25,32,72,.34)"
+      >
+        <template v-slot:placeholder>
+          <v-row
+            class="fill-height ma-0"
+            align="center"
+            justify="center"
+          >
+            <v-progress-circular
+              indeterminate
+              color="grey lighten-5"
+            />
+          </v-row>
+        </template>
+      </v-img>
       <div v-if="artistId" class="nowPlayingItem">
         <nuxt-link
           v-if="artistId"
@@ -61,20 +75,22 @@
         >
           <template v-slot:activator="{ on }">
             <div v-on="on">
-              <v-btn
-                icon
-                disabled
-                :class="{ 'show-btns': hover }"
-                @click.native.stop.prevent
-              >
-                <v-icon
-                  small
+              <v-hover v-slot:default="{ hover }">
+                <v-btn
+                  icon
+                  disabled
                   :class="{ 'show-btns': hover }"
-                  color="transparent"
+                  @click.native.stop.prevent
                 >
-                  mdi-heart
-                </v-icon>
-              </v-btn>
+                  <v-icon
+                    small
+                    :class="{ 'show-btns': hover }"
+                    color="transparent"
+                  >
+                    mdi-heart
+                  </v-icon>
+                </v-btn>
+              </v-hover>
             </div>
           </template>
           <span>Log In To Favorite</span>
@@ -93,7 +109,7 @@
 <script>
 import { mapState } from 'vuex';
 import {
-  getTrackDetail, favoriteTrack,
+  getTrackDetail, favoriteTrack, createTrack,
 } from '~/api/api';
 import ActionMenu from '~/components/MusicItem/ActionMenu.vue';
 
@@ -150,11 +166,22 @@ export default {
         this.$auth.getToken('auth0'),
         this.trackObject.id,
       );
-      console.log('resp');
-      console.log(resp);
       this.isFavorited = resp.data.track.favorited;
-    } catch (e) {
-      console.log(e)
+    } catch (err) {
+      if (err.response.status === 409) {
+        try {
+          await createTrack(
+            this.$auth.getToken('auth0'),
+            {
+              'id': this.trackObject.id,
+            }
+          );
+        } catch (err) {
+          console.error(err);
+        }
+      }
+      this.loading = false;
+      console.error(err);
     }
     
     // const librarySearchResp = await this.$store.dispatch(

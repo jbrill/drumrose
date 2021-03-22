@@ -40,18 +40,18 @@ import Post from '~/components/PostItem/Post.vue';
 const carouselPixelRanges = {
   '1': {
     'min': 1,
-    'max': 500,
+    'max': 700,
   },
   '2': {
-    'min': 501,
-    'max': 900,
+    'min': 701,
+    'max': 1200,
   },
   '3': {
-    'min': 901,
-    'max': 1600,
+    'min': 1201,
+    'max': 1800,
   },
   '4': {
-    'min': 1601,
+    'min': 1801,
     'max': null,
   },
 };

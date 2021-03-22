@@ -16,7 +16,8 @@
         <v-icon x-small>
           mdi-comment
         </v-icon>
-        102 Reviews
+        <span v-if="numReviews === 1" class="overline">{{ numReviews }} Review</span>
+        <span v-else class="overline">{{ numReviews }} Reviews</span>
       </h5>
       <v-divider />
     </v-container>
@@ -38,6 +39,7 @@ export default {
     playing: false,
     average: 0.0,
     ratingValues: [],
+    numReviews: 0,
     didFavorite: false,
   }),
   computed: {
@@ -57,7 +59,7 @@ export default {
         this.$route.params.id
       );
       this.average = resp.data.playlist.review_summary.total_reviews > 0 ?
-        resp.data.track.review_summary.average_review : 0.0;
+        resp.data.playlist.review_summary.average_review : 0.0;
       for (
         let ratingKey in resp.data.playlist.review_summary.totals_per_rating
       ) {
@@ -65,8 +67,9 @@ export default {
           resp.data.playlist.review_summary.totals_per_rating[ratingKey]
         );
       }
-      this.didFavorite = resp.data.plaaylist.favorited;
+      this.didFavorite = resp.data.playlist.favorited;
       this.loading = false;
+      this.numReviews = resp.data.playlist.review_summary.total_reviews;
     } catch (err) {
       this.loading = false;
       console.error(err);

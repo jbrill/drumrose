@@ -4,6 +4,7 @@
       v-if="loading || !attributes"
       class="mx-auto"
       type="image"
+      style="height: 100%"
     />
     <v-badge
       v-else
@@ -24,6 +25,7 @@
         :tracks="tracks"
         type="playlist"
         :name="attributes.name"
+        :artist-name="attributes.curatorName"
         :is-favorited="isFavorited"
       />
     </v-badge>

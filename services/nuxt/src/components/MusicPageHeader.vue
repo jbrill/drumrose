@@ -358,6 +358,7 @@
                 width="100%"
                 height="auto"
                 :src="appleImage"
+                class="fill-height"
                 gradient="to top right, rgba(100,115,201,.0), rgba(25,32,72,.34)"
               >
                 <template v-slot:placeholder>
@@ -379,6 +380,39 @@
             justify-center
           >
             <v-fade-transition leave-absolute>
+              <v-tooltip
+                v-if="!auth.loggedIn"
+                top
+              >
+                <template v-slot:activator="{ on }">
+                  <v-list-item
+                    :style="{
+                      'justify-content':'center',
+                      'align-items': 'center',
+                      'height': '1rem'
+                    }"
+                    v-on="on"
+                  >
+                    <v-rating
+                      v-model="rating"
+                      readonly
+                      empty-icon="mdi-star-outline"
+                      full-icon="mdi-star"
+                      half-icon="mdi-star-half-full"
+                      background-color="grey"
+                      color="var(--primary-red)"
+                      style="padding-top: 2rem"
+                      dense
+                      half-increments
+                      hover
+                      size="24"
+                      @input="changeRating($event)"
+                      @click.native.stop.prevent
+                    />
+                  </v-list-item>
+                </template>
+                <span>Log In To Rate</span>
+              </v-tooltip>
               <v-rating
                 v-model="rating"
                 empty-icon="mdi-star-outline"
@@ -388,7 +422,6 @@
                 color="var(--primary-red)"
                 style="padding-top: 2rem"
                 dense
-                :readonly="!auth.loggedIn"
                 half-increments
                 hover
                 size="24"

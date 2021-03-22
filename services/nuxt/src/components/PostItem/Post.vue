@@ -1,5 +1,5 @@
 <template>
-  <div class="post">
+  <v-container>
     <PostHeader
       v-if="post.user"
       :user="post.user"
@@ -25,7 +25,7 @@
       is-playable
       is-actionable
     />
-  </div>
+  </v-container>
 </template>
 
 <script>

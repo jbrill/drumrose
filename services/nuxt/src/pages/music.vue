@@ -36,7 +36,7 @@
             :options="{
               threshold: .5
             }"
-            min-height="200"
+            min-height="300px"
             transition="fade-transition"
           >
             <v-row

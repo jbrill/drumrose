@@ -26,14 +26,42 @@
       </v-btn>
     </template>
     <v-list dense>
+      <v-tooltip
+        v-if="!auth.loggedIn"
+        top
+      >
+        <template v-slot:activator="{ on }">
+          <v-list-item
+            :style="{
+              'justify-content':'center',
+              'align-items': 'center',
+              'height': '1rem'
+            }"
+            v-on="on"
+          >
+            <v-rating
+              v-model="reviewRating"
+              background-color="grey"
+              color="var(--primary-purple)"
+              dense
+              readonly
+              half-increments
+              hover
+              size="18"
+            />
+          </v-list-item>
+        </template>
+        <span>Log In To Rate</span>
+      </v-tooltip>
       <v-list-item
+        v-else
         :style="{
           'justify-content':'center',
+          'align-items': 'center',
           'height': '1rem'
         }"
       >
         <v-rating
-          v-if="auth.loggedIn"
           v-model="reviewRating"
           background-color="white"
           color="var(--primary-purple)"
@@ -42,20 +70,33 @@
           hover
           size="18"
         />
-        <v-btn
-          v-else
-          block
-          color="var(--primary-purple)"
-          raised
-          width="2rem"
-          secondary
-          @click="$auth.loginWith('auth0')"
-          @click.native.stop.prevent
-        >
-          Log In to Rate
-        </v-btn>
       </v-list-item>
+      <v-tooltip
+        v-if="!auth.loggedIn"
+        top
+      >
+        <template v-slot:activator="{ on }">
+          <v-list-item
+            v-bind="attrs"
+            v-on="on"
+            @click.native.stop.prevent
+          >
+            <v-list-item-icon>
+              <v-icon small color="grey">
+                mdi-pencil
+              </v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title class="grey--text">
+                Write a Review
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </template>
+        <span>Log In To Review</span>
+      </v-tooltip>
       <v-dialog
+        v-else
         v-model="reviewDialog"
         scrollable
         max-width="50vw"
@@ -97,33 +138,71 @@
               <v-responsive>
                 <v-container fluid>
                   <v-form>
-                    <v-textarea
-                      v-model="reviewDescription"
-                      :rules="reviewDescriptionRules"
-                      label="Add a review"
-                    />
-                    <!-- <v-rating
-                      v-if="auth.loggedIn"
-                      background-color="white"
-                      color="var(--primary-purple)"
-                      dense
-                      half-increments
-                      hover
-                      size="18"
-                      @input="changeRating($event)"
-                      @click.native.stop.prevent
-                    /> -->
-                    <v-btn
-                      :disabled="
-                        reviewDescription.length === 0 ||
-                          isCreatingReview ||
-                          reviewDescription.length > 255
-                      "
-                      color="var(--primary-purple)"
-                      @click="createPlaylist"
-                    >
-                      Create Review
-                    </v-btn>
+                    <v-card rounded>
+                      <v-layout>
+                        <v-img
+                          class="albumCover"
+                          width="30%"
+                          elevation="12"
+                          dark
+                          :src="artworkUrl"
+                        >
+                          <template v-slot:placeholder>
+                            <v-row
+                              class="fill-height ma-0"
+                              align="center"
+                              justify="center"
+                            >
+                              <v-progress-circular
+                                indeterminate
+                                color="grey lighten-5"
+                              />
+                            </v-row>
+                          </template>
+                        </v-img>
+                        <v-container style="display: flex; justify-content: center; flex-direction: column">
+                          <v-card-title class="title" style="padding-bottom: 0">
+                            {{ name }}
+                          </v-card-title>
+                          <v-card-title class="subtitle">
+                            {{ artistName }}
+                          </v-card-title>
+                        </v-container>
+                        <v-card-actions>
+                          <v-rating
+                            background-color="white"
+                            color="var(--primary-purple)"
+                            dense
+                            half-increments
+                            hover
+                            size="24"
+                            @input="reviewRating = $event"
+                            @click.native.stop.prevent
+                          />
+                        </v-card-actions>
+                      </v-layout>
+                    </v-card>
+                    <v-container>
+                      <p class="caption yellow--text overline" style="margin-top: 1vh">
+                        Review
+                      </p>
+                      <v-textarea
+                        v-model="reviewDescription"
+                        :rules="reviewDescriptionRules"
+                        label="Add a review"
+                      />
+                      <v-btn
+                        :disabled="
+                          reviewDescription.length === 0 ||
+                            isCreatingReview ||
+                            reviewDescription.length > 255
+                        "
+                        color="var(--primary-purple)"
+                        @click="createReview"
+                      >
+                        Create Review
+                      </v-btn>
+                    </v-container>
                   </v-form>
                 </v-container>
               </v-responsive>
@@ -132,7 +211,32 @@
         </v-card>
       </v-dialog>
       <v-divider />
+      <v-tooltip
+        v-if="!auth.loggedIn"
+        top
+      >
+        <template v-slot:activator="{ on }">
+          <v-list-item
+            v-bind="attrs"
+            v-on="on"
+            @click.native.stop.prevent
+          >
+            <v-list-item-icon>
+              <v-icon small color="grey">
+                mdi-playlist-music
+              </v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title class="grey--text">
+                Add to Playlist
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </template>
+        <span>Log In To Add Or Create Playlist</span>
+      </v-tooltip>
       <v-dialog
+        v-else
         v-model="playlistDialog"
         scrollable
         max-width="50vw"
@@ -313,6 +417,7 @@ import {
 
 
 export default {
+  components: {},
   props: {
     id: {
       type: String,
@@ -331,6 +436,10 @@ export default {
       default: '',
     },
     name: {
+      type: String,
+      default: '',
+    },
+    artistName: {
       type: String,
       default: '',
     },
@@ -442,6 +551,7 @@ export default {
       }
     },
     async changeRating (e) {
+      console.log(this.id)
       const data = {
         'rating': e,
         'apple_music_id': this.id,
@@ -460,6 +570,35 @@ export default {
             this.$auth.getToken('auth0'), data
           );
         }
+      } catch (err) {
+        console.error(err);
+        this.$toast.error(err);
+      }
+    },
+    async createReview () {
+      const data = {
+        'rating': this.reviewRating,
+        'review': this.reviewDescription,
+        'apple_music_id': this.id,
+      };
+      console.log(this.id)
+      try {
+        if (this.type === 'song') {
+          await reviewTrack(
+            this.$auth.getToken('auth0'), data
+          );
+        } else if (this.type === 'album') {
+          await reviewAlbum(
+            this.$auth.getToken('auth0'), data
+          );
+        } else if (this.type === 'playlist') {
+          await reviewPlaylist(
+            this.$auth.getToken('auth0'), data
+          );
+        }
+        this.$toast.info(
+          `Successfully reviewed ${this.type}`
+        );
       } catch (err) {
         console.error(err);
         this.$toast.error(err);

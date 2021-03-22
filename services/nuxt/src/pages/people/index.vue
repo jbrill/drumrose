@@ -10,12 +10,13 @@
       >
         <v-list-item-content>
           <v-list-item-title>
-            <a
-              :href="'/people/' + user.username"
+            <nuxt-link
+              :to="'/people/' + user.username"
+              class="font-weight-bold"
               style="color: var(--primary-yellow)"
             >
               {{ user.username }}
-            </a>
+            </nuxt-link>
           </v-list-item-title>
           <v-list-item-subtitle class="text--primary">
             {{ user.followers.length }} Followers

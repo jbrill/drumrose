@@ -10,7 +10,7 @@ export default {
    ** Headers of the page
    */
   head: {
-    title: 'DRUMROSE | Affect Culture',
+    title: 'Drumrose | The Social Catalog for Music.',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },

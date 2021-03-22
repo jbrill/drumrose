@@ -4,6 +4,7 @@
       v-if="loading || !attributes"
       class="mx-auto"
       type="image"
+      style="height: 100%"
     />
     <v-container v-else>
       <v-badge
@@ -24,6 +25,7 @@
           :link="'/albums/' + id"
           type="album"
           :name="attributes.name"
+          :artist-name="attributes.artistName"
           :is-favorited="isFavorited"
         />
       </v-badge>

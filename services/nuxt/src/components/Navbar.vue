@@ -1,68 +1,10 @@
 <template>
   <div>
-    <!-- <v-navigation-drawer
-      v-model="drawer"
-      app
-      color="#272727"
-      dark
-      stateless
-    >
-      <v-layout class="flex-column" flex justify-space-between>
-        <v-container>
-          <v-list nav>
-            <v-list-item
-              v-for="navObject in filteredNavObjects"
-              :key="navObject.title"
-              active-class="activeListItem"
-              link
-              :to="navObject.nav"
-            >
-              <v-list-item-icon>
-                <v-icon>{{ navObject.icon }}</v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>
-                <v-list-item-title>{{ navObject.title }}</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>
-        </v-container>
-        <v-container>
-          <v-flex v-if="auth.loggedIn">
-            <div class="pa-2">
-              <v-btn to="/profile" block>
-                Profile
-              </v-btn>
-              <v-btn block @click="signOut">
-                Logout
-              </v-btn>
-            </div>
-          </v-flex> 
-          <v-divider />
-          <v-chip-group
-            active-class="primary--text"
-            column
-          >
-            <v-chip
-              v-for="tag in tags"
-              :key="tag"
-              label
-            >
-              {{ tag }}
-            </v-chip>
-          </v-chip-group>
-        </v-container>
-      </v-layout>
-    </v-navigation-drawer>       -->
     <v-app-bar 
       fixed
       style="padding: 4px"
       app
     >
-      <!-- <v-app-bar-nav-icon
-        class="menu-navigation"
-        color="#ccc"
-        @click="drawer=!drawer"
-      /> -->
       <v-toolbar-title>
         <nuxt-link to="/">
           <span class="drumrose-title">DRUMROSE</span>
@@ -157,7 +99,11 @@
           </v-btn>
         </template>
         <v-list dense>
-          <v-list-item v-if="auth.loggedIn" nuxt to="/profile">
+          <v-list-item
+            v-if="auth.loggedIn"
+            nuxt
+            :to="'/people/' + getAuthHandle"
+          >
             <v-list-item-title>
               Profile
             </v-list-item-title>
@@ -254,11 +200,20 @@ export default {
       return 'DRUMROSE';
     },
     filteredNavObjects () {
-      return this.navObjects.filter( navObject => ((!this.auth.loggedIn &&
-        !navObject.requiresAuth) || this.auth.loggedIn) &&
-((!this.$store.state.isAuthorized &&
-        !navObject.requiresAppleAuth) || this.$store.state.isAuthorized)
+      return this.navObjects.filter(
+        navObject => (
+          (
+            !this.auth.loggedIn && !navObject.requiresAuth
+          ) || this.auth.loggedIn
+        ) && (
+          (
+            !this.$store.state.isAuthorized && !navObject.requiresAppleAuth
+          ) || this.$store.state.isAuthorized
+        )
       );
+    },
+    getAuthHandle () {
+      return this.auth.user['https://django-server:8000/handle'];
     },
   },
   methods: {

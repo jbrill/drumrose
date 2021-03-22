@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-container class="search-bar">
     <v-autocomplete
       v-model="selectedSearch"
       background-color="var(--primary-black-light)"
@@ -15,7 +15,7 @@
       item-text="attributes.name"
       item-value="attributes.name"
       no-data-text="No data found"
-      placeholder="Search music"
+      placeholder="Search for music, playlists, and people"
       prepend-inner-icon="mdi-magnify"
       outlined
       return-object
@@ -92,7 +92,7 @@
         </v-list-item-action>	
       </template>
     </v-autocomplete>
-  </div>
+  </v-container>
 </template>
 
 <script>
@@ -202,7 +202,7 @@ export default {
 </script>
 
 <style scoped>
->>>.v-list-item {
-  max-width: 20rem !important;
+.search-bar {
+  max-width: 30rem;
 }
 </style>

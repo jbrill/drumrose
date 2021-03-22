@@ -17,7 +17,8 @@
         <v-icon x-small>
           mdi-comment
         </v-icon>
-        {{ numReviews }} Reviews
+        <span v-if="numReviews === 1" class="overline">{{ numReviews }} Review</span>
+        <span v-else class="overline">{{ numReviews }} Reviews</span>
       </h5>
       <v-divider />
     </v-container>
@@ -59,7 +60,7 @@ export default {
         this.$route.params.id,
       );
       this.average = resp.data.album.review_summary.total_reviews > 0 ?
-        resp.data.track.review_summary.average_review : 0.0;
+        resp.data.album.review_summary.average_review : 0.0;
       for (let ratingKey in resp.data.album.review_summary.totals_per_rating) {
         this.ratingValues.push(
           resp.data.album.review_summary.totals_per_rating[ratingKey]
@@ -67,8 +68,10 @@ export default {
       }
       this.didFavorite = resp.data.album.favorited;
       this.loading = false;
+      this.numReviews = resp.data.album.review_summary.total_reviews;
     } catch (err) {
-      if (err.response.status === 409) {
+      console.log(err.response)
+      if (err.response.status === "409") {
         try {
           await createAlbum(
             this.$auth.getToken('auth0'),

@@ -115,7 +115,11 @@
                   </v-icon>
                 </v-btn>
                 <ActionMenu
+                  :id="id"
                   :type="type"
+                  :artwork-url="artworkUrl"
+                  :name="name"
+                  :artist-name="artistName"
                 />
               </v-card-actions>
             </v-container>
@@ -164,6 +168,10 @@ export default {
       default: '',
     },
     name: {
+      type: String,
+      default: '',
+    },
+    artistName: {
       type: String,
       default: '',
     },
@@ -348,6 +356,7 @@ export default {
             this.id,
           );
           this.isFavorited = false;
+          this.$toast.info('Unfavorited track');
         } catch (err) {
           console.error(err);
         }
@@ -358,7 +367,8 @@ export default {
             this.$auth.getToken('auth0'),
             this.id,
           );
-          this.isFavorited = true;
+          this.isFavorited = false;
+          this.$toast.info('Unfavorited album');
         } catch (err) {
           console.error(err);
         }
@@ -369,7 +379,8 @@ export default {
             this.$auth.getToken('auth0'),
             this.id,
           );
-          this.isFavorited = true;
+          this.isFavorited = false;
+          this.$toast.info('Unfavorited playlist');
         } catch (err) {
           console.error(err);
         }

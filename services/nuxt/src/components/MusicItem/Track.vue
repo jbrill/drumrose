@@ -4,6 +4,7 @@
       v-if="loading || !trackObject || !('attributes' in trackObject)"
       class="mx-auto"
       type="image"
+      style="height: 100%"
     />
     <v-container
       v-else
@@ -26,6 +27,7 @@
           :link="'/tracks/' + trackObject.id"
           type="song"
           :name="attributes.name"
+          :artist-name="attributes.artistName"
           :is-favorited="isFavorited"
         />
       </v-badge>

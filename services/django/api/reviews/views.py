@@ -35,7 +35,12 @@ class TrackReviewList(APIView):
         reviews = TrackReview.objects.all()
 
         return JsonResponse(
-            {"track_reviews": list(reviews.values())}, status=status.HTTP_200_OK
+            {
+                "track_reviews": list(
+                    reviews.values("id", "track__apple_music_id", "review", "rating")
+                )
+            },
+            status=status.HTTP_200_OK,
         )
 
     def post(self, request):
@@ -45,13 +50,14 @@ class TrackReviewList(APIView):
         try:
             if "review" not in request.data and "rating" not in request.data:
                 raise KeyError
+            print(request.data)
             serializer = TrackReviewSerializer(
                 data={
+                    "apple_music_id": request.data.get("apple_music_id"),
                     "auth0_user_id": str(request.user).split("auth0.")[1],
                     "review": request.data.get("review"),
                     "rating": request.data.get("rating"),
-                },
-                context={"request": request},
+                }
             )
         except KeyError:
             return JsonResponse(
@@ -96,6 +102,7 @@ class AlbumReviewList(APIView):
         Create favorited album
         """
         try:
+            print(request.data)
             if "review" not in request.data and "rating" not in request.data:
                 raise KeyError
             serializer = AlbumReviewSerializer(
@@ -151,13 +158,14 @@ class PlaylistReviewList(APIView):
         try:
             if "review" not in request.data and "rating" not in request.data:
                 raise KeyError
+            print(request.data)
             serializer = PlaylistReviewSerializer(
                 data={
                     "apple_music_id": request.data["apple_music_id"],
+                    "auth0_user_id": str(request.user).split("auth0.")[1],
                     "review": request.data.get("review"),
                     "rating": request.data.get("rating"),
-                },
-                context={"request": request},
+                }
             )
         except KeyError:
             return JsonResponse(

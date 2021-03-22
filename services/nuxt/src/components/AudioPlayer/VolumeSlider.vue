@@ -6,6 +6,7 @@
       :offset-y="true"
       dark
       transition="slide-y-transition"
+      open-on-hover
       elevation="10"
     >
       <template v-slot:activator="{ on }">

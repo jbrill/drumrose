@@ -175,11 +175,14 @@ export default {
       
       
     );
+    console.log(reviewsResponse);
     const reviewTrackList = await Promise.all(
       reviewsResponse.data.track_reviews.map( async review => {
+        console.log(review)
         const attributes = await store.getters.fetch(
-          `/v1/catalog/us/songs/${review.track.apple_music_id}`
+          `/v1/catalog/us/songs/${review.track__apple_music_id}`
         );
+        console.log(attributes)
         review.attributes = attributes.data[0].attributes;
         review.type = "songs";
         review.id = attributes.data[0].id;

@@ -17,7 +17,8 @@
         <v-icon x-small>
           mdi-comment  
         </v-icon>
-        {{ numReviews }} Reviews
+        <span v-if="numReviews === 1" class="overline">{{ numReviews }} Review</span>
+        <span v-else class="overline">{{ numReviews }} Reviews</span>
       </h5>
       <v-divider />
     </v-container>
@@ -69,7 +70,7 @@ export default {
       }
       this.loading = false;
       this.didFavorite = resp.data.track.favorited;
-      console.log(resp.data.track)
+      this.numReviews = resp.data.track.review_summary.total_reviews;
     } catch (err) {
       if (err.response.status === 409) {
         try {

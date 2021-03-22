@@ -4,6 +4,7 @@
       <v-row>
         <v-select
           v-model="selectedItems"
+          color="var(--primary-purple)"
           :items="items"
           style="margin: 2rem"
           attach

@@ -1,6 +1,7 @@
 """
 Module contains serializers for favorites
 """
+# pylint: disable=W0221
 
 from api.albums.serializers import AlbumSerializer
 from api.models.core import (

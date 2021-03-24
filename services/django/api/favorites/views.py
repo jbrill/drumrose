@@ -80,7 +80,7 @@ class FavoriteTrackDetail(APIView):
                 user__auth0_user_id=str(request.user).split("auth0.")[1],
             )
         except FavoritedTrack.DoesNotExist:
-            return JsonResponse(status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse({}, status=status.HTTP_400_BAD_REQUEST)
         favorited_track.delete()
         return JsonResponse({}, status=status.HTTP_200_OK)
 

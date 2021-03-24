@@ -2,7 +2,7 @@
   <v-menu
     close-on-content-click
     origin="bottom right"
-    z-index="10000"
+    z-index="1000"
     attach
     top
     left
@@ -250,7 +250,7 @@
                             )
                         "
                         color="var(--primary-purple)"
-                        @click="editReview"
+                        @click="createReview"
                       >
                         Create Review
                       </v-btn>

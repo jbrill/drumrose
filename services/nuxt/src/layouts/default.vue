@@ -31,6 +31,7 @@
         <transition name="fade">
           <AudioPlayer />
         </transition>
+        <QueueFab />
       </v-content>
     </v-app>
     <v-footer
@@ -83,6 +84,7 @@
 <script>
 import { mapState } from 'vuex';
 import Navbar from '~/components/Navbar';
+import QueueFab from '~/components/QueueFab';
 import AudioPlayer from '~/components/AudioPlayer/AudioPlayer';
 import RegisterBanner from '~/components/RegisterBanner';
 
@@ -91,6 +93,7 @@ export default {
   components: {
     Navbar,
     AudioPlayer,
+    QueueFab,
     RegisterBanner,
   },
   data: () => ({

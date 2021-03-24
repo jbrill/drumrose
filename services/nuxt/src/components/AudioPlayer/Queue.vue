@@ -4,7 +4,7 @@
       :track-object="nowPlayingItem"
       :now-playing="true"
     />
-    <v-menu
+    <!-- <v-menu
       left
       top
       dark
@@ -27,7 +27,7 @@
           <v-icon>queue_music</v-icon>
         </v-btn>
       </template>
-      <v-list two-line>
+      <v-list v-if="queue.length > 0" two-line>
         <v-subheader>Up Next - {{ queue.length }} Tracks</v-subheader>
         <v-list-item-group
           v-model="selected"
@@ -43,7 +43,7 @@
           </template>
         </v-list-item-group>
       </v-list>
-    </v-menu>
+    </v-menu> -->
   </div>
 </template>
 

@@ -359,7 +359,9 @@
                 height="auto"
                 :src="appleImage"
                 class="fill-height"
-                gradient="to top right, rgba(100,115,201,.0), rgba(25,32,72,.34)"
+                gradient="
+                  to top right, rgba(100,115,201,.0), rgba(25,32,72,.34)
+                "
               >
                 <template v-slot:placeholder>
                   <v-row
@@ -769,7 +771,7 @@ export default {
             this.$auth.getToken('auth0'), data
           );
         }
-        this.$toast.info(`Rated ${this.trackInfo.attributes.name} ${e} stars`)
+        this.$toast.info(`Rated ${this.trackInfo.attributes.name} ${e} stars`);
       } catch (err) {
         console.error(err);
         this.$toast.error(err);

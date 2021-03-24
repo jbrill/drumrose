@@ -26,7 +26,7 @@
         type="playlist"
         :name="attributes.name"
         :artist-name="attributes.curatorName"
-        :is-favorited="isFavorited"
+        :favorited="isFavorited"
       />
     </v-badge>
     <MusicFooter

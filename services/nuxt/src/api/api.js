@@ -22,6 +22,26 @@ export const getTrackReviews = async bearerToken => {
 
 
 /*
+ * Fetches reviews
+ * */
+export const getTrackReview = async bearerToken => {
+  try {
+    const response = await axios.get(
+      `https://teton.drumrose.io/api/reviews/tracks/<track_id>/`,
+      {
+        headers: {
+          Authorization: `${bearerToken}`,
+        },
+      }
+    );
+    return response;
+  } catch(err) {
+    throw new Error(err);
+  }
+};
+
+
+/*
  * Fetches followers
  * */
 export const getFollowers = async (bearerToken, userHandle) => {
@@ -94,6 +114,21 @@ export const getUserList = async bearerToken => {
  * */
 export const reviewTrack = async (bearerToken, data) => {
   return await axios.post(
+    `https://teton.drumrose.io/api/reviews/tracks/`,
+    data,
+    {
+      headers: {
+        Authorization: `${bearerToken}`,
+      },
+    }
+  );
+};
+
+/* 
+ * Update track review
+ * */
+export const updateTrackReview = async (bearerToken, data) => {
+  return await axios.put(
     `https://teton.drumrose.io/api/reviews/tracks/`,
     data,
     {

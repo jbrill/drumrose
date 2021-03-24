@@ -17,7 +17,12 @@
         <v-icon x-small>
           mdi-comment  
         </v-icon>
-        <span v-if="numReviews === 1" class="overline">{{ numReviews }} Review</span>
+        <span
+          v-if="numReviews === 1"
+          class="overline"
+        >
+          {{ numReviews }} Review
+        </span>
         <span v-else class="overline">{{ numReviews }} Reviews</span>
       </h5>
       <v-divider />

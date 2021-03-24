@@ -7,6 +7,7 @@ class SongSerializer(serializers.ModelSerializer):
 
     favorited = serializers.SerializerMethodField(read_only=True)
     review_summary = serializers.SerializerMethodField(read_only=True)
+    review = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Song
@@ -35,6 +36,33 @@ class SongSerializer(serializers.ModelSerializer):
                 "5.0": track_reviews.filter(rating=5.0).count(),
             },
         }
+
+    def get_review(self, obj):
+        if "request" not in self.context:
+            return False
+        try:
+            auth0_user_id = str(self.context.get("request").user).split(".")[1]
+        except IndexError:
+            return False
+        try:
+            review = TrackReview.objects.get(
+                user__auth0_user_id=auth0_user_id,
+                track__apple_music_id=obj.apple_music_id,
+            ).review
+        except TrackReview.DoesNotExist:
+            review = None
+        return review
+
+    def get_rating(self, obj):
+        if "request" not in self.context:
+            return False
+        try:
+            auth0_user_id = str(self.context.get("request").user).split(".")[1]
+        except IndexError:
+            return False
+        return TrackReview.objects.get(
+            user__auth0_user_id=auth0_user_id, track__apple_music_id=obj.apple_music_id
+        ).rating
 
     def get_favorited(self, obj):
         if "request" not in self.context:

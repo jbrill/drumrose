@@ -8,7 +8,10 @@
             :key="link"
             link
           >
-            <v-list-item-title class="overline font-weight-bold" v-text="link" />
+            <v-list-item-title
+              class="overline font-weight-bold"
+              v-text="link"
+            />
           </v-list-item>
         </v-list>
       </v-card>
@@ -24,7 +27,7 @@
           What is Drumrose?
         </p>
         <p>
-          Drumrose is an open, contextual catalog set to advance the discussion and discourse of the musicverse.
+          {{ drumroseDescription }}
         </p>
       </v-container>
       <v-container>
@@ -32,7 +35,7 @@
           Why do you exist?
         </p>
         <p>
-          We believe current models of music facilitation are too centralized. 
+          {{ drumrosePurpose }}
         </p>
       </v-container>
     </v-flex>
@@ -48,8 +51,12 @@ export default {
         'Legal',
         'Data',
       ],
-    }
-  }
+      drumroseDescription: "Drumrose is an open, contextual catalog " +
+        "set to advance the discussion and discourse of the musicverse.",
+      drumrosePurpose: "We believe current models of music facilitation " +
+        "are too centralized.",
+    };
+  },
 };
 </script>
 

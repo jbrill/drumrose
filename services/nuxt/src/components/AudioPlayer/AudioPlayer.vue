@@ -113,9 +113,9 @@ export default {
       if (newPlaybackState === 6) {
         await this.$store.dispatch("play");
       }
-      console.log(`We had ${oldPlaybackState} fruits, aw!`)
-      console.log(`We have ${newPlaybackState} fruits now, yay!`)
-    }
+      console.log(`We had ${oldPlaybackState} fruits, aw!`);
+      console.log(`We have ${newPlaybackState} fruits now, yay!`);
+    },
   },
   created () {
     if (process.browser) {

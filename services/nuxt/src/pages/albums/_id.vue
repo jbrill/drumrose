@@ -17,8 +17,18 @@
         <v-icon x-small>
           mdi-comment
         </v-icon>
-        <span v-if="numReviews === 1" class="overline">{{ numReviews }} Review</span>
-        <span v-else class="overline">{{ numReviews }} Reviews</span>
+        <span
+          v-if="numReviews === 1"
+          class="overline"
+        >
+          {{ numReviews }} Review
+        </span>
+        <span
+          v-else
+          class="overline"
+        >
+          {{ numReviews }} Reviews
+        </span>
       </h5>
       <v-divider />
     </v-container>
@@ -70,7 +80,7 @@ export default {
       this.loading = false;
       this.numReviews = resp.data.album.review_summary.total_reviews;
     } catch (err) {
-      console.log(err.response)
+      console.log(err.response);
       if (err.response.status === "409") {
         try {
           await createAlbum(

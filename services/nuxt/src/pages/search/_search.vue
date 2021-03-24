@@ -104,7 +104,8 @@
         </v-list-item-group>
         <span
           v-if="
-            selectedItems.includes('Playlists') && searchResults.playlists.length
+            selectedItems.includes('Playlists') &&
+              searchResults.playlists.length
           "
           class="overline"
         >
@@ -112,7 +113,8 @@
         </span>
         <v-list-item-group
           v-if="
-            selectedItems.includes('Playlists') && searchResults.playlists.length
+            selectedItems.includes('Playlists') &&
+              searchResults.playlists.length
           "
           v-model="selectedPlaylist"
         >

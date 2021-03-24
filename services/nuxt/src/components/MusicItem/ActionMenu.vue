@@ -48,6 +48,7 @@
               half-increments
               hover
               size="18"
+              @click="changeRating"
             />
           </v-list-item>
         </template>
@@ -77,7 +78,6 @@
       >
         <template v-slot:activator="{ on }">
           <v-list-item
-            v-bind="attrs"
             v-on="on"
             @click.native.stop.prevent
           >
@@ -114,7 +114,12 @@
               </v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title>Write a Review</v-list-item-title>
+              <v-list-item-title v-if="review && review.length > 0">
+                Edit Review
+              </v-list-item-title>
+              <v-list-item-title v-else>
+                Write a Review
+              </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </template>
@@ -160,7 +165,13 @@
                             </v-row>
                           </template>
                         </v-img>
-                        <v-container style="display: flex; justify-content: center; flex-direction: column">
+                        <v-container
+                          style="
+                            display: flex;
+                            justify-content: center;
+                            flex-direction: column
+                          "
+                        >
                           <v-card-title class="title" style="padding-bottom: 0">
                             {{ name }}
                           </v-card-title>
@@ -177,28 +188,69 @@
                             hover
                             size="24"
                             @input="reviewRating = $event"
-                            @click.native.stop.prevent
                           />
                         </v-card-actions>
                       </v-layout>
                     </v-card>
                     <v-container>
-                      <p class="caption yellow--text overline" style="margin-top: 1vh">
+                      <p
+                        class="caption yellow--text overline"
+                        style="margin-top: 1vh"
+                      >
                         Review
                       </p>
+                      {{ reviewRating }}
                       <v-textarea
+                        v-if="review"
+                        v-model="reviewDescription"
+                        :rules="reviewDescriptionRules"
+                        label="Edit review"
+                      />
+                      <v-textarea
+                        v-else
                         v-model="reviewDescription"
                         :rules="reviewDescriptionRules"
                         label="Add a review"
                       />
                       <v-btn
+                        v-if="review || rating"
                         :disabled="
-                          reviewDescription.length === 0 ||
+                          (
+                            (
+                              reviewDescription &&
+                              reviewDescription.length === 0
+                            ) ||
                             isCreatingReview ||
-                            reviewDescription.length > 255
+                            (
+                              reviewDescription &&
+                              reviewDescription.length > 255
+                            )
+                          ) ||
+                            (
+                              review === reviewDescription &&
+                              reviewRating === rating
+                            )
                         "
                         color="var(--primary-purple)"
-                        @click="createReview"
+                        @click="editReview"
+                      >
+                        Update Review
+                      </v-btn>
+                      <v-btn
+                        v-else
+                        :disabled="
+                          (
+                            reviewDescription &&
+                            reviewDescription.length === 0
+                          ) ||
+                            isCreatingReview ||
+                            (
+                              reviewDescription &&
+                              reviewDescription.length > 255
+                            )
+                        "
+                        color="var(--primary-purple)"
+                        @click="editReview"
                       >
                         Create Review
                       </v-btn>
@@ -217,7 +269,6 @@
       >
         <template v-slot:activator="{ on }">
           <v-list-item
-            v-bind="attrs"
             v-on="on"
             @click.native.stop.prevent
           >
@@ -413,6 +464,7 @@ import {
   reviewTrack,
   reviewAlbum,
   reviewPlaylist,
+  updateTrackReview,
 } from '~/api/api';
 
 
@@ -455,9 +507,13 @@ export default {
       type: String,
       default: '',
     },
-    isFavorited: {
-      type: Boolean,
-      default: false,
+    rating: {
+      type: Number,
+      default: 0.0,
+    },
+    review: {
+      type: String,
+      default: "",
     },
   },
   data () {
@@ -469,12 +525,14 @@ export default {
       isCreatingPlaylist: false,
       isCreatingReview: false,
       reviewDialog: false,
-      reviewDescription: '',
+      reviewDescription: this.review,
       reviewDescriptionRules: [
         v => !!v || 'Review is required',
-        v => (v && v.length <= 255) || 'Review must be less than 255 characters',
+        v => (
+          v && v.length <= 255
+        ) || 'Review must be less than 255 characters',
       ],
-      reviewRating: null,
+      reviewRating: this.rating,
       playlistDialog: false,
       playlists: [],
       playlistDescription: '',
@@ -485,12 +543,15 @@ export default {
       ],
       privacyRadio: 'Public',
       itemInUserLibrary: false,
+      isReviewed: false,
+      loading: true,
     };
   },
   computed: {
     ...mapState(['auth', 'isAuthorized', 'nowPlayingItem', 'playbackState']),
   },
-  async created () {
+  async mounted () {
+    this.loading = true;
     if (this.$store.state.isAuthorized) {
       try {
         let playlistResp = await this.$store.getters.fetch(
@@ -504,8 +565,10 @@ export default {
         //     'searchInput': this.name,
         //   }
         // );
+        this.loading = false;
       } catch (err) {
         console.error(err);
+        this.loading = false;
       }
       
     }
@@ -551,7 +614,7 @@ export default {
       }
     },
     async changeRating (e) {
-      console.log(this.id)
+      console.log(this.id);
       const data = {
         'rating': e,
         'apple_music_id': this.id,
@@ -581,7 +644,7 @@ export default {
         'review': this.reviewDescription,
         'apple_music_id': this.id,
       };
-      console.log(this.id)
+      console.log(this.id);
       try {
         if (this.type === 'song') {
           await reviewTrack(
@@ -593,6 +656,35 @@ export default {
           );
         } else if (this.type === 'playlist') {
           await reviewPlaylist(
+            this.$auth.getToken('auth0'), data
+          );
+        }
+        this.$toast.info(
+          `Successfully reviewed ${this.type}`
+        );
+      } catch (err) {
+        console.error(err);
+        this.$toast.error(err);
+      }
+    },
+    async editReview () {
+      const data = {
+        'rating': this.reviewRating,
+        'review': this.reviewDescription,
+        'apple_music_id': this.id,
+      };
+      console.log(this.id);
+      try {
+        if (this.type === 'song') {
+          await updateTrackReview(
+            this.$auth.getToken('auth0'), data
+          );
+        } else if (this.type === 'album') {
+          await updateTrackReview(
+            this.$auth.getToken('auth0'), data
+          );
+        } else if (this.type === 'playlist') {
+          await updateTrackReview(
             this.$auth.getToken('auth0'), data
           );
         }

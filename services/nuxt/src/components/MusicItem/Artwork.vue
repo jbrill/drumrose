@@ -120,6 +120,8 @@
                   :artwork-url="artworkUrl"
                   :name="name"
                   :artist-name="artistName"
+                  :review="review"
+                  :rating="rating"
                 />
               </v-card-actions>
             </v-container>
@@ -187,9 +189,17 @@ export default {
       type: String,
       default: '',
     },
-    isFavorited: {
+    favorited: {
       type: Boolean,
       default: false,
+    },
+    rating: {
+      type: Number,
+      default: 0.0,
+    },
+    review: {
+      type: String,
+      default: "",
     },
   },
   data () {
@@ -208,6 +218,7 @@ export default {
       ],
       privacyRadio: 'Public',
       itemInUserLibrary: false,
+      isFavorited: this.favorited,
     };
   },
   computed: {

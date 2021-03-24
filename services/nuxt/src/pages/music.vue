@@ -138,11 +138,13 @@ export default {
     const albumResponse = await getAlbums();
 
     let trackData = trackResponse.data['tracks'].filter( track => {
-      return track.apple_music_id != null && !track.apple_music_id.includes('-');
+      return track.apple_music_id != null &&
+        !track.apple_music_id.includes('-');
     });
     let albumData = albumResponse.data['albums'].filter( album => {
       // parsing to make sure it's clean
-      return album.apple_music_id != null && !album.apple_music_id.includes('-');
+      return album.apple_music_id != null &&
+        !album.apple_music_id.includes('-');
     });
 
     return {

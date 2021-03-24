@@ -58,7 +58,7 @@ import { getUserList } from '~/api/api';
 export default {
   async asyncData ({ store, $auth }) {
     const usersResponse = await getUserList();
-    console.log(usersResponse)
+    console.log(usersResponse);
     return {
       "users": usersResponse.data.users,
     };
@@ -67,7 +67,7 @@ export default {
     followPerson () {
       console.log("SHOULD FOLLOW");
     },
-  }
+  },
 };
 </script>
 

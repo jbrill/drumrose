@@ -26,7 +26,7 @@
           type="album"
           :name="attributes.name"
           :artist-name="attributes.artistName"
-          :is-favorited="isFavorited"
+          :favorited="isFavorited"
         />
       </v-badge>
       <MusicFooter

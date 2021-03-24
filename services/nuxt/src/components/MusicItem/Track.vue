@@ -28,7 +28,9 @@
           type="song"
           :name="attributes.name"
           :artist-name="attributes.artistName"
-          :is-favorited="isFavorited"
+          :favorited="isFavorited"
+          :review="trackReview"
+          :rating="trackRating"
         />
       </v-badge>
       <MusicFooter
@@ -84,6 +86,8 @@ export default {
       trackObject: {},
       attributes: {},
       isFavorited: false,
+      trackReview: null,
+      trackRating: null,
     };
   },
   computed: {
@@ -96,7 +100,10 @@ export default {
           this.$auth.getToken('auth0'),
           this.id
         );
+        console.log(trackResponse);
         this.isFavorited = trackResponse.data.track.favorited;
+        this.trackReview = trackResponse.data.track.review;
+        this.trackRating = trackResponse.data.track.rating;
       } catch (err) {
         if (err.response.status === 409) {
           try {

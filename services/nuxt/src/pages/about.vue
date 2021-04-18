@@ -32,7 +32,7 @@
       </v-container>
       <v-container>
         <p class="header-2 font-weight-bold yellow--text">
-          Why do you exist?
+          Why do we exist?
         </p>
         <p>
           {{ drumrosePurpose }}

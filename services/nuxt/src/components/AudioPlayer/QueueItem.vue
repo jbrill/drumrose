@@ -155,33 +155,36 @@ export default {
       const resp = await this.$store.getters.fetch(
         `/v1/catalog/us/songs/${this.trackObject.id}`
       );
+      console.log(resp.data)
       this.artistId = resp.data[0].relationships.artists.data[0].id;
       this.loading = false;
     } catch (err) {
       this.loading = false;
       console.error(err);
     }
-    try {
-      const resp = await getTrackDetail(
-        this.$auth.getToken('auth0'),
-        this.trackObject.id,
-      );
-      this.isFavorited = resp.data.track.favorited;
-    } catch (err) {
-      if (err.response.status === 409) {
-        try {
-          await createTrack(
-            this.$auth.getToken('auth0'),
-            {
-              'id': this.trackObject.id,
-            }
-          );
-        } catch (err) {
-          console.error(err);
+    if (this.$auth.loggedIn) {
+      try {
+        const resp = await getTrackDetail(
+          this.$auth.getToken('auth0'),
+          this.trackObject.id,
+        );
+        this.isFavorited = resp.data.track.favorited;
+      } catch (err) {
+        if (err.response.status === 409) {
+          try {
+            await createTrack(
+              this.$auth.getToken('auth0'),
+              {
+                'id': this.trackObject.id,
+              }
+            );
+          } catch (err) {
+            console.error(err);
+          }
         }
+        this.loading = false;
+        console.error(err);
       }
-      this.loading = false;
-      console.error(err);
     }
     
     // const librarySearchResp = await this.$store.dispatch(

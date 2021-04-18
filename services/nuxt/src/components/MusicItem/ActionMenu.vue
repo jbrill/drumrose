@@ -583,7 +583,9 @@ export default {
     },
 		async addToQueue () {
       if (this.type == 'song') {
-        await this.$store.dispatch("playNext", { 'song': this.id });
+        await this.$store.dispatch("playLater", {
+          'song': this.id,
+        });
       }
       if (this.type == 'playlist') {
         await this.$store.dispatch("playNext", { 'playlist': this.id });

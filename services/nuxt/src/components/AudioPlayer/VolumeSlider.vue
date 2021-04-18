@@ -12,6 +12,7 @@
       <template v-slot:activator="{ on }">
         <v-btn
           icon
+          x-small
           v-on="on"
         >
           <v-icon class="album-overlay-more">

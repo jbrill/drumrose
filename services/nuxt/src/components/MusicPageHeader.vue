@@ -681,15 +681,15 @@ export default {
   methods: {
     async addToQueue () {
       if (this.type == 'songs') {
-        await this.$store.dispatch("playNext", { 'song': this.id });
+        await this.$store.dispatch("setQueue", { 'song': this.id });
         this.$toast.show(`Added track to queue`);
       }
       if (this.type == 'playlists') {
-        await this.$store.dispatch("playNext", { 'playlist': this.id });
+        await this.$store.dispatch("setQueue", { 'playlist': this.id });
         this.$toast.show(`Added playlist to queue`);
       }
       if (this.type == 'albums') {
-        await this.$store.dispatch("playNext", { 'album': this.id });
+        await this.$store.dispatch("setQueue", { 'album': this.id });
         this.$toast.show(`Added album to queue`);
       }
     },
@@ -817,7 +817,7 @@ export default {
       dummy.select();
       document.execCommand('copy');
       document.body.removeChild(dummy);
-      this.$toast.success('Copied link to clipboard');
+      this.$toast.info('Copied link to clipboard');
     },
     moreLikeThis () {
       try {

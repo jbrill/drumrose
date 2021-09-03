@@ -105,6 +105,7 @@ export default {
 			home: '/',
 		},
     strategies: {
+      local: false,
 			auth0: {
 				domain: process.env.AUTH0_DOMAIN,
 				client_id: process.env.AUTH0_CLIENT_ID,
@@ -156,8 +157,10 @@ export default {
           fullWidth: true,
           action : {
             text : 'Connect Account',
-            onClick : (e, toastObject) => {
-                toastObject.goAway(0);
+            push : {
+                  name : 'settings',
+                  // this will prevent toast from closing
+                  dontClose : true,
             },
           },
         },

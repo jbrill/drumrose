@@ -9,6 +9,7 @@
       </v-btn>
     </div>
     <carousel
+      v-if="type===''"
       :touch-drag="false"
       :loop="true"
       :pagination-enabled="false"
@@ -30,12 +31,36 @@
         />
       </slide>
     </carousel>
+    <carousel
+      v-else
+      :touch-drag="false"
+      :loop="true"
+      :pagination-enabled="false"
+      :navigation-enabled="true"
+      :per-page="numPerCarousel"
+    >
+      <slide
+        v-for="(carouselItem, index) in validCarouselItems"
+        :key="carouselItem.id"
+        data-index="index"
+        :data-name="carouselItem.id"
+        :style="{ maxWidth: 100 / 2 + '%'}"
+        @slideclick="handleSlideClick"
+      >
+        <MusicReview
+          :key="carouselItem.id"
+          :index="index"
+          :post="carouselItem"
+        />
+      </slide>
+    </carousel>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
 import Post from '~/components/PostItem/Post.vue';
+import MusicReview from '~/components/ReviewItem/MusicReview.vue';
 
 const carouselPixelRanges = {
   '1': {
@@ -60,6 +85,7 @@ const carouselPixelRanges = {
 export default {
   components: {
     Post,
+    MusicReview,
   },
   props: {
     'title': {
@@ -71,6 +97,10 @@ export default {
       default: () => [],
     },
     'moreLink': {
+      type: String,
+      default: '',
+    },
+    'type': {
       type: String,
       default: '',
     },

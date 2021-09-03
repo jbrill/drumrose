@@ -199,7 +199,7 @@
                       >
                         Review
                       </p>
-                      {{ reviewRating }}
+                      {{ reviewRating }} / 5
                       <v-textarea
                         v-if="review"
                         v-model="reviewDescription"

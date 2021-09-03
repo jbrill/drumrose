@@ -3,25 +3,32 @@
     <v-row
       class="fill-height"
       align="center"
-      justify="center"
+      justify="space-between"
     >
       <v-btn
         text
+        :href="'/people/' + user"
         color="#ccc"
-        :to="'/people/' + user.username"
+        :to="'/people/' + user"
       >
-        {{ user.username }}
+        {{ user }}
       </v-btn>
       <v-rating
+        v-if="rating"
         v-model="rating"
         background-color="white"
-        color="var(--primary-purple)"
+        color="var(--primary-yellow)"
         dense
         half-increments
         readonly
-        x-small
-        size="18"
+        small
+        size="22"
       />
+    </v-row>
+    <v-row class="review">  
+      <p class="body-1 review__text">
+        {{ review }}
+      </p>
     </v-row>
   </div>
 </template>
@@ -52,16 +59,10 @@ export default {
     },
   },
   created: function () {
-    console.log(this.user);
-    console.log(this.date);
-    console.log(this.type);
-    console.log(this.rating);
-    console.log(this.review);
+
   },
   methods: {
     addRating (value, id) {
-      console.log(value);
-      console.log(id);
     },
   },
 };
@@ -194,5 +195,8 @@ p.poster-action {
 }
 .profile-name {
   color: #ccc;
+}
+.review__text {
+  padding: 2rem;
 }
 </style>

@@ -1,7 +1,9 @@
 <template>
   <v-container>
     <PostHeader
-      v-if="post.user"
+      v-if="post.user && (
+        post.review || post.rating
+      )"
       :user="post.user"
       :date="post.date"
       :type="post.postType"
@@ -53,6 +55,9 @@ export default {
       default: '',
     },
   },
+  mounted () {
+    console.log(this.post)
+  }
 };
 </script>
 

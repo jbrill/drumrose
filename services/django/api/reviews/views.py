@@ -37,7 +37,13 @@ class TrackReviewList(APIView):
         return JsonResponse(
             {
                 "track_reviews": list(
-                    reviews.values("id", "track__apple_music_id", "review", "rating")
+                    reviews.values(
+                        "id",
+                        "track__apple_music_id",
+                        "review",
+                        "rating",
+                        "user__username",
+                    )
                 )
             },
             status=status.HTTP_200_OK,

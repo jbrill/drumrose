@@ -36,14 +36,26 @@
           </v-row>
           <v-divider />
           <CarouselSection
-            title="Popular Reviews"
-            :carousel-items="reviews"
-          />
-          <v-divider />
-          <CarouselSection
             title="Just Rated"
             :carousel-items="recentReviews"
           />
+          <v-divider />
+          <CarouselSection
+            title="Popular Reviews"
+            :carousel-items="recentReviews"
+            type="reviews"
+          />
+        <!-- <Post
+          v-for="(carouselItem, index) in recentReviews"
+          :key="carouselItem.id"
+          :index="index"
+          :post="carouselItem"
+        /> -->
+          <!-- <MusicReview
+            :key="carouselItem.id"
+            :index="index"
+            :post="carouselItem"
+          /> -->
           <v-divider />
           <CarouselSection
             v-if="auth.loggedIn"
@@ -136,62 +148,83 @@ export default {
   },
   async fetch () {
     this.loading = true;
+    let reviewsResponse = [];
+    let favoritesResponse = [];
+
+    if (this.$store.state.auth && this.$store.state.auth.loggedIn) {
+        try {
+            favoritesResponse = await getFavorites(
+              this.$auth.getToken('auth0')
+            );
+            reviewsResponse = await getTrackReviews(
+              this.$auth.getToken('auth0')
+            );
+            this.loading = false;
+        } catch (err) {
+            console.error(err);
+            this.loading = false;
+            this.$toast.error(err.message);
+        }
+    }
+    console.log("this.$auth.getToken('auth0')")
+    console.log(this.$auth.getToken('auth0'))
+
     try {
-      let storefront = `${this.$store.state.storefront}` || 'us';
-      const trendingResponse = await this.$store.getters.fetch(
-        `/v1/catalog/${storefront}/` +
-        `charts?types=playlists,songs,albums`
+      reviewsResponse = await getTrackReviews(
+        this.$auth.getToken('auth0')
       );
-      this.trendingAlbumGroups = trendingResponse.results.albums;
-      this.trendingPlaylistGroups = trendingResponse.results.playlists;
-      this.trendingSongGroups = trendingResponse.results.songs;
+      const reviewTrackList = await Promise.all(
+        reviewsResponse.data.track_reviews.map( async review => {
+            const attributes = await this.$store.getters.fetch(
+              `/v1/catalog/us/songs/${review.track__apple_music_id}`
+            );
+            review.attributes = attributes.data[0].attributes;
+            review.type = "songs";
+            review.id = attributes.data[0].id;
+            review.user = review.user__username;
+            return review;
+        })
+      );
+      this.recentReviews = reviewTrackList;
     } catch (err) {
-      this.$toast.error(err.message);
+        console.error(err);
+        this.loading = false;
+        this.$toast.error(err.message);
+    }
+    console.log(reviewsResponse)
+    
+    try {
+        let storefront = `${this.$store.state.storefront}` || 'us';
+        const trendingResponse = await this.$store.getters.fetch(
+          `/v1/catalog/${storefront}/` +
+          `charts?types=playlists,songs,albums`
+        );
+        this.trendingAlbumGroups = trendingResponse.results.albums;
+        this.trendingPlaylistGroups = trendingResponse.results.playlists;
+        this.trendingSongGroups = trendingResponse.results.songs;
+    } catch (err) {
+        this.loading = false;
+        console.error(err);
+        this.$toast.error(err.message);
     }
 
     if (this.$store.state.isAuthorized) {
-      try {
-        this.recommendations = await this.$store.getters['recommendations'];
-      } catch (err) {
-        this.$toast.error(err.message);
-      }
+        try {
+            this.recommendations = await this.$store.getters['recommendations'];
+        } catch (err) {
+            console.error(err);
+            this.loading = false;
+            this.$toast.error(err.message);
+        }
+        try {
+            this.listeningHistory = await this.$store.getters.recentlyPlayed;
+        } catch(err) {
+            console.error(err);
+            this.loading = false;
+            this.$toast.error(err.message);
+        }
     }
     this.loading = false;
-  },
-  async asyncData ({ store, $auth }) {
-    if (store.auth && store.auth.loggedIn) {
-      const favoritesResponse = await getFavorites(
-        $auth.getToken('auth0')
-      );
-      const reviewsResponse = await getTrackReviews(
-        $auth.getToken('auth0')
-      );
-      return {
-        "favorites": favoritesResponse.data,
-        "recentReviews": reviewsResponse.data,
-      };
-    }
-    const reviewsResponse = await getTrackReviews(
-      
-      
-    );
-    console.log(reviewsResponse);
-    const reviewTrackList = await Promise.all(
-      reviewsResponse.data.track_reviews.map( async review => {
-        console.log(review);
-        const attributes = await store.getters.fetch(
-          `/v1/catalog/us/songs/${review.track__apple_music_id}`
-        );
-        console.log(attributes);
-        review.attributes = attributes.data[0].attributes;
-        review.type = "songs";
-        review.id = attributes.data[0].id;
-        return review;
-      })
-    );
-    return {
-      "recentReviews": reviewTrackList,
-    };
   },
   data () {
     return {
@@ -234,18 +267,6 @@ export default {
         return this.isActiveTab(tab.name);
       });
     },
-  },
-  async mounted () {
-    if (this.$store.state.isAuthorized) {
-      this.loading = true;
-      try {
-        this.listeningHistory = await this.$store.getters.recentlyPlayed;
-      } catch(err) {
-        console.error(err);
-        this.$toast.error(err.message);
-      }
-      this.loading = false;
-    }
   },
   methods: {
     isActiveTab (name) {

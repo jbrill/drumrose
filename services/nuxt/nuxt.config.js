@@ -10,7 +10,7 @@ export default {
    ** Headers of the page
    */
   head: {
-    title: 'Drumrose | The Social Catalog for Music.',
+    title: 'DRUMROSE // Social Music Catalog',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -20,7 +20,7 @@ export default {
         rel: 'stylesheet',
         href: 'https://fonts.googleapis.com/icon?family=Material+Icons',
       },
-      { rel: 'icon', type: 'image/x-icon', href: 'favicon.ico' },
+      { rel: 'icon', type: 'image/svg+xml', href: 'favicon.svg' },
       {
         rel: 'apple-touch-icon',
         sizes: '180x180',

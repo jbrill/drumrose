@@ -42,7 +42,7 @@
             <v-rating
               v-model="reviewRating"
               background-color="grey"
-              color="var(--primary-purple)"
+              color="var(--primary-yellow)"
               dense
               readonly
               half-increments
@@ -65,7 +65,7 @@
         <v-rating
           v-model="reviewRating"
           background-color="white"
-          color="var(--primary-purple)"
+          color="var(--primary-yellow)"
           dense
           half-increments
           hover
@@ -182,7 +182,7 @@
                         <v-card-actions>
                           <v-rating
                             background-color="white"
-                            color="var(--primary-purple)"
+                            color="var(--primary-yellow)"
                             dense
                             half-increments
                             hover

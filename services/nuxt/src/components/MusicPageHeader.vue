@@ -402,7 +402,7 @@
                       full-icon="mdi-star"
                       half-icon="mdi-star-half-full"
                       background-color="grey"
-                      color="var(--primary-red)"
+                      color="var(--primary-yellow)"
                       style="padding-top: 2rem"
                       dense
                       half-increments
@@ -421,7 +421,7 @@
                 full-icon="mdi-star"
                 half-icon="mdi-star-half-full"
                 background-color="white"
-                color="var(--primary-red)"
+                color="var(--primary-yellow)"
                 style="padding-top: 2rem"
                 dense
                 half-increments

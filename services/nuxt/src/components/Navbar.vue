@@ -5,7 +5,8 @@
       style="padding: 4px"
       app
     >
-      <v-toolbar-title>
+      <v-toolbar-title class="toolbar-title">
+        <img width="24" height="24" src="~../assets/img/iteration1.png">
         <nuxt-link to="/">
           <span class="drumrose-title">DRUMROSE</span>
         </nuxt-link>
@@ -111,11 +112,6 @@
           <v-list-item nuxt to="/about">
             <v-list-item-title>
               About us
-            </v-list-item-title>
-          </v-list-item>
-          <v-list-item nuxt to="/contact">
-            <v-list-item-title>
-              Contact
             </v-list-item-title>
           </v-list-item>
           <v-list-item nuxt to="/settings">
@@ -262,6 +258,7 @@ export default {
 .drumrose-title {
   color: #ccc;
   font-size: 1rem;
+  padding-left: 5px;
   font-family: 'Drumrose', monospace !important;
 }
 .drumrose-title:hover, .drumrose-title:focus {
@@ -269,5 +266,10 @@ export default {
 }
 .menu-navigation:hover, .menu-navigation:focus {
   color: white;
+}
+.toolbar-title {
+  display: flex;
+  align-items: center !important;
+  justify-content: center;
 }
 </style>

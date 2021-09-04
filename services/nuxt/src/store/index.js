@@ -571,7 +571,7 @@ export const actions = {
     await MusicKit.getInstance().player.queue.prepend(
       queue
     );
-    console.log(MusicKit.getInstance().player.queue.length)
+    console.log(MusicKit.getInstance().player.queue.length);
   },
   async playLater (_, queue) {
     await MusicKit.getInstance().player.queue.append(queue);

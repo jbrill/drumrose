@@ -104,7 +104,8 @@
       class="queueMenu"
       style="
         margin-right: 35vw; z-index: 50;
-      ">
+      "
+    >
       <v-subheader>Up Next - {{ queue.length }} Tracks</v-subheader>
       <v-list-item>Add a track to the queue</v-list-item>
     </v-list>
@@ -137,10 +138,10 @@ export default {
     ...mapState(['nowPlayingItem', 'queue']),
     activeFab () {
       switch (this.tabs) {
-        case 'one': return { class: 'purple', icon: 'account_circle' }
-        case 'two': return { class: 'red', icon: 'edit' }
-        case 'three': return { class: 'green', icon: 'keyboard_arrow_up' }
-        default: return {}
+        case 'one': return { class: 'purple', icon: 'account_circle' };
+        case 'two': return { class: 'red', icon: 'edit' };
+        case 'three': return { class: 'green', icon: 'keyboard_arrow_up' };
+        default: return {};
       }
     },
   },

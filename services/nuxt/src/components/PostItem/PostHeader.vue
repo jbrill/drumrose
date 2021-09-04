@@ -25,7 +25,7 @@
         size="22"
       />
     </v-row>
-    <v-row class="review">  
+    <v-row v-if="review" class="review">  
       <p class="body-1 review__text">
         {{ review }}
       </p>

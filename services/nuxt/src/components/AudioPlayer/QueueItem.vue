@@ -155,7 +155,7 @@ export default {
       const resp = await this.$store.getters.fetch(
         `/v1/catalog/us/songs/${this.trackObject.id}`
       );
-      console.log(resp.data)
+      console.log(resp.data);
       this.artistId = resp.data[0].relationships.artists.data[0].id;
       this.loading = false;
     } catch (err) {

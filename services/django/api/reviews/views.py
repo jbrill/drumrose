@@ -56,7 +56,6 @@ class TrackReviewList(APIView):
         try:
             if "review" not in request.data and "rating" not in request.data:
                 raise KeyError
-            print(request.data)
             serializer = TrackReviewSerializer(
                 data={
                     "apple_music_id": request.data.get("apple_music_id"),

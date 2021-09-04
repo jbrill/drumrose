@@ -36,31 +36,32 @@
           </v-row>
           <v-divider />
           <CarouselSection
+            v-if="auth.loggedIn"
+            title="Fresh Reviews From Friends"
+            :carousel-items="reviews"
+          />
+          <v-divider />
+          <CarouselSection
             title="Just Rated"
             :carousel-items="recentReviews"
           />
           <v-divider />
           <CarouselSection
-            title="Popular Reviews"
-            :carousel-items="recentReviews"
+            title="Popular Track Reviews"
+            :carousel-items="popularTrackReviews"
             type="reviews"
           />
-        <!-- <Post
-          v-for="(carouselItem, index) in recentReviews"
-          :key="carouselItem.id"
-          :index="index"
-          :post="carouselItem"
-        /> -->
-          <!-- <MusicReview
-            :key="carouselItem.id"
-            :index="index"
-            :post="carouselItem"
-          /> -->
           <v-divider />
           <CarouselSection
-            v-if="auth.loggedIn"
-            title="Fresh Reviews From Friends"
-            :carousel-items="reviews"
+            title="Popular Album Reviews"
+            :carousel-items="popularPlaylistReviews"
+            type="reviews"
+          />
+          <v-divider />
+          <CarouselSection
+            title="Popular Playlist Reviews"
+            :carousel-items="popularPlaylistReviews"
+            type="reviews"
           />
           <v-divider v-if="listeningHistory && listeningHistory.length" />
           <CarouselSection
@@ -138,7 +139,7 @@ import { mapState } from 'vuex';
 import CarouselSection from '~/components/CarouselSection';
 import LoadingCircle from '~/components/LoadingCircle';
 
-import { getFavorites, getTrackReviews } from '~/api/api';
+import { getFavoritedTracks, getTrackReviews } from '~/api/api';
 
 
 export default {
@@ -149,25 +150,57 @@ export default {
   async fetch () {
     this.loading = true;
     let reviewsResponse = [];
+    let reviewsTrackList = [];
     let favoritesResponse = [];
 
     if (this.$store.state.auth && this.$store.state.auth.loggedIn) {
         try {
-            favoritesResponse = await getFavorites(
+            favoritesResponse = await getFavoritedTracks(
               this.$auth.getToken('auth0')
             );
             reviewsResponse = await getTrackReviews(
               this.$auth.getToken('auth0')
             );
-            this.loading = false;
+            reviewsTrackList = await Promise.all(
+              reviewsResponse.data.track_reviews.map( async review => {
+                  const attributes = await this.$store.getters.fetch(
+                    `/v1/catalog/us/songs/${review.track__apple_music_id}`
+                  );
+                  review.attributes = attributes.data[0].attributes;
+                  review.type = "songs";
+                  review.id = attributes.data[0].id;
+                  review.user = review.user__username;
+                  return review;
+              })
+            );
         } catch (err) {
             console.error(err);
             this.loading = false;
             this.$toast.error(err.message);
         }
+        try {
+            let storefront = `${this.$store.state.storefront}` || 'us';
+            const trendingResponse = await this.$store.getters.fetch(
+              `/v1/catalog/${storefront}/` +
+              `charts?types=playlists,songs,albums`
+            );
+            this.trendingAlbumGroups = trendingResponse.results.albums;
+            this.trendingPlaylistGroups = trendingResponse.results.playlists;
+            this.trendingSongGroups = trendingResponse.results.songs;
+        } catch (err) {
+            this.loading = false;
+            console.error(err);
+            this.$toast.error(err.message);
+        }
+        this.loading = false;
+        return {
+            'recentReviews': reviewsTrackList,
+            'popularTrackReviews': reviewsTrackList,
+            'popularAlbumReviews': reviewsTrackList,
+            'popularPlaylistReviews': reviewsTrackList,
+            'favorites': favoritesResponse.data,
+        };
     }
-    console.log("this.$auth.getToken('auth0')")
-    console.log(this.$auth.getToken('auth0'))
 
     try {
       reviewsResponse = await getTrackReviews(
@@ -191,8 +224,6 @@ export default {
         this.loading = false;
         this.$toast.error(err.message);
     }
-    console.log(reviewsResponse)
-    
     try {
         let storefront = `${this.$store.state.storefront}` || 'us';
         const trendingResponse = await this.$store.getters.fetch(
@@ -252,6 +283,9 @@ export default {
       isActive: false,
       favorites: [],
       reviews: [],
+      popularTrackReviews: [],
+      popularAlbumReviews: [],
+      popularPlaylistReviews: [],
       recentReviews: [],
       listeningHistory: [],
       recommendations: [],

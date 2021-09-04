@@ -138,9 +138,9 @@ export default {
 <style scoped>
 .app {
   font-family: Menlo, Monaco, 'Droid Sans Mono', Consolas, 'Lucida Console',
-    'Courier New', monospace;
-  background-image: linear-gradient(180deg,#14181c 0,#14181c 250px,#2c3440);
-  background-color: var(--primary-black-light);
+    'Courier New', monospace !important;
+  background-image: linear-gradient(180deg,#14181c 0,#14181c 250px,#2c3440) !important;
+  background-color: var(--primary-black-light) !important;
 }
 .main-contain {
   width: 80vw;

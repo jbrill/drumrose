@@ -12,7 +12,7 @@ stages:
 pylint:
   stage: test
   script:
-    - docker-compose up -d --build django-server
+    - docker-compose -f docker-compose.yml -f compose/docker-compose.dev.yml up -d --build django-server
     - make dtest-pylint
   tags:
     - full-stack
@@ -20,7 +20,7 @@ pylint:
 django:
   stage: test
   script:
-    - docker-compose up -d --build django-server postgres-server
+    - docker-compose -f docker-compose.yml -f compose/docker-compose.dev.yml up -d --build django-server postgres-server
     - ./scripts/wait_till_container_healthy.sh drumrose_django-server_1
     - make dtest-django
   tags:
@@ -29,7 +29,7 @@ django:
 lintjs:
   stage: test
   script:
-    - docker-compose up -d --build nuxt-server
+    - docker-compose -f docker-compose.yml -f compose/docker-compose.dev.yml up -d --build nuxt-server
     - ./scripts/wait_till_container_healthy.sh drumrose_nuxt-server_1
     - make dtest-lint
   tags:

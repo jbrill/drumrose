@@ -6,7 +6,6 @@ import axios from 'axios';
  * */
 export const getTrackReviews = async bearerToken => {
   try {
-    console.log(`${process.env.baseUrl}`)
     const response = await axios.get(
       `${process.env.baseUrl}/api/reviews/tracks/`,
       {

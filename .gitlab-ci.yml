@@ -1,6 +1,7 @@
 image: "ubuntu:18.04"
 
 before_script:
+  - export HOME=/home/gitlab-runner/
   - chmod +x ./setup_env.sh
   - ./setup_env.sh
 

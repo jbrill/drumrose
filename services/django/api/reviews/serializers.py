@@ -35,20 +35,20 @@ class AlbumReviewSerializer(serializers.ModelSerializer):
         model = AlbumReview
         fields = "__all__"
 
-    def validate(self, data):
+    def validate(self, attrs):
         """
         Check if favorited album already exists
         """
         if AlbumReview.objects.filter(
-            user__auth0_user_id=data.get("auth0_user_id"),
-            album__apple_music_id=data.get("apple_music_id"),
+            user__auth0_user_id=attrs.get("auth0_user_id"),
+            album__apple_music_id=attrs.get("apple_music_id"),
         ).count():
             raise serializers.ValidationError("Reviewed Album Already Exists")
         if not UserProfile.objects.filter(
-            auth0_user_id=data.get("auth0_user_id")
+            auth0_user_id=attrs.get("auth0_user_id")
         ).exists():
             raise serializers.ValidationError("User Does Not Exist")
-        return data
+        return attrs
 
     def to_internal_value(self, data):
         internal_value = super().to_internal_value(data)
@@ -90,20 +90,20 @@ class TrackReviewSerializer(serializers.ModelSerializer):
         model = TrackReview
         fields = "__all__"
 
-    def validate(self, data):
+    def validate(self, attrs):
         """
         Check if favorited album already exists
         """
         if TrackReview.objects.filter(
-            user__auth0_user_id=data.get("auth0_user_id"),
-            track__apple_music_id=data.get("apple_music_id"),
+            user__auth0_user_id=attrs.get("auth0_user_id"),
+            track__apple_music_id=attrs.get("apple_music_id"),
         ).count():
             raise serializers.ValidationError("Reviewed Track Already Exists")
         if not UserProfile.objects.filter(
-            auth0_user_id=data.get("auth0_user_id")
+            auth0_user_id=attrs.get("auth0_user_id")
         ).exists():
             raise serializers.ValidationError("User Does Not Exist")
-        return data
+        return attrs
 
     def to_internal_value(self, data):
         internal_value = super().to_internal_value(data)
@@ -145,20 +145,20 @@ class PlaylistReviewSerializer(serializers.ModelSerializer):
         model = PlaylistReview
         fields = "__all__"
 
-    def validate(self, data):
+    def validate(self, attrs):
         """
         Check if favorited playlist already exists
         """
         if PlaylistReview.objects.filter(
-            user__auth0_user_id=data.get("auth0_user_id"),
-            playlist__apple_music_id=data.get("apple_music_id"),
+            user__auth0_user_id=attrs.get("auth0_user_id"),
+            playlist__apple_music_id=attrs.get("apple_music_id"),
         ).count():
             raise serializers.ValidationError("Reviewed Playlist Already Exists")
         if not UserProfile.objects.filter(
-            auth0_user_id=data.get("auth0_user_id")
+            auth0_user_id=attrs.get("auth0_user_id")
         ).exists():
             raise serializers.ValidationError("User Does Not Exist")
-        return data
+        return attrs
 
     def to_internal_value(self, data):
         internal_value = super().to_internal_value(data)

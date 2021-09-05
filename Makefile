@@ -11,7 +11,7 @@ dtest-pylint:
 	docker exec -t drumrose_django-server_1 bash -c "cd /usr/local/drumrose; make _test-pylint"
 
 _test-pylint:
-	find . -iname '*.py' | xargs pylint
+	find . -iname '*.py' | xargs pylint --django-settings-module=api.settings --load-plugins pylint_django
 
 dtest-django:
 	docker exec -t drumrose_django-server_1 bash -c "cd /usr/local/drumrose; make _test-models; make _test-views; make _test-serializers; coverage report -m;"

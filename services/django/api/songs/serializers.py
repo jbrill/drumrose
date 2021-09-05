@@ -76,14 +76,14 @@ class SongSerializer(serializers.ModelSerializer):
         ).exists()
 
     # pylint: disable=W0221
-    def validate(self, data):
+    def validate(self, attrs):
         """
         Check if favorited_track already exists
         """
         # TODO: Check if you can get song with apple music api
-        if Song.objects.filter(apple_music_id=data.get("apple_music_id")).count():
+        if Song.objects.filter(apple_music_id=attrs.get("apple_music_id")).count():
             raise serializers.ValidationError("Song Already Exists")
-        return data
+        return attrs
 
     def to_internal_value(self, data):
         internal_value = super().to_internal_value(data)

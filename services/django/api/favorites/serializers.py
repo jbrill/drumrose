@@ -35,16 +35,16 @@ class FavoritedTrackSerializer(serializers.ModelSerializer):
         model = FavoritedTrack
         fields = "__all__"
 
-    def validate(self, data):
+    def validate(self, attrs):
         """
         Check if favorited_track already exists
         """
         if FavoritedTrack.objects.filter(
-            user__auth0_user_id=data.get("auth0_user_id"),
-            song__apple_music_id=data.get("apple_music_id"),
+            user__auth0_user_id=attrs.get("auth0_user_id"),
+            song__apple_music_id=attrs.get("apple_music_id"),
         ).count():
             raise serializers.ValidationError("Favorited Track Already Exists")
-        return data
+        return attrs
 
     def to_internal_value(self, data):
         internal_value = super().to_internal_value(data)
@@ -81,17 +81,16 @@ class FavoritedAlbumSerializer(serializers.ModelSerializer):
         model = FavoritedAlbum
         fields = "__all__"
 
-    def validate(self, data):
+    def validate(self, attrs):
         """
         Check if favorited album already exists
         """
         if FavoritedAlbum.objects.filter(
-            user__auth0_user_id=data.get("auth0_user_id"),
-            album__apple_music_id=data.get("apple_music_id"),
+            user__auth0_user_id=attrs.get("auth0_user_id"),
+            album__apple_music_id=attrs.get("apple_music_id"),
         ).count():
-            print(data)
             raise serializers.ValidationError("Favorited Album Already Exists")
-        return data
+        return attrs
 
     def to_internal_value(self, data):
         internal_value = super().to_internal_value(data)
@@ -128,16 +127,16 @@ class FavoritedPlaylistSerializer(serializers.ModelSerializer):
         model = FavoritedPlaylist
         fields = "__all__"
 
-    def validate(self, data):
+    def validate(self, attrs):
         """
         Check if favorited_track already exists
         """
         if FavoritedPlaylist.objects.filter(
-            user__auth0_user_id=data.get("auth0_user_id"),
-            playlist__apple_music_id=data.get("apple_music_id"),
+            user__auth0_user_id=attrs.get("auth0_user_id"),
+            playlist__apple_music_id=attrs.get("apple_music_id"),
         ).count():
             raise serializers.ValidationError("Favorited Playlist Already Exists")
-        return data
+        return attrs
 
     def to_internal_value(self, data):
         internal_value = super().to_internal_value(data)

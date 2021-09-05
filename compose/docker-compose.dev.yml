@@ -17,4 +17,4 @@ services:
       DEBUG: 1
       NODE_ENV: 'development'
     env_file:
-    - ".nuxt.dev.env"
+    - ${HOME}/drumrose/.nuxt.dev.env

@@ -25,7 +25,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "n467bz@g24axx$=zf17ty@$j(m!t9o+tu!lhfafd4$_!r7ja&$"
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -33,7 +33,7 @@ if os.getenv("DEBUG") == "1":
     Debug = True
 
 # TODO: Revisit
-ALLOWED_HOSTS = ["django-server", "127.0.0.1", "localhost", "teton.drumrose.io"]
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 
 # Application definition
 INSTALLED_APPS = [

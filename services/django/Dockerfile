@@ -4,6 +4,7 @@ ENV LC_ALL C.UTF-8
 ENV LANG C.UTF-8
 
 ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 ENV PYTHONPATH /usr/local/drumrose/services/django
 
 # Install Python and Package Libraries
@@ -15,7 +16,7 @@ RUN apt-get install -y \
     vim
 
 # -- Install Pipenv:
-RUN apt update && apt upgrade -y && apt install python3.7-dev libffi-dev -y && apt install python3-distutils -y
+RUN apt update && apt upgrade -y && apt install python3.7-dev libffi-dev -y && apt install python3-distutils -y && apt-get install -y netcat
 RUN curl --silent https://bootstrap.pypa.io/get-pip.py | python3.7
 
 # Backwards compatility.
@@ -37,3 +38,6 @@ WORKDIR /usr/local/drumrose/services/django/
 
 # install python packages
 RUN pipenv install --dev --system --deploy
+
+# run entrypoint.sh
+ENTRYPOINT ["/usr/local/drumrose/services/django/django_entry.sh"]

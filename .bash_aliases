@@ -28,3 +28,7 @@ alias dsa="docker ps -q | awk '{print $1}' | xargs -o docker stop"
 alias dsp="docker system prune"
 
 alias dcu-dev="docker-compose -f docker-compose.yml -f compose/docker-compose.dev.yml up -d"
+
+alias dcu-dev-build="docker-compose -f docker-compose.yml -f compose/docker-compose.dev.yml up -d --build"
+
+alias dcu-prod="docker-compose -f docker-compose.yml -f compose/docker-compose.prod.yml up -d"

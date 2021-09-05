@@ -5,6 +5,9 @@ services:
     - '${HOME}/drumrose/services/django:/usr/local/drumrose/services/django'
     environment:
       DEBUG: 1
+    env_file:
+      - ${HOME}/drumrose/.django.dev.env
+    command: python3 manage.py runserver 0.0.0.0:8000
   
   nuxt-server:
     volumes:

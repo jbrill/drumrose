@@ -14,7 +14,7 @@ services:
     ports:
     - "3000:3000"
     env_file:
-    - ".nuxt.env"
+    - ".nuxt.dev.env"
     healthcheck:
       test: "curl -sS http://localhost:3000/healtcheck || exit 1"
       interval: "60s"

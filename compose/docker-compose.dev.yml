@@ -15,3 +15,5 @@ services:
     - '${HOME}/drumrose/services/nuxt/nuxt.config.js:/usr/local/drumrose/services/nuxt/nuxt.config.js'
     environment:
       DEBUG: 1
+    env_file:
+    - ".nuxt.dev.env"

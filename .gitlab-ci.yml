@@ -1,5 +1,9 @@
 image: "ubuntu:18.04"
 
+before_script:
+  - chmod +x ./setup_env.sh
+  - ./setup_env.sh
+
 after_script:
     - docker-compose down
     - docker system prune --volumes -af

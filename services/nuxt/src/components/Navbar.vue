@@ -5,9 +5,9 @@
       style="padding: 4px"
       app
     >
-      <v-toolbar-title class="toolbar-title">
-        <img width="24" height="24" src="~../assets/img/iteration1.png">
-        <nuxt-link to="/">
+      <v-toolbar-title>
+        <nuxt-link class="toolbar-title" to="/">
+          <img width="24" height="24" src="~../assets/img/iteration1.png">
           <span class="drumrose-title">DRUMROSE</span>
         </nuxt-link>
       </v-toolbar-title>

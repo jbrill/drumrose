@@ -2,19 +2,19 @@ version: "3.3"
 services:
   django-server:
     volumes:
-    - '${HOME}/drumrose/services/django:/usr/local/drumrose/services/django'
+    - 'services/django:/usr/local/drumrose/services/django'
     environment:
       DEBUG: 1
     env_file:
-      - ${HOME}/drumrose/.django.dev.env
+      - .django.dev.env
     command: python3 manage.py runserver 0.0.0.0:8000
   
   nuxt-server:
     volumes:
-    - '${HOME}/drumrose/services/nuxt/src:/usr/local/drumrose/services/nuxt/src'
-    - '${HOME}/drumrose/services/nuxt/nuxt.config.js:/usr/local/drumrose/services/nuxt/nuxt.config.js'
+    - 'services/nuxt/src:/usr/local/drumrose/services/nuxt/src'
+    - 'services/nuxt/nuxt.config.js:/usr/local/drumrose/services/nuxt/nuxt.config.js'
     environment:
       DEBUG: 1
       NODE_ENV: 'development'
     env_file:
-    - ${HOME}/drumrose/.nuxt.dev.env
+    - .nuxt.dev.env

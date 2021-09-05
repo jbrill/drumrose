@@ -3,6 +3,7 @@ image: "ubuntu:18.04"
 before_script:
   - chmod +x ./setup_env.sh
   - ./setup_env.sh
+  - set -e
 
 after_script:
     - docker-compose down

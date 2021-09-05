@@ -20,7 +20,7 @@ export default {
         rel: 'stylesheet',
         href: 'https://fonts.googleapis.com/icon?family=Material+Icons',
       },
-      { rel: 'icon', type: 'image/svg+xml', href: 'favicon.svg' },
+      { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
       {
         rel: 'apple-touch-icon',
         sizes: '180x180',

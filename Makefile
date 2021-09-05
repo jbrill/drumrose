@@ -14,7 +14,7 @@ _test-pylint:
 	find . -iname '*.py' | xargs pylint --django-settings-module=api.settings --load-plugins pylint_django
 
 dtest-django:
-	docker exec -t drumrose_django-server_1 bash -c "cd /usr/local/drumrose; make _test-models && make _test-views && make _test-serializers && coverage report -m;"
+	docker exec -t drumrose_django-server_1 bash -c "cd /usr/local/drumrose; make _test-models && make _test-views && make _test-serializers && coverage xml -o services/django/coverage.xml"
 
 _test-views:
 	coverage run --source . services/django/manage.py test services/django/api/tests/api_tests/ -v2 --pattern="*_apitest.py"

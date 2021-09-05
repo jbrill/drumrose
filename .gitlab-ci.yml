@@ -28,6 +28,9 @@ django:
     - docker-compose -f docker-compose.yml -f compose/docker-compose.dev.yml up -d --build django-server postgres-server
     - ./scripts/wait_till_container_healthy.sh drumrose_django-server_1
     - make dtest-django
+  artifacts:
+    reports:
+      cobertura: services/django/coverage.xml
   tags:
     - full-stack
 

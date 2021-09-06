@@ -61,9 +61,10 @@ class ReviewsTest(TestCase):
         reviewed_track = TrackReview.objects.get(id=self.reviewed_track.id)
         serializer = TrackReviewSerializer(reviewed_track)
         reviewed_track_response = json.loads(response.content)
+        print(reviewed_track_response)
         self.assertEqual(
-            reviewed_track_response["track_reviews"][0]["user_id"],
-            serializer.data["user"].get("id"),
+            reviewed_track_response["track_reviews"][0]["user__username"],
+            serializer.data["user"].get("username"),
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 

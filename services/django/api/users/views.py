@@ -47,7 +47,6 @@ class UserList(APIView):
           Create a new user
         """
         try:
-            print(request.data)
             serializer = UserProfileSerializer(
                 data={
                     "email": request.data["email"],

@@ -12,11 +12,7 @@ def _build_headers(_access_token_in):
 
 
 def auth0_response_is_valid(response):
-    print(response)
-    print(response["statusCode"])
-    if response["statusCode"] != 200:
-        return False
-    return True
+    return response["statusCode"] == 200
 
 
 def get_access_token():

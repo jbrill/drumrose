@@ -41,10 +41,11 @@ class FavoriteTracksList(APIView):
         Create favorited track
         """
         try:
+            print(request.user)
             serializer = FavoritedTrackSerializer(
                 data={
                     "apple_music_id": request.data["apple_music_id"],
-                    "auth0_user_id": str(request.user).split("auth0.")[1],
+                    "auth0_user_id": str(request.user),
                 }
             )
         except (KeyError, IndexError):

@@ -1,7 +1,8 @@
 """
 Factories
 """
-
+from factory import fuzzy
+from faker import Faker
 import factory
 from api.models.core import (
     Album,
@@ -16,8 +17,6 @@ from api.models.core import (
     TrackReview,
     UserProfile,
 )
-from factory import fuzzy
-from faker import Faker
 
 fake = Faker()
 
@@ -70,7 +69,7 @@ class UserProfileFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = UserProfile
 
-    auth0_user_id = fuzzy.FuzzyInteger(1469577142, 1469597142)
+    auth0_user_id = fuzzy.FuzzyInteger(1000000000, 1469597142)
     username = fuzzy.FuzzyText()
     email = factory.Faker("email")
 

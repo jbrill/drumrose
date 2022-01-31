@@ -34,10 +34,14 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 COPY . /usr/local/drumrose/
-WORKDIR /usr/local/drumrose/services/django/
+
+WORKDIR /usr/local/drumrose/
 
 # install python packages
 RUN pipenv install --system --deploy
 
-# run entrypoint.sh
-ENTRYPOINT ["/usr/local/drumrose/services/django/django_entry.prod.sh"]
+RUN chmod +x django_entry.prod.sh 
+
+EXPOSE 8000
+
+ENTRYPOINT [ "./django_entry.prod.sh" ]

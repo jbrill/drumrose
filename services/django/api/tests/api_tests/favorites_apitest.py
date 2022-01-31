@@ -1,5 +1,8 @@
 import json
-
+from django.test import TestCase
+from django.urls import reverse
+from rest_framework import status
+from rest_framework.test import APIClient
 from api.favorites.serializers import (
     FavoritedAlbumSerializer,
     FavoritedPlaylistSerializer,
@@ -16,10 +19,6 @@ from api.models.factories import (
     UserProfileFactory,
 )
 from api.tests.api_tests.util import get_test_token
-from django.test import TestCase
-from django.urls import reverse
-from rest_framework import status
-from rest_framework.test import APIClient
 
 
 class FavoritesTest(TestCase):

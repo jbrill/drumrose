@@ -1,5 +1,11 @@
+"""
+Reviews Tests
+"""
 import json
-
+from django.test import TestCase
+from django.urls import reverse
+from rest_framework import status
+from rest_framework.test import APIClient
 from api.models.core import AlbumReview, PlaylistReview, TrackReview
 from api.models.factories import (
     AlbumFactory,
@@ -16,12 +22,9 @@ from api.reviews.serializers import (
     TrackReviewSerializer,
 )
 from api.tests.api_tests.util import get_test_token
-from django.test import TestCase
-from django.urls import reverse
-from rest_framework import status
-from rest_framework.test import APIClient
 
 
+# pylint: disable=R0902
 class ReviewsTest(TestCase):
     """
     Test casest for favorites views
@@ -32,7 +35,7 @@ class ReviewsTest(TestCase):
         Creates models on setup
         """
         self.token = get_test_token()
-        self.cleint = APIClient()
+        self.client = APIClient()
 
         test_username = "test_username"
         test_auth0_user_id = "ApqgC9UHWyDV0Qb6rv3cby0gP47u5ZmO@clients"
@@ -53,6 +56,7 @@ class ReviewsTest(TestCase):
         )
 
     def test_get_all_track_reviews(self):
+        """Tests All Track Reviews Gettable"""
         response = self.client.get(
             reverse("TrackReviewList"),
             content_type="application/json",
@@ -69,6 +73,7 @@ class ReviewsTest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_get_all_album_reviews(self):
+        """Tests All Reviews Gettable"""
         response = self.client.get(
             reverse("AlbumReviewList"),
             content_type="application/json",
@@ -86,6 +91,9 @@ class ReviewsTest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_get_all_playlist_reviews(self):
+        """
+        Tests Playlist Review Model Query
+        """
         response = self.client.get(
             reverse("PlaylistReviewList"),
             content_type="application/json",
@@ -102,6 +110,9 @@ class ReviewsTest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_create_invalid_reviewed_track_missing_field(self):
+        """
+        Tests Invalid Track Does Not Get Created
+        """
         response = self.client.post(
             reverse("TrackReviewList"),
             content_type="application/json",

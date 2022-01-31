@@ -1,20 +1,19 @@
 version: "3.3"
 services:
   nginx-server:
-    image: nginx:latest
     volumes:
-      - ./services/nginx:/etc/nginx
-      - /etc/letsencrypt/:/etc/letsencrypt/
+      - /etc/letsencrypt/:/etc/letsencrypt
     ports:
       - 443:443
       - 80:80
+    depends_on:
+      - django-server
+    environment:
+      - DRUMROSE_DOMAIN=teton.drumrose.io
 
   nuxt-server:
-    build: services/nuxt
     ports:
     - "3000:3000"
-    env_file:
-    - ".nuxt.dev.env"
     healthcheck:
       test: "curl -sS http://localhost:3000/healtcheck || exit 1"
       interval: "60s"
@@ -23,9 +22,6 @@ services:
     command: "npm run dev"
 
   django-server:
-    build: 
-      context: .
-      dockerfile: services/django/Dockerfile
     ports:
     - "8000:8000"
     healthcheck:
@@ -35,7 +31,6 @@ services:
       retries: 3
     depends_on:
     - postgres-server
-    command: ./django_entry.sh
 
   postgres-server:
     build: services/postgres
@@ -53,7 +48,7 @@ services:
       timeout: 30s
       retries: 3
     volumes:
-      - /var/lib/postgresql/:/var/lib/postgresql/
+      - /var/lib/postgresql/:/var/lib
   
   tests-server:
     build:

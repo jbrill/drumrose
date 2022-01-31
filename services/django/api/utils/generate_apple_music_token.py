@@ -1,5 +1,4 @@
 import datetime
-
 import jwt
 
 
@@ -32,7 +31,5 @@ class AppleMusicTokenGenerator:
             "exp": int(time_expired.strftime("%s")),
             "iat": int(time_now.strftime("%s")),
         }
-        token = jwt.encode(
-            payload, self.secret, algorithm=self.alg, headers=headers
-        )
+        token = jwt.encode(payload, self.secret, algorithm=self.alg, headers=headers)
         return token.decode("utf-8")

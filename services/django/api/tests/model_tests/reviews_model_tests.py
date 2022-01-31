@@ -1,10 +1,9 @@
 """
 Reviews Model Tests
 """
-
-from api.models.factories import SongFactory, TrackReviewFactory, UserProfileFactory
 from django.db import IntegrityError
 from django.test import TestCase
+from api.models.factories import SongFactory, TrackReviewFactory, UserProfileFactory
 
 
 class ReviewsTest(TestCase):

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 if [ "$DATABASE" = "postgres" ]
 then
@@ -11,14 +11,15 @@ then
     echo "PostgreSQL started"
 fi
 
-python manage.py flush --no-input
+python3 manage.py flush --no-input
 
 # Apply database migrations
 echo "Apply database migrations"
-python3 manage.py migrate
+python3 manage.py migrate --noinput  || exit 1
 
 # Import fixtures
-echo "Loading dev fixtures"
-#python3 manage.py loaddata api/fixtures/data.json
+# echo "Loading dev fixtures"
+# python3 manage.py loaddata api/fixtures/data.json
+python3 manage.py runserver 0.0.0.0:8000
 
 exec "$@"

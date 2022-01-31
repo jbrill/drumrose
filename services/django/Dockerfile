@@ -1,4 +1,7 @@
+# Drumrose Front-end
+# Version: 1.0
 FROM ubuntu:18.04
+LABEL Maintainer="Jason Brill <jason@drumrose.com>"
 
 ENV LC_ALL C.UTF-8
 ENV LANG C.UTF-8
@@ -33,11 +36,17 @@ RUN apt-get update \
         postgresql-client \
     && rm -rf /var/lib/apt/lists/*
 
+RUN mkdir -p /usr/local/drumrose/
+
+WORKDIR /usr/local/drumrose/
+
 COPY . /usr/local/drumrose/
-WORKDIR /usr/local/drumrose/services/django/
 
 # install python packages
 RUN pipenv install --dev --system --deploy
 
-# run entrypoint.sh
-ENTRYPOINT ["/usr/local/drumrose/services/django/django_entry.sh"]
+RUN chmod +x django_entry.sh 
+
+EXPOSE 8000
+
+ENTRYPOINT [ "./django_entry.sh" ]

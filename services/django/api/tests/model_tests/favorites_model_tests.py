@@ -1,10 +1,9 @@
 """
 Favorites Model Tests
 """
-
-from api.models.factories import FavoritedTrackFactory, SongFactory, UserProfileFactory
 from django.db import IntegrityError
 from django.test import TestCase
+from api.models.factories import FavoritedTrackFactory, SongFactory, UserProfileFactory
 
 
 class FavoritesTest(TestCase):

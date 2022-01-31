@@ -33,7 +33,9 @@ if os.getenv("DEBUG") == "1":
     Debug = True
 
 # TODO: Revisit
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
+ALLOWED_HOSTS = os.environ.get(
+    "DJANGO_ALLOWED_HOSTS", ["localhost", "django-server", "127.0.0.1", "[::1"]
+).split(" ")
 
 # Application definition
 INSTALLED_APPS = [
@@ -157,6 +159,7 @@ STATIC_URL = "/static/"
 
 CORS_ORIGIN_WHITELIST = (
     "http://nuxt-server:3000",
+    "http://nuxt-server:3001",
     "https://drumrose.com",
     "https://drumrose.vercel.app",
 )

@@ -1,7 +1,7 @@
 """
 Favorites Serializers Test Module
 """
-
+from django.test import TestCase
 from api.favorites.serializers import (
     FavoritedAlbumSerializer,
     FavoritedPlaylistSerializer,
@@ -14,7 +14,6 @@ from api.models.factories import (
     SongFactory,
     UserProfileFactory,
 )
-from django.test import TestCase
 
 
 class FavoritedTrackSerializerTest(TestCase):

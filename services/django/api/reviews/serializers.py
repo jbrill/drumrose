@@ -2,6 +2,7 @@
 Module contains serializers for favorites
 """
 # pylint: disable=W0221
+from rest_framework import serializers
 
 from api.albums.serializers import AlbumSerializer
 from api.models.core import (
@@ -16,7 +17,6 @@ from api.models.core import (
 from api.playlists.serializers import PlaylistSerializer
 from api.songs.serializers import SongSerializer
 from api.users.serializers import UserProfileSerializer
-from rest_framework import serializers
 
 
 class AlbumReviewSerializer(serializers.ModelSerializer):

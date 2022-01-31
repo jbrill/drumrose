@@ -1,10 +1,9 @@
 """
 Song Serializer Test Module
 """
-
+from django.test import TestCase
 from api.models.factories import SongFactory, TrackReviewFactory
 from api.songs.serializers import SongSerializer
-from django.test import TestCase
 
 
 class SongSerializerTest(TestCase):

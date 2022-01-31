@@ -1,0 +1,7 @@
+FROM nginx:1.19-alpine
+
+ENV NODE_ENV production
+ENV DRUMROSE_DOMAIN dev.drumrose.io
+ENV NUXT_PORT 3001
+
+COPY ./nginx.conf.template /etc/nginx/templates/nginx.conf.template

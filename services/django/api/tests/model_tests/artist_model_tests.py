@@ -1,10 +1,9 @@
 """
 Artist Model Tests
 """
-
+from django.test import TestCase
 from api.models.core import Artist
 from api.models.factories import ArtistFactory
-from django.test import TestCase
 
 
 class ArtistTest(TestCase):

@@ -1,10 +1,9 @@
 """
 Song Model Tests
 """
-
+from django.test import TestCase
 from api.models.core import Song
 from api.models.factories import SongFactory
-from django.test import TestCase
 
 
 class SongTest(TestCase):

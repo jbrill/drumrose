@@ -1,3 +1,6 @@
+"""
+Util Module
+"""
 import json
 
 import requests
@@ -16,6 +19,9 @@ ACCESS_TOKEN = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkI4ZmRWNzRVa2NpM0JW
 
 
 def get_test_token():
+    """
+    Obtain Test Token From Auth0
+    """
     data = requests.post(
         "https://drumrose.auth0.com/oauth/token",
         data=json.dumps(payload),

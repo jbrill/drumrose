@@ -1,31 +1,46 @@
-image: "ubuntu:18.04"
+image:
+  name: docker/compose:latest
+  entrypoint: [""]
+
+services:
+  - docker:dind
+
+variables:
+  DOCKER_HOST: tcp://docker:2375/
+  DOCKER_DRIVER: overlay2
+
+stages:
+    - test
+    - build
+    - deploy
 
 before_script:
+  - apk update && apk add --no-cache openssh openssh-client make py-pip bash build-base gcc wget git
+  - docker info
+  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  - export IMAGE=$CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME
+  - export DJANGO_IMAGE=$IMAGE:django-server
   - chmod +x ./setup_env.sh
   - ./setup_env.sh
   - set -e
 
-after_script:
-    - docker-compose down
-    - docker system prune --volumes -af
-
-stages:
-    - build
-    - test
-    - deploy
-
 pylint:
   stage: test
   script:
-    - docker-compose -f docker-compose.yml -f compose/docker-compose.dev.yml up -d --build django-server
+    - docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build django-server
     - make dtest-pylint
   tags:
     - full-stack
+  after_script:
+    - docker-compose -f docker-compose.yml -f docker-compose.dev.yml logs || true
+    - docker-compose -f docker-compose.yml -f docker-compose.dev.yml down || true
+    - docker system prune --volumes -af || true
 
 django:
   stage: test
   script:
-    - docker-compose -f docker-compose.yml -f compose/docker-compose.dev.yml up -d --build django-server postgres-server
+    - docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build django-server postgres-server
+    - chmod +x ./scripts/wait_till_container_healthy.sh
     - ./scripts/wait_till_container_healthy.sh drumrose_django-server_1
     - make dtest-django
   artifacts:
@@ -33,12 +48,105 @@ django:
       cobertura: services/django/coverage.xml
   tags:
     - full-stack
+  after_script:
+    - docker-compose logs || true
+    - docker-compose down || true
+    - docker system prune --volumes -af || true
 
 lintjs:
   stage: test
   script:
-    - docker-compose -f docker-compose.yml -f compose/docker-compose.dev.yml up -d --build nuxt-server
+    - docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build nuxt-server
+    - chmod +x ./scripts/wait_till_container_healthy.sh
     - ./scripts/wait_till_container_healthy.sh drumrose_nuxt-server_1
     - make dtest-lint
   tags:
     - full-stack
+  after_script:
+    - docker-compose -f docker-compose.yml -f docker-compose.dev.yml logs || true
+    - docker-compose -f docker-compose.yml -f docker-compose.dev.yml down || true
+    - docker system prune --volumes -af || true
+
+build-dev:
+  stage: build
+  script:
+    - docker build -f services/nuxt/Dockerfile.dev --build-arg DOMAIN_HOST=${DEV_DOMAIN_HOST} --build-arg AUTH0_DOMAIN=${AUTH0_DOMAIN}  --build-arg AUTH0_CLIENT_ID=${AUTH0_CLIENT_ID} --build-arg API_URL=${API_URL} --build-arg API_AUDIENCE=${API_AUDIENCE} -t registry.gitlab.com/jbrill/drumrose/nuxt-server:dev services/nuxt
+    - docker build -f services/django/Dockerfile.prod -t registry.gitlab.com/jbrill/drumrose/django-server:dev services/django
+    - docker build -f services/nginx/Dockerfile.dev -t registry.gitlab.com/jbrill/drumrose/nginx-server:dev services/nginx
+    - docker push registry.gitlab.com/jbrill/drumrose/django-server:dev
+    - docker push registry.gitlab.com/jbrill/drumrose/nuxt-server:dev
+    - docker push registry.gitlab.com/jbrill/drumrose/nginx-server:dev
+  tags:
+    - full-stack
+  except:
+    - master
+
+deploy-dev:
+  stage: deploy
+  variables:
+    DIGITAL_OCEAN_IP_ADDRESS: "165.232.159.145"
+    DRUMROSE_DOMAIN: "dev.drumrose.io"
+    DJANGO_ALLOWED_HOSTS: "localhost dev.drumrose.io 165.232.159.145"
+    DEBUG: 1
+    CI_COMMIT_SHA: $CI_COMMIT_SHA
+  script:
+    - chmod +x ./setup_env_dev.sh
+    - ./setup_env_dev.sh
+    - mkdir -p ~/.ssh
+    - echo "$PRIVATE_DEV_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+    - chmod 700 ~/.ssh/id_rsa
+    - eval "$(ssh-agent -s)"
+    - ssh-add ~/.ssh/id_rsa
+    - ssh-keyscan -H 'gitlab.com' >> ~/.ssh/known_hosts
+    - chmod +x ./deploy_dev.sh
+    - scp  -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa -r ./.django.env ./.nuxt.env ./.nginx.env root@$DIGITAL_OCEAN_IP_ADDRESS:/drumrose
+    - bash ./deploy_dev.sh
+  tags:
+    - full-stack
+  environment:
+    name: development
+    url: https://dev.drumrose.io
+  except:
+   - master
+
+build-prod:
+  stage: build
+  script:
+    - docker build -f services/nuxt/Dockerfile.prod --build-arg DOMAIN_HOST=${DEV_DOMAIN_HOST} --build-arg AUTH0_DOMAIN=${AUTH0_DOMAIN}  --build-arg AUTH0_CLIENT_ID=${AUTH0_CLIENT_ID} --build-arg API_URL=${API_URL} --build-arg API_AUDIENCE=${API_AUDIENCE} -t registry.gitlab.com/jbrill/drumrose/nuxt-server:prod services/nuxt
+    - docker build -f services/django/Dockerfile.prod -t registry.gitlab.com/jbrill/drumrose/django-server:prod services/django
+    - docker build -f services/nginx/Dockerfile.prod -t registry.gitlab.com/jbrill/drumrose/nginx-server:prod services/nginx
+    - docker push registry.gitlab.com/jbrill/drumrose/django-server:prod
+    - docker push registry.gitlab.com/jbrill/drumrose/nuxt-server:prod
+    - docker push registry.gitlab.com/jbrill/drumrose/nginx-server:prod
+  tags:
+    - full-stack
+  only:
+    - master
+
+deploy-prod:
+  stage: deploy
+  variables:
+    DIGITAL_OCEAN_PROD_IP_ADDRESS: "157.230.84.69"
+    DRUMROSE_DOMAIN: "api.drumrose.com"
+    DJANGO_ALLOWED_HOSTS: "localhost api.drumrose.com 157.230.84.69"
+    DEBUG: 1
+    CI_COMMIT_SHA: $CI_COMMIT_SHA
+  script:
+    - chmod +x ./setup_env_prod.sh
+    - ./setup_env_prod.sh
+    - mkdir -p ~/.ssh
+    - echo "$PRIVATE_PROD_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+    - chmod 700 ~/.ssh/id_rsa
+    - eval "$(ssh-agent -s)"
+    - ssh-add ~/.ssh/id_rsa
+    - ssh-keyscan -H 'gitlab.com' >> ~/.ssh/known_hosts
+    - chmod +x ./deploy_prod.sh
+    - scp  -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa -r ./.django.env ./.nuxt.env ./.nginx.env drumrose@$DIGITAL_OCEAN_PROD_IP_ADDRESS:drumrose
+    - bash ./deploy_prod.sh
+  tags:
+    - full-stack
+  environment:
+    name: production
+    url: https://drumrose.com
+  only:
+    - master

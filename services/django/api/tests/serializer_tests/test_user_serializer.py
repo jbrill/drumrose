@@ -1,10 +1,9 @@
 """
 User Serializer Test Module
 """
-
+from django.test import TestCase
 from api.models.factories import UserProfileFactory
 from api.users.serializers import UserProfileSerializer
-from django.test import TestCase
 
 
 class UserSerializerTest(TestCase):

@@ -257,7 +257,7 @@ export const actions = {
   async nuxtServerInit ({ commit }, { $sentry }) {
     try {
       const tokenResponse = await axios.post(
-        'https://teton.drumrose.io/api/apple_music_token/'
+        `${process.env.baseUrl}/api/apple_music_token/`
       );
       await commit('setAppleMusicToken', tokenResponse.data.token);
     } catch(err) {
@@ -270,7 +270,7 @@ export const actions = {
   {
     try {
       const tokenResponse = await axios.post(
-        'https://teton.drumrose.io/api/apple_music_token/'
+        `${process.env.baseUrl}/api/apple_music_token/`
       );
       commit('setAppleMusicToken', tokenResponse.data.token);
 

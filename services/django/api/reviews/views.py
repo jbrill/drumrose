@@ -1,6 +1,11 @@
 """
 Reivews Views
 """
+from django.http import JsonResponse
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.views import APIView
+from rest_framework_auth0.authentication import Auth0JSONWebTokenAuthentication
 
 from api.models.core import AlbumReview, TrackReview
 
@@ -9,11 +14,6 @@ from api.reviews.serializers import (
     PlaylistReviewSerializer,
     TrackReviewSerializer,
 )
-from django.http import JsonResponse
-from rest_framework import status
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from rest_framework.views import APIView
-from rest_framework_auth0.authentication import Auth0JSONWebTokenAuthentication
 
 
 class TrackReviewList(APIView):

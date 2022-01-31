@@ -1,10 +1,9 @@
 """
 Album Models Tests
 """
-
+from django.test import TestCase
 from api.models.core import Album
 from api.models.factories import AlbumFactory
-from django.test import TestCase
 
 
 class AlbumTest(TestCase):

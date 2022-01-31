@@ -1,6 +1,7 @@
 """
 Urls Module
 """
+from django.urls import path
 from api import views as api_routes
 from api.albums import views as album_routes
 from api.apple_music_token import views as apple_music_token_routes
@@ -10,7 +11,7 @@ from api.playlists import views as playlist_routes
 from api.reviews import views as review_routes
 from api.songs import views as song_routes
 from api.users import views as user_routes
-from django.urls import path
+
 
 urlpatterns = [
     path("", api_routes.HealthRoute.as_view(), name="HealthCheck"),

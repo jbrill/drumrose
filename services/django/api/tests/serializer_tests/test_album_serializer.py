@@ -1,10 +1,9 @@
 """
 Album Serializer Test Module
 """
-
+from django.test import TestCase
 from api.albums.serializers import AlbumSerializer
 from api.models.factories import AlbumFactory
-from django.test import TestCase
 
 
 class AlbumSerializerTest(TestCase):

@@ -2,15 +2,14 @@
 API Tests for User Views
 """
 import json
-
-from api.models.core import UserProfile
-from api.models.factories import UserProfileFactory
-from api.tests.api_tests.util import get_test_token
-from api.users.serializers import UserProfileSerializer
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
+from api.models.core import UserProfile
+from api.models.factories import UserProfileFactory
+from api.tests.api_tests.util import get_test_token
+from api.users.serializers import UserProfileSerializer
 
 
 class UserListTest(TestCase):
@@ -34,6 +33,7 @@ class UserListTest(TestCase):
         )
 
     def test_get_all_users(self):
+        """Test All Users Gettable"""
         response = self.client.get(
             reverse("UserList"),
             content_type="application/json",

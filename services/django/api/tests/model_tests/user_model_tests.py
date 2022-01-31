@@ -1,10 +1,9 @@
 """
 User API Test
 """
-
+from django.test import TestCase
 from api.models.core import UserProfile
 from api.models.factories import UserProfileFactory
-from django.test import TestCase
 
 
 class UserTest(TestCase):

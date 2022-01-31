@@ -23,7 +23,7 @@
           to Apple Music to gain full access to tracks and sync your library.
         </span>
       </v-app-bar>-->
-      <v-content class="content-contain">
+      <v-main class="content-contain">
         <RegisterBanner v-if="!auth.loggedIn" />
         <v-container class="main-contain">
           <nuxt class="feed-contain" />
@@ -32,7 +32,7 @@
           <AudioPlayer />
         </transition>
         <QueueFab />
-      </v-content>
+      </v-main>
     </v-app>
     <v-footer
       padless

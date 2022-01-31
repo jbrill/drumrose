@@ -25,12 +25,14 @@ alias dps="docker ps"
 alias dsa="docker ps -q | awk '{print $1}' | xargs -o docker stop"
 
 # Remove stopped containers, unused images, unused networks, etc.:
-alias dsp="docker system prune"
+alias dsp="docker system prune -a"
 
-alias dcu-dev="docker-compose -f docker-compose.yml -f compose/docker-compose.dev.yml up -d"
+alias dcu-dev="docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d"
 
-alias dcu-dev-build="docker-compose -f docker-compose.yml -f compose/docker-compose.dev.yml up -d --build"
+alias dcu-dev-build="docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build"
 
-alias dcu-prod="docker-compose -f docker-compose.yml -f compose/docker-compose.prod.yml up -d"
+alias dcu-dev-logs="docker-compose -f docker-compose.yml -f docker-compose.dev.yml logs -f"
 
-alias dcu-prod-build="docker-compose -f docker-compose.yml -f compose/docker-compose.prod.yml up -d --build"
+alias dcu-prod="docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d"
+
+alias dcu-prod-build="docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build"

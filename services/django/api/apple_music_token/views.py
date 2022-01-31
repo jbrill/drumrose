@@ -2,11 +2,9 @@
 Apple-Music-Token Route Definition
 """
 # pylint: disable=W0612,W0613
-#
-
-from api.settings import APPLE_MUSIC_TOKEN_GENERATOR
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from api.settings import APPLE_MUSIC_TOKEN_GENERATOR
 
 
 class AppleMusicTokenRoute(APIView):

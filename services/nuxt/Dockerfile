@@ -1,7 +1,7 @@
-FROM ubuntu:18.04
-LABEL Maintainer="Jason Brill <jlbrill@umich.edu>"
 # Drumrose Front-end
 # Version: 1.0
+FROM ubuntu:18.04
+LABEL Maintainer="Jason Brill <jason@drumrose.com>"
 
 # Install Python and Package Libraries
 RUN apt-get update && apt-get upgrade -y && apt-get autoremove && apt-get autoclean
@@ -25,10 +25,11 @@ RUN npm install --verbose
 =======
 RUN sudo apt-get install -y nodejs
 
-RUN mkdir -p /usr/local/drumrose/services/nuxt/
+RUN mkdir -p /usr/local/drumrose/
 
-WORKDIR /usr/local/drumrose/services/nuxt/
+WORKDIR /usr/local/drumrose/
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 RUN npm install
 >>>>>>> dc9f6e5... Nomenclature changes:services/nuxt/Dockerfile
@@ -42,3 +43,13 @@ RUN npm ci
 # CI=1 to not ignore tty output
 RUN CI=1 npm ci
 >>>>>>> 771fa62... (feature) cypress
+=======
+COPY . /usr/local/drumrose/
+
+EXPOSE 3000
+
+# CI=1 to not ignore tty output
+RUN CI=1 npm ci
+
+CMD ["npm", "run", "dev"]
+>>>>>>> 107887a... create different environment pipeline

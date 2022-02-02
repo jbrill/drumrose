@@ -100,7 +100,7 @@
                   >
                     mdi-pause
                   </v-icon>
-                  </v-btn>
+                </v-btn>
               </v-row>
               <v-card-actions class="card-actions">
                 <v-tooltip

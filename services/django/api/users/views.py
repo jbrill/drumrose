@@ -2,6 +2,7 @@
 User Route Module
 """
 
+from ast import Assert
 import json
 
 from api.models.core import UserProfile
@@ -117,7 +118,14 @@ class UserDetail(APIView):
         """
         PATCH for UserDetail
         """
-        user = UserProfile.objects.get(username=user_handle)
+        print(str(request.user))
+        user = UserProfile.objects.get(
+            auth0_user_id=str(request.user).replace(".", "|")
+        )
+        try:
+            assert user_handle == user.username
+        except AssertionError:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
 
         request_body = json.loads(request.body.decode("utf-8"))
         serialized_user = UserProfileSerializer(user, data=request_body, partial=True)

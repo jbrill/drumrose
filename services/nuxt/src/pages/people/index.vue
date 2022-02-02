@@ -30,7 +30,7 @@
           <v-icon
             v-if="!active"
             color="grey lighten-1"
-            @click="followPerson"
+            @click="followPerson(user.username)"
           >
             person_add_alt_1
           </v-icon>
@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import { getUserList } from '~/api/api';
+import { getUserList, patchUserDetail } from '~/api/api';
 
 export default {
   async asyncData ({ store, $auth }) {
@@ -64,8 +64,19 @@ export default {
     };
   },
   methods: {
-    followPerson () {
-      console.log("SHOULD FOLLOW");
+    async followPerson (username) {
+      try {
+        patchUserDetail(
+          this.$auth.getToken('auth0'),
+          this.$auth.user['https://django-server:8000/handle'],
+          {
+            "user_handle": username,
+          }
+        );
+      } catch (err) {
+        console.error(err);
+        this.$toast.show(`Log in to follow ${username}`);
+      }
     },
   },
 };

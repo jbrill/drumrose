@@ -146,3 +146,36 @@ class UserListTest(TestCase):
             HTTP_AUTHORIZATION="Bearer " + self.token,
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_add_follower(self):
+        """
+        Adds a follower
+        """
+        response = self.client.post(
+            reverse("UserList"),
+            content_type="application/json",
+            data=json.dumps(
+                {
+                    "email": "unique_email_2@gmail.com",
+                    "id": "test_auth0_user_id",
+                    "username": "test_username_1",
+                }
+            ),
+            HTTP_AUTHORIZATION="Bearer " + self.token,
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        response = self.client.get(
+            reverse("UserDetail", kwargs={"user_handle": "test_username_1"}),
+            content_type="application/json",
+            HTTP_AUTHORIZATION="Bearer " + self.token,
+        )
+        print(response.data)
+        response = self.client.patch(
+            reverse("UserDetail", kwargs={"user_handle": "test_username_1"}),
+            content_type="application/json",
+            data=json.dumps(
+                {"followers": [response.data.get("id")], "username": "test_username_2"}
+            ),
+            HTTP_AUTHORIZATION="Bearer " + self.token,
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)

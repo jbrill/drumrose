@@ -113,45 +113,79 @@ export default {
       if (newPlaybackState === 6) {
         await this.$store.dispatch("play");
       }
-      console.log(`We had ${oldPlaybackState} fruits, aw!`);
-      console.log(`We have ${newPlaybackState} fruits now, yay!`);
+      // console.log(`We had ${oldPlaybackState} fruits, aw!`);
+      // console.log(`We have ${newPlaybackState} fruits now, yay!`);
     },
   },
   created () {
     if (process.browser) {
       window.addEventListener('keydown', e => { // eslint-disable-line
-        if (e.keyCode === 32 && this.playbackTime) {
-          e.preventDefault();
-          if (this.playbackState === 3) {
-            this.playTrack();
-          } else {
-            this.pauseTrack();
-          }
+        console.log(e)
+        if (e.defaultPrevented) {
+          return; // Do nothing if the event was already processed
         }
+
+        switch (e.code) {
+          case "Down": // IE/Edge specific value
+          case "ArrowDown":
+            // Do something for "down arrow" key press.
+            break;
+          case "Up": // IE/Edge specific value
+          case "ArrowUp":
+            // Do something for "up arrow" key press.
+            break;
+          case "Left": // IE/Edge specific value
+          case "ArrowLeft":
+            // Do something for "left arrow" key press.
+            break;
+          case "Right": // IE/Edge specific value
+          case "ArrowRight":
+            // Do something for "right arrow" key press.
+            break;
+          case "Enter":
+            // Do something for "enter" or "return" key press.
+            break;
+          case "Esc": // IE/Edge specific value
+          case "Escape":
+            // Do something for "esc" key press.
+            break;
+          case "Space":
+            if (this.playbackTime) {
+              if (this.playbackState === 3) {
+                this.playTrack();
+              } else {
+                this.pauseTrack();
+              }
+            }
+            break;
+          default:
+            return; // Quit when this doesn't handle the key event.
+        }
+
+        // Cancel the default action to avoid it being handled twice
+        e.preventDefault();
+        
       });
     }
   },
   methods: {
-    playTrack () {
-      this.$store.dispatch("play");
+    async playTrack () {
+      await this.$store.dispatch("play");
     },
-    pauseTrack () {
-      this.$store.dispatch("pause");
+    async pauseTrack () {
+      await this.$store.dispatch("pause");
     },
-    prevMusic () {
-      this.$store.dispatch("previous");
+    async prevMusic () {
+      await this.$store.dispatch("previous");
     },
-    nextMusic () {
-      this.$store.dispatch("next");
+    async nextMusic () {
+      await this.$store.dispatch("next");
     },
-    repeatTrack () {
-      this.$store.dispatch("toggleRepeatMode");
+    async repeatTrack () {
+      await this.$store.dispatch("toggleRepeatMode");
     },
-    shuffleTrack () {
-      this.$store.dispatch("toggleShuffleMode");
-    },
-    changeVolume () {
-      console.log("VOLUME");
+    async shuffleTrack () {
+      await this.$store.dispatch("toggleShuffleMode");
     },
     maximize () {
       this.height = "250vh";

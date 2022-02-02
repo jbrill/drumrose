@@ -25,7 +25,7 @@
 
         <v-list-item-action>
           <v-list-item-action-text>
-            Member since 2009
+            Member since {{ user.created_date.split('-')[0] }}
           </v-list-item-action-text>
           <v-icon
             v-if="!active"
@@ -58,7 +58,7 @@ import { getUserList } from '~/api/api';
 export default {
   async asyncData ({ store, $auth }) {
     const usersResponse = await getUserList();
-    console.log(usersResponse);
+    console.log(usersResponse.data.users);
     return {
       "users": usersResponse.data.users,
     };

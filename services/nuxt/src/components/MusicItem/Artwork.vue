@@ -31,9 +31,23 @@
             <v-container fill-height fluid align="center">
               <v-row align="center" justify="center">
                 <v-btn
-                  v-if="isPlaying === true && playbackState === 2"
+                  v-if="
+                    (
+                      playbackState === 2 && !nowPlayingPlaylist && !nowPlayingAlbum && (
+                        nowPlayingItem.id === id
+                      )
+                    ) || (
+                      playbackState === 2 && nowPlayingAlbum && (
+                        nowPlayingAlbum.id === id
+                      )
+                    ) || (
+                      playbackState === 2 && (
+                        nowPlayingPlaylist && nowPlayingPlaylist.id === id
+                      )
+                    )
+                  "
                   :class="{ 'not-show-btns': !hover, 'show-btns': hover }"
-                  :loading="isPlaying === true && playbackState !== 2"
+                  :loading="playbackState === 6 || playbackState === 7 || playbackState === 9"
                   fab
                   medium
                   @click="pauseTrack"
@@ -46,9 +60,9 @@
                   </v-icon>
                 </v-btn>
                 <v-btn
-                  v-else
+                  v-else-if="playbackState === 2"
                   :class="{ 'not-show-btns': !hover, 'show-btns': hover }"
-                  :loading="isPlaying === true && playbackState !== 2"
+                  :loading="playbackState === 6 || playbackState === 7 || playbackState === 9"
                   fab
                   medium
                   @click="playTrack"
@@ -60,6 +74,33 @@
                     mdi-play
                   </v-icon>
                 </v-btn>
+                <v-btn
+                  v-else-if="playbackState === 3 || playbackState === 0"
+                  :class="{ 'not-show-btns': !hover, 'show-btns': hover }"
+                  :loading="playbackState === 6 || playbackState === 7 || playbackState === 9"
+                  fab
+                  medium
+                  @click="playTrack"
+                  @click.native.stop.prevent
+                >
+                  <v-icon
+                    :class="{ 'show-btns': hover }"
+                  >
+                    mdi-play
+                  </v-icon>
+                </v-btn>
+                <v-btn
+                  v-else
+                  :class="{ 'not-show-btns': !hover, 'show-btns': hover }"
+                  fab
+                  medium
+                >
+                  <v-icon
+                    :class="{ 'show-btns': hover }"
+                  >
+                    mdi-pause
+                  </v-icon>
+                  </v-btn>
               </v-row>
               <v-card-actions class="card-actions">
                 <v-tooltip
@@ -222,7 +263,16 @@ export default {
     };
   },
   computed: {
-    ...mapState(['auth', 'isAuthorized', 'nowPlayingItem', 'playbackState']),
+    ...mapState(
+      [
+        'auth',
+        'isAuthorized',
+        'nowPlayingItem',
+        'playbackState',
+        'nowPlayingPlaylist',
+        'nowPlayingAlbum',
+      ]
+    ),
   },
   async created () {
     if (this.$store.state.isAuthorized) {
@@ -310,7 +360,6 @@ export default {
     },
     async pauseTrack () {
       await this.$store.dispatch("pause");
-      this.isPlaying = false;
     },
     async favoriteItem () {
       if (this.type == 'song') {
@@ -401,19 +450,41 @@ export default {
       await this.$auth.loginWith('auth0');
     },
     async playTrack () {
+      console.log(this.id)
       if (this.type == 'song') {
         await this.$store.dispatch(
           "setQueue", { 'song': this.id }
+        );
+        await this.$store.dispatch(
+          "setNowPlayingPlaylist", null
+        );
+        await this.$store.dispatch(
+          "setNowPlayingAlbum", null
         );
       }
       if (this.type == 'playlist') {
         await this.$store.dispatch(
           "setQueue", { 'playlist': this.id }
         );
+        await this.$store.dispatch(
+          "setQueue", { 'playlist': this.id }
+        );
+        await this.$store.dispatch(
+          "setNowPlayingPlaylist", { 'id': this.id }
+        );
+        await this.$store.dispatch(
+          "setNowPlayingAlbum", null
+        );
       }
       if (this.type == 'album') {
         await this.$store.dispatch(
           "setQueue", { 'album': this.id }
+        );
+        await this.$store.dispatch(
+          "setNowPlayingPlaylist", null
+        );
+        await this.$store.dispatch(
+          "setNowPlayingAlbum", { 'id': this.id }
         );
       }
       try {
@@ -424,7 +495,6 @@ export default {
       if (!this.$store.state.isAuthorized) {
         this.$toast.global.apple_login();
       }
-      this.isPlaying = true;
     },
     shareLink () {
       let dummy = document.createElement('input');

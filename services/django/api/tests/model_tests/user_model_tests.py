@@ -22,7 +22,11 @@ class UserTest(TestCase):
 
     def test_get_multiple_users_simple(self):
         """
-        Tests retrieving a user
+        Tests retrieving a user and adding a follower
         """
-        UserProfileFactory.create_batch(25)
-        self.assertEqual(UserProfile.objects.count(), 25)
+        UserProfileFactory(username="casperdafriendlyghost")
+        casper = UserProfile.objects.get(username="casperdafriendlyghost")
+        UserProfileFactory(username="noodle")
+        noodle = UserProfile.objects.get(username="noodle")
+        casper.followers.set([noodle])
+        self.assertEqual(casper.followers.first(), noodle)

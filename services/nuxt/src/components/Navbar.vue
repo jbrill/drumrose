@@ -259,6 +259,7 @@ export default {
   color: #ccc;
   font-size: 1rem;
   padding-left: 5px;
+  overflow: hidden;
   font-family: 'Drumrose', monospace !important;
 }
 .drumrose-title:hover, .drumrose-title:focus {

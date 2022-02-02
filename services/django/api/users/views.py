@@ -36,6 +36,8 @@ class UserList(APIView):
             Retrieves a list of all users
         """
         users = UserProfile.objects.all()
+        if str(request.user):
+            users = users.exclude(auth0_user_id=str(request.user))
         serializer = UserProfileSerializer(users, many=True)
         return JsonResponse({"users": serializer.data})
 
@@ -106,7 +108,7 @@ class UserDetail(APIView):
         """
         GET for UserDetail
         """
-        user = UserProfile.objects.get(handle=user_handle)
+        user = UserProfile.objects.get(username=user_handle)
 
         serializer = UserProfileSerializer(user)
         return Response(serializer.data)
@@ -115,18 +117,19 @@ class UserDetail(APIView):
         """
         PATCH for UserDetail
         """
-        user = UserProfile.objects.get(handle=user_handle)
+        user = UserProfile.objects.get(username=user_handle)
 
         request_body = json.loads(request.body.decode("utf-8"))
+        serialized_user = UserProfileSerializer(user, data=request_body, partial=True)
+        # if request_body["name"]:
+        #     user.name = request_body["name"]
+        # if request_body["handle"]:
+        #     user.handle = request_body["handle"]
+        # if request_body["avatar_url"]:
+        #     user.avatar_url = request_body["avatar_url"]
 
-        if request_body["name"]:
-            user.name = request_body["name"]
-        if request_body["handle"]:
-            user.handle = request_body["handle"]
-        if request_body["avatar_url"]:
-            user.avatar_url = request_body["avatar_url"]
-
-        user.save()
+        if serialized_user.is_valid():
+            serialized_user.save()
 
         serializer = UserProfileSerializer(user)
         return Response(serializer.data)
@@ -160,8 +163,7 @@ class FollowersList(APIView):
 
     def get(self, request):
         """
-        Description:
-            Retrieves a list of all followers by user
+        - Retrieves a list of all followers by user
         """
         followers = UserProfile.objects.filter(
             user=UserProfile.objects.get(username=request.user.username)
@@ -171,8 +173,7 @@ class FollowersList(APIView):
 
     def post(self, request):
         """
-        Description
-          Creates a new follower request.user for the user by <user_id>
+        - Creates a new follower request.user for the user by <user_id>
         """
         # request_body = json.loads(request.body.decode("utf-8"))
         # user_id = request.user

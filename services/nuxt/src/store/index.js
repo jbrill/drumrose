@@ -21,6 +21,8 @@ export const state = () => ({
   shuffleMode: 0,
   repeatMode: 0,
   nowPlayingItem: null,
+  nowPlayingPlaylist: null,
+  nowPlayingAlbum: null,
   playbackTime: null,
   volume: null,
 
@@ -183,6 +185,12 @@ export const mutations = {
   },
 	setAppleMusicToken (state, apple_music_token) {
 		state.appleMusicToken = apple_music_token;
+	},
+  nowPlayingPlaylist (state, id) {
+		state.nowPlayingPlaylist = id;
+	},
+  nowPlayingAlbum (state, id) {
+		state.nowPlayingAlbum = id;
 	},
 	activeCollection (state, activeCollection) {
 		state.activeCollection = activeCollection;
@@ -550,6 +558,12 @@ export const actions = {
     if (window.localStorage) {
       window.localStorage.setItem('bitrate', MusicKit.PlaybackBitrate[bitrate]);
     }
+  },
+  setNowPlayingPlaylist ({ commit }, id) {
+    commit('nowPlayingPlaylist', id);
+  },
+  setNowPlayingAlbum ({ commit }, id) {
+    commit('nowPlayingAlbum', id);
   },
 
   async play (_) {

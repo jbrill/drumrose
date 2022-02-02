@@ -176,7 +176,7 @@ export const reviewPlaylist = async (bearerToken, data) => {
 export const getFavoritedTracks = async bearerToken => {
   try {
     const response = await axios.get(
-      '${process.env.baseUrl}/api/favorites/tracks/',
+      `${process.env.baseUrl}/api/favorites/tracks/`,
       {
         headers: {
           Authorization: `${bearerToken}`,

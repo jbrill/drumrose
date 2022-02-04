@@ -4,6 +4,7 @@ Core Models for  API
 
 # pylint: disable=W0222
 
+# from tkinter import CASCADE
 import uuid
 
 from api.services.auth0 import get_access_token
@@ -76,8 +77,23 @@ class UserProfile(BaseModel):
     auth0_user_id = models.CharField(max_length=200, unique=True, blank=True, null=True)
     username = models.CharField(max_length=200, unique=True, blank=True, null=True)
     email = models.EmailField(max_length=200, unique=True, blank=True, null=True)
-    followers = models.ManyToManyField("self", blank=True)
     blocked_users = models.ManyToManyField("self", blank=True)
+
+
+class FollowContain(BaseModel):
+    """
+    Container Model for Followers
+    """
+
+    follower_user = models.ForeignKey(
+        UserProfile, related_name="following", blank=True, on_delete=models.CASCADE
+    )
+    following_user = models.ForeignKey(
+        UserProfile, related_name="followers", blank=True, on_delete=models.CASCADE
+    )
+
+    class Meta:
+        unique_together = ("follower_user", "following_user")
 
 
 class Artist(BaseModel):

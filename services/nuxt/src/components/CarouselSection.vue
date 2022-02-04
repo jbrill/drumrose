@@ -185,16 +185,8 @@ export default {
   margin-left: 1rem;
   margin-top: -1rem;
 }
->>>.VueCarousel-navigation-prev:hover,
->>>.VueCarousel-navigation-prev:focus {
-  border: 1px solid var(--primary-yellow);
-}
 >>>.VueCarousel-navigation-next {
   margin-top: -1rem;
   margin-right: 1rem;
-}
->>>.VueCarousel-navigation-next:hover,
->>>.VueCarousel-navigation-next:focus {
-  border: 1px solid var(--primary-yellow);
 }
 </style>

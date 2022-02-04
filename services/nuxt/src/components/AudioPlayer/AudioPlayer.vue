@@ -78,7 +78,6 @@
     </div>
     <PostTimeline />
     <VolumeSlider />
-    <v-spacer />
     <Queue />
   </v-system-bar>
 </template>

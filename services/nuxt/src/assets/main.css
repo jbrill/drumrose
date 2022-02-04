@@ -26,6 +26,7 @@
 body {
   padding: 0;
   margin: 0;
+  text-rendering: auto;
   border-top: 2px solid var(--primary-yellow);
 }
 
@@ -93,6 +94,10 @@ span, p {
   border-radius: 2px;
   color: #ccc !important;
 }
+.VueCarousel-navigation-button:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
 .VueCarousel-wrapper {
   overflow: visible !important;
 }
@@ -135,4 +140,7 @@ span, p {
 
 .rounded-0 {
   border-radius: 25px;
+}
+.row {
+  flex-wrap: nowrap !important;
 }

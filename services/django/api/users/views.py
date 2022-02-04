@@ -5,9 +5,10 @@ User Route Module
 from ast import Assert
 import json
 
-from api.models.core import UserProfile
+from api.models.core import UserProfile, FollowContain
 from api.users.serializers import UserProfileSerializer
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
@@ -37,8 +38,9 @@ class UserList(APIView):
             Retrieves a list of all users
         """
         users = UserProfile.objects.all()
+        print(str(request.user))
         if str(request.user):
-            users = users.exclude(auth0_user_id=str(request.user))
+            users = users.exclude(auth0_user_id=str(request.user).replace(".", "|"))
         serializer = UserProfileSerializer(users, many=True)
         return JsonResponse({"users": serializer.data})
 
@@ -129,13 +131,6 @@ class UserDetail(APIView):
 
         request_body = json.loads(request.body.decode("utf-8"))
         serialized_user = UserProfileSerializer(user, data=request_body, partial=True)
-        # if request_body["name"]:
-        #     user.name = request_body["name"]
-        # if request_body["handle"]:
-        #     user.handle = request_body["handle"]
-        # if request_body["avatar_url"]:
-        #     user.avatar_url = request_body["avatar_url"]
-
         if serialized_user.is_valid():
             serialized_user.save()
 
@@ -160,37 +155,45 @@ class FollowersList(APIView):
     Description:
         API View for Followers List
     Routes:
-        GET /users/<user_id>/followers/
-            Retrieves a list of all followers by user
-        POST /users/<user_id>/followers/
-            Creates a new follower for that user
+    GET /followers/
+        Retrieves a list of all followers by logged in user
+    POST /followers/
+        Creates a new follower for that user
     """
 
     authentication_classes = [Auth0JSONWebTokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get(self, request):
         """
         - Retrieves a list of all followers by user
         """
-        followers = UserProfile.objects.filter(
-            user=UserProfile.objects.get(username=request.user.username)
+        followers = FollowContain.objects.filter(
+            following_user=get_object_or_404(
+                UserProfile, username=request.user.username
+            )
         ).followers
         serializer = UserProfileSerializer(followers, many=True)
         return Response(serializer.data)
 
     def post(self, request):
         """
-        - Creates a new follower request.user for the user by <user_id>
+        - Creates a new follower request.user for the user by request data
         """
-        # request_body = json.loads(request.body.decode("utf-8"))
-        # user_id = request.user
-        # follower_id = request_body.get("follower_id")
-        serializer = UserProfileSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        user = get_object_or_404(
+            UserProfile, auth0_user_id=str(request.user).replace(".", "|")
+        )
+        following_user = get_object_or_404(
+            UserProfile, username=str(request.data.get("following_user"))
+        )
+        following = FollowContain(follower_user=user, following_user=following_user)
+        following.save()
+        user = get_object_or_404(
+            UserProfile, auth0_user_id=str(request.user).replace(".", "|")
+        )
+        serializer = UserProfileSerializer(user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserFavoritesList(APIView):

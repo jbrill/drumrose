@@ -6,10 +6,18 @@ class UserProfileSerializer(serializers.ModelSerializer):
     email = serializers.EmailField()
     username = serializers.CharField(max_length=200)
     auth0_user_id = serializers.CharField(max_length=200)
+    following = serializers.SerializerMethodField("get_following_list")
+    followers = serializers.SerializerMethodField("get_followers_list")
 
     class Meta:
         model = UserProfile
         fields = "__all__"
+
+    def get_following_list(self, obj):
+        return [user.id for user in obj.following.all()]
+
+    def get_followers_list(self, obj):
+        return [user.id for user in obj.followers.all()]
 
     def validate_email(self, value):
         """

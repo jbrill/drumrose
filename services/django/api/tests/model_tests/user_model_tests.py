@@ -2,8 +2,8 @@
 User API Test
 """
 from django.test import TestCase
-from api.models.core import UserProfile
-from api.models.factories import UserProfileFactory
+from api.models.core import UserProfile, FollowContain
+from api.models.factories import UserProfileFactory, FollowContainFactory
 
 
 class UserTest(TestCase):
@@ -24,9 +24,5 @@ class UserTest(TestCase):
         """
         Tests retrieving a user and adding a follower
         """
-        UserProfileFactory(username="casperdafriendlyghost")
-        casper = UserProfile.objects.get(username="casperdafriendlyghost")
-        UserProfileFactory(username="noodle")
-        noodle = UserProfile.objects.get(username="noodle")
-        casper.followers.set([noodle])
-        self.assertEqual(casper.followers.first(), noodle)
+        followers = FollowContainFactory()
+        print(vars(followers))

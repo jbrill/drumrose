@@ -63,6 +63,7 @@ urlpatterns = [
     path("albums/<album_id>/", album_routes.AlbumDetail.as_view(), name="AlbumDetail"),
     path("users/", user_routes.UserList.as_view(), name="UserList"),
     path("users/<user_handle>/", user_routes.UserDetail.as_view(), name="UserDetail"),
+    path("followers/", user_routes.FollowersList.as_view(), name="FollowersList"),
     path(
         "apple_music_token/",
         apple_music_token_routes.AppleMusicTokenRoute.as_view(),

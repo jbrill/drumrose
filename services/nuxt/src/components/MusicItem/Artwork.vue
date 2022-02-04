@@ -519,8 +519,8 @@ export default {
 }
 .v-card {
   transition: opacity .4s ease-in-out;
-  border-radius: 2px;
-  outline: 2px solid var(--primary-purple);
+  border-radius: 1px;
+  outline: 1px solid var(--primary-purple);
 }
 .bottom-gradient {
   height: 100%;
@@ -579,7 +579,7 @@ export default {
 }
 .albumOverlayActive {
   opacity: 1;
-  border: 2px solid var(--primary-yellow);
+  border: 1px solid var(--primary-yellow);
 }
 .album-overlay-actions-contain {
   position: absolute;

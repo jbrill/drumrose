@@ -16,6 +16,7 @@ from api.models.core import (
     Song,
     TrackReview,
     UserProfile,
+    FollowContain,
 )
 
 fake = Faker()
@@ -65,6 +66,14 @@ class PlaylistFactory(factory.django.DjangoModelFactory):
                 self.tracks.add(track)
 
 
+class FollowContainFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = FollowContain
+
+    follower_user = factory.SubFactory("api.models.factories.UserProfileFactory")
+    following_user = factory.SubFactory("api.models.factories.UserProfileFactory")
+
+
 class UserProfileFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = UserProfile
@@ -73,16 +82,16 @@ class UserProfileFactory(factory.django.DjangoModelFactory):
     username = fuzzy.FuzzyText()
     email = factory.Faker("email")
 
-    @factory.post_generation
-    def followers(self, create, extracted):
-        if not create:
-            # Simple build, do nothing.
-            return
+    # @factory.post_generation
+    # def followers(self, create, extracted):
+    #     if not create:
+    #         # Simple build, do nothing.
+    #         return
 
-        if extracted:
-            # A list of groups were passed in, use them
-            for follower in extracted:
-                self.followers.add(follower)
+    #     if extracted:
+    #         # A list of groups were passed in, use them
+    #         for follower in extracted:
+    #             self.followers.add(follower)
 
     @factory.post_generation
     def blocked_users(self, create, extracted):

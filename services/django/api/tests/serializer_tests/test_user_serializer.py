@@ -2,8 +2,9 @@
 User Serializer Test Module
 """
 from django.test import TestCase
-from api.models.factories import UserProfileFactory
+from api.models.factories import FollowContainFactory, UserProfileFactory
 from api.users.serializers import UserProfileSerializer
+from api.models.core import FollowContain
 
 
 class UserSerializerTest(TestCase):
@@ -28,25 +29,24 @@ class UserSerializerTest(TestCase):
         Test single user serializer
         """
         user = UserProfileFactory()
-        user_with_followers = UserProfileFactory(followers=[user])
+        follower = UserProfileFactory()
+        FollowContainFactory(following_user=user, follower_user=follower)
 
         # Do the serialization
-        serialized_user = UserProfileSerializer(user_with_followers, many=False).data
+        serialized_user = UserProfileSerializer(user, many=False).data
 
         # Assert user fields
-        self.assertEqual(serialized_user["username"], str(user_with_followers.username))
+        self.assertEqual(serialized_user["username"], str(user.username))
 
     def test_user_serializer_update_with_followers(self):
         """
         Test single user serializer
         """
         user = UserProfileFactory()
-        follower = UserProfileFactory()
-        new_user_data = {"followers": [follower.id]}
+        follower = FollowContainFactory(following_user=user)
         # Do the serialization
-        serialized_user = UserProfileSerializer(user, data=new_user_data, partial=True)
-        if serialized_user.is_valid():
-            serialized_user.save()
+        serialized_user = UserProfileSerializer(user)
+
         # Assert user fields
         self.assertEqual(serialized_user.data["username"], str(user.username))
         self.assertEqual(serialized_user.data["followers"], [follower.id])

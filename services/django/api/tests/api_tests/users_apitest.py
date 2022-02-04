@@ -170,12 +170,16 @@ class UserListTest(TestCase):
             HTTP_AUTHORIZATION="Bearer " + self.token,
         )
         print(response.data)
-        response = self.client.patch(
-            reverse("UserDetail", kwargs={"user_handle": "test_username_1"}),
+        response = self.client.post(
+            reverse("FollowersList"),
             content_type="application/json",
-            data=json.dumps(
-                {"followers": [response.data.get("id")], "username": "test_username_2"}
-            ),
+            data=json.dumps({"following_user": "test_username_1"}),
             HTTP_AUTHORIZATION="Bearer " + self.token,
         )
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        response = self.client.get(
+            reverse("UserDetail", kwargs={"user_handle": "test_username_1"}),
+            content_type="application/json",
+            HTTP_AUTHORIZATION="Bearer " + self.token,
+        )
+        print(response.data)

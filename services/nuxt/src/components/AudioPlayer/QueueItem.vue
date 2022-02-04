@@ -207,7 +207,7 @@ export default {
   methods: {
     async favoriteTrack () {
       try {
-        if (this.trackObject.type === 'songs') {
+        if (this.trackObject.type === 'song') {
           await favoriteTrack(
             this.$auth.getToken('auth0'),
             {
@@ -215,8 +215,8 @@ export default {
             },
           );
           this.isFavorited = true;
+          this.$toast.info('Favorited track');
         }
-        this.$toast.info('Favorited track');
       } catch (err) {
         console.error(err);
         this.$sentry.captureException(err);
@@ -359,6 +359,7 @@ export default {
 .artistName {
   font-size: 0.65rem;
   color: #f2f2f2;
+  line-height: 1rem !important;
 }
 .songName {
   font-size: 0.65rem;

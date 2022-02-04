@@ -64,6 +64,29 @@ export const getFollowers = async (bearerToken, userHandle) => {
 };
 
 /*
+ * Add follower
+ * */
+export const addFollower = async (bearerToken, data) => {
+  try {
+    const response = await axios.post(
+      `${process.env.baseUrl}/api/followers/`,
+      data,
+      {
+        headers: {
+          Authorization: `${bearerToken}`,
+        },
+      }
+    );
+    return response;
+  } catch(err) {
+    console.error(err);
+    return {
+      data: [],
+    };
+  }
+};
+
+/*
  * Patch user (i.e. add follower, change username)
  * */
 export const patchUserDetail = async (bearerToken, userHandle, data) => {

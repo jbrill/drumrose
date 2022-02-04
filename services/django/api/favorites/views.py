@@ -45,7 +45,7 @@ class FavoriteTracksList(APIView):
             serializer = FavoritedTrackSerializer(
                 data={
                     "apple_music_id": request.data["apple_music_id"],
-                    "auth0_user_id": str(request.user),
+                    "auth0_user_id": str(request.user).replace(".", "|"),
                 }
             )
         except (KeyError, IndexError):
@@ -78,7 +78,7 @@ class FavoriteTrackDetail(APIView):
         try:
             favorited_track = FavoritedTrack.objects.get(
                 song__apple_music_id=track_id,
-                user__auth0_user_id=str(request.user).split("auth0.")[1],
+                user__auth0_user_id=str(request.user).replace(".", "|"),
             )
         except FavoritedTrack.DoesNotExist:
             return JsonResponse({}, status=status.HTTP_400_BAD_REQUEST)
@@ -114,11 +114,12 @@ class FavoriteAlbumList(APIView):
         """
         Create favorited album
         """
+        print(request.user)
         try:
             serializer = FavoritedAlbumSerializer(
                 data={
                     "apple_music_id": request.data["apple_music_id"],
-                    "auth0_user_id": str(request.user).split("auth0.")[1],
+                    "auth0_user_id": str(request.user).replace(".", "|"),
                 }
             )
         except (KeyError, IndexError):
@@ -167,7 +168,7 @@ class FavoritePlaylistList(APIView):
             serializer = FavoritedPlaylistSerializer(
                 data={
                     "apple_music_id": request.data.get("apple_music_id"),
-                    "auth0_user_id": str(request.user).split("auth0.")[1],
+                    "auth0_user_id": str(request.user).replace(".", "|"),
                 }
             )
         except (KeyError, IndexError):

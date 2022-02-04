@@ -29,36 +29,40 @@
         >
           <v-row no-gutters>
             <CarouselSection
-              v-if="auth.loggedIn"
+              v-if="auth.loggedIn && favorites.length"
               title="Listen with Friends"
               :carousel-items="favorites"
             />
           </v-row>
-          <v-divider />
+          <v-divider v-if="reviews && reviews.length" />
           <CarouselSection
-            v-if="auth.loggedIn"
+            v-if="auth.loggedIn && reviews.length"
             title="Fresh Reviews From Friends"
             :carousel-items="reviews"
           />
-          <v-divider />
+          <v-divider v-if="recentReviews && recentReviews.length" />
           <CarouselSection
+            v-if="recentReviews && recentReviews.length"
             title="Just Rated"
             :carousel-items="recentReviews"
           />
-          <v-divider />
+          <v-divider v-if="popularTrackReviews && popularTrackReviews.length" />
           <CarouselSection
+            v-if="popularTrackReviews && popularTrackReviews.length"
             title="Popular Track Reviews"
             :carousel-items="popularTrackReviews"
             type="reviews"
           />
-          <v-divider />
+          <v-divider v-if="popularAlbumReviews && popularAlbumReviews.length" />
           <CarouselSection
+            v-if="popularAlbumReviews && popularAlbumReviews.length"
             title="Popular Album Reviews"
-            :carousel-items="popularPlaylistReviews"
+            :carousel-items="popularAlbumReviews"
             type="reviews"
           />
-          <v-divider />
+          <v-divider v-if="popularPlaylistReviews && popularPlaylistReviews.length" />
           <CarouselSection
+            v-if="popularPlaylistReviews && popularPlaylistReviews.length"
             title="Popular Playlist Reviews"
             :carousel-items="popularPlaylistReviews"
             type="reviews"
@@ -147,115 +151,106 @@ export default {
     CarouselSection,
     LoadingCircle,
   },
-  async fetch () {
-    this.loading = true;
+  async asyncData ({ store, $auth }) {
+
     let reviewsResponse = [];
     let reviewsTrackList = [];
     let favoritesResponse = [];
+    let trendingAlbumGroups = [];
+    let trendingPlaylistGroups = [];
+    let trendingSongGroups = [];
+    let popularAlbumReviews = [];
+    let popularPlaylistReviews = [];
+    let popularTrackReviews = [];
+    let listeningHistory = [];
+    let recommendations = [];
+    let recentReviews = [];
 
-    if (this.$store.state.auth && this.$store.state.auth.loggedIn) {
+    // logged into drumrose
+    if ($auth && $auth.loggedIn) {
         try {
-            favoritesResponse = await getFavoritedTracks(
-              this.$auth.getToken('auth0')
-            );
-            reviewsResponse = await getTrackReviews(
-              this.$auth.getToken('auth0')
-            );
-            reviewsTrackList = await Promise.all(
-              reviewsResponse.data.track_reviews.map( async review => {
-                  const attributes = await this.$store.getters.fetch(
-                    `/v1/catalog/us/songs/${review.track__apple_music_id}`
-                  );
-                  review.attributes = attributes.data[0].attributes;
-                  review.type = "songs";
-                  review.id = attributes.data[0].id;
-                  review.user = review.user__username;
-                  return review;
-              })
-            );
+          favoritesResponse = await getFavoritedTracks(
+            $auth.getToken('auth0')
+          );
+          reviewsResponse = await getTrackReviews(
+            $auth.getToken('auth0')
+          );
+          const reviewTrackList = await Promise.all(
+            reviewsResponse.data.track_reviews.map( async review => {
+                const attributes = await store.getters.fetch(
+                  `/v1/catalog/us/songs/${review.track__apple_music_id}`
+                );
+                review.attributes = attributes.data[0].attributes;
+                review.type = "songs";
+                review.id = attributes.data[0].id;
+                review.user = review.user__username;
+                return review;
+            })
+          );
+          recentReviews = reviewTrackList;
         } catch (err) {
             console.error(err);
-            this.loading = false;
-            this.$toast.error(err.message);
+            // this.loading = false;
+            // this.$toast.error(err.message);
         }
-        try {
-            let storefront = `${this.$store.state.storefront}` || 'us';
-            const trendingResponse = await this.$store.getters.fetch(
-              `/v1/catalog/${storefront}/` +
-              `charts?types=playlists,songs,albums`
-            );
-            this.trendingAlbumGroups = trendingResponse.results.albums;
-            this.trendingPlaylistGroups = trendingResponse.results.playlists;
-            this.trendingSongGroups = trendingResponse.results.songs;
-        } catch (err) {
-            this.loading = false;
-            console.error(err);
-            this.$toast.error(err.message);
-        }
-        this.loading = false;
-        return {
-            'recentReviews': reviewsTrackList,
-            'popularTrackReviews': reviewsTrackList,
-            'popularAlbumReviews': reviewsTrackList,
-            'popularPlaylistReviews': reviewsTrackList,
-            'favorites': favoritesResponse.data,
-        };
     }
 
     try {
-      reviewsResponse = await getTrackReviews(
-        this.$auth.getToken('auth0')
-      );
-      const reviewTrackList = await Promise.all(
-        reviewsResponse.data.track_reviews.map( async review => {
-            const attributes = await this.$store.getters.fetch(
-              `/v1/catalog/us/songs/${review.track__apple_music_id}`
-            );
-            review.attributes = attributes.data[0].attributes;
-            review.type = "songs";
-            review.id = attributes.data[0].id;
-            review.user = review.user__username;
-            return review;
-        })
-      );
-      this.recentReviews = reviewTrackList;
-    } catch (err) {
-        console.error(err);
-        this.loading = false;
-        this.$toast.error(err.message);
-    }
-    try {
-        let storefront = `${this.$store.state.storefront}` || 'us';
-        const trendingResponse = await this.$store.getters.fetch(
+        let storefront = `${store.state.storefront}` || 'us';
+        const trendingResponse = await store.getters.fetch(
           `/v1/catalog/${storefront}/` +
           `charts?types=playlists,songs,albums`
         );
-        this.trendingAlbumGroups = trendingResponse.results.albums;
-        this.trendingPlaylistGroups = trendingResponse.results.playlists;
-        this.trendingSongGroups = trendingResponse.results.songs;
+        trendingAlbumGroups = trendingResponse.results.albums;
+        trendingPlaylistGroups = trendingResponse.results.playlists;
+        trendingSongGroups = trendingResponse.results.songs;
     } catch (err) {
-        this.loading = false;
+        // this.loading = false;
         console.error(err);
-        this.$toast.error(err.message);
+        // this.$toast.error(err.message);
     }
 
-    if (this.$store.state.isAuthorized) {
+    if (store.state.isAuthorized) {
         try {
-            this.recommendations = await this.$store.getters['recommendations'];
+            recommendations = await store.getters['recommendations'];
         } catch (err) {
             console.error(err);
-            this.loading = false;
-            this.$toast.error(err.message);
+            // this.loading = false;
+            // this.$toast.error(err.message);
         }
         try {
-            this.listeningHistory = await this.$store.getters.recentlyPlayed;
+            listeningHistory = await store.getters.recentlyPlayed;
         } catch(err) {
             console.error(err);
-            this.loading = false;
-            this.$toast.error(err.message);
+            // this.loading = false;
+            // this.$toast.error(err.message);
         }
+        return {
+          'recentReviews': recentReviews,
+          'popularTrackReviews': popularTrackReviews,
+          'popularAlbumReviews': popularAlbumReviews,
+          'popularPlaylistReviews': popularPlaylistReviews,
+          'favorites': favoritesResponse.data,
+          'listeningHistory': listeningHistory,
+          'recommendations': recommendations,
+          'trendingAlbumGroups': trendingAlbumGroups,
+          'trendingSongGroups': trendingSongGroups,
+          'trendingPlaylistGroups': trendingPlaylistGroups,
+      };
     }
-    this.loading = false;
+    return {
+      'recentReviews': recentReviews,
+      'popularTrackReviews': popularTrackReviews,
+      'popularAlbumReviews': popularAlbumReviews,
+      'popularPlaylistReviews': popularPlaylistReviews,
+      'favorites': favoritesResponse.data,
+      'listeningHistory': listeningHistory,
+      'recommendations': recommendations,
+      'trendingAlbumGroups': trendingAlbumGroups,
+      'trendingSongGroups': trendingSongGroups,
+      'trendingPlaylistGroups': trendingPlaylistGroups,
+    };
+    // this.loading = false;
   },
   data () {
     return {

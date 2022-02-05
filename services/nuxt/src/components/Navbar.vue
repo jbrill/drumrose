@@ -50,7 +50,7 @@
         large
         class="font-weight-bold"
       >
-        People
+        Members
       </v-btn>
       <v-spacer />
       <SearchBar style="margin: 5px" />
@@ -171,7 +171,7 @@ export default {
           requiresAppleAuth: false,
         },
         {
-          title: 'People',
+          title: 'Members',
           nav: '/people',
           icon: 'mdi-account',
           requiresAuth: false,

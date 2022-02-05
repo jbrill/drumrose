@@ -26,39 +26,35 @@
               <v-list-item-title>
                 <nuxt-link
                   :to="'/people/' + user.username"
-                  class="font-weight-bold"
-                  style="color: var(--primary-yellow)"
+                  class="font-weight-bold text--primary username"
                 >
                   {{ user.username }}
                 </nuxt-link>
               </v-list-item-title>
-              <v-list-item-subtitle class="text--secondary">
-                {{ user.followers.length }} Followers
+              <v-list-item-subtitle class="text--secondary overline">
+                {{ user.track_reviews.length + user.playlist_reviews.length + user.album_reviews.length }} {{ "Reviews".toLowerCase() }} | {{ user.track_reviews.length + user.playlist_reviews.length + user.album_reviews.length }} {{ "Ratings".toLowerCase() }} | {{ user.track_reviews.length + user.playlist_reviews.length + user.album_reviews.length }} {{ "Reviews".toLowerCase() }} | {{ user.followers.length }} {{ "Followers".toLowerCase() }}
               </v-list-item-subtitle>
             </v-list-item-content>
 
             <v-list-item-action>
               <v-list-item-action-text>
-                {{ user.id }}
                 Member since {{ user.created_date.split('-')[0] }}
               </v-list-item-action-text>
-              <v-icon
+              <v-btn
                 v-if="!(following.includes(user.id))"
-                color="grey lighten-1"
                 small
                 @click="followPerson(user.username)"
               >
-                person_add_alt_1
-              </v-icon>
+                follow
+              </v-btn>
 
-              <v-icon
+              <v-btn
                 v-else
-                color="yellow lighten-3"
                 small
-                @click="followPerson(user.username)"
+                @click="unFollowPerson(user.username)"
               >
-                person_add_minus
-              </v-icon>
+                unfollow
+              </v-btn>
             </v-list-item-action>
           </v-list-item>
 
@@ -111,6 +107,7 @@ export default {
             "following_user": username,
           }
         );
+        this.$toast.show(`Successfully followed ${username}`);
       } catch (err) {
         console.error(err);
         this.$toast.show(`Log in to follow ${username}`);
@@ -120,4 +117,9 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.username:hover, .username:focus {
+  color: var(--primary-yellow) !important;
+  font-weight: black;
+}
+</style>

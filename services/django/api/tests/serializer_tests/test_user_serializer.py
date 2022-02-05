@@ -49,4 +49,4 @@ class UserSerializerTest(TestCase):
 
         # Assert user fields
         self.assertEqual(serialized_user.data["username"], str(user.username))
-        self.assertEqual(serialized_user.data["followers"], [follower.id])
+        self.assertEqual(serialized_user.data["followers"], [follower.follower_user.id])

@@ -24,5 +24,11 @@ class UserTest(TestCase):
         """
         Tests retrieving a user and adding a follower
         """
-        followers = FollowContainFactory()
-        print(vars(followers))
+        follower_contain = FollowContainFactory()
+        print(follower_contain.follower_user)
+        print(follower_contain.following_user)
+        following = [
+            follow.following_user
+            for follow in follower_contain.follower_user.following.all()
+        ]
+        print(following)

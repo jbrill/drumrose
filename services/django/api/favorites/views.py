@@ -31,7 +31,6 @@ class FavoriteTracksList(APIView):
         Get favorited tracks
         """
         favorites = FavoritedTrack.objects.all()
-
         return JsonResponse(
             {"favorited_tracks": list(favorites.values())}, status=status.HTTP_200_OK
         )
@@ -41,7 +40,6 @@ class FavoriteTracksList(APIView):
         Create favorited track
         """
         try:
-            print(request.user)
             serializer = FavoritedTrackSerializer(
                 data={
                     "apple_music_id": request.data["apple_music_id"],

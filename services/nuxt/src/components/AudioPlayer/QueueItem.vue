@@ -319,7 +319,7 @@ export default {
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  width: 25vw;
+  min-width: 25vw;
 }
 .queueItemContain {
   display: flex;

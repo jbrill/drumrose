@@ -9,7 +9,7 @@
       </v-btn>
     </div>
     <carousel
-      v-if="type===''"
+      v-if="type === ''"
       :touch-drag="false"
       :loop="true"
       :pagination-enabled="false"
@@ -81,6 +81,40 @@ const carouselPixelRanges = {
   },
 };
 
+const carouselPixelRangesSmaller = {
+  '1': {
+    'min': 1,
+    'max': 200,
+  },
+  '2': {
+    'min': 201,
+    'max': 300,
+  },
+  '3': {
+    'min': 301,
+    'max': 400,
+  },
+  '4': {
+    'min': 401,
+    'max': 500,
+  },
+  '5': {
+    'min': 501,
+    'max': 600,
+  },
+  '6': {
+    'min': 601,
+    'max': 700,
+  },
+  '7': {
+    'min': 701,
+    'max': 800,
+  },
+  '8': {
+    'min': 801,
+    'max': null,
+  },
+};
 
 export default {
   components: {
@@ -114,7 +148,6 @@ export default {
   computed: {
     ...mapState(['auth']),
     validCarouselItems () {
-      console.log(this.carouselItems);
       return this.carouselItems.filter(
         carouselItem => this.isValid(carouselItem.type)
       );
@@ -133,10 +166,11 @@ export default {
         );
       });
       this.numPerCarousel = parseInt(numPostsPerCarousel[0]);
-      console.log(this.numPerCarousel);
     },
   },
   mounted () {
+    console.log(this.carouselItems)
+    console.log(this.validCarouselItems)
     let pixelRanges = Object.keys(carouselPixelRanges);
     const numPostsPerCarousel = pixelRanges.filter( pixelRange => {
       return (

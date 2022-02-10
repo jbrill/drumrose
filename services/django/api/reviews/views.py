@@ -59,7 +59,7 @@ class TrackReviewList(APIView):
             serializer = TrackReviewSerializer(
                 data={
                     "apple_music_id": request.data.get("apple_music_id"),
-                    "auth0_user_id": str(request.user).split("auth0.")[1],
+                    "auth0_user_id": str(request.user).replace(".", "|"),
                     "review": request.data.get("review"),
                     "rating": request.data.get("rating"),
                 }
@@ -71,9 +71,7 @@ class TrackReviewList(APIView):
             )
         if serializer.is_valid():
             serializer.save()
-            return JsonResponse(
-                serializer.data, status=status.HTTP_201_CREATED, safe=False
-            )
+            return JsonResponse(data={}, status=status.HTTP_201_CREATED, safe=False)
         print(serializer.errors)
         return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -113,7 +111,7 @@ class AlbumReviewList(APIView):
             serializer = AlbumReviewSerializer(
                 data={
                     "apple_music_id": request.data["apple_music_id"],
-                    "auth0_user_id": str(request.user).split("auth0.")[1],
+                    "auth0_user_id": str(request.user).replace(".", "|"),
                     "review": request.data.get("review"),
                     "rating": request.data.get("rating"),
                 }
@@ -125,9 +123,7 @@ class AlbumReviewList(APIView):
             )
         if serializer.is_valid():
             serializer.save()
-            return JsonResponse(
-                serializer.data, status=status.HTTP_201_CREATED, safe=False
-            )
+            return JsonResponse(data={}, status=status.HTTP_201_CREATED, safe=False)
         print(serializer.errors)
         return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -167,7 +163,7 @@ class PlaylistReviewList(APIView):
             serializer = PlaylistReviewSerializer(
                 data={
                     "apple_music_id": request.data["apple_music_id"],
-                    "auth0_user_id": str(request.user).split("auth0.")[1],
+                    "auth0_user_id": str(request.user).replace(".", "|"),
                     "review": request.data.get("review"),
                     "rating": request.data.get("rating"),
                 }
@@ -179,7 +175,5 @@ class PlaylistReviewList(APIView):
             )
         if serializer.is_valid():
             serializer.save()
-            return JsonResponse(
-                serializer.data, status=status.HTTP_201_CREATED, safe=False
-            )
+            return JsonResponse(data={}, status=status.HTTP_201_CREATED, safe=False)
         return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

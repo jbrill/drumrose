@@ -36,42 +36,38 @@
       </v-btn>
       <v-btn
         icon
-        small
         @click="shuffleTrack"
       >
-        <v-icon x-small>
+        <v-icon small>
           mdi-shuffle
         </v-icon>
       </v-btn>
       <v-btn
         v-if="$store.state.repeatMode === 1"
         icon
-        small
         color="var(--primary-red) !important"
         @click="repeatTrack"
       >
-        <v-icon x-small>
+        <v-icon small>
           mdi-repeat-once
         </v-icon>
       </v-btn>
       <v-btn
         v-else-if="$store.state.repeatMode === 2"
         icon
-        small
         color="var(--primary-red) !important"
         @click="repeatTrack"
       >
-        <v-icon x-small>
+        <v-icon small>
           mdi-repeat
         </v-icon>
       </v-btn>
       <v-btn
         v-else
         icon
-        small
         @click="repeatTrack"
       >
-        <v-icon x-small>
+        <v-icon small>
           mdi-repeat-off
         </v-icon>
       </v-btn>

@@ -119,10 +119,11 @@ export default {
       const resp = await this.$store.getters.fetch(
         `/v1/catalog/us/albums/${this.id}`
       );
-      console.log('data');
-      console.log(resp.data);
       this.attributes = resp.data[0].attributes;
+      console.log(resp.data)
       if (resp.data[0].relationships.artists.length > 0) {
+        this.artistId = resp.data[0].relationships.artists.data[0].id;
+      } else {
         this.artistId = resp.data[0].relationships.artists.data[0].id;
       }
       this.loading = false;

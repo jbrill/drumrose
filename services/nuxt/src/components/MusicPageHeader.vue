@@ -54,7 +54,7 @@
                       </v-icon>
                     </v-btn>
                     <v-flex class="music-title-contain">
-                      <h2 class="headline">
+                      <h2 class="headline font-weight-bold">
                         {{ trackInfo.attributes.name }}
                       </h2>
                       <nuxt-link
@@ -89,8 +89,8 @@
                   v-if="type === 'albums'"
                   class="type-contain"
                 >
-                  <span class="overline">Album  | 
-                    Released In   <strong>
+                  <span class="grey--text overline">Album  | 
+                    &nbsp Released In   <strong>
                       {{ trackInfo.attributes.releaseDate.split('-')[0] }}
                     </strong>
                   </span>
@@ -119,7 +119,7 @@
                     class="overline"
                     style="text-align: right;"
                   >
-                    Last Modified In
+                    &nbsp Last Modified In
                     <strong>
                       {{ trackInfo.attributes.lastModifiedDate.split('-')[0] }}
                     </strong>
@@ -135,7 +135,7 @@
                         'recordLabel' in trackInfo.attributes &&
                           'copyright' in trackInfo.attributes
                       "
-                    > | </span>
+                    > | &nbsp</span>
                     <span v-if="'copyright' in trackInfo.attributes">
                       {{ trackInfo.attributes.copyright }}
                     </span>
@@ -144,7 +144,7 @@
               </v-container>
               <v-card-actions>
                 <v-container full-width>
-                  <v-row dense style="width: 100%">
+                  <v-row dense style="width: 100%; flex-wrap: wrap">
                     <v-col>
                       <v-tooltip
                         v-if="!auth.loggedIn"

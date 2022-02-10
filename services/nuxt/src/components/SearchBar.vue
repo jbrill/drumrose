@@ -203,6 +203,6 @@ export default {
 
 <style scoped>
 .search-bar {
-  max-width: 30rem;
+  max-width: 25rem;
 }
 </style>

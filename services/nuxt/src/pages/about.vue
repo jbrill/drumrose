@@ -52,13 +52,13 @@
           Where do you get your data?
         </p>
         <p>
-          bleh
+          {{ drumroseData }}
         </p>
         <p class="header-2 font-weight-bold white--text">
-          What do you do with my data?
+          What data do you collect from me?
         </p>
         <p>
-          bleh
+          {{ drumroseDataCollect }}
         </p>
       </v-container>
       <v-container>
@@ -71,18 +71,7 @@
         <v-divider />
         <v-spacer />
         <p class="header-2 font-weight-bold white--text">
-          What is Drumrose?
-        </p>
-        <p>
-          {{ drumroseDescription }}
-        </p>
-      </v-container>
-      <v-container>
-        <p class="header-2 font-weight-bold white--text">
-          Why do we exist?
-        </p>
-        <p>
-          {{ drumrosePurpose }}
+          How can I reach you?
         </p>
       </v-container>
       <v-container>
@@ -128,7 +117,10 @@ export default {
       drumroseDescription: "Drumrose is an open, contextual catalog " +
         "set to advance the discussion and discourse of the musicverse.",
       drumrosePurpose: "We believe current models of music facilitation " +
-        "are too centralized.",
+        "lack context, are too centralized, and fail to provide both artists " +
+        "and listeners with a sense of community and support.",
+      drumroseData: "We currently obtain our data from Apple Music's API.",
+      drumroseDataCollect: "We currently obtain our data from Apple Music's API.",
     };
   },
 };

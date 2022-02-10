@@ -3,16 +3,9 @@
     <v-row
       class="fill-height"
       align="center"
-      justify="space-between"
+      justify="start"
+      style="padding-bottom: 1vh"
     >
-      <v-btn
-        text
-        :href="'/people/' + user"
-        color="#ccc"
-        :to="'/people/' + user"
-      >
-        {{ user }}
-      </v-btn>
       <v-rating
         v-if="rating"
         v-model="rating"
@@ -56,6 +49,10 @@ export default {
     'review': {
       type: String,
       default: '',
+    },
+    'favorite': {
+      type: Boolean,
+      default: false,
     },
   },
   created: function () {

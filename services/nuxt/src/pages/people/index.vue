@@ -37,12 +37,29 @@
             </v-list-item-content>
 
             <v-list-item-action>
-              <v-list-item-action-text>
-                Member since {{ user.created_date.split('-')[0] }}
-              </v-list-item-action-text>
+              <v-tooltip
+                v-if="
+                  !(following.includes(user.id)) && !auth.loggedIn
+                "
+                top
+              >
+                <template v-slot:activator="{ on }">
+                  <div v-on="on">
+                    <v-btn
+                      small
+                      disabled
+                      @click="followPerson(user.username)"
+                    >
+                      follow
+                    </v-btn>
+                  </div>
+                </template>
+                <span>Log In To Follow</span>
+              </v-tooltip>
               <v-btn
-                v-if="!(following.includes(user.id))"
+                v-else-if="!(following.includes(user.id))"
                 small
+                :disabled="!auth.loggedIn"
                 @click="followPerson(user.username)"
               >
                 follow
@@ -69,9 +86,11 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import {
   getUserDetail, getUserList, addFollower,
 } from '~/api/api';
+
 
 export default {
   async asyncData ({ store, $auth, $toast }) {
@@ -97,6 +116,9 @@ export default {
       "following": userResponse.data.following,
       "users": usersResponse.data.users,
     };
+  },
+  computed: {
+    ...mapState(['isAuthorized', 'auth']),
   },
   methods: {
     async followPerson (username) {

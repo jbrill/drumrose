@@ -27,11 +27,27 @@
           v-else
           class="overflow-y-auto"
         >
+          <v-row
+            v-if="auth.loggedIn"
+            no-gutters
+          >
+            <span style="text-align: center; width: 100%; font-size: 1.5rem;">
+              Hi again, <nuxt-link
+                :to="
+                  `people/${auth.user['https://django-server:8000/handle']}`
+                "
+                class="nuxt-link-active"
+              >
+                {{ auth.user['https://django-server:8000/handle'] }}
+              </nuxt-link>! Here's what you may have missed.
+            </span>
+          </v-row>
           <v-row no-gutters>
             <CarouselSection
               v-if="auth.loggedIn && favorites.length"
-              title="Listen with Friends"
+              title="Tracks Your Friends Love"
               :carousel-items="favorites"
+              type="favorites"
             />
           </v-row>
           <v-divider v-if="reviews && reviews.length" />
@@ -152,9 +168,10 @@ export default {
     LoadingCircle,
   },
   async asyncData ({ store, $auth }) {
-
+    console.log($auth['https://django-server:8000/handle'])
     let reviewsResponse = [];
-    let reviewsTrackList = [];
+    let favoritedTracksResponseList = [];
+    let reviewTrackList = [];
     let favoritesResponse = [];
     let trendingAlbumGroups = [];
     let trendingPlaylistGroups = [];
@@ -175,7 +192,20 @@ export default {
           reviewsResponse = await getTrackReviews(
             $auth.getToken('auth0')
           );
-          const reviewTrackList = await Promise.all(
+          console.log(favoritesResponse.data)
+          favoritedTracksResponseList = await Promise.all(
+            favoritesResponse.data.favorited_tracks.map( async track => {
+                const attributes = await store.getters.fetch(
+                  `/v1/catalog/us/songs/${track.song.apple_music_id}`
+                );
+                track.attributes = attributes.data[0].attributes;
+                track.type = "songs";
+                track.id = attributes.data[0].id;
+                track.user = track.user.username;
+                return track;
+            })
+          );
+          reviewTrackList = await Promise.all(
             reviewsResponse.data.track_reviews.map( async review => {
                 const attributes = await store.getters.fetch(
                   `/v1/catalog/us/songs/${review.track__apple_music_id}`
@@ -230,7 +260,7 @@ export default {
           'popularTrackReviews': popularTrackReviews,
           'popularAlbumReviews': popularAlbumReviews,
           'popularPlaylistReviews': popularPlaylistReviews,
-          'favorites': favoritesResponse.data,
+          'favorites': favoritedTracksResponseList,
           'listeningHistory': listeningHistory,
           'recommendations': recommendations,
           'trendingAlbumGroups': trendingAlbumGroups,
@@ -243,7 +273,7 @@ export default {
       'popularTrackReviews': popularTrackReviews,
       'popularAlbumReviews': popularAlbumReviews,
       'popularPlaylistReviews': popularPlaylistReviews,
-      'favorites': favoritesResponse.data,
+      'favorites': favoritedTracksResponseList,
       'listeningHistory': listeningHistory,
       'recommendations': recommendations,
       'trendingAlbumGroups': trendingAlbumGroups,
@@ -325,5 +355,9 @@ export default {
 >>>.v-tabs-items {
   background-color: transparent;
   padding-top: 5vh;
+}
+.nuxt-link-active {
+  color: var(--primary-yellow);
+  font-weight: 600;
 }
 </style>

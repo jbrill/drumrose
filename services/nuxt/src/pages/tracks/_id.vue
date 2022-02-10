@@ -26,6 +26,22 @@
         <span v-else class="overline">{{ numReviews }} Reviews</span>
       </h5>
       <v-divider />
+      <v-container v-if="numReviews === 0">
+        <p class="playlists-description">
+          No reviews yet... be the first to write one!
+        </p>
+        <div class="create-playlist-button-contain">
+          <v-btn
+            class="add-post-button"
+            color="primary"
+            dark
+            nuxt
+            width="10rem"
+          >
+            Write review
+          </v-btn>
+        </div>
+      </v-container>
     </v-container>
   </v-responsive>
 </template>

@@ -81,7 +81,7 @@ class PopularUserList(APIView):
     """
 
     authentication_classes = [Auth0JSONWebTokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get(self, request):
         """
@@ -105,7 +105,7 @@ class UserDetail(APIView):
     """
 
     authentication_classes = [Auth0JSONWebTokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get(self, request, user_handle):
         """
@@ -206,7 +206,7 @@ class UserFavoritesList(APIView):
     """
 
     authentication_classes = [Auth0JSONWebTokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get(self, request, user_handle):
         """

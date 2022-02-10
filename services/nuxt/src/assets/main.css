@@ -141,6 +141,3 @@ span, p {
 .rounded-0 {
   border-radius: 25px;
 }
-.row {
-  flex-wrap: nowrap !important;
-}

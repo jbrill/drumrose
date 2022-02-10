@@ -1,7 +1,13 @@
 <template>
-  <div class="profileContain" style="width:100%">
+  <v-container class="profileContain" style="width:100%">
     <v-responsive style="display: flex; justify-content: space-between">
+      <v-skeleton-loader
+        v-if="!profile"
+        class="mx-auto"
+        type="card"
+      />
       <v-card
+        v-else
         style="padding: 2rem;"
       >
         <v-row flex class="content-contain" style="margin: 0; width:100%">
@@ -36,7 +42,7 @@
                         </v-row>
                       </template>
                     </v-img>
-                    <p class="title profileName" style="padding: 2rem; text-align: center">
+                    <p class="title profileName" style="padding-top: 2rem; text-align: center">
                       {{ profile.username }}
                     </p>
                   </v-col>
@@ -70,13 +76,13 @@
             </v-layout>
           </v-col>
         </v-row>
+        <div class="postsContain">
+          POSTS GO HERE...
+          {{profile.favorite_tracks.length}}
+        </div>
       </v-card>
     </v-responsive>
-    <div class="postsContain">
-      POSTS GO HERE...
-      {{profile.favorite_tracks.length}}
-    </div>
-  </div>
+  </v-container>
 </template>
 
 <script>
@@ -89,6 +95,11 @@ export default {
     let userResponse;
 
     if ($auth.loggedIn) {
+      userResponse = await getUserDetail(
+        $auth.getToken('auth0'),
+        route.params.username,
+      );
+    } else {
       userResponse = await getUserDetail(
         $auth.getToken('auth0'),
         route.params.username,

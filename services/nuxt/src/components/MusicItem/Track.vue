@@ -38,7 +38,7 @@
         :primary-link="'/tracks/' + trackObject.id"
         :secondary-name="attributes.artistName"
         :secondary-link="
-          '/artists/' + trackObject.relationships.artists.data[0].id
+          '/artists/' + artistId
         "
       />
     </v-container>
@@ -81,6 +81,7 @@ export default {
       loading: true,
       playlistDialog: false,
       artistName: '',
+      artistId: '',
       artworkUrl: '',
       name: '',
       trackObject: {},
@@ -129,6 +130,12 @@ export default {
       this.attributes = resp.data[0].attributes;
       this.trackObject = resp.data[0];
       this.loading = false;
+      console.log(resp.data)
+      if (resp.data[0].relationships.artists.length > 0) {
+        this.artistId = resp.data[0].relationships.artists.data[0].id;
+      } else {
+        this.artistId = resp.data[0].relationships.artists.data[0].id;
+      }
     } catch (err) {
       this.loading = false;
       console.error(err);

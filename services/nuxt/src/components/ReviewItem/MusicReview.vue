@@ -1,6 +1,34 @@
 <template>
-  <v-row class="review-contain">
-    <v-container class="review-contain__music-item">
+  <v-container>
+    <!-- favorite -->
+    <v-container
+      v-if="post.user && !(
+        post.review
+      )"
+    >
+      <v-btn
+        text
+        :href="'/people/' + user"
+        color="#ccc"
+        :to="'/people/' + user"
+      >
+        {{ post.user }}
+      </v-btn>
+      <v-icon
+        small
+        transparent
+        :class="{ 'show-btns': hover }"
+      >
+        mdi-heart
+      </v-icon>
+      <PostHeader
+        v-if="post.rating"
+        :user="post.user"
+        :date="post.date"
+        :type="post.postType"
+        :rating="post.rating"
+        :review="post.review"
+      />
       <Album
         v-if="post.type == 'albums'"
         :id="post.id"
@@ -20,19 +48,31 @@
         is-actionable
       />
     </v-container>
-    <v-container class="review-contain__review-item">
-      <PostHeader
-        v-if="post.user && (
-          post.review || post.rating
-        )"
-        :user="post.user"
-        :date="post.date"
-        :type="post.postType"
-        :rating="post.rating"
-        :review="post.review"
-      />
-    </v-container>
-  </v-row>
+    <v-row v-else class="review-contain">
+      <v-container class="review-contain__music-item">
+        <Album
+          v-if="post.type == 'albums'"
+          :id="post.id"
+          is-playable
+          is-actionable
+        />
+        <Track
+          v-if="post.type == 'songs'"
+          :id="post.id"
+          is-playable
+          is-actionable
+        />
+        <Playlist
+          v-if="post.type == 'playlists'"
+          :id="post.id"
+          is-playable
+          is-actionable
+        />
+      </v-container>
+      <v-container class="review-contain__review-item">
+      </v-container>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -60,6 +100,9 @@ export default {
       default: '',
     },
   },
+  mounted () {
+    console.log(this.post)
+  }
 };
 </script>
 

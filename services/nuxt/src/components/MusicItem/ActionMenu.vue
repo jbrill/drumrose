@@ -40,15 +40,14 @@
             v-on="on"
           >
             <v-rating
-              v-model="reviewRating"
+              v-model="newRating"
               background-color="grey"
-              color="var(--primary-yellow)"
+              color="var(--primary-purple)"
               dense
               readonly
               half-increments
               hover
               size="18"
-              @click="changeRating"
             />
           </v-list-item>
         </template>
@@ -63,13 +62,14 @@
         }"
       >
         <v-rating
-          v-model="reviewRating"
+          v-model="newRating"
           background-color="white"
-          color="var(--primary-yellow)"
+          color="var(--primary-purple)"
           dense
           half-increments
           hover
           size="18"
+          @click.native.stop.prevent="changeRating($event)"
         />
       </v-list-item>
       <v-tooltip
@@ -545,13 +545,18 @@ export default {
       itemInUserLibrary: false,
       isReviewed: false,
       loading: true,
+      newRating: 0,
     };
   },
   computed: {
     ...mapState(['auth', 'isAuthorized', 'nowPlayingItem', 'playbackState']),
   },
   async mounted () {
+    this.newRating = this.rating;
     this.loading = true;
+    // if (this.$auth && this.$auth.loggedIn) {
+
+    // }
     if (this.$store.state.isAuthorized) {
       try {
         let playlistResp = await this.$store.getters.fetch(
@@ -616,9 +621,10 @@ export default {
       }
     },
     async changeRating (e) {
-      console.log(this.id);
+      const newRating = e.target.ariaLabel.split(' of 5')[0].split('Rating ')[1];
+      console.log(newRating);
       const data = {
-        'rating': e,
+        'rating': newRating,
         'apple_music_id': this.id,
       };
       try {
@@ -635,9 +641,13 @@ export default {
             this.$auth.getToken('auth0'), data
           );
         }
+        this.$toast.success(`Successfully rated ${this.name} ${newRating} out of 5`);
+        // e.stopPropogation();
+        this.newRating = newRating;
       } catch (err) {
         console.error(err);
         this.$toast.error(err);
+        // e.stopPropogation();
       }
     },
     async createReview () {

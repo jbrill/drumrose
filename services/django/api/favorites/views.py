@@ -12,6 +12,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework_auth0.authentication import Auth0JSONWebTokenAuthentication
+from django.core import serializers
 
 
 class FavoriteTracksList(APIView):
@@ -30,9 +31,11 @@ class FavoriteTracksList(APIView):
         """
         Get favorited tracks
         """
-        favorites = FavoritedTrack.objects.all()
+        favorites = FavoritedTrackSerializer(
+            FavoritedTrack.objects.all(), many=True
+        ).data
         return JsonResponse(
-            {"favorited_tracks": list(favorites.values())}, status=status.HTTP_200_OK
+            {"favorited_tracks": favorites}, status=status.HTTP_200_OK, safe=False
         )
 
     def post(self, request):

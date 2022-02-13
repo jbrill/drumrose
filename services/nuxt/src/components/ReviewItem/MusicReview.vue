@@ -6,29 +6,42 @@
         post.review
       )"
     >
-      <v-btn
-        text
-        :href="'/people/' + user"
-        color="#ccc"
-        :to="'/people/' + user"
+      <v-row
+        flex
+        style="
+          align-items: center;
+          justify-content: space-between;
+          padding: 1rem;
+        "
       >
-        {{ post.user }}
-      </v-btn>
-      <v-icon
-        small
-        transparent
-        :class="{ 'show-btns': hover }"
-      >
-        mdi-heart
-      </v-icon>
-      <PostHeader
-        v-if="post.rating"
-        :user="post.user"
-        :date="post.date"
-        :type="post.postType"
-        :rating="post.rating"
-        :review="post.review"
-      />
+        <v-btn
+          text
+          :href="'/people/' + post.user"
+          color="#ccc"
+          :to="'/people/' + post.user"
+        >
+          {{ post.user }}
+        </v-btn>
+        <v-icon
+          x-small
+          transparent
+          :class="{ 'show-btns': hover }"
+          color="grey"
+        >
+          mdi-heart
+        </v-icon>
+        <v-rating
+          v-if="post.rating"
+          v-model="post.rating"
+          background-color="grey"
+          color="grey"
+          dense
+          half-increments
+          readonly
+          small
+          size="22"
+        />
+      </v-row>
       <Album
         v-if="post.type == 'albums'"
         :id="post.id"

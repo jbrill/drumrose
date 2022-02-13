@@ -34,6 +34,7 @@
         />
       </v-badge>
       <MusicFooter
+        v-if="isActionable"
         :primary-name="attributes.name"
         :primary-link="'/tracks/' + trackObject.id"
         :secondary-name="attributes.artistName"

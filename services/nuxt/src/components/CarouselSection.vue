@@ -9,7 +9,9 @@
       </v-btn>
     </div>
     <carousel
-      v-if="type === ''"
+      v-if="
+        type === ''
+      "
       :touch-drag="false"
       :loop="true"
       :pagination-enabled="false"
@@ -44,7 +46,7 @@
         :key="carouselItem.id"
         data-index="index"
         :data-name="carouselItem.id"
-        :style="{ maxWidth: 100 / 2 + '%'}"
+        :style="{ maxWidth: 100 / numPerCarousel + '%'}"
         @slideclick="handleSlideClick"
       >
         <MusicReview
@@ -67,15 +69,15 @@ const carouselPixelRanges = {
     'min': 1,
     'max': 700,
   },
-  '2': {
+  '4': {
     'min': 701,
     'max': 1200,
   },
-  '3': {
+  '6': {
     'min': 1201,
     'max': 1800,
   },
-  '4': {
+  '8': {
     'min': 1801,
     'max': null,
   },
@@ -142,7 +144,7 @@ export default {
   data () {
     return {
       windowWidth: window.innerWidth,
-      numPerCarousel: 4,
+      numPerCarousel: 8,
     };
   },
   computed: {

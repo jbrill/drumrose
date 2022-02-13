@@ -117,6 +117,7 @@ export default {
       );
       console.log(resp);
       this.trackInfo = resp.data[0];
+      console.log(this.trackInfo)
       this.loading = false;
     } catch (err) {
       this.loading = false;

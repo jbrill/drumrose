@@ -30,13 +30,13 @@ class UserProfileSerializer(serializers.ModelSerializer):
         return [follow.follower_user.id for follow in obj.followers.all()]
 
     def get_track_reviews_list(self, obj):
-        return [review for review in TrackReview.objects.filter(user=obj)]
+        return [review.review for review in TrackReview.objects.filter(user=obj)]
 
     def get_album_reviews_list(self, obj):
-        return [review for review in TrackReview.objects.filter(user=obj)]
+        return [review.review for review in TrackReview.objects.filter(user=obj)]
 
     def get_playlist_reviews_list(self, obj):
-        return [review for review in TrackReview.objects.filter(user=obj)]
+        return [review.review for review in TrackReview.objects.filter(user=obj)]
 
     def get_favorited_tracks_list(self, obj):
         return [track.id for track in FavoritedTrack.objects.filter(user=obj)]

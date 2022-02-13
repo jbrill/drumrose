@@ -50,18 +50,78 @@
               type="favorites"
             />
           </v-row>
-          <v-divider v-if="reviews && reviews.length" />
           <CarouselSection
             v-if="auth.loggedIn && reviews.length"
             title="Fresh Reviews From Friends"
             :carousel-items="reviews"
           />
           <v-divider v-if="recentReviews && recentReviews.length" />
-          <CarouselSection
-            v-if="recentReviews && recentReviews.length"
-            title="Just Rated"
-            :carousel-items="recentReviews"
-          />
+          <p class="font-weight-bold overline">
+            Recently reviewed playlists
+          </p>
+          <v-row
+            no-gutters
+          >
+            <v-col
+              v-for="(review, reviewKey) in recentReviews.slice(0, 6)"
+              :key="reviewKey"
+              cols="12"
+              sm="2"
+              style="padding: 1vw"
+            >
+              <v-card>
+                <Track
+                  :id="review.track__apple_music_id"
+                  is-playable
+                  :is-actionable="false"
+                />
+              </v-card>
+            </v-col>
+          </v-row>
+          <p class="font-weight-bold overline">
+            Recently reviewed albums
+          </p>
+          <v-row
+            no-gutters
+          >
+            <v-col
+              v-for="(review, reviewKey) in recentReviews.slice(0, 6)"
+              :key="reviewKey"
+              cols="12"
+              sm="2"
+              style="padding: 1vw"
+            >
+              <v-card>
+                <Track
+                  :id="review.track__apple_music_id"
+                  is-playable
+                  :is-actionable="false"
+                />
+              </v-card>
+            </v-col>
+          </v-row>
+          <p class="font-weight-bold overline">
+            Recently reviewed tracks
+          </p>
+          <v-row
+            no-gutters
+          >
+            <v-col
+              v-for="(review, reviewKey) in recentReviews.slice(0, 6)"
+              :key="reviewKey"
+              cols="12"
+              sm="2"
+              style="padding: 1vw"
+            >
+              <v-card>
+                <Track
+                  :id="review.track__apple_music_id"
+                  is-playable
+                  :is-actionable="false"
+                />
+              </v-card>
+            </v-col>
+          </v-row>
           <v-divider v-if="popularTrackReviews && popularTrackReviews.length" />
           <CarouselSection
             v-if="popularTrackReviews && popularTrackReviews.length"
@@ -158,6 +218,7 @@
 import { mapState } from 'vuex';
 import CarouselSection from '~/components/CarouselSection';
 import LoadingCircle from '~/components/LoadingCircle';
+import Track from '~/components/MusicItem/Track';
 
 import { getFavoritedTracks, getTrackReviews } from '~/api/api';
 
@@ -166,6 +227,7 @@ export default {
   components: {
     CarouselSection,
     LoadingCircle,
+    Track,
   },
   async asyncData ({ store, $auth }) {
     console.log($auth['https://django-server:8000/handle'])
@@ -189,9 +251,6 @@ export default {
           favoritesResponse = await getFavoritedTracks(
             $auth.getToken('auth0')
           );
-          reviewsResponse = await getTrackReviews(
-            $auth.getToken('auth0')
-          );
           console.log(favoritesResponse.data)
           favoritedTracksResponseList = await Promise.all(
             favoritesResponse.data.favorited_tracks.map( async track => {
@@ -205,25 +264,27 @@ export default {
                 return track;
             })
           );
-          reviewTrackList = await Promise.all(
-            reviewsResponse.data.track_reviews.map( async review => {
-                const attributes = await store.getters.fetch(
-                  `/v1/catalog/us/songs/${review.track__apple_music_id}`
-                );
-                review.attributes = attributes.data[0].attributes;
-                review.type = "songs";
-                review.id = attributes.data[0].id;
-                review.user = review.user__username;
-                return review;
-            })
-          );
-          recentReviews = reviewTrackList;
         } catch (err) {
             console.error(err);
             // this.loading = false;
             // this.$toast.error(err.message);
         }
     }
+    reviewsResponse = await getTrackReviews();
+    reviewTrackList = await Promise.all(
+      reviewsResponse.data.track_reviews.map( async review => {
+          const attributes = await store.getters.fetch(
+            `/v1/catalog/us/songs/${review.track__apple_music_id}`
+          );
+          review.attributes = attributes.data[0].attributes;
+          review.type = "songs";
+          review.id = attributes.data[0].id;
+          review.user = review.user__username;
+          return review;
+      })
+    );
+    recentReviews = reviewTrackList;
+    console.log(recentReviews)
 
     try {
         let storefront = `${store.state.storefront}` || 'us';

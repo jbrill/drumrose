@@ -40,6 +40,7 @@ class TrackReviewList(APIView):
                     reviews.values(
                         "id",
                         "track__apple_music_id",
+                        "track__id",
                         "review",
                         "rating",
                         "user__username",

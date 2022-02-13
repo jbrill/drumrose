@@ -104,7 +104,7 @@
               </v-row>
               <v-card-actions class="card-actions">
                 <v-tooltip
-                  v-if="!auth.loggedIn"
+                  v-if="!auth.loggedIn && isActionable"
                   top
                 >
                   <template v-slot:activator="{ on }">
@@ -128,7 +128,7 @@
                   <span>Log In To Favorite</span>
                 </v-tooltip>
                 <v-btn
-                  v-else-if="!isFavorited"
+                  v-else-if="!isFavorited && isActionable"
                   icon
                   :class="{ 'show-btns': hover }"
                   @click="favoriteItem()"
@@ -143,7 +143,7 @@
                   </v-icon>
                 </v-btn>
                 <v-btn
-                  v-else
+                  v-else-if="isActionable"
                   icon
                   @click="unFavoriteItem()"
                   @click.native.stop.prevent
@@ -156,6 +156,7 @@
                   </v-icon>
                 </v-btn>
                 <ActionMenu
+                  v-if="isActionable"
                   :id="id"
                   :type="type"
                   :artwork-url="artworkUrl"
@@ -562,7 +563,8 @@ export default {
   width: 100%;
   overflow: visible !important;
   height: auto;
-  min-height: 18vh;
+
+  /* min-height: 18vh; */
   border-radius: 2px;
 }
 .albumCover:hover, .albumCover:focus {

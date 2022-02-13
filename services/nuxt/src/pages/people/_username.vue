@@ -45,6 +45,10 @@
                     <p class="title profileName" style="padding-top: 2rem; text-align: center">
                       {{ profile.username }}
                     </p>
+                    <!-- add if username is logged in -->
+                    <v-btn to="/settings">
+                      Edit Profile
+                    </v-btn>
                   </v-col>
                   <v-container style="height: 20%">
                     <v-row style="justify-content: space-evenly">
@@ -76,10 +80,19 @@
             </v-layout>
           </v-col>
         </v-row>
-        <div class="postsContain">
-          POSTS GO HERE...
-          {{profile.favorite_tracks.length}}
-        </div>
+      </v-card>
+      <v-card>
+        <CarouselSection
+          v-if="profile"
+          title="Favorites"
+          :carousel-items="favoritedTracks"
+        />
+      </v-card>
+      <v-card>
+        <v-card-title>Favorited Albums</v-card-title>
+      </v-card>
+      <v-card>
+        <v-card-title>Favorited Playlists</v-card-title>
       </v-card>
     </v-responsive>
   </v-container>
@@ -87,7 +100,7 @@
 
 <script>
 import {
-  getUserDetail, getUserList, addFollower,
+  getUserDetail, getFavoritedTracks, addFollower,
 } from '~/api/api';
 
 export default {
@@ -105,11 +118,17 @@ export default {
         route.params.username,
       );
     }
+    let favoritesResponse = await getFavoritedTracks(
+      $auth.getToken('auth0'),
+      route.params.username,
+    );
     if (!userResponse ) {
       return { "profile": null };
     }
+    console.log(favoritesResponse);
     return {
       "profile": userResponse.data,
+      "favoritedTracks": favoritesResponse.data.favorited_tracks,
     };
   },
 };

@@ -2,6 +2,7 @@
   <div class="queueContain">
     <QueueItem
       :track-object="nowPlayingItem"
+      :more-options="true"
       :now-playing="true"
     />
     <!-- <v-menu

@@ -20,7 +20,7 @@
         large
         class="font-weight-bold"
       >
-        Home
+        Reviews
       </v-btn>
       <v-btn
         nuxt

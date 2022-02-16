@@ -96,7 +96,7 @@
           <span>Log In To Favorite</span>
         </v-tooltip>
       </v-btn>
-      <ActionMenu />
+      <ActionMenu v-if="moreOptions" />
     </v-row>
     <div v-else>
       <span class="overline">
@@ -123,6 +123,10 @@ export default {
       default: () => {},
     },
     'nowPlaying': {
+      type: Boolean,
+      default: false,
+    },
+    'moreOptions': {
       type: Boolean,
       default: false,
     },

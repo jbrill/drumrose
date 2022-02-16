@@ -110,19 +110,21 @@ export default {
     if ($auth.loggedIn) {
       userResponse = await getUserDetail(
         $auth.getToken('auth0'),
-        route.params.username,
+        route.params.slug,
       );
     } else {
       userResponse = await getUserDetail(
         $auth.getToken('auth0'),
-        route.params.username,
+        route.params.slug,
       );
     }
     let favoritesResponse = await getFavoritedTracks(
       $auth.getToken('auth0'),
-      route.params.username,
+      route.params.slug,
     );
-    if (!userResponse ) {
+    console.log(userResponse.data)
+    if (!userResponse || userResponse.status != 200) {
+      console.error(userResponse.data);
       return { "profile": null };
     }
     console.log(favoritesResponse);

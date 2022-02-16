@@ -24,7 +24,7 @@
           :is-playable="isPlayable"
           :is-actionable="isActionable"
           :artwork-url="appleImage()"
-          :link="'/tracks/' + trackObject.id"
+          :link="type === 'review' ? `people/${user}/reviews/tracks/${trackObject.id}` : `/tracks/${trackObject.id}`"
           type="song"
           :name="attributes.name"
           :artist-name="attributes.artistName"
@@ -68,6 +68,10 @@ export default {
       type: String,
       default: '',
     },
+    type: {
+      type: String,
+      default: '',
+    },
     isActionable: {
       type: Boolean,
       default: false,
@@ -75,6 +79,10 @@ export default {
     isPlayable: {
       type: Boolean,
       default: false,
+    },
+    user: {
+      type: String,
+      default: 'false',
     },
   },
   data () {

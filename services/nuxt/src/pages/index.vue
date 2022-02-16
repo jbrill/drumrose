@@ -17,8 +17,8 @@
     
     <v-tabs-items v-model="tab">
       <v-tab-item
-        key="social"
-        value="social"
+        key="reviews"
+        value="reviews"
       >
         <LoadingCircle
           v-if="loading" 
@@ -73,6 +73,8 @@
                 <Track
                   :id="review.track__apple_music_id"
                   is-playable
+                  type="review"
+                  :user="review.user__username"
                   :is-actionable="false"
                 />
               </v-card>
@@ -95,6 +97,8 @@
                 <Track
                   :id="review.track__apple_music_id"
                   is-playable
+                  type="review"
+                  :user="review.user__username"
                   :is-actionable="false"
                 />
               </v-card>
@@ -117,6 +121,8 @@
                 <Track
                   :id="review.track__apple_music_id"
                   is-playable
+                  type="review"
+                  :user="review.user__username"
                   :is-actionable="false"
                 />
               </v-card>
@@ -345,11 +351,11 @@ export default {
   },
   data () {
     return {
-      tab: 'Social',
+      tab: 'Reviews',
       tabs: [
         {
-          'name': 'Social',
-          'link': 'social',
+          'name': 'Reviews',
+          'link': 'reviews',
         },
         {
           'name': 'Trending',
@@ -393,7 +399,7 @@ export default {
       switch (name) {
         case 'Trending':
           return true;
-        case 'Social':
+        case 'Reviews':
           return true;
         case 'For You':
           return this.$store.state.isAuthorized;

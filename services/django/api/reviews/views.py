@@ -77,6 +77,41 @@ class TrackReviewList(APIView):
         return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+class TrackReviewDetailList(APIView):
+    """
+    Description:
+        API View for Track Reviews List
+    Routes:
+        GET /reviews/tracks/
+            Gets a list of track reviews
+    """
+
+    authentication_classes = [Auth0JSONWebTokenAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def get(self, request, track_id):
+        """
+        Get track reviews
+        """
+        reviews = TrackReview.objects.filter(track__apple_music_id=track_id)
+
+        return JsonResponse(
+            {
+                "track_reviews": list(
+                    reviews.values(
+                        "id",
+                        "track__apple_music_id",
+                        "track__id",
+                        "review",
+                        "rating",
+                        "user__username",
+                    )
+                )
+            },
+            status=status.HTTP_200_OK,
+        )
+
+
 class AlbumReviewList(APIView):
     """
     Description:

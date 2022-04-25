@@ -239,6 +239,30 @@ export const getFavoritedTracks = async bearerToken => {
   }
 };
 
+
+/* 
+ * Fetches a list of reviews for specific track
+ * */
+export const getTrackDetailedReviews = async (bearerToken, trackId) => {
+  try {
+    const response = await axios.get(
+      `${process.env.baseUrl}/api/reviews/tracks/${trackId}`,
+      {
+        headers: {
+          Authorization: `${bearerToken}`,
+        },
+      }
+    );
+    return response;
+  } catch (err) {
+    console.error(err);
+    return {
+      data: [],
+    };
+  }
+};
+
+
 /*
  * Fetches all playlists
  * */

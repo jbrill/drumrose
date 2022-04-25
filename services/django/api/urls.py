@@ -21,6 +21,11 @@ urlpatterns = [
         name="TrackReviewList",
     ),
     path(
+        "reviews/tracks/<track_id>",
+        review_routes.TrackReviewDetailList.as_view(),
+        name="TrackReviewList",
+    ),
+    path(
         "reviews/albums/",
         review_routes.AlbumReviewList.as_view(),
         name="AlbumReviewList",

@@ -257,7 +257,7 @@ export default {
 }
 .drumrose-title {
   color: #ccc;
-  font-size: 1rem;
+  font-size: .9rem;
   padding-left: 5px;
   overflow: hidden;
   font-family: 'Drumrose', monospace !important;

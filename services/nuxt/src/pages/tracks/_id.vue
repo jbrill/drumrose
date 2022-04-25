@@ -42,20 +42,30 @@
           </v-btn>
         </div>
       </v-container>
+      <v-container v-else>
+        <MusicReview
+          v-for="review in reviews"
+          :key="review.id"
+          type="review"
+          :post="review"
+        />
+      </v-container>
     </v-container>
   </v-responsive>
 </template>
 
 <script>
 import {
-  postFavorite, getTrackDetail, createTrack,
+  postFavorite, getTrackDetail, createTrack, getTrackDetailedReviews,
 } from '~/api/api';
 import MusicPageHeader from '~/components/MusicPageHeader';
+import MusicReview from '~/components/ReviewItem/MusicReview';
 
 
 export default {
   components: {
     MusicPageHeader,
+    MusicReview,
   },
   data: () => ({
     trackInfo: null,
@@ -65,6 +75,7 @@ export default {
     didFavorite: false,
     ratingValues: [],
     numReviews: 0,
+    reviews: [],
   }),
   computed: {
     appleImage () {
@@ -89,9 +100,15 @@ export default {
           resp.data.track.review_summary.totals_per_rating[ratingKey]
         );
       }
+      const detailedReviewsResp = await getTrackDetailedReviews(
+        this.$auth.getToken('auth0'),
+        this.$route.params.id
+      );
+      console.log(detailedReviewsResp)
       this.loading = false;
       this.didFavorite = resp.data.track.favorited;
       this.numReviews = resp.data.track.review_summary.total_reviews;
+      this.reviews = detailedReviewsResp.data.track_reviews;
     } catch (err) {
       if (err.response.status === 409) {
         try {

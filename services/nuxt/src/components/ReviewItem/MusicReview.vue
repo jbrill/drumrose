@@ -2,9 +2,7 @@
   <v-container>
     <!-- favorite -->
     <v-container
-      v-if="post.user && !(
-        post.review
-      )"
+      v-if="post.user && post.review === null"
     >
       <v-row
         flex
@@ -66,23 +64,64 @@
         <Album
           v-if="post.type == 'albums'"
           :id="post.id"
-          is-playable
-          is-actionable
+          :is-playable="false"
+          :is-actionable="false"
         />
         <Track
           v-if="post.type == 'songs'"
           :id="post.id"
-          is-playable
-          is-actionable
+          :is-playable="false"
+          :is-actionable="false"
         />
         <Playlist
           v-if="post.type == 'playlists'"
           :id="post.id"
-          is-playable
-          is-actionable
+          :is-playable="false"
+          :is-actionable="false"
+        />
+        <v-rating
+          v-if="post.rating"
+          v-model="post.rating"
+          background-color="grey"
+          color="grey"
+          dense
+          half-increments
+          readonly
+          x-small
+          size="16"
+        />
+        <v-rating
+          v-else
+          background-color="grey"
+          color="grey"
+          dense
+          half-increments
+          readonly
+          x-small
+          size="16"
         />
       </v-container>
       <v-container class="review-contain__review-item">
+        <v-row
+          flex
+          style="
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+          "
+        >
+          <v-btn
+            text
+            :href="'/people/' + post.user || post.user__username"
+            color="#ccc"
+            :to="'/people/' + post.user || post.user__username"
+          >
+            {{ post.user || post.user__username }}
+          </v-btn>
+        </v-row>
+        <v-row>
+          <v-text>{{ post.review }}</v-text>
+        </v-row>
       </v-container>
     </v-row>
   </v-container>

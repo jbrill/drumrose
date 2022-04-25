@@ -128,11 +128,11 @@
               </v-card>
             </v-col>
           </v-row>
-          <v-divider v-if="popularTrackReviews && popularTrackReviews.length" />
+          <v-divider v-if="recentReviews && recentReviews.length" />
           <CarouselSection
-            v-if="popularTrackReviews && popularTrackReviews.length"
+            v-if="recentReviews && recentReviews.length"
             title="Popular Track Reviews"
-            :carousel-items="popularTrackReviews"
+            :carousel-items="recentReviews"
             type="reviews"
           />
           <v-divider v-if="popularAlbumReviews && popularAlbumReviews.length" />
